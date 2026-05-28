@@ -1,0 +1,71 @@
+{
+  "_comment": "Daily Why 写作规范 — 唯一规则来源。validate_article.py 从本文件读取数值规则。skill 文档引用本文件。",
+  "_version": "1.4",
+  "_updated": "2026-05-28",
+
+  "word_count": {
+    "min": 300,
+    "max": 600,
+    "p1_threshold": 600,
+    "_usage": "中文字符数（不含标点/格式）。300-600 正常，>600 打 P1。"
+  },
+
+  "structure": {
+    "questions_min": 3,
+    "questions_max": 4,
+    "questions_p0_threshold": 2,
+    "_usage": "低于 questions_p0_threshold 个问题标记 → P0。推荐 3-4 个递进式问题。"
+  },
+
+  "formatting": {
+    "emoji_title": true,
+    "separator_exact": 2,
+    "separator_max": 2,
+    "quote_blocks_min": 2,
+    "quote_blocks_note": "A段和F段各1处，C段不用",
+    "bold_min": 2,
+    "style_table": true,
+    "style_table_rows": 4,
+    "style_table_template": "| 话题 | ... |\\n| 分类 | ... |\\n| 核心机制 | ... |\\n| 冷知识反转 | ... |",
+    "q_format": "**Q1：xxx？**",
+    "q_format_forbidden": "### 🤔 Q1（禁止h3格式）",
+    "q_format_level": "P0",
+    "separator_over_tolerance_level": "P0",
+    "_p0_upgrade_note": "v1.4: Q用h3格式和分隔线>3处从P1升级为P0（结构硬性要求）",
+    "twist_label": "冷知识反转",
+    "twist_label_forbidden": "冷知识彩蛋（禁止使用）"
+  },
+
+  "quality": {
+    "p0_must_be_zero": true,
+    "p1_max_allowed": 2,
+    "anecdote_check_chars": 80,
+
+    "cliche_openers": [
+      "今天我们来", "今天我们要", "你知道吗？", "我们都知道",
+      "随着", "在当今", "在如今", "在现在"
+    ],
+
+    "connector_keywords": ["首先", "其次", "然后", "最后", "此外", "另外"],
+    "connector_p1_threshold": 3,
+
+    "paragraph_min_len": 50,
+    "paragraph_deviation_max": 20,
+    "paragraph_deviation_level": "P2",
+
+    "twist_keywords": ["反转", "恰恰", "其实", "没想到", "出乎意料", "真相是",
+                        "你以为", "别以为", "反直觉", "竟然", "居然", "万万没想到"],
+    "twist_heading_keywords": ["反转", "彩蛋", "冷知识", "没想到", "趣味"],
+
+    "question_patterns": [
+      "Q\\d+[：:]",
+      "\\*\\*\\d+\\.\\s*.+\\？",
+      "\\*\\*Q\\d+",
+      "^\\d+\\.\\s*.+\\？",
+      "^###?\\s*.*\\？"
+    ]
+  },
+
+  "exit_on_fail": true,
+  "_exit_on_fail_comment": "为 true 时，P0>0 或 P1>2 时 exit(1)。为 false 时仅报告，exit(0)。"
+}
