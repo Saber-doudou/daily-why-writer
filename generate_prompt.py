@@ -12,21 +12,31 @@ generate_prompt.py — 从 writing_rules.json + SKILL.md 自动生成 automation
     python generate_prompt.py                    # 输出到 stdout
     python generate_prompt.py --backup           # 同时备份到 automation-2-prompt-backup.md
     python generate_prompt.py --check            # 检查规则一致性，不输出 prompt
+    python generate_prompt.py --update-automation # 生成 prompt 并更新到 automation 数据库
 """
 
 import json
 import re
+import sys
 import argparse
 from pathlib import Path
 from datetime import datetime
+
+# Windows GBK 兼容
+if sys.stdout.encoding and sys.stdout.encoding.lower() != "utf-8":
+    sys.stdout.reconfigure(encoding="utf-8")
+if sys.stderr.encoding and sys.stderr.encoding.lower() != "utf-8":
+    sys.stderr.reconfigure(encoding="utf-8")
 
 
 WORKSPACE = Path(r"F:\WorkBuddy\daily-why")
 RULES_PATH = WORKSPACE / "writing_rules.json"
 SKILL_PATH = Path(r"C:\Users\admin\.workbuddy\skills\daily-why-writer\SKILL.md")
+SKILL_COMPACT_PATH = Path(r"C:\Users\admin\.workbuddy\skills\daily-why-writer\SKILL_COMPACT.md")
 PYTHON_PATH = r"C:/Users/admin/.workbuddy/binaries/python/versions/3.13.12/python.exe"
 TOPICS_CONTEXT = WORKSPACE / "topics_context.json"
-BACKUP_PATH = WORKSPACE / "automation-2-prompt-backup.md"
+TOPICS_CONTEXT_COMPACT = WORKSPACE / "topics_context_compact.json"
+BACKUP_PATH = WORKSPACE / "automation-prompt-backup.md"
 
 
 def load_rules() -> dict:
@@ -36,20 +46,27 @@ def load_rules() -> dict:
     return json.loads(RULES_PATH.read_text(encoding="utf-8"))
 
 
-def load_skill() -> str:
-    """加载 SKILL.md"""
-    if not SKILL_PATH.exists():
-        raise FileNotFoundError(f"Skill 文件不存在: {SKILL_PATH}")
-    return SKILL_PATH.read_text(encoding="utf-8")
+def load_skill(compact: bool = False) -> str:
+    """加载 SKILL.md（精简版或完整版）"""
+    path = SKILL_COMPACT_PATH if compact else SKILL_PATH
+    if not path.exists():
+        raise FileNotFoundError(f"Skill 文件不存在: {path}")
+    return path.read_text(encoding="utf-8")
 
 
-def load_recent_topics(limit: int = 10) -> list:
-    """从 topics_context.json 加载最近话题（用于去重提示）"""
-    if not TOPICS_CONTEXT.exists():
+def load_recent_topics(limit: int = 0, compact: bool = False) -> list:
+    """从 topics_context.json 加载最近话题（用于去重提示）
+    limit=0 表示加载全部标准话题（topic_summaries 已在 prepare_topics.py 中过滤为标准格式）
+    compact=True 时使用精简版 topics_context_compact.json"""
+    path = TOPICS_CONTEXT_COMPACT if compact else TOPICS_CONTEXT
+    if not path.exists():
         return []
     try:
-        data = json.loads(TOPICS_CONTEXT.read_text(encoding="utf-8"))
-        return data.get("topic_summaries", [])[:limit]
+        data = json.loads(path.read_text(encoding="utf-8"))
+        summaries = data.get("topic_summaries", [])
+        if limit > 0:
+            return summaries[:limit]
+        return summaries
     except Exception:
         return []
 
@@ -91,16 +108,17 @@ def check_consistency(rules: dict, skill: str) -> list:
         issues.append(f"反转标签: rules='{twist_label}', SKILL.md 中未找到")
 
     # 6. 分类选项一致性
-    skill_cats = re.findall(r"\*\*(人体奥秘|自然科学|生活常识|宇宙探索|动物世界|物理化学)\*\*", skill)
-    # 只要能找到就行
-    if not skill_cats:
+    # 分类名可能在加粗、表格、或纯文本中，只要出现即可
+    category_options = ["人体奥秘", "自然科学", "生活常识", "宇宙探索", "动物世界", "物理化学"]
+    found_cats = [c for c in category_options if c in skill]
+    if len(found_cats) < 3:  # 至少找到 3 个才算有效
         issues.append("SKILL.md 中未找到标准分类选项列表")
 
     return issues
 
 
 def generate_prompt(rules: dict, recent_topics: list = None) -> str:
-    """生成完整的 automation prompt（排版规则由 SKILL.md 提供，prompt 不重复）"""
+    """生成精简版 automation prompt（核心流程 + 增量规则，不重复 SKILL.md 已有内容）"""
     wc_min = rules["word_count"]["min"]
     wc_max = rules["word_count"]["max"]
 
@@ -117,32 +135,141 @@ def generate_prompt(rules: dict, recent_topics: list = None) -> str:
 生成一篇"每日一个为什么"冷知识文章。
 
 前置检查：先检查 `F:/WorkBuddy/daily-why/{{今天日期}}-每日冷知识.md` 是否已存在，存在则跳过。
+`{{今天日期}}` 取自系统注入的 `current_time`（ISO 格式），直接截取 YYYY-MM-DD 部分，**不要自行推算**。
 
 失败处理：如果任意步骤出错或结果不符合要求，立即停止，不再继续后续步骤，并报告问题原因。
 
 ## 步骤
 1. 加载 **daily-why-writer** skill，按其中 A+C+F 结构、排版格式、语言风格和黑名单写文章
 2. 运行 `{PYTHON} F:/WorkBuddy/daily-why/prepare_topics.py` 刷新话题库（确保 topics_context.json 包含最新文章记录）
-3. 读取 `F:/WorkBuddy/daily-why/topics_context.json`，从 `topics` 数组的 `topic` 字段选一个**未曾使用**的话题。优先选自然科学 / 生活常识 / 人体奥秘类，避免高度重复的话题领域
-{dedup_section}4. **写前快速查证**：用 WebSearch 搜 1-2 个该话题的关键词（中文），目的是：
-   - 查证文章中的关键数字是否准确（距离、倍数、温度等），有争议的表述要修正
-   - 看看同类科普是否写了辟谣/误区内容，如有则参考融入
-   - 确认你的反转是否够独特（别人没写才保留）
-   - **注意**：搜 1-2 个结果即可，不用深入阅读超过 2 篇。纯常识类话题（如海水咸、天蓝）可跳过此步
-5. 综合查证结果，按 A+C+F 结构写文章，字数 {wc_min}-{wc_max} 字。最后一个问题（Q3）建议定位为辟谣或冷门延伸
-6. **写后自检**：按 daily-why-writer skill 中的「写作自检清单」逐项检查，重点关注：
-   - 用词精准度（身体部位术语、解剖位置是否准确、量词是否有依据）
-   - 机制描述准确性（通俗比喻是否牺牲了准确性，"懂行的人会不会皱眉？"）
-   - 避免绝对化表述（"不是A而是B"→"A为主、B为辅"更安全）
-   - 数据与引用（关键数字有出处、区间优于精确值、使用标准科学单位）
-   - 猜测与事实边界（推测性内容是否标注了"科学家猜测""可能是因为"）
-   - 比喻一致性（全文比喻是否统一、经得起推敲）
-   - 冷知识反转是否加了闭环收尾句（增强记忆点）
-   如发现问题，修正后再保存
+3. 读取 `F:/WorkBuddy/daily-why/topics_context.json`，从 `topic_summaries` 数组选一个**未曾使用**的话题。优先选自然科学 / 生活常识 / 人体奥秘类，避免高度重复的话题领域
+{dedup_section}4. **写前快速查证**：用 WebSearch 搜 1-2 个该话题的关键词（中文），查证关键数字和引用准确性
+5. **边写边自检**：按 A+C+F 结构写文章，字数 {wc_min}-{wc_max} 字。每写完一段（A/C/F），立即检查：
+   - A段：是否以场景或小故事切入，避免套话开头
+   - C段：Q格式是否正确（加粗，非h3）、逻辑是否自洽、F段是否与Q3重复
+   - F段：长度是否与Q段均衡、是否用了「冷知识反转」标签
+   - 最后一个问题（Q3）建议定位为辟谣或冷门延伸
+6. **写后总检**：按 daily-why-writer skill 中的「写作自检清单」逐项检查，重点关注机制描述准确性
 7. 保存到 `F:/WorkBuddy/daily-why/{{今天日期}}-每日冷知识.md`
 8. 运行 `{PYTHON} F:/WorkBuddy/daily-why/validate_article.py` 审核
-   - 如果审核不通过（审核脚本在 P0>0 或 P1>2 时 exit code 为 1），停止流水线，不要继续
+   - 如果审核不通过（审核脚本在 P0>0 或 P1>2 时 exit code 为 1），**先检索判例库再修正**：
+     - 运行 `{PYTHON} F:/WorkBuddy/daily-why/case_matcher.py "问题关键词"` 智能匹配相关判例
+     - 参考判例中的「修正方案」进行修正
+     - 修正后重新运行 validate_article.py 验证
+   - 如果审核通过，继续下一步
 9. 运行 `{PYTHON} F:/WorkBuddy/daily-why/update_history.py` 更新记忆
+"""
+    return prompt
+
+
+def generate_multi_agent_prompt(rules: dict, recent_topics: list = None) -> str:
+    """生成多Agent版本的 automation prompt（两阶段工作流）"""
+    wc_min = rules["word_count"]["min"]
+    wc_max = rules["word_count"]["max"]
+
+    # 构建去重话题列表
+    dedup_section = ""
+    if recent_topics:
+        dedup_section = "\n### 最近话题（绝对不要重复）\n"
+        for t in recent_topics:
+            dedup_section += f"- {t}\n"
+
+    PYTHON = "C:/Users/admin/.workbuddy/binaries/python/versions/3.13.12/python.exe"
+
+    prompt = f"""《每日一个为什么》多Agent工作流
+生成一篇"每日一个为什么"冷知识文章，采用两阶段工作流。
+
+前置检查：先检查 `F:/WorkBuddy/daily-why/{{今天日期}}-每日冷知识.md` 是否已存在，存在则跳过。
+`{{今天日期}}` 取自系统注入的 `current_time`（ISO 格式），直接截取 YYYY-MM-DD 部分，**不要自行推算**。
+
+失败处理：如果任意步骤出错或结果不符合要求，立即停止，不再继续后续步骤，并报告问题原因。
+
+---
+
+## 阶段1：内容生成（Content Generation Phase）
+
+**目标**：选题、查证、写作、自检，生成文章草稿
+
+### 步骤1.1：准备话题库
+运行 `{PYTHON} F:/WorkBuddy/daily-why/prepare_topics.py --compact` 刷新话题库
+
+### 步骤1.2：选择话题
+读取 `F:/WorkBuddy/daily-why/topics_context_compact.json`，从 `topic_summaries` 数组选一个**未曾使用**的话题。
+- 优先选自然科学 / 生活常识 / 人体奥秘类
+- 避免高度重复的话题领域
+{dedup_section}
+### 步骤1.3：写前查证
+用 WebSearch 搜 1-2 个该话题的关键词（中文），查证关键数字和引用准确性
+
+### 步骤1.4：写作与自检
+加载 **daily-why-writer** skill，按其中 A+C+F 结构、排版格式、语言风格和黑名单写文章。
+
+**边写边自检**，字数 {wc_min}-{wc_max} 字。每写完一段（A/C/F），立即检查：
+- A段：是否以场景或小故事切入，避免套话开头
+- C段：Q格式是否正确（加粗，非h3）、逻辑是否自洽、F段是否与Q3重复
+- F段：长度是否与Q段均衡、是否用了「冷知识反转」标签
+- 最后一个问题（Q3）建议定位为辟谣或冷门延伸
+
+### 步骤1.5：保存草稿
+保存到 `F:/WorkBuddy/daily-why/{{今天日期}}-每日冷知识.md`
+
+### 步骤1.6：写后总检
+按 daily-why-writer skill 中的「写作自检清单」逐项检查，重点关注机制描述准确性
+
+**阶段1完成标志**：文章草稿已保存，准备进入阶段2
+
+---
+
+## 阶段2：审核发布（Quality Review Phase）
+
+**目标**：质量审核、判例匹配、修正、更新历史
+
+### 步骤2.1：质量审核
+运行 `{PYTHON} F:/WorkBuddy/daily-why/validate_article.py --latest` 审核文章
+
+### 步骤2.2：智能路由判定
+根据审核结果决定下一步：
+- **审核通过**（P0=0 且 P1≤2）→ 进入步骤2.4
+- **审核不通过** → 进入步骤2.3
+
+### 步骤2.3：判例匹配与修正（如果审核不通过）
+1. 运行 `{PYTHON} F:/WorkBuddy/daily-why/case_matcher.py "问题关键词"` 智能匹配相关判例
+2. 参考判例中的「修正方案」进行修正
+3. 修正后重新运行 validate_article.py 验证
+4. 最多重试2次，如果仍然不通过，输出最终报告
+
+### 步骤2.4：更新历史
+运行 `{PYTHON} F:/WorkBuddy/daily-why/update_history.py` 更新记忆
+
+### 步骤2.5：输出最终结果
+输出文章的最终状态，包括：
+- 文章文件路径
+- 审核得分
+- P0/P1/P2 问题数
+
+---
+
+## 工作流状态追踪
+
+在执行过程中，维护一个状态文件 `F:/WorkBuddy/daily-why/orchestrator-state.json`：
+```json
+{{
+  "date": "{{今天日期}}",
+  "phase": "phase1|phase2|completed",
+  "phase1_status": "pending|in_progress|completed",
+  "phase2_status": "pending|in_progress|completed",
+  "article_file": "F:/WorkBuddy/daily-why/{{今天日期}}-每日冷知识.md",
+  "started_at": "ISO时间",
+  "completed_at": "ISO时间",
+  "errors": []
+}}
+```
+
+**关键原则**：
+- 阶段1完成后才进入阶段2
+- 阶段2发现问题可以反馈修正
+- 每个阶段都有明确的输入输出
+- 状态文件支持断点续传
 """
     return prompt
 
@@ -235,11 +362,17 @@ def main():
                         help="同时备份到 automation-2-prompt-backup.md")
     parser.add_argument("--check", action="store_true",
                         help="只检查规则一致性，不输出 prompt")
+    parser.add_argument("--update-automation", action="store_true",
+                        help="生成 prompt 并更新到 automation 数据库")
+    parser.add_argument("--compact", action="store_true",
+                        help="使用精简版 SKILL.md 和 topics_context.json，减少 Token 消耗")
+    parser.add_argument("--multi-agent", action="store_true",
+                        help="生成多Agent版本的 prompt（两阶段工作流）")
     args = parser.parse_args()
 
     # 加载规则
     rules = load_rules()
-    skill = load_skill()
+    skill = load_skill(compact=args.compact)
 
     # 一致性检查
     issues = check_consistency(rules, skill)
@@ -255,16 +388,22 @@ def main():
         return
 
     # 加载最近话题
-    recent = load_recent_topics(10)
+    recent = load_recent_topics(0, compact=args.compact)  # 精简版加载全部话题
 
     # 生成 prompt
-    prompt = generate_prompt(rules, recent)
+    if args.multi_agent:
+        prompt = generate_multi_agent_prompt(rules, recent)
+        mode = "多Agent版"
+    else:
+        prompt = generate_prompt(rules, recent)
+        mode = "精简版" if args.compact else "完整版"
 
     print("=" * 60)
     print("📋 生成的 Automation Prompt")
     print(f"   规则版本: writing_rules.json v{rules['_version']}")
     print(f"   字数范围: {rules['word_count']['min']}-{rules['word_count']['max']}")
     print(f"   最近话题: {len(recent)} 个（用于去重）")
+    print(f"   模式: {mode}")
     print("=" * 60)
     print()
     print(prompt)
@@ -272,6 +411,14 @@ def main():
 
     if args.backup:
         write_backup(prompt, rules)
+
+    if args.update_automation:
+        # 写入到固定文件，供外部脚本读取
+        latest_path = WORKSPACE / "automation-prompt-latest.txt"
+        latest_path.write_text(prompt, encoding="utf-8")
+        print(f"[generate_prompt] Prompt 已写入: {latest_path}")
+        print(f"[generate_prompt] 请运行以下命令更新 automation:")
+        print(f"  automation_update mode=update id=automation-1778312519754 prompt=< {latest_path}")
 
 
 if __name__ == "__main__":
