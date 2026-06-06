@@ -143,10 +143,10 @@ def generate_prompt(rules: dict, recent_topics: list = None) -> str:
 1. 加载 **daily-why-writer** skill，按其中 A+C+F 结构、排版格式、语言风格和黑名单写文章
 2. 运行 `{PYTHON} F:/WorkBuddy/daily-why/prepare_topics.py` 刷新话题库（确保 topics_context.json 包含最新文章记录）
 3. 读取 `F:/WorkBuddy/daily-why/topics_context.json`，从 `topic_summaries` 数组选一个**未曾使用**的话题。优先选自然科学 / 生活常识 / 人体奥秘类，避免高度重复的话题领域
-{dedup_section}4. **写前快速查证**：用 WebSearch 搜 1-2 个该话题的关键词（中文），查证关键数字和引用准确性
+{dedup_section}4. **写前快速查证**：用 WebSearch 搜 1-2 个该话题的关键词（中文），查证关键数字、研究者引用完整性（机构+年份+发表期刊）和引用准确性
 5. **边写边自检**：按 A+C+F 结构写文章，字数 {wc_min}-{wc_max} 字。每写完一段（A/C/F），立即检查：
    - A段：是否以场景或小故事切入，避免套话开头
-   - C段：Q格式是否正确（加粗，非h3）、逻辑是否自洽、F段是否与Q3重复
+   - C段：Q格式是否正确（加粗，非h3）、逻辑是否自洽、F段是否与Q3重复、开头是否避免学术化句式
    - F段：长度是否与Q段均衡、是否用了「冷知识反转」标签
    - 最后一个问题（Q3）建议定位为辟谣或冷门延伸
 6. **写后总检**：按 daily-why-writer skill 中的「写作自检清单」逐项检查，重点关注机制描述准确性
@@ -163,114 +163,30 @@ def generate_prompt(rules: dict, recent_topics: list = None) -> str:
 
 
 def generate_multi_agent_prompt(rules: dict, recent_topics: list = None) -> str:
-    """生成多Agent版本的 automation prompt（两阶段工作流）"""
+    """生成多Agent版本的 automation prompt（精简版，≤500字）"""
     wc_min = rules["word_count"]["min"]
     wc_max = rules["word_count"]["max"]
 
-    # 构建去重话题列表
-    dedup_section = ""
-    if recent_topics:
-        dedup_section = "\n### 最近话题（绝对不要重复）\n"
-        for t in recent_topics:
-            dedup_section += f"- {t}\n"
-
     PYTHON = "C:/Users/admin/.workbuddy/binaries/python/versions/3.13.12/python.exe"
 
-    prompt = f"""《每日一个为什么》多Agent工作流
-生成一篇"每日一个为什么"冷知识文章，采用两阶段工作流。
+    prompt = f"""每日冷知识自动化：两阶段工作流。
 
-前置检查：先检查 `F:/WorkBuddy/daily-why/{{今天日期}}-每日冷知识.md` 是否已存在，存在则跳过。
-`{{今天日期}}` 取自系统注入的 `current_time`（ISO 格式），直接截取 YYYY-MM-DD 部分，**不要自行推算**。
+前置：检查 `F:/WorkBuddy/daily-why/{{今天日期}}-每日冷知识.md` 已存在则跳过。{{今天日期}}截取自系统 current_time。
 
-失败处理：如果任意步骤出错或结果不符合要求，立即停止，不再继续后续步骤，并报告问题原因。
+阶段1：内容生成
+1. 运行 `{PYTHON} F:/WorkBuddy/daily-why/prepare_topics.py --compact`
+2. 读 topics_context_compact.json，选未用过的话题（避开已用话题）
+3. WebSearch 查证 1-2 个关键词
+4. 加载 daily-why-writer skill，A+C+F 结构写作，{wc_min}-{wc_max} 字，边写边自检
+5. 保存到 `F:/WorkBuddy/daily-why/{{今天日期}}-每日冷知识.md`
 
----
+阶段2：审核发布
+1. 运行 `{PYTHON} F:/WorkBuddy/daily-why/validate_article.py --latest`
+2. 通过(P0=0且P1≤2)→步骤4；不通过→步骤3
+3. 参考审核输出的修复建议修正，重试最多2次
+4. 运行 `{PYTHON} F:/WorkBuddy/daily-why/update_history.py`
+5. 输出：文件路径/审核得分/P0P1P2数"""
 
-## 阶段1：内容生成（Content Generation Phase）
-
-**目标**：选题、查证、写作、自检，生成文章草稿
-
-### 步骤1.1：准备话题库
-运行 `{PYTHON} F:/WorkBuddy/daily-why/prepare_topics.py --compact` 刷新话题库
-
-### 步骤1.2：选择话题
-读取 `F:/WorkBuddy/daily-why/topics_context_compact.json`，从 `topic_summaries` 数组选一个**未曾使用**的话题。
-- 优先选自然科学 / 生活常识 / 人体奥秘类
-- 避免高度重复的话题领域
-{dedup_section}
-### 步骤1.3：写前查证
-用 WebSearch 搜 1-2 个该话题的关键词（中文），查证关键数字和引用准确性
-
-### 步骤1.4：写作与自检
-加载 **daily-why-writer** skill，按其中 A+C+F 结构、排版格式、语言风格和黑名单写文章。
-
-**边写边自检**，字数 {wc_min}-{wc_max} 字。每写完一段（A/C/F），立即检查：
-- A段：是否以场景或小故事切入，避免套话开头
-- C段：Q格式是否正确（加粗，非h3）、逻辑是否自洽、F段是否与Q3重复
-- F段：长度是否与Q段均衡、是否用了「冷知识反转」标签
-- 最后一个问题（Q3）建议定位为辟谣或冷门延伸
-
-### 步骤1.5：保存草稿
-保存到 `F:/WorkBuddy/daily-why/{{今天日期}}-每日冷知识.md`
-
-### 步骤1.6：写后总检
-按 daily-why-writer skill 中的「写作自检清单」逐项检查，重点关注机制描述准确性
-
-**阶段1完成标志**：文章草稿已保存，准备进入阶段2
-
----
-
-## 阶段2：审核发布（Quality Review Phase）
-
-**目标**：质量审核、判例匹配、修正、更新历史
-
-### 步骤2.1：质量审核
-运行 `{PYTHON} F:/WorkBuddy/daily-why/validate_article.py --latest` 审核文章
-
-### 步骤2.2：智能路由判定
-根据审核结果决定下一步：
-- **审核通过**（P0=0 且 P1≤2）→ 进入步骤2.4
-- **审核不通过** → 进入步骤2.3
-
-### 步骤2.3：判例匹配与修正（如果审核不通过）
-1. 运行 `{PYTHON} F:/WorkBuddy/daily-why/case_matcher.py "问题关键词"` 智能匹配相关判例
-2. 参考判例中的「修正方案」进行修正
-3. 修正后重新运行 validate_article.py 验证
-4. 最多重试2次，如果仍然不通过，输出最终报告
-
-### 步骤2.4：更新历史
-运行 `{PYTHON} F:/WorkBuddy/daily-why/update_history.py` 更新记忆
-
-### 步骤2.5：输出最终结果
-输出文章的最终状态，包括：
-- 文章文件路径
-- 审核得分
-- P0/P1/P2 问题数
-
----
-
-## 工作流状态追踪
-
-在执行过程中，维护一个状态文件 `F:/WorkBuddy/daily-why/orchestrator-state.json`：
-```json
-{{
-  "date": "{{今天日期}}",
-  "phase": "phase1|phase2|completed",
-  "phase1_status": "pending|in_progress|completed",
-  "phase2_status": "pending|in_progress|completed",
-  "article_file": "F:/WorkBuddy/daily-why/{{今天日期}}-每日冷知识.md",
-  "started_at": "ISO时间",
-  "completed_at": "ISO时间",
-  "errors": []
-}}
-```
-
-**关键原则**：
-- 阶段1完成后才进入阶段2
-- 阶段2发现问题可以反馈修正
-- 每个阶段都有明确的输入输出
-- 状态文件支持断点续传
-"""
     return prompt
 
 

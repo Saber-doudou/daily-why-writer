@@ -11,6 +11,7 @@ update_history.py — 从新文章中提取话题，自动更新 memory.md
 
 import re
 import sys
+import json
 import argparse
 from pathlib import Path
 from datetime import datetime
@@ -18,6 +19,9 @@ from datetime import datetime
 # Windows GBK 终端兼容
 if hasattr(sys.stdout, 'reconfigure'):
     sys.stdout.reconfigure(encoding='utf-8')
+
+# 导入公共模块
+from topic_utils import extract_topic_from_article
 
 
 # memory.md 路径优先级
@@ -46,76 +50,6 @@ def extract_date_from_filename(filename: str) -> str:
     return m.group(1) if m else datetime.now().strftime("%Y-%m-%d")
 
 
-def extract_topic_from_article(filepath: Path) -> dict:
-    """从文章提取话题信息"""
-    content = filepath.read_text(encoding="utf-8")
-
-    topic = ""
-    category = ""
-    keywords = []
-
-    # 话题提取：今日话题/本期话题（支持 > **本期话题**：xxx 格式）
-    m = re.search(r"(?:\*\*)?(?:今日|本期)话题(?:\*\*)?[：:]\s*\*?\*?(.+?)(?:\*\*)?\s*$", content, re.MULTILINE)
-    if m:
-        topic = m.group(1).strip().rstrip("*")
-        cat_match = re.search(r"[（(](.+?)[）)]\s*$", topic)
-        if cat_match:
-            category = cat_match.group(1)
-            topic = re.sub(r"\s*[（(].+?[）)]\s*$", "", topic).strip()
-
-    if not topic:
-        title_match = re.search(r"^#\s+(?:[\U0001F300-\U0001F9FF]\s*)*(.+)",
-                                content, re.MULTILINE)
-        if title_match:
-            raw = title_match.group(1).strip()
-            if "每日" not in raw and "期" not in raw:
-                topic = raw
-
-    # 方式5: 从 h1 中 "每日冷知识" / "每日一个为什么" 后面提取话题
-    # 跳过纯日期结果（如 "2026-04-09"），交给方式6从 h2 提取
-    if not topic:
-        m = re.search(r"^#\s+(?:每日冷知识|每日一个为什么)\s*[|·\-]\s*(.+)", content, re.MULTILINE)
-        if m:
-            candidate = m.group(1).strip()
-            if not re.match(r"^\d{4}-\d{2}-\d{2}", candidate):
-                topic = candidate
-
-    # 方式6: 从二级标题提取（如 ## 为什么打哈欠会"传染"？）
-    if not topic:
-        m = re.search(r"^##\s+(?:[\U0001F300-\U0001F9FF]\s*)*(.+)", content, re.MULTILINE)
-        if m:
-            topic = m.group(1).strip()
-
-    if not topic:
-        topic = filepath.stem
-
-    # 清理零宽空格和不可见字符
-    topic = re.sub(r"[\u200b\u200c\u200d\ufeff\u00ad\u2060\ufe0f]", "", topic).strip()
-
-    # 分类（新格式优先，旧格式兜底）
-    if not category:
-        # 新格式：| 分类 | xxx |
-        cat_match = re.search(r"\|\s*分类\s*\|\s*(.+?)\s*\|", content)
-        if cat_match:
-            category = cat_match.group(1).strip()
-        else:
-            # 旧格式：话题分类** | xxx |
-            cat_match = re.search(r"话题分类\*\*\s*\|\s*(.+?)\s*\|", content)
-            if cat_match:
-                category = cat_match.group(1).strip()
-
-    # 提取关键词（加粗词）
-    keywords = re.findall(r"\*\*(.+?)\*\*", content)
-    keywords = [k for k in keywords if len(k) <= 10 and not k.startswith("Q")
-                and k not in ("本期话题", "今日话题", "话题")]
-
-    return {
-        "topic": topic,
-        "category": category or "未分类",
-        "keywords": keywords[:5],
-    }
-
-
 def is_duplicate(memory_content: str, date_str: str, topic: str) -> bool:
     """检查是否已存在同日记录（精确匹配日期 + 话题）"""
     # 先找该日期的所有记录块
@@ -136,7 +70,7 @@ def is_duplicate(memory_content: str, date_str: str, topic: str) -> bool:
     return False
 
 
-def build_record(date_str: str, info: dict, filename: str) -> str:
+def build_record(date_str: str, info: dict, filename: str, validation: dict = None) -> str:
     """构建一条 memory 记录"""
     lines = [
         f"## {date_str}",
@@ -146,6 +80,18 @@ def build_record(date_str: str, info: dict, filename: str) -> str:
     ]
     if info["keywords"]:
         lines.append(f"- 关键词：{', '.join(info['keywords'])}")
+    if validation:
+        p0 = validation.get("p0_count", "?")
+        p1 = validation.get("p1_count", "?")
+        p2 = validation.get("p2_count", "?")
+        score = validation.get("final_score", "?")
+        char_count = validation.get("char_count", "?")
+        passed = validation.get('p0p1_passed')
+        lines.append(
+            f"- 审核：P0={p0}, P1={p1}, P2={p2}, "
+            f"得分 {score}, 字数 {char_count} "
+            f"{'✅' if passed else '❌'}"
+        )
     return "\n".join(lines) + "\n"
 
 
@@ -169,8 +115,9 @@ def find_insert_position(content: str, date_str: str) -> int:
     return len(content)
 
 
-def update_memory(filepath: Path, dry_run: bool = False) -> dict:
-    """主函数：从文章更新 memory.md"""
+def update_memory(filepath: Path, dry_run: bool = False, validation: dict = None) -> dict:
+    """主函数：从文章更新 memory.md
+    validation: 可选的审核结果 dict，包含 p0_count/p1_count/p2_count/final_score/char_count/p0p1_passed"""
     filename = filepath.name
     date_str = extract_date_from_filename(filename)
 
@@ -178,10 +125,10 @@ def update_memory(filepath: Path, dry_run: bool = False) -> dict:
     print(f"[update_history] 提取日期: {date_str}")
 
     # 提取话题
-    info = extract_topic_from_article(filepath)
+    info = extract_topic_from_article(filepath, include_keywords=True)
     print(f"[update_history] 话题: {info['topic']}")
     print(f"[update_history] 分类: {info['category']}")
-    if info["keywords"]:
+    if info.get("keywords"):
         print(f"[update_history] 关键词: {', '.join(info['keywords'])}")
 
     # 读取 memory.md
@@ -195,8 +142,8 @@ def update_memory(filepath: Path, dry_run: bool = False) -> dict:
         print(f"[update_history] ⚠️  该日期/话题已存在，跳过")
         return {"status": "skipped", "reason": "duplicate"}
 
-    # 构建新记录
-    new_record = build_record(date_str, info, filename)
+    # 构建新记录（含审核信息）
+    new_record = build_record(date_str, info, filename, validation)
 
     if dry_run:
         print(f"\n--- 预览（dry-run）---\n{new_record}")
@@ -246,6 +193,8 @@ def main():
                         help="工作目录")
     parser.add_argument("--dry-run", action="store_true",
                         help="预览模式，不实际写入")
+    parser.add_argument("--validation-json", dest="validation_json",
+                        help="审核结果 JSON 字符串（由 validate_article.py --json 输出的 info 字段）")
     args = parser.parse_args()
 
     workspace = Path(args.workspace)
@@ -257,7 +206,17 @@ def main():
     else:
         filepath = find_latest_article(workspace)
 
-    result = update_memory(filepath, dry_run=args.dry_run)
+    # 解析审核结果（如有）
+    validation = None
+    if args.validation_json:
+        try:
+            validation = json.loads(args.validation_json)
+            print(f"[update_history] 携带审核结果: P0={validation.get('p0_count')}, "
+                  f"P1={validation.get('p1_count')}, 得分={validation.get('final_score')}")
+        except json.JSONDecodeError as e:
+            print(f"[update_history] ⚠️  审核结果 JSON 解析失败: {e}")
+
+    result = update_memory(filepath, dry_run=args.dry_run, validation=validation)
     print(f"\n[update_history] 结果: {result['status']}")
 
 

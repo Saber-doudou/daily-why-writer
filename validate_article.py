@@ -8,12 +8,14 @@ validate_article.py — P0/P1/P2 内容质量审核 + A+C+F 结构 + 排版格�
     python validate_article.py --strict 2026-05-09-每日冷知识.md
     python validate_article.py --json article.md
     python validate_article.py --latest
+    python validate_article.py --verbose article.md   # 输出详细修复建议
 """
 
 import re
 import sys
 import json
 import argparse
+import subprocess
 
 # Windows GBK 终端兼容：强制 stdout 使用 UTF-8
 if hasattr(sys.stdout, 'reconfigure'):
@@ -21,6 +23,13 @@ if hasattr(sys.stdout, 'reconfigure'):
 from pathlib import Path
 from dataclasses import dataclass, field, asdict
 from typing import Optional
+
+# 导入格式检查模块
+from format_checker import (
+    check_all_formats,
+    count_chinese_chars,
+    strip_markdown,
+)
 
 # ── 从 writing_rules.json 加载规则（唯一来源） ──
 RULES_PATH = Path(__file__).parent / "writing_rules.json"
@@ -107,6 +116,8 @@ class ValidationResult:
     errors: list = field(default_factory=list)
     warnings: list = field(default_factory=list)
     info: dict = field(default_factory=dict)
+    fix_suggestions: list = field(default_factory=list)  # 可执行的修复建议
+    related_cases: list = field(default_factory=list)    # 匹配的判例
 
     def error(self, msg: str, points: int = 10):
         self.errors.append(msg)
@@ -131,6 +142,15 @@ class ValidationResult:
     def p2_error(self, msg: str):
         self.p2.append(msg)
         self.warn(f"[P2] {msg}", 2)
+
+    def add_fix(self, level: str, issue: str, suggestion: str, location: str = ""):
+        """添加可执行的修复建议"""
+        self.fix_suggestions.append({
+            "level": level,
+            "issue": issue,
+            "suggestion": suggestion,
+            "location": location,
+        })
 
     def has_passed_p0p1(self) -> bool:
         return len(self.p0) == 0 and len(self.p1) <= P1_MAX_ALLOWED
@@ -162,6 +182,9 @@ def validate_content_quality(content: str, result: ValidationResult):
     """P0/P1/P2 内容质量审核"""
     plain = strip_markdown(content)
 
+    # ── 格式检查（调用 format_checker 模块） ──
+    check_all_formats(content, result)
+
     # ── P0：事实 / 逻辑 / 结构 ──
 
     # P0: 缺少故事化开头（A段）
@@ -176,6 +199,10 @@ def validate_content_quality(content: str, result: ValidationResult):
             break
     if not has_anecdote:
         result.p0_error("缺少故事化开头（A段）—— 应以场景或小故事切入")
+        result.add_fix("P0", "缺少故事化开头（A段）",
+            '在标题下方插入引用块场景段落，如：\n'
+            '> 晚上十点，你窝在沙发里刷手机。不知不觉一小时过去了...',
+            '第5行（标题后的空行位置）')
 
     # P0: 缺少疑问驱动结构（C段）
     q_count = 0
@@ -186,6 +213,10 @@ def validate_content_quality(content: str, result: ValidationResult):
         result.p0_error(
             f"缺少疑问驱动结构（C段）—— 仅发现 {q_count} 个问题标记，"
             f"需要 {QUESTIONS_P0_THRESHOLD}+ 个递进式问题")
+        result.add_fix("P0", "缺少疑问驱动结构（C段）",
+            f'当前仅 {q_count} 个问题，需至少 {QUESTIONS_P0_THRESHOLD} 个。'
+            f'使用格式：**Q1：xxx？** / **Q2：xxx？** / **Q3：xxx？**',
+            '分隔线---之后为C段区域')
     else:
         result.ok(f"C段（疑问驱动）✓ — 发现 {q_count} 个问题")
 
@@ -198,6 +229,11 @@ def validate_content_quality(content: str, result: ValidationResult):
         has_twist = True
     if not has_twist:
         result.p0_error("缺少反转结尾（F段）—— 结尾应有意外反转或彩蛋")
+        result.add_fix("P0", "缺少反转结尾（F段）",
+            '在第二个分隔线---之后添加引用块反转，格式：\n'
+            '> 🤝 **冷知识反转**：反转内容...\n'
+            '并在末尾附风格表格（| 话题 | ... | 分类 | ... | 核心机制 | ... | 冷知识反转 | ... |）',
+            '文章末尾区域')
     else:
         result.ok("F段（趣味反转）✓")
 
@@ -242,104 +278,77 @@ def validate_content_quality(content: str, result: ValidationResult):
                 f"段落长度过于均匀（偏差 < {int(max_dev)} 字），"
                 f"AI 排版的典型特征")
 
-    # P1: 标题缺少 emoji
-    title_match = re.search(r"^#\s+(.+)", content, re.MULTILINE)
-    if title_match:
-        title = title_match.group(1)
-        has_emoji = bool(
-            re.search(r"[\U0001F300-\U0001F9FF\u2600-\u26FF\u2700-\u27BF]",
-                      title))
-        if not has_emoji:
-            result.p1_error("标题缺少 emoji 装饰")
-        else:
-            result.ok("标题 emoji 装饰 ✓")
+    # ── P1：表达润色检测（来自 proofreading skill 借鉴） ──
 
-    # P0: 分隔线数量（恰好 2 处，结构硬性要求）
-    # 只匹配行首独立的 ---，排除表格分隔符 |---|
-    sep_count = len(re.findall(r"^\s*---\s*$", content, re.MULTILINE))
-    if sep_count < SEPARATOR_EXACT:
-        result.p0_error(
-            f"分隔线不足（仅 {sep_count} 处），"
-            f"需要恰好 {SEPARATOR_EXACT} 处：A段后 + F段前")
-    elif sep_count > SEPARATOR_MAX + 1:
-        # 超过 3 处才报 P0（容忍 1 处偏差），恰好 3 处给 P1
-        result.p0_error(
-            f"分隔线过多（{sep_count} 处），"
-            f"应恰好 {SEPARATOR_MAX} 处，C段内部Q之间不加 ---")
-    elif sep_count > SEPARATOR_MAX:
-        result.p1_error(
-            f"分隔线过多（{sep_count} 处），"
-            f"应恰好 {SEPARATOR_MAX} 处，C段内部Q之间不加 ---")
-    else:
-        result.ok(f"分隔线使用 ✓ ({sep_count} 处)")
+    # P1: 隐蔽冗余检测
+    redundancy_patterns = [
+        # "在...中发现/表明/显示" → 冗余介词
+        (r"在[^。，]{2,20}中(?:发现|表明|显示|指出|认为)", "冗余介词「在...中」，可直接说「XX发现/表明」"),
+        # "所+动词+的" 中 "所" 多余（覆盖高频动词）
+        (r"所(?:培养|建立|产生|形成|带来|具有|提供|使用|采用|导致|引起|造成|积累|影响|决定|涉及|包含|经历|获得)的",
+         "冗余助词「所」，可删去使表达更简洁"),
+        # "通过...使/让" 双重介词
+        (r"通过[^。，]{2,30}(?:使|让)", "冗余介词「通过...使」结构，删掉「通过」或「使」之一"),
+        # "有效" + 能愿动词重复
+        (r"能[^。，]{1,15}有效", "「能」和「有效」语义重叠，删掉「有效」"),
+        # "进行" 万能动词
+        (r"进行(?:了?\s*)(?:研究|分析|检查|测试|实验|观察|调查)", "万能动词「进行」，可直接用动词本身（如「研究了」）"),
+    ]
+    for pattern, desc in redundancy_patterns:
+        matches = re.findall(pattern, plain)
+        if matches:
+            sample = matches[0][:20] + "..." if len(matches[0]) > 20 else matches[0]
+            result.p1_error(f"隐蔽冗余：「{sample}」— {desc}")
+            break  # 只报第一个，避免刷屏
 
-    # P1: 引用块缺失
-    quote_lines = re.findall(r"^>\s+.+", content, re.MULTILINE)
-    if len(quote_lines) < QUOTE_MIN:
-        result.p1_error("缺少引用块「>」，应用来承载故事场景和反转金句")
-    else:
-        result.ok(f"引用块 ✓ ({len(quote_lines)} 行)")
+    # P1: 近距离重复检测（同段同词 / 连续举例标记）
+    # 先按段落拆分（排除表格行和分隔线）
+    article_paragraphs = [p.strip() for p in re.split(r"\n{2,}", content)
+                          if p.strip()
+                          and not p.strip().startswith("|")
+                          and not p.strip().startswith("---")
+                          and not p.strip().startswith("#")]
 
-    # P1: 加粗不足
-    bold_count = len(re.findall(r"\*\*.+?\*\*", content))
-    if bold_count < BOLD_MIN:
-        result.p1_error(
-            f"加粗偏少（仅 {bold_count} 处），"
-            f"建议突出 2-3 个关键概念")
-    else:
-        result.ok(f"加粗关键词 ✓ ({bold_count} 处)")
+    repetition_found = False
+    for para in article_paragraphs:
+        if repetition_found:
+            break
+        # 去掉 markdown 格式后统计
+        para_plain = strip_markdown(para)
+        if len(para_plain) < 30:
+            continue
 
-    # P0: Q 格式检测（禁止 h3 格式，结构硬性要求）
-    h3_questions = re.findall(r"^###\s+.*[？?]", content, re.MULTILINE)
-    if h3_questions:
-        result.p0_error(
-            f"Q 标记使用了 h3 格式（{len(h3_questions)} 处），"
-            f"应统一用加粗格式 **Q1：xxx？**")
-    else:
-        result.ok("Q 格式 ✓（加粗格式）")
+        # 1) 同段内同一实词（≥2字）出现 ≥3 次（高频虚词排除）
+        words = re.findall(r"[\u4e00-\u9fff]{2,4}", para_plain)
+        word_freq = {}
+        for w in words:
+            word_freq[w] = word_freq.get(w, 0) + 1
+        STOPWORDS = {"我们", "他们", "一个", "这个", "那个", "可以", "已经",
+                     "不是", "没有", "就是", "如果", "但是", "因为", "所以",
+                     "虽然", "这些", "那些", "什么", "怎么", "为什么", "时候",
+                     "其实", "可能", "需要", "通过", "而且", "或者", "以及",
+                     "不过", "而是", "然后", "之后", "之前", "出来", "起来",
+                     "一些", "一定", "不会", "不能", "也会", "还是", "只是",
+                     "对于", "其中", "这样", "那样", "比较", "非常", "应该",
+                     "一种", "这种", "那种", "人体", "身体"}
+        for w, cnt in sorted(word_freq.items(), key=lambda x: -x[1]):
+            if cnt >= 3 and w not in STOPWORDS:
+                result.p1_error(
+                    f"近距离重复：「{w}」在同一段落中出现 {cnt} 次，"
+                    f"考虑用近义词替换或合并表述")
+                repetition_found = True
+                break
 
-    # P1: 反转标签检测（必须用"冷知识反转"，禁止"冷知识彩蛋"）
-    if "冷知识彩蛋" in content:
-        result.p1_error("反转标签使用了「冷知识彩蛋」，应统一用「冷知识反转」")
-    elif "冷知识反转" in content:
-        result.ok("反转标签 ✓（冷知识反转）")
-    else:
-        result.p1_error("缺少「冷知识反转」标签")
-
-    # P1: 风格表格分类行检测
-    if not re.search(r"分类\s*\|", content):
-        result.p1_error("风格表格缺少「分类」行")
-    else:
-        result.ok("风格表格分类 ✓")
-
-    # P2: 风格表格行标题完整性检测（话题/分类/核心机制/冷知识反转）
-    table_row_headers = ["话题", "分类", "核心机制", "冷知识反转"]
-    found_headers = [h for h in table_row_headers if re.search(rf"\|\s*{h}\s*\|", content)]
-    missing_headers = [h for h in table_row_headers if h not in found_headers]
-    if missing_headers:
-        result.p2_error(
-            f"风格表格行标题不完整，缺少：{'、'.join(missing_headers)}，"
-            f"标准格式为 话题/分类/核心机制/冷知识反转")
-    else:
-        result.ok("风格表格行标题完整性 ✓")
-
-    # ── P2：细节优化 ──
-
-    # 字数检测：< min 打 P2，> max 打 P1，中间正常
-    char_count = count_chinese_chars(plain)
-    result.info["char_count"] = char_count
-    if char_count < WC_MIN:
-        result.p2_error(f"字数偏少（{char_count} 字），建议 {WC_MIN}-{WC_MAX} 字")
-    elif char_count > WC_MAX:
-        result.p1_error(f"字数过多（{char_count} 字），上限 {WC_MAX} 字，需精简")
-    else:
-        result.ok(f"字数 ✓ ({char_count} 字)")
-
-    # P2: 风格说明表格
-    if not re.search(r"\|.+\|.+\|", content):
-        result.p2_error("建议结尾附风格说明表格")
-    else:
-        result.ok("风格说明表格 ✓")
+    # 2) 连续"例如"检测
+    example_marks = list(re.finditer(r"(?:例如|比如|譬如)", plain))
+    for i in range(len(example_marks) - 1):
+        gap = example_marks[i + 1].start() - example_marks[i].end()
+        if gap < 50:  # 两个举例标记间距 < 50 字
+            result.p1_error(
+                f"连续举例标记：「{example_marks[i].group()}」和"
+                f"「{example_marks[i+1].group()}」间距过近，"
+                f"第二个可改为「又如」「再如」或删除")
+            break
 
 
 def validate_file(filepath: Path, strict: bool = False) -> ValidationResult:
@@ -377,10 +386,15 @@ def validate_file(filepath: Path, strict: bool = False) -> ValidationResult:
     return result
 
 
-def print_report(result: ValidationResult, use_json: bool = False):
-    """打印验证报告（P0/P1/P2 新版）"""
+def print_report(result: ValidationResult, use_json: bool = False, verbose: bool = False):
+    """打印验证报告（P0/P1/P2 新版）
+    verbose=True 时输出详细修复建议 + 自动匹配判例
+    """
     if use_json:
-        print(json.dumps(asdict(result), ensure_ascii=False, indent=2))
+        output = asdict(result)
+        # 精简 JSON 输出：移除 info 中的内部字段
+        output["related_cases"] = result.related_cases
+        print(json.dumps(output, ensure_ascii=False, indent=2))
         return
 
     print(f"\n{'='*60}")
@@ -388,7 +402,8 @@ def print_report(result: ValidationResult, use_json: bool = False):
     print(f"{'='*60}")
 
     p0p1_ok = result.has_passed_p0p1()
-    status_icon = "✅ PASS" if p0p1_ok else "❌ FAIL"
+    overall_pass = result.passed and p0p1_ok
+    status_icon = "✅ PASS" if overall_pass else "❌ FAIL"
     print(f"状态: {status_icon}")
     print(f"P0(致命)={len(result.p0)}  P1(重要)={len(result.p1)}  P2(一般)={len(result.p2)}")
     print(f"通过条件: P0=0 ? {'✅' if len(result.p0)==0 else '❌'}  |  "
@@ -420,7 +435,54 @@ def print_report(result: ValidationResult, use_json: bool = False):
             print(f"  · {p}")
         print()
 
+    # ── verbose: 输出详细修复建议 ──
+    if verbose and result.fix_suggestions:
+        print("--- 🛠️ 修复建议 ---")
+        for i, fix in enumerate(result.fix_suggestions, 1):
+            print(f"  [{fix['level']}] {fix['issue']}")
+            if fix.get("location"):
+                print(f"    位置: {fix['location']}")
+            print(f"    建议: {fix['suggestion']}")
+            print()
+
+    # ── 自动匹配判例（有P0/P1问题时） ──
+    if result.p0 or result.p1:
+        cases = _fetch_related_cases(result)
+        if cases:
+            result.related_cases = cases
+            print("--- 📚 相关判例 ---")
+            for case in cases:
+                print(f"  {case.get('id', '?')}: {case.get('problem_type', '?')} ({case.get('date', '?')})")
+                if case.get('solution'):
+                    for line in case['solution'].split('\n')[:2]:
+                        line = line.strip()
+                        if line:
+                            print(f"    {line}")
+            print()
+
     print(f"{'='*60}\n")
+
+
+def _fetch_related_cases(result: ValidationResult) -> list:
+    """自动调用 case_matcher.py 匹配相关判例"""
+    try:
+        # 从 P0/P1 问题中提取关键词
+        all_issues = " ".join(result.p0 + result.p1)
+        # 简化关键词：取前50个字符
+        query = all_issues[:50]
+        case_matcher = Path(__file__).parent / "case_matcher.py"
+        if not case_matcher.exists():
+            return []
+        proc = subprocess.run(
+            [sys.executable, str(case_matcher), query, "--json", "--top", "3"],
+            capture_output=True, text=True, encoding="utf-8", timeout=10,
+            cwd=str(Path(__file__).parent),
+        )
+        if proc.returncode == 0 and proc.stdout.strip():
+            return json.loads(proc.stdout)
+    except Exception:
+        pass  # 静默失败，不阻塞主流程
+    return []
 
 
 def main():
@@ -433,6 +495,8 @@ def main():
     parser.add_argument("--json", action="store_true", help="JSON 格式输出")
     parser.add_argument("--latest", action="store_true",
                         help="审核工作目录中最新的文章")
+    parser.add_argument("--verbose", action="store_true",
+                        help="输出详细修复建议和关联判例")
     args = parser.parse_args()
 
     workspace = Path(args.workspace)
@@ -467,7 +531,7 @@ def main():
     all_results = []
     for fp in files_to_check:
         result = validate_file(fp, strict=args.strict)
-        print_report(result, use_json=args.json)
+        print_report(result, use_json=args.json, verbose=args.verbose)
         all_results.append(result)
 
     if len(all_results) > 1:
@@ -476,7 +540,8 @@ def main():
 
     # ── 退出码：失败处理 ──
     if EXIT_ON_FAIL:
-        any_fail = any(not r.has_passed_p0p1() for r in all_results)
+        # 同时检查 result.passed（文件缺失等致命错误）和 p0p1 通过条件
+        any_fail = any(not r.passed or not r.has_passed_p0p1() for r in all_results)
         if any_fail:
             import sys
             sys.exit(1)
