@@ -32,10 +32,8 @@ if sys.stderr.encoding and sys.stderr.encoding.lower() != "utf-8":
 WORKSPACE = Path(r"F:\WorkBuddy\daily-why")
 RULES_PATH = WORKSPACE / "writing_rules.json"
 SKILL_PATH = Path(r"C:\Users\admin\.workbuddy\skills\daily-why-writer\SKILL.md")
-SKILL_COMPACT_PATH = Path(r"C:\Users\admin\.workbuddy\skills\daily-why-writer\SKILL_COMPACT.md")
 PYTHON_PATH = r"C:/Users/admin/.workbuddy/binaries/python/versions/3.13.12/python.exe"
 TOPICS_CONTEXT = WORKSPACE / "topics_context.json"
-TOPICS_CONTEXT_COMPACT = WORKSPACE / "topics_context_compact.json"
 BACKUP_PATH = WORKSPACE / "automation-prompt-backup.md"
 
 
@@ -46,23 +44,20 @@ def load_rules() -> dict:
     return json.loads(RULES_PATH.read_text(encoding="utf-8"))
 
 
-def load_skill(compact: bool = False) -> str:
-    """加载 SKILL.md（精简版或完整版）"""
-    path = SKILL_COMPACT_PATH if compact else SKILL_PATH
-    if not path.exists():
-        raise FileNotFoundError(f"Skill 文件不存在: {path}")
-    return path.read_text(encoding="utf-8")
+def load_skill() -> str:
+    """加载 SKILL.md"""
+    if not SKILL_PATH.exists():
+        raise FileNotFoundError(f"Skill 文件不存在: {SKILL_PATH}")
+    return SKILL_PATH.read_text(encoding="utf-8")
 
 
-def load_recent_topics(limit: int = 0, compact: bool = False) -> list:
+def load_recent_topics(limit: int = 0) -> list:
     """从 topics_context.json 加载最近话题（用于去重提示）
-    limit=0 表示加载全部标准话题（topic_summaries 已在 prepare_topics.py 中过滤为标准格式）
-    compact=True 时使用精简版 topics_context_compact.json"""
-    path = TOPICS_CONTEXT_COMPACT if compact else TOPICS_CONTEXT
-    if not path.exists():
+    limit=0 表示加载全部标准话题（topic_summaries 已在 prepare_topics.py 中过滤为标准格式）"""
+    if not TOPICS_CONTEXT.exists():
         return []
     try:
-        data = json.loads(path.read_text(encoding="utf-8"))
+        data = json.loads(TOPICS_CONTEXT.read_text(encoding="utf-8"))
         summaries = data.get("topic_summaries", [])
         if limit > 0:
             return summaries[:limit]
@@ -174,9 +169,9 @@ def generate_multi_agent_prompt(rules: dict, recent_topics: list = None) -> str:
 前置：检查 `F:/WorkBuddy/daily-why/{{今天日期}}-每日冷知识.md` 已存在则跳过。{{今天日期}}截取自系统 current_time。
 
 阶段1：内容生成
-1. 运行 `{PYTHON} F:/WorkBuddy/daily-why/prepare_topics.py --compact`
-2. 读 topics_context_compact.json，选未用过的话题（避开已用话题）
-3. WebSearch 查证 1-2 个关键词
+1. 运行 `{PYTHON} F:/WorkBuddy/daily-why/prepare_topics.py`
+2. 读 topics_context.json，选未用过的话题（避开已用话题）
+3. WebSearch 查证 1-2 个关键词，关注关键数字和研究者引用完整性
 4. 加载 daily-why-writer skill，A+C+F 结构写作，{wc_min}-{wc_max} 字，边写边自检
 5. 保存到 `F:/WorkBuddy/daily-why/{{今天日期}}-每日冷知识.md`
 
@@ -280,15 +275,13 @@ def main():
                         help="只检查规则一致性，不输出 prompt")
     parser.add_argument("--update-automation", action="store_true",
                         help="生成 prompt 并更新到 automation 数据库")
-    parser.add_argument("--compact", action="store_true",
-                        help="使用精简版 SKILL.md 和 topics_context.json，减少 Token 消耗")
     parser.add_argument("--multi-agent", action="store_true",
                         help="生成多Agent版本的 prompt（两阶段工作流）")
     args = parser.parse_args()
 
     # 加载规则
     rules = load_rules()
-    skill = load_skill(compact=args.compact)
+    skill = load_skill()
 
     # 一致性检查
     issues = check_consistency(rules, skill)
@@ -304,7 +297,7 @@ def main():
         return
 
     # 加载最近话题
-    recent = load_recent_topics(0, compact=args.compact)  # 精简版加载全部话题
+    recent = load_recent_topics(0)  # 加载全部话题
 
     # 生成 prompt
     if args.multi_agent:
@@ -312,7 +305,7 @@ def main():
         mode = "多Agent版"
     else:
         prompt = generate_prompt(rules, recent)
-        mode = "精简版" if args.compact else "完整版"
+        mode = "标准版"
 
     print("=" * 60)
     print("📋 生成的 Automation Prompt")
