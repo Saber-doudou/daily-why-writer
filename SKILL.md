@@ -23,19 +23,32 @@ agent_created: true
 ## 工作流总览
 
 ```
-选题确认 → 写前查证(WebSearch) → 写作(A+C+F) → 写后自检(CHECKLIST+FORBIDDEN) → 审核(validate_article.py) → 记录(update_history.py)
+选题 → 去重校验(check_topic.py) → 写前查证(WebSearch) → 写作(A+C+F) → 写后自检(CHECKLIST+FORBIDDEN) → 审核(validate_article.py) → 记录(update_history.py)
 ```
 
-**决策树**：选题完成→[话题池空?]→YES:🔴终止 / NO:继续。用户确认→[自动模式?]→YES:跳过 / NO:🟡等"OK"。初稿→[字数>600?]→YES:删C段冗余 / NO:继续。自检→[P0>0?]→YES:修复重检(最多3轮) / NO→[P1>2?]→YES:🟡问用户 / NO:✅。审核→[validate失败?]→YES:修复(最多2轮) / NO:✅发布。
+**决策树**：选题完成→[check_topic.py 退出码1?]→YES:重选话题(最多3轮) / NO:继续。用户确认→[自动模式?]→YES:跳过 / NO:🟡等"OK"。初稿→[字数>600?]→YES:删C段冗余 / NO:继续。自检→[P0>0?]→YES:修复重检(最多3轮) / NO→[P1>2?]→YES:🟡问用户 / NO:✅。审核→[validate失败?]→YES:修复(最多2轮) / NO:✅发布。
 
 ---
 
 ## Phase 0：选题与去重
 
-1. 从 `topic_summaries`（`F:\WorkBuddy\daily-why\topics_context.json`）中选择**未曾使用**的话题
-2. 分类必须从 6 个标准中选一：人体奥秘 / 自然科学 / 生活常识 / 宇宙探索 / 动物世界 / 物理化学
-3. 如话题池为空或全部已用：🟡 提示用户补充新话题
-4. **检查点**（非自动模式）：展示已选话题，等待用户确认后再进入 Phase 1
+1. **读取已有话题**：读 `F:\WorkBuddy\daily-why\topics_context.json` 的 `topic_summaries` 数组，了解所有已用话题
+2. **选题**：自己想一个新话题（不在 topic_summaries 中），分类从 6 个标准中选一：人体奥秘 / 自然科学 / 生活常识 / 宇宙探索 / 动物世界 / 物理化学
+3. **检查点**（非自动模式）：展示已选话题，等待用户确认
+
+### Phase 0.5：去重校验（强制，不可跳过）
+
+选题后、写文章前，**必须**运行机械校验脚本：
+
+```bash
+C:/Users/admin/.workbuddy/binaries/python/versions/3.13.12/python.exe F:/WorkBuddy/daily-why/check_topic.py "你选的话题"
+```
+
+- **退出码 0** → 通过，进入 Phase 1
+- **退出码 1** → 重复！回到 Phase 0 重选（最多 3 轮，仍失败则终止并报告）
+- **退出码 2** → 参数错误，检查话题格式
+
+> ⚠️ 此步骤是机械性防护网，不依赖 AI 判断力。即使你确信话题没写过，也必须跑这个脚本。
 
 ---
 
@@ -114,7 +127,10 @@ agent_created: true
 
 ## Phase 4：审核与发布
 
-1. 保存文章到 `F:\WorkBuddy\daily-why\`
+1. 保存文章到 `F:\WorkBuddy\daily-why\{日期}-每日冷知识-{话题关键词}.md`
+   - 文件名格式：`{YYYY-MM-DD}-每日冷知识-{关键词}.md`
+   - 关键词从话题中提取，2-6 字，如"手指泡水起皱""打哈欠""海水是咸的"
+   - 示例：`2026-06-08-每日冷知识-手指泡水起皱.md`
 2. 运行 `validate_article.py` 验证（最多 2 轮）
 3. 运行 `update_history.py` 更新话题记录
 4. 有新教训 → 记录到 `references/FEEDBACK_LOG.md`
