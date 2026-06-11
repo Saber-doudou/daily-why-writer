@@ -15,7 +15,7 @@ agent_created: true
 ## 元规则
 
 1. **教训没有不可泛化的** — 每次出错分析根因，提炼为可复用规则，记录到 FEEDBACK_LOG
-2. **三层分离，按需加载**：本文件 = 核心法典（Always Load）；`references/CHECKLIST.md` = 科学准确性自检（写后加载）；`references/FORBIDDEN.md` = 黑名单 FP-01~12（写后加载）；`references/FEEDBACK_LOG.md` = 教训记录（审校时按需检索）；`references/EXAMPLES.md` = 好/坏案例（写作时按需查阅）
+2. **三层分离，按需加载**：本文件 = 核心法典（Always Load）；`references/CHECKLIST.md` = 科学准确性自检（写后加载）；`references/FORBIDDEN.md` = 黑名单 FP-01~20（写后加载）；`references/FEEDBACK_LOG.md` = 教训记录（审校时按需检索）；`references/EXAMPLES.md` = 好/坏案例（写作时按需查阅）
 3. **数值规则内联**：本文已内联所有关键阈值，`writing_rules.json` 仅供 `validate_article.py` 程序化验证
 
 ---
