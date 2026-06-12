@@ -3,8 +3,8 @@ name: daily-why-writer
 description: >
   每日冷知识科普文章写作助手。按 A+C+F 结构（故事开头→疑问驱动→反转收尾）
   撰写 300-600 字趣味科普。含排版规范、科学准确性自检（CHECKLIST.md）、
-  标点纠错（GB/T 15834）。触发词：写冷知识、每日一个为什么、科普文章、
-  冷知识写作、写篇科普、每日冷知识。
+  标点纠错（GB/T 15834）。触发词：每日一个为什么、每日一个为什么写作、
+  dailywhy、dailywhy写作、每日冷知识。
 agent_created: true
 ---
 
@@ -15,7 +15,7 @@ agent_created: true
 ## 元规则
 
 1. **教训没有不可泛化的** — 每次出错分析根因，提炼为可复用规则，记录到 FEEDBACK_LOG
-2. **三层分离，按需加载**：本文件 = 核心法典（Always Load）；`references/CHECKLIST.md` = 科学准确性自检（写后加载）；`references/FORBIDDEN.md` = 黑名单 FP-01~20（写后加载）；`references/FEEDBACK_LOG.md` = 教训记录（审校时按需检索）；`references/EXAMPLES.md` = 好/坏案例（写作时按需查阅）
+2. **三层分离，按需加载**：本文件 = 核心法典（Always Load）；`references/CHECKLIST.md` = 科学准确性自检（写后加载）；`references/FORBIDDEN.md` = 黑名单 FP-01~21（写后加载）；`references/FEEDBACK_LOG.md` = 教训记录（审校时按需检索）；`references/EXAMPLES.md` = 好/坏案例（写作时按需查阅）
 3. **数值规则内联**：本文已内联所有关键阈值，`writing_rules.json` 仅供 `validate_article.py` 程序化验证
 
 ---
@@ -139,12 +139,28 @@ C:/Users/admin/.workbuddy/binaries/python/versions/3.13.12/python.exe F:/WorkBud
 
 ---
 
+## 三 Skill 架构
+
+```
+L1: daily-why-writer（本文件）— 每日09:40自动运行，产出v1
+L2: daily-why-feed-learning — 四AI投喂学习，产出v2+新规则
+L3: daily-why-publish — 匹配检查+IMA备份+GitHub推送+记忆归档
+```
+
+| Skill | 路径 | 触发词 |
+|-------|------|--------|
+| L1 写作 | `~/.workbuddy/skills/daily-why-writer/` | 写冷知识、每日冷知识 |
+| L2 投喂 | `~/.workbuddy/skills/daily-why-feed-learning/` | 投喂学习、四AI学习 |
+| L3 发布 | `~/.workbuddy/skills/daily-why-publish/` | 发布、推送、备份 |
+
+---
+
 ## 相关文件索引
 
 | 文件 | 用途 | 加载时机 |
 |------|------|---------|
-| `references/CHECKLIST.md` | 9 类科学准确性自检 | Phase 3 |
-| `references/FORBIDDEN.md` | 12 条禁止模式 FP-01~12 | Phase 3 |
+| `references/CHECKLIST.md` | 12 类科学准确性自检 | Phase 3 |
+| `references/FORBIDDEN.md` | 21 条禁止模式 FP-01~21 | Phase 3 |
 | `references/FEEDBACK_LOG.md` | 教训→规则转化记录 | 按需检索 |
 | `references/EXAMPLES.md` | A段/F段/Q格式好/坏案例 | 写作时查阅 |
 | `CODE_REVIEW_GUIDE.md` | Python 脚本代码审查标准 | 改脚本时查阅 |
