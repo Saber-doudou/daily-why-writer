@@ -15,7 +15,7 @@ agent_created: true
 ## 元规则
 
 1. **教训没有不可泛化的** — 每次出错分析根因，提炼为可复用规则，记录到 FEEDBACK_LOG
-2. **三层分离，按需加载**：本文件 = 核心法典（Always Load）；`references/CHECKLIST.md` = 科学准确性自检（写后加载）；`references/FORBIDDEN.md` = 黑名单 FP-01~22（写后加载）；`references/FEEDBACK_LOG.md` = 活跃教训（30天内，审校时按需检索）；`references/FEEDBACK_ARCHIVE.md` = 休眠教训（30天未再犯，手动查阅）；`references/EXAMPLES.md` = 好/坏案例（写作时按需查阅）
+2. **三层分离，按需加载**：本文件 = 核心法典（Always Load）；`references/CHECKLIST.md` = 科学准确性自检（写后加载）；`references/FORBIDDEN.md` = 黑名单 FP-01~28（写后加载）；`references/FEEDBACK_LOG.md` = 活跃教训（30天内，审校时按需检索）；`references/FEEDBACK_ARCHIVE.md` = 休眠教训（30天未再犯，手动查阅）；`references/EXAMPLES.md` = 好/坏案例（写作时按需查阅）
 3. **数值规则内联**：本文已内联所有关键阈值，`writing_rules.json` 仅供 `validate_article.py` 程序化验证
 
 ---
@@ -49,12 +49,16 @@ C:/Users/admin/.workbuddy/binaries/python/versions/3.13.12/python.exe F:/WorkBud
 - **退出码 2** → 参数错误，检查话题格式
 
 > ⚠️ 此步骤是机械性防护网，不依赖 AI 判断力。即使你确信话题没写过，也必须跑这个脚本。
+>
+> 若 3 轮选题均被 check_topic.py 判定重复，终止并报告"⚠️ 今日选题失败，需人工介入"。
 
 ---
 
 ## Phase 1：写前查证
 
 用 WebSearch 搜 1-2 个关键词：查证关键数字（距离、倍数、温度），争议表述要修正；**核实机构名和研究者姓名**（如"英格兰大学"不存在→应为"曼彻斯特大学"）；**搜索最新科学机制**（搜"XX 机制 最新研究"）；看看同类科普有无辟谣/误区内容；确认反转是否独特。纯常识类话题（海水咸、天蓝）可跳过。
+
+> ⚠️ WebSearch 失败或无结果时：使用已有常识写作，标注"⚠️ 未查证"，在 F 段注明"建议读者自行确认"。不得因搜索失败而终止流程。
 
 ---
 
@@ -100,7 +104,7 @@ C:/Users/admin/.workbuddy/binaries/python/versions/3.13.12/python.exe F:/WorkBud
 ## Phase 3：写后自检
 
 1. 加载 `references/CHECKLIST.md` 逐项检查科学准确性
-2. 加载 `references/FORBIDDEN.md` 扫描 FP-01~22
+2. 加载 `references/FORBIDDEN.md` 扫描 FP-01~28
 3. **标点自查**（5 项高频陷阱，GB/T 15834-2011）：
 
 | # | 陷阱 | 错误 → 正确 |
@@ -155,12 +159,82 @@ L3: daily-why-publish — 匹配检查+IMA备份+GitHub推送+记忆归档
 
 ---
 
+## 🤖 多 Agent 执行模式（v1.0）
+
+> **1 Agent spawn 模式**：Orchestrator 亲自选题+写作+自检+精修，只 spawn Reviewer 做独立审校。
+
+| 角色 | 职责 | 阶段 | 加载模块 | 预估 Token |
+|------|------|------|---------|:---:|
+| **Orchestrator**（Automation 自身） | 选题 + 写作 + 自检 + 精修 + 输出 + 记忆更新 | Phase 0-2, 4-5 | 写作阶段: SKILL.md + topics_context.json；精修阶段: + CHECKLIST.md + FORBIDDEN.md | 峰值~20K |
+| **reviewer**（spawn） | 独立审校 + 脚本审核 + 判例检索 | Phase 3 | reviewer_prompt.md + CHECKLIST.md + FORBIDDEN.md | ~12K |
+
+### 模块化设计原则
+- Orchestrator 写作阶段不加载 CHECKLIST.md/FORBIDDEN.md —— 避免"知道考纲做题"
+- Orchestrator 精修阶段加载 CHECKLIST.md/FORBIDDEN.md —— 精准修复
+- Reviewer 不加载 SKILL.md 写作规则 —— 纯粹的审核视角
+- CASE_STUDIES.md 按需检索，不塞进上下文
+
+### 执行流程
+
+```
+Phase 0: 防重跑检查（今日文章是否已存在）
+    ↓
+Phase 1: 【Orchestrator】选题 + check_topic.py 去重 + WebSearch 查证
+    ↓
+Phase 2: 【Orchestrator】A+C+F 写作 + 写后自检
+    ↓
+Phase 3: 【Orchestrator】初稿写入文件 → spawn reviewer
+    ↓
+Phase 3.5: 【reviewer 独立审校】
+    - 读取初稿
+    - 运行 validate_article.py
+    - 按 CHECKLIST + FORBIDDEN 逐项检查
+    - 按需 Grep CASE_STUDIES.md
+    - 输出 review_report.json
+    ↓
+    若 P0=0 且 P1≤2 → Phase 4（通过）
+    否则 → Phase 4（修复循环）
+    ↓
+Phase 4: 【Orchestrator】收到审核报告
+    - 通过 → 直接输出 + 记忆更新
+    - 不通过 → 按报告修复 → 写入文件 → re-spawn reviewer（最多 2 轮）
+    - 2 轮后仍不通过 → 标记"⚠️ 需人工审核"，输出当前最佳版本
+    ↓
+Phase 5: 【Orchestrator】输出全文 + update_history.py + 记忆更新
+```
+
+**效率规范**：网络请求上限3次；记忆更新合并为1次。
+
+### Agent 级异常处理
+
+| 场景 | 处理策略 |
+|------|---------|
+| reviewer 超时（10分钟无响应） | Orchestrator 跳过审校，直接输出初稿 + 标注"⚠️ 未审校" |
+| reviewer spawn 失败 | 重试 1 次 → 仍失败 → 跳过审校 |
+| reviewer 返回空结果 | Orchestrator 重试 1 次，仍为空则跳过审校 |
+| validate_article.py 脚本执行失败 | reviewer 降级为纯 AI 审校（不依赖脚本） |
+
+### 迭代终结条件
+
+- 审校通过（P0=0 且 P1≤2）→ 输出文章
+- 审校不通过 → Orchestrator 直接修复 → reviewer 重新审校（最多 2 轮）
+- 2 轮后仍不通过 → 标记"⚠️ 需人工审核"，输出当前最佳版本
+
+### 消息协议
+
+reviewer → orchestrator：
+```json
+{ "agent": "reviewer", "status": "done", "file": "{date}_review.json", "p0_count": 0, "p1_count": 1, "pass": true, "score": 95 }
+```
+
+---
+
 ## 相关文件索引
 
 | 文件 | 用途 | 加载时机 |
 |------|------|---------|
-| `references/CHECKLIST.md` | 12 类科学准确性自检 | Phase 3 |
-| `references/FORBIDDEN.md` | 22 条禁止模式 FP-01~22 | Phase 3 |
+| `references/CHECKLIST.md` | 14 类科学准确性自检 | Phase 3 |
+| `references/FORBIDDEN.md` | 28 条禁止模式 FP-01~28 | Phase 3 |
 | `references/FEEDBACK_LOG.md` | 教训→规则转化记录（30天内活跃） | 按需检索 |
 | `references/FEEDBACK_ARCHIVE.md` | 休眠教训库（30天未再犯） | 手动查阅 |
 | `references/EXAMPLES.md` | A段/F段/Q格式好/坏案例 | 写作时查阅 |
@@ -168,7 +242,27 @@ L3: daily-why-publish — 匹配检查+IMA备份+GitHub推送+记忆归档
 | `writing_rules.json` | 程序化验证数据源 | validate_article.py |
 | `validate_article.py` | 格式+质量自动审核 | Phase 4 |
 | `update_history.py` | 话题去重记录更新 | Phase 4 |
+| `reviewer_prompt.md` | Reviewer Agent 审校 prompt | Phase 3（spawn 时加载） |
 
 ## 风格样本
 
 一篇合格文章：看标题想点 → 第一段被带入场景 → 3 个问题牵着走 → 结尾反转"打脸" → 记住一个冷知识。
+
+**结构速查**：
+```
+# 🦷 为什么咬到舌头会特别疼？
+> 你正啃着鸡腿，突然"咔嚓"一声——牙齿狠狠咬在舌头侧面。那种钻心的疼，比被针扎还让人跳起来...
+---
+
+**Q1：舌头不是全身最灵活的肌肉吗？怎么这么脆弱？** → 答案
+**Q2：为什么咬到舌头比咬到嘴唇疼那么多？** → 答案
+**Q3：有没有办法让咬伤好得快一点？** → 答案
+---
+
+> 🧠 **冷知识反转**：舌头的愈合速度是身体其他部位的3倍...
+| 话题 | 舌头咬伤特别疼 | 分类 | 人体奥秘 |
+| 核心机制 | 舌头密布痛觉感受器，神经末梢密度是皮肤的6倍 | 冷知识反转 | 舌头愈合速度是身体最快，约3天即可痊愈 |
+```
+
+---
+*Version: v3.0 | 2026-06-21 | 多Agent架构（Orchestrator+Reviewer spawn）+ Darwin优化*`
