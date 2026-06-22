@@ -32,7 +32,7 @@ agent_created: true
 
 ## Phase 0：选题与去重
 
-1. **读取已有话题**：读 `F:\WorkBuddy\daily-why\topics_context.json` 的 `topic_summaries` 数组，了解所有已用话题
+1. **读取已有话题**：读 `F:\WorkBuddy\daily-why\config\topics_context.json` 的 `topic_summaries` 数组，了解所有已用话题
 2. **选题**：自己想一个新话题（不在 topic_summaries 中），分类从 6 个标准中选一：人体奥秘 / 自然科学 / 生活常识 / 宇宙探索 / 动物世界 / 物理化学
 3. **检查点**（非自动模式）：展示已选话题，等待用户确认
 
@@ -41,7 +41,7 @@ agent_created: true
 选题后、写文章前，**必须**运行机械校验脚本：
 
 ```bash
-C:/Users/admin/.workbuddy/binaries/python/versions/3.13.12/python.exe F:/WorkBuddy/daily-why/check_topic.py "你选的话题"
+C:/Users/admin/.workbuddy/binaries/python/versions/3.13.12/python.exe F:/WorkBuddy/daily-why/scripts/check_topic.py "你选的话题"
 ```
 
 - **退出码 0** → 通过，进入 Phase 1
@@ -131,12 +131,12 @@ C:/Users/admin/.workbuddy/binaries/python/versions/3.13.12/python.exe F:/WorkBud
 
 ## Phase 4：审核与发布
 
-1. 保存文章到 `F:\WorkBuddy\daily-why\{日期}-每日冷知识-{话题关键词}.md`
+1. 保存文章到 `F:\WorkBuddy\daily-why\articles\{YYYY-MM}\{日期}-每日冷知识-{话题关键词}.md`
    - 文件名格式：`{YYYY-MM-DD}-每日冷知识-{关键词}.md`
    - 关键词从话题中提取，2-6 字，如"手指泡水起皱""打哈欠""海水是咸的"
-   - 示例：`2026-06-08-每日冷知识-手指泡水起皱.md`
-2. 运行 `validate_article.py` 验证（最多 2 轮）
-3. 运行 `update_history.py` 更新话题记录
+   - 示例：`2026-06-08-每日冷知识-手指泡水起皱.md`（保存到 `articles/2026-06/` 目录）
+2. 运行 `scripts/validate_article.py` 验证（最多 2 轮）
+3. 运行 `scripts/update_history.py` 更新话题记录
 4. 有新教训 → 记录到 `references/FEEDBACK_LOG.md`
 
 **自动模式**：`--auto` 跳过所有确认检查点，用于 cron 定时任务。
