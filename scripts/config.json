@@ -1,0 +1,26 @@
+{
+  "python_path": "C:/Users/admin/.workbuddy/binaries/python/versions/3.13.12/python.exe",
+  "base_dir": "F:/WorkBuddy/daily-why",
+  "articles_dir": "F:/WorkBuddy/daily-why/articles",
+  "投喂素材_dir": "F:/WorkBuddy/daily-why/投喂素材",
+  "references_dir": "C:/Users/admin/.workbuddy/skills/daily-why-writer/references",
+  "scripts_dir": "F:/WorkBuddy/daily-why/scripts",
+  "validate_script": "F:/WorkBuddy/daily-why/scripts/validate_article.py",
+  "ima_archive_script": "C:/Users/admin/WorkBuddy/tools/ima_archive.py",
+  "ima_kb_id": "7457707061698771",
+  "automation_memory": "F:/WorkBuddy/daily-why/.workbuddy/automations/automation-1778312519754/memory.md",
+  "memory_dir": "F:/WorkBuddy/daily-why/.workbuddy/memory",
+  "memory_md_path": "F:/WorkBuddy/daily-why/.workbuddy/memory/MEMORY.md",
+  "git_repo_path": "F:/WorkBuddy/daily-why-writer",
+  "git_add_files": [
+    "SKILL.md",
+    "references/FORBIDDEN.md",
+    "references/CHECKLIST.md",
+    "references/FEEDBACK_LOG.md",
+    "scripts/l3_publish.py",
+    "scripts/config.json",
+    "daily-why-publish/SKILL.md"
+  ],
+  "ima_upload_timeout": 30,
+  "git_push_timeout": 30
+}
