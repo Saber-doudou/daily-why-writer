@@ -111,9 +111,45 @@ C:/Users/admin/.workbuddy/binaries/python/versions/3.13.12/python.exe F:/WorkBud
 
 脚本执行 Phase 2/3/4（IMA 备份、GitHub 推送、记忆归档）。
 
+**⚠️ IMA 备份约束（2026-06-23 修复）**：
+- Phase 2 的 IMA 备份使用 `--config-only` 参数，**只备份 MEMORY.md 配置**
+- **不包含**今日日志（`memory/{date}.md`），防止文章元数据/发布记录混入 IMA
+- 参照：history-today 的同一约束（2026-06-22 BUG 修复）
+
 ### Step 4：产出汇总
 
-AI 汇总完整的匹配度检查报告（脚本的结构/审核/规则结果 + AI 的改进点验证结果）。
+AI 汇总完整报告，格式如下：
+
+```
+## 发布报告 — {YYYY-MM-DD} {话题}
+
+### 基本信息
+- 话题：{话题}
+- 分类：{分类}
+- 初版：{文件名}（{字数}字，{Q数}Q）
+- 优化版：{文件名}（{字数}字，{Q数}Q）
+
+### 脚本预检（Step 1）
+- 结构一致性：✅/❌（分类/Q数/A/C/F）
+- 审核得分：{分数}（P0={N}, P1={N}, P2={N}）
+- 规则同步：✅/❌（{涉及的FP/CHECKLIST}）
+
+### 语义验证（Step 2）
+| # | 改进点 | 判定 | 证据 |
+|---|--------|------|------|
+| 1 | ... | ✅/⚠️/❌ | → L{N}: "..." |
+
+汇总：✅ {N} / ⚠️ {N} / ❌ {N}
+结论：✅ 通过 / ⚠️ 有条件通过 / ❌ 不通过
+
+### 发布结果（Step 3）
+- IMA：note_id={id} / ⚠️ 失败 / ⏭️ 跳过
+- GitHub：commit={hash} / ⚠️ 失败 / ⏭️ 跳过
+- 记忆归档：✅ / ❌
+
+### 总体结论
+✅ 发布成功 / ⚠️ 部分成功（说明）/ ❌ 发布失败（说明）
+```
 
 ---
 
@@ -131,6 +167,24 @@ l3_publish.py [YYYY-MM-DD] [--dry-run] [--force] [--no-git] [--no-ima] [--skip-m
 | `--no-git` | 跳过 GitHub 推送 |
 | `--no-ima` | 跳过 IMA 备份 |
 | `--skip-match` | 跳过 Phase 1（Step 3 使用） |
+
+---
+
+## 依赖关系
+
+```
+L1 daily-why-writer（每日 09:40 自动运行）
+  ↓ 产出 v1 初版文章
+L2 daily-why-feed-learning（手动触发）
+  ↓ 产出 v2 优化版 + 学习总结
+L3 daily-why-publish（手动触发）← 本 Skill
+  ↓ 验证 + 发布 + 归档
+```
+
+**前置条件**：
+- L1 已完成（初版文章存在）
+- L2 已完成（优化版 + 学习总结存在）
+- 若 L2 未完成，Step 1 脚本预检会报错终止
 
 ---
 
@@ -154,6 +208,17 @@ l3_publish.py [YYYY-MM-DD] [--dry-run] [--force] [--no-git] [--no-ima] [--skip-m
 | 1 | 致命错误 | 检查 stderr，修复后重试 |
 | 2 | 部分成功（有 warning） | 检查 ⚠️ Phase，按需补做 |
 
+### 边界条件处理
+
+| 场景 | 处理方式 |
+|------|----------|
+| **优化版文件不存在** | 终止发布，提示"请先运行 L2 投喂学习生成优化版" |
+| **IMA 上传失败** | 重试 1 次；仍失败则跳过 IMA，记录 `⚠️ IMA 上传失败`，不阻塞 GitHub 推送 |
+| **GitHub 推送失败** | 重试 1 次；仍失败则记录 `⚠️ GitHub 推送失败（本地 ahead N）`，下次发布时自动补推 |
+| **语义验证不通过** | 终止发布，输出未落实的改进点清单，等 Master 决定是否强制发布 |
+| **l3_publish.py 脚本不存在** | 终止，提示检查 `scripts/l3_publish.py` 路径 |
+| **Python 环境不可用** | 终止，提示检查 `C:/Users/admin/.workbuddy/binaries/python/versions/3.13.12/python.exe` |
+
 ---
 
 ## 产出清单
@@ -167,4 +232,18 @@ l3_publish.py [YYYY-MM-DD] [--dry-run] [--force] [--no-git] [--no-ima] [--skip-m
 
 ---
 
-*Version: v3.1 | 2026-06-23 | 去掉"零 AI"假约束，关键词匹配 → AI 语义验证*
+---
+
+## 版本变更日志
+
+| 版本 | 日期 | 变更 |
+|------|------|------|
+| v3.2 | 2026-06-23 | Darwin 优化：边界条件处理(6项) + 产出汇总模板 + 依赖关系图 + CHANGELOG |
+| v3.1 | 2026-06-23 | 去掉"零 AI"假约束，关键词匹配 → AI 语义验证（三档判定+证据规则+通过线） |
+| v3.0 | 2026-06-12 | 多 Agent 架构：脚本预检 + AI 语义验证 + 脚本执行 |
+| v2.0 | 2026-06-05 | Phase B 脚本化：validate_article.py + update_history.py |
+| v1.0 | 2026-04-23 | 初始版本：手动验证 + 发布 |
+
+---
+
+*Version: v3.2 | 2026-06-23 | Darwin 优化：补充边界条件处理 + 产出汇总模板具体化 + 依赖关系 + CHANGELOG*

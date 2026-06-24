@@ -438,6 +438,7 @@ def phase2_ima(date_str, dry_run, force, res):
         "backup-memory",
         f"--kb-id={CFG['ima_kb_id']}",
         f"--version={version}",
+        "--config-only",  # 只备份配置，不包含今日日志（防止文章元数据混入）
     ]
 
     try:
