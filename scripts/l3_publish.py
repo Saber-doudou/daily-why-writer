@@ -4,7 +4,7 @@ L3 Publish v3.0 — daily-why 自包含发布脚本
 零 AI 依赖，一条命令跑完：匹配检查、IMA 备份、GitHub 推送、执行日志归档
 
 Usage:
-    python l3_publish.py [YYYY-MM-DD] [--dry-run] [--force] [--no-git] [--no-ima] [--skip-match]
+    python l3_publish.py [YYYY-MM-DD] [--dry-run] [--force] [--no-git] [--no-ima] [--skip-match] [--skip-archive]
 """
 
 import argparse
@@ -124,6 +124,8 @@ def parse_args():
                    help="跳过 IMA 云端备份")
     p.add_argument("--skip-match", action="store_true",
                    help="跳过匹配度检查（Phase 1）")
+    p.add_argument("--skip-archive", action="store_true",
+                   help="跳过 FEEDBACK 休眠归档（Phase 5）")
     return p.parse_args()
 
 
@@ -387,20 +389,34 @@ def phase1_match_check(v1_path, v2_path, summary_path, dry_run, res):
 # ── Phase 2: IMA 云端备份 ────────────────────────────
 
 def _detect_ima_version():
-    """从 MEMORY.md 的 IMA 备份历史表检测最新版本号并 +1"""
+    """从 MEMORY.md 检测最新版本号 → 进位（minor 满 9 进 1）
+
+    十进制版本语义：3.9 → 4.0（不是 3.10）。
+    降级策略：IMA 备份历史章节找不到 → 全文搜索。
+    """
     memory_md = Path(CFG["memory_md_path"])
     if not memory_md.exists():
-        return "3.0"
+        return "1.0"
+
     content = memory_md.read_text(encoding="utf-8")
-    section = re.search(r"## IMA 备份历史\n(.*?)(?=\n## |\Z)", content, re.DOTALL)
+
+    # 优先从 IMA 备份历史章节取（兼容「最近5条」等后缀）
+    section = re.search(r"## IMA 备份历史[^\n]*\n(.*?)(?=\n## |\Z)", content, re.DOTALL)
     if section:
         versions = re.findall(r"\bv(\d+\.\d+)\b", section.group(1))
-        if versions:
-            latest = max(versions, key=lambda v: [int(x) for x in v.split(".")])
-            parts = latest.split(".")
-            minor = int(parts[1]) + 1 if len(parts) > 1 else 1
-            return f"{parts[0]}.{minor}"
-    return "3.0"
+    else:
+        # 降级：全文搜索
+        versions = re.findall(r"\bv(\d+\.\d+)\b", content)
+
+    if versions:
+        latest = max(versions, key=lambda v: [int(x) for x in v.split(".")])
+        major, minor = [int(x) for x in latest.split(".")]
+        minor += 1
+        if minor >= 10:
+            major += 1
+            minor = 0
+        return f"{major}.{minor}"
+    return "1.0"
 
 
 def _append_ima_history(note_id, version, date_str):
@@ -411,7 +427,7 @@ def _append_ima_history(note_id, version, date_str):
     content = memory_md.read_text(encoding="utf-8")
     new_row = f"| v{version} | {note_id} | {date_str} | l3_publish.py 自动备份 |"
     # 在 IMA 备份历史表末尾追加（匹配最后一个 | 开头的行之后）
-    pattern = r"(## IMA 备份历史\n\|.*\|.*\|.*\|.*\|(?:\n\|.*\|.*\|.*\|.*\|)*)"
+    pattern = r"(## IMA 备份历史[^\n]*\n\|.*\|.*\|.*\|.*\|(?:\n\|.*\|.*\|.*\|.*\|)*)"
     m = re.search(pattern, content, re.DOTALL)
     if m:
         table_block = m.group(1)
@@ -632,6 +648,46 @@ def phase4_memory(date_str, v1_meta, v2_meta, ima_result, git_result, dry_run, r
     res.ok(4, f"已写入 {log_file.name}")
 
 
+# ── Phase 5: FEEDBACK 休眠教训归档 ─────────────────────
+
+def phase5_feedback_archive(dry_run, res):
+    """检查 FEEDBACK_LOG 中超30天+已转规则的教训，归档到 FEEDBACK_ARCHIVE"""
+    archive_script = Path(CFG.get("archive_lessons_script", ""))
+    if not archive_script.exists():
+        res.skip(5, "archive_lessons.py 未配置或不存在")
+        return
+
+    python = CFG["python_path"]
+    cmd = [python, str(archive_script), "--mode", "archive"]
+    if dry_run:
+        cmd.append("--dry-run")
+
+    try:
+        result = subprocess.run(cmd, capture_output=True, text=True, timeout=60)
+        output = result.stdout.strip()
+        if result.returncode != 0:
+            res.warn(5, f"存档脚本异常退出 ({result.returncode}): {result.stderr[:200]}")
+            return
+
+        # 解析输出判断是否有实际归档
+        if "无可归档条目" in output:
+            res.ok(5, "FEEDBACK 无新归档条目")
+        elif "归档完成" in output:
+            # 提取具体数字
+            lines = output.split("\n")
+            for line in lines:
+                if "新增" in line:
+                    res.ok(5, f"FEEDBACK 休眠归档: {line.strip()}")
+                    return
+            res.ok(5, "FEEDBACK 休眠归档完成")
+        else:
+            res.ok(5, f"FEEDBACK 存档检查完成")
+    except subprocess.TimeoutExpired:
+        res.warn(5, "存档脚本超时（>60s），跳过")
+    except Exception as e:
+        res.warn(5, f"存档脚本异常: {e}")
+
+
 # ── Main ─────────────────────────────────────────────
 
 def main():
@@ -725,6 +781,10 @@ def main():
 
     # Phase 4: 记忆归档
     phase4_memory(date_str, v1_meta, v2_meta, ima_result, git_result, args.dry_run, res)
+
+    # Phase 5: FEEDBACK 休眠归档
+    if not args.skip_archive:
+        phase5_feedback_archive(args.dry_run, res)
 
     res.summary()
     if res.errors:

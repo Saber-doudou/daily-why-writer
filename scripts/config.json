@@ -5,6 +5,7 @@
   "投喂素材_dir": "F:/WorkBuddy/daily-why/投喂素材",
   "references_dir": "C:/Users/admin/.workbuddy/skills/daily-why-writer/references",
   "scripts_dir": "F:/WorkBuddy/daily-why/scripts",
+  "archive_lessons_script": "F:/WorkBuddy/daily-why/scripts/archive_lessons.py",
   "validate_script": "F:/WorkBuddy/daily-why/scripts/validate_article.py",
   "ima_archive_script": "C:/Users/admin/WorkBuddy/tools/ima_archive.py",
   "ima_kb_id": "7457707061698771",
