@@ -15,7 +15,7 @@ agent_created: true
 ## 元规则
 
 1. **教训没有不可泛化的** — 每次出错分析根因，提炼为可复用规则，记录到 FEEDBACK_LOG
-2. **三层分离，按需加载**：本文件 = 核心法典（Always Load）；`references/CHECKLIST.md` = 科学准确性自检（写后加载）；`references/FORBIDDEN.md` = 黑名单 FP-01~41（写后加载）；`references/FEEDBACK_LOG.md` = 活跃教训（30天内，审校时按需检索）；`references/FEEDBACK_ARCHIVE.md` = 休眠教训（30天未再犯，手动查阅）；`references/EXAMPLES.md` = 好/坏案例（写作时按需查阅）
+2. **三层分离，按需加载**：本文件 = 核心法典（Always Load）；`references/CHECKLIST.md` = 科学准确性自检（写后加载）；`references/FORBIDDEN.md` = 黑名单 FP-01~42（写后加载）；`references/FEEDBACK_LOG.md` = 活跃教训（30天内，审校时按需检索）；`references/FEEDBACK_ARCHIVE.md` = 休眠教训（30天未再犯，手动查阅）；`references/EXAMPLES.md` = 好/坏案例（写作时按需查阅）
 3. **数值规则内联**：本文已内联所有关键阈值，`writing_rules.json` 仅供 `validate_article.py` 程序化验证
 
 ---
@@ -104,7 +104,7 @@ C:/Users/admin/.workbuddy/binaries/python/versions/3.13.12/python.exe F:/WorkBud
 ## Phase 3：写后自检
 
 1. 加载 `references/CHECKLIST.md` 逐项检查科学准确性
-2. 加载 `references/FORBIDDEN.md` 扫描 FP-01~35
+2. 加载 `references/FORBIDDEN.md` 扫描 FP-01~42
 3. **标点自查**（5 项高频陷阱，GB/T 15834-2011）：
 
 | # | 陷阱 | 错误 → 正确 |
@@ -233,8 +233,8 @@ reviewer → orchestrator：
 
 | 文件 | 用途 | 加载时机 |
 |------|------|---------|
-| `references/CHECKLIST.md` | 24 项科学准确性自检（含 FP 交叉引用） | Phase 3 |
-| `references/FORBIDDEN.md` | 35 条禁止模式 FP-01~35 | Phase 3 |
+| `references/CHECKLIST.md` | 34 项科学准确性自检（含 FP 交叉引用） | Phase 3 |
+| `references/FORBIDDEN.md` | 42 条禁止模式 FP-01~42 | Phase 3 |
 | `references/FEEDBACK_LOG.md` | 教训→规则转化记录（30天内活跃） | 按需检索 |
 | `references/FEEDBACK_ARCHIVE.md` | 休眠教训库（30天未再犯） | 手动查阅 |
 | `references/EXAMPLES.md` | A段/F段/Q格式好/坏案例 | 写作时查阅 |
