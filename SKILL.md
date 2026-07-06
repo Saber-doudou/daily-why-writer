@@ -233,7 +233,7 @@ reviewer → orchestrator：
 
 | 文件 | 用途 | 加载时机 |
 |------|------|---------|
-| `references/CHECKLIST.md` | 37 项科学准确性自检（含 FP 交叉引用） | Phase 3 |
+| `references/CHECKLIST.md` | 38 项科学准确性自检（含 FP 交叉引用） | Phase 3 |
 | `references/FORBIDDEN.md` | 44 条禁止模式 FP-01~44 | Phase 3 |
 | `references/FEEDBACK_LOG.md` | 教训→规则转化记录（30天内活跃） | 按需检索 |
 | `references/FEEDBACK_ARCHIVE.md` | 休眠教训库（30天未再犯） | 手动查阅 |
