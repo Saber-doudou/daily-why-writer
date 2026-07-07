@@ -18,6 +18,9 @@
     "references/FORBIDDEN.md",
     "references/CHECKLIST.md",
     "references/FEEDBACK_LOG.md",
+    "references/FEEDBACK_ARCHIVE.md",
+    "review/CASE_STUDIES.md",
+    "scripts/generate_prompt.py",
     "scripts/l3_publish.py",
     "scripts/config.json",
     "daily-why-publish/SKILL.md"
