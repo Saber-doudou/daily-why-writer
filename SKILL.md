@@ -6,7 +6,7 @@ description: >
   标点纠错（GB/T 15834）。触发词：每日一个为什么、每日一个为什么写作、
   dailywhy、dailywhy写作、每日冷知识。
 agent_created: true
-last_updated: 2026-07-14
+last_updated: 2026-07-23
 ---
 
 # daily-why-writer
@@ -234,8 +234,8 @@ reviewer → orchestrator：
 
 | 文件 | 用途 | 加载时机 |
 |------|------|---------|
-| `references/CHECKLIST.md` | 50 项科学准确性自检（含 FP 交叉引用） | Phase 3 |
-| `references/FORBIDDEN.md` | 52 条禁止模式 FP-01~52 | Phase 3 |
+| `references/CHECKLIST.md` | 54 项科学准确性自检（含 FP 交叉引用） | Phase 3 |
+| `references/FORBIDDEN.md` | 56 条禁止模式 FP-01~56 | Phase 3 |
 | `references/FEEDBACK_LOG.md` | 教训→规则转化记录（30天内活跃） | 按需检索 |
 | `references/FEEDBACK_ARCHIVE.md` | 休眠教训库（30天未再犯） | 手动查阅 |
 | `references/EXAMPLES.md` | A段/F段/Q格式好/坏案例 | 写作时查阅 |
@@ -271,4 +271,8 @@ reviewer → orchestrator：
 *Version: v3.1 | 2026-07-14 | + FP-49(辟谣一刀切否定中间态) + CHECKLIST §47(标题概念域一致性)*
 *Version: v3.1 | 2026-07-15 | + FP-50(极限值须标理论极限前提) + FP-51(结构数值须WebSearch核实) + CHECKLIST §48(分级结构层级数量区分)*
 *Version: v3.1 | 2026-07-17 | + FP-52(物理过程动词不精确) + CHECKLIST §49(天文坐标标注坐标系)/§50(A段→C段过渡衔接)*
-*Version: v3.1 | 2026-07-17 | + FP-53(薄膜干涉黑膜成因遗漏半波损失) + FP-54(干涉类表述主动误导) + CHECKLIST §51(光学干涉覆盖半波损失)/§52(干涉因果表述避免主动误导)*
+*Version: v3.1 | 2026-07-17 | + FP-53(薄膜干涉黑膜成因遗漏半波损失) + FP-54(干涉类表述主动误导) + CHECKLIST §51(光学干涉覆盖半波损失)/§52(干涉因果表述避免主动误导)
+*Version: v3.1 | 2026-07-23 | + FP-55(冷知识反转与前文逻辑断裂) + FP-56(结尾口号式说教) + CHECKLIST §53(反常现象开头须前置条件限定)/§54(科学新闻引用的论文归属核查)*
+*Version: v3.1 | 2026-07-23 | + FP-57(湿表面现象区分光照条件) + CHECKLIST §55(湿表面现象须区分光照条件)*
+*Version: v3.1 | 2026-07-23 | + CHECKLIST §56(防御/保护功能反转须展开具体机制)（投喂学习）*
+*Version: v3.1 | 2026-07-23 | + FP-58(误区纠正只破坏不重建) + CHECKLIST §57(生化/机制叙事优先提供类比锚点)（喝酒脸红 投喂学习）*
