@@ -234,8 +234,8 @@ reviewer → orchestrator：
 
 | 文件 | 用途 | 加载时机 |
 |------|------|---------|
-| `references/CHECKLIST.md` | 54 项科学准确性自检（含 FP 交叉引用） | Phase 3 |
-| `references/FORBIDDEN.md` | 56 条禁止模式 FP-01~56 | Phase 3 |
+| `references/CHECKLIST.md` | 60 项科学准确性自检（含 FP 交叉引用） | Phase 3 |
+| `references/FORBIDDEN.md` | 59 条禁止模式 FP-01~59 | Phase 3 |
 | `references/FEEDBACK_LOG.md` | 教训→规则转化记录（30天内活跃） | 按需检索 |
 | `references/FEEDBACK_ARCHIVE.md` | 休眠教训库（30天未再犯） | 手动查阅 |
 | `references/EXAMPLES.md` | A段/F段/Q格式好/坏案例 | 写作时查阅 |
@@ -276,3 +276,4 @@ reviewer → orchestrator：
 *Version: v3.1 | 2026-07-23 | + FP-57(湿表面现象区分光照条件) + CHECKLIST §55(湿表面现象须区分光照条件)*
 *Version: v3.1 | 2026-07-23 | + CHECKLIST §56(防御/保护功能反转须展开具体机制)（投喂学习）*
 *Version: v3.1 | 2026-07-23 | + FP-58(误区纠正只破坏不重建) + CHECKLIST §57(生化/机制叙事优先提供类比锚点)（喝酒脸红 投喂学习）*
+*Version: v3.1 | 2026-07-24 | + FP-59(季节性变化"一直都在"静态绝对化表述) + CHECKLIST §58(相邻Q段内容边界不重叠)/§59(A段感官细节内部自洽)/§60(避免"一直都在"静态表述)（树叶变红 投喂学习）*
