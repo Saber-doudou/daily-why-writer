@@ -235,7 +235,7 @@ reviewer → orchestrator：
 | 文件 | 用途 | 加载时机 |
 |------|------|---------|
 | `references/CHECKLIST.md` | 60 项科学准确性自检（含 FP 交叉引用） | Phase 3 |
-| `references/FORBIDDEN.md` | 59 条禁止模式 FP-01~59 | Phase 3 |
+| `references/FORBIDDEN.md` | 62 条禁止模式 FP-01~62 | Phase 3 |
 | `references/FEEDBACK_LOG.md` | 教训→规则转化记录（30天内活跃） | 按需检索 |
 | `references/FEEDBACK_ARCHIVE.md` | 休眠教训库（30天未再犯） | 手动查阅 |
 | `references/EXAMPLES.md` | A段/F段/Q格式好/坏案例 | 写作时查阅 |
@@ -279,3 +279,4 @@ reviewer → orchestrator：
 *Version: v3.1 | 2026-07-24 | + FP-59(季节性变化"一直都在"静态绝对化表述) + CHECKLIST §58(相邻Q段内容边界不重叠)/§59(A段感官细节内部自洽)/§60(避免"一直都在"静态表述)（树叶变红 投喂学习）*
 *Version: v3.1 | 2026-07-27 | + FP-60(光学反射性结构术语混淆) + CHECKLIST §61(明毯用词精度)/§62(F段表格内容差异化)（猫眼发亮 投喂学习）*
 *Version: v3.1 | 2026-07-28 | + FP-61(食品加工动词与实物加工方式不符) + CHECKLIST §63(并列成分各因素权重准确性)（面包变硬 投喂学习）*
+*Version: v3.1 | 2026-07-29 | + FP-62(密度变化误用"变轻/变重")（冰浮水面 投喂学习）*
