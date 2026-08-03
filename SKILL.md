@@ -6,7 +6,7 @@ description: >
   标点纠错（GB/T 15834）。触发词：每日一个为什么、每日一个为什么写作、
   dailywhy、dailywhy写作、每日冷知识。
 agent_created: true
-last_updated: 2026-07-23
+last_updated: 2026-08-03
 ---
 
 # daily-why-writer
@@ -16,7 +16,7 @@ last_updated: 2026-07-23
 ## 元规则
 
 1. **教训没有不可泛化的** — 每次出错分析根因，提炼为可复用规则，记录到 FEEDBACK_LOG
-2. **三层分离，按需加载**：本文件 = 核心法典（Always Load）；`references/CHECKLIST.md` = 科学准确性自检（写后加载）；`references/FORBIDDEN.md` = 黑名单 FP-01~51（写后加载）；`references/FEEDBACK_LOG.md` = 活跃教训（30天内，审校时按需检索）；`references/FEEDBACK_ARCHIVE.md` = 休眠教训（30天未再犯，手动查阅）；`references/EXAMPLES.md` = 好/坏案例（写作时按需查阅）
+2. **三层分离，按需加载**：本文件 = 核心法典（Always Load）；`references/CHECKLIST.md` = 科学准确性自检（写后加载）；`references/FORBIDDEN.md` = 黑名单 FP-01~65（写后加载）；`references/FEEDBACK_LOG.md` = 活跃教训（30天内，审校时按需检索）；`references/FEEDBACK_ARCHIVE.md` = 休眠教训（30天未再犯，手动查阅）；`references/EXAMPLES.md` = 好/坏案例（写作时按需查阅）
 3. **数值规则内联**：本文已内联所有关键阈值，`writing_rules.json` 仅供 `validate_article.py` 程序化验证
 
 ---
@@ -105,7 +105,7 @@ C:/Users/admin/.workbuddy/binaries/python/versions/3.13.12/python.exe F:/WorkBud
 ## Phase 3：写后自检
 
 1. 加载 `references/CHECKLIST.md` 逐项检查科学准确性
-2. 加载 `references/FORBIDDEN.md` 扫描 FP-01~51
+2. 加载 `references/FORBIDDEN.md` 扫描 FP-01~65
 3. **标点自查**（5 项高频陷阱，GB/T 15834-2011）：
 
 | # | 陷阱 | 错误 → 正确 |
@@ -235,7 +235,7 @@ reviewer → orchestrator：
 | 文件 | 用途 | 加载时机 |
 |------|------|---------|
 | `references/CHECKLIST.md` | 60 项科学准确性自检（含 FP 交叉引用） | Phase 3 |
-| `references/FORBIDDEN.md` | 62 条禁止模式 FP-01~62 | Phase 3 |
+| `references/FORBIDDEN.md` | 65 条禁止模式 FP-01~65 | Phase 3 |
 | `references/FEEDBACK_LOG.md` | 教训→规则转化记录（30天内活跃） | 按需检索 |
 | `references/FEEDBACK_ARCHIVE.md` | 休眠教训库（30天未再犯） | 手动查阅 |
 | `references/EXAMPLES.md` | A段/F段/Q格式好/坏案例 | 写作时查阅 |
@@ -281,3 +281,5 @@ reviewer → orchestrator：
 *Version: v3.1 | 2026-07-28 | + FP-61(食品加工动词与实物加工方式不符) + CHECKLIST §63(并列成分各因素权重准确性)（面包变硬 投喂学习）*
 *Version: v3.1 | 2026-07-29 | + FP-62(密度变化误用"变轻/变重")（冰浮水面 投喂学习）*
 *Version: v3.1 | 2026-07-30 | + FP-63(高压环境蛋白质变性类比喻混淆热变性) + CHECKLIST §64(高压/压强Topic蛋白质变性描述用压力专属动词)（深海鱼压不扁 投喂学习）*
+*Version: v3.1 | 2026-07-31 | + FP-64(机制拟人化感知/躲避归属错误) + CHECKLIST §65(机制终止归因须指向物理过程停止)/§66(倍数数据须限定时段场景)/§67(机制断言须给实验证据)（向日葵转头 投喂学习）*
+*Version: v3.1 | 2026-08-03 | + FP-65(用疾病/病理术语解释正常现象) + CHECKLIST §68(相关数值间须说明衔接逻辑)/§9细化(引用融入行文)/§66案例(五成为主观感受范围)（月亮错觉 投喂学习）*

@@ -543,6 +543,30 @@ def phase3_git(date_str, topic, dry_run, force, res):
         cwd=str(repo), capture_output=True, text=True
     )
     if not r.stdout.strip():
+        # 工作树干净：仍可能有「已提交但未推送」的 commit（如网络失败重试场景）
+        ahead = subprocess.run(
+            ["git", "rev-list", "--count", "origin/main..HEAD"],
+            cwd=str(repo), capture_output=True, text=True
+        )
+        try:
+            ahead_n = int((ahead.stdout or "").strip() or 0)
+        except ValueError:
+            ahead_n = 0
+        if ahead_n > 0:
+            push_timeout = CFG.get("git_push_timeout", 30)
+            success, err_msg = git_pull_rebase_push(repo, push_timeout)
+            if not success:
+                success, err_msg = git_pull_rebase_push(repo, push_timeout)
+                if not success:
+                    res.fail(3, err_msg)
+                    return "push_fail"
+            r = subprocess.run(
+                ["git", "rev-parse", "--short", "HEAD"],
+                cwd=str(repo), capture_output=True, text=True
+            )
+            commit_hash = r.stdout.strip() if r.returncode == 0 else "unknown"
+            res.ok(3, f"补推已提交 commit={commit_hash}")
+            return commit_hash
         res.skip(3, "无新变更，跳过")
         return "no_changes"
 
