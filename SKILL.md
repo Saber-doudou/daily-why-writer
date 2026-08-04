@@ -6,7 +6,7 @@ description: >
   标点纠错（GB/T 15834）。触发词：每日一个为什么、每日一个为什么写作、
   dailywhy、dailywhy写作、每日冷知识。
 agent_created: true
-last_updated: 2026-08-03
+last_updated: 2026-08-04
 ---
 
 # daily-why-writer
@@ -234,7 +234,7 @@ reviewer → orchestrator：
 
 | 文件 | 用途 | 加载时机 |
 |------|------|---------|
-| `references/CHECKLIST.md` | 60 项科学准确性自检（含 FP 交叉引用） | Phase 3 |
+| `references/CHECKLIST.md` | 70 项科学准确性自检（含 FP 交叉引用） | Phase 3 |
 | `references/FORBIDDEN.md` | 65 条禁止模式 FP-01~65 | Phase 3 |
 | `references/FEEDBACK_LOG.md` | 教训→规则转化记录（30天内活跃） | 按需检索 |
 | `references/FEEDBACK_ARCHIVE.md` | 休眠教训库（30天未再犯） | 手动查阅 |
@@ -283,3 +283,4 @@ reviewer → orchestrator：
 *Version: v3.1 | 2026-07-30 | + FP-63(高压环境蛋白质变性类比喻混淆热变性) + CHECKLIST §64(高压/压强Topic蛋白质变性描述用压力专属动词)（深海鱼压不扁 投喂学习）*
 *Version: v3.1 | 2026-07-31 | + FP-64(机制拟人化感知/躲避归属错误) + CHECKLIST §65(机制终止归因须指向物理过程停止)/§66(倍数数据须限定时段场景)/§67(机制断言须给实验证据)（向日葵转头 投喂学习）*
 *Version: v3.1 | 2026-08-03 | + FP-65(用疾病/病理术语解释正常现象) + CHECKLIST §68(相关数值间须说明衔接逻辑)/§9细化(引用融入行文)/§66案例(五成为主观感受范围)（月亮错觉 投喂学习）*
+*Version: v3.1 | 2026-08-04 | + CHECKLIST §69(概括动词须覆盖并列全部机制)/§70(历史考古断言须加证据强度与前提限定) + 修复§57内容错乱（蜂蜜不坏 投喂学习）*
