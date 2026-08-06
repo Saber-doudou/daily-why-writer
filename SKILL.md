@@ -6,7 +6,7 @@ description: >
   标点纠错（GB/T 15834）。触发词：每日一个为什么、每日一个为什么写作、
   dailywhy、dailywhy写作、每日冷知识。
 agent_created: true
-last_updated: 2026-08-04
+last_updated: 2026-08-06
 ---
 
 # daily-why-writer
