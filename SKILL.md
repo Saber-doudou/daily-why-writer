@@ -235,7 +235,7 @@ reviewer → orchestrator：
 
 | 文件 | 用途 | 加载时机 |
 |------|------|---------|
-| `references/CHECKLIST.md` | 75 项科学准确性自检（含 FP 交叉引用） | Phase 3 |
+| `references/CHECKLIST.md` | 78 项科学准确性自检（含 FP 交叉引用） | Phase 3 |
 | `references/FORBIDDEN.md` | 65 条禁止模式 FP-01~65 | Phase 3 |
 | `references/FEEDBACK_LOG.md` | 教训→规则转化记录（30天内活跃） | 按需检索 |
 | `references/FEEDBACK_ARCHIVE.md` | 休眠教训库（30天未再犯） | 手动查阅 |
@@ -288,3 +288,4 @@ reviewer → orchestrator：
 *Version: v3.1 | 2026-08-05 | + CHECKLIST §71(同一现象/参数表述须前后一致)/§72(习惯化等基础学习形式勿简化为学会/学习)/§73(强因果关联知识点须点明因果链)（含羞草缩叶 投喂学习）*
 *Version: v3.1 | 2026-08-06 | + 内容规则"机制解释必须小白可懂"(FP-17再犯，啄木鸟Q3术语堆砌教训) + CHECKLIST §2实证化案例/§68三倍vs六成案例 + FORBIDDEN FP总数修正65（啄木鸟 投喂学习+Master反馈）*
 *Version: v3.1 | 2026-08-07 | + CHECKLIST §74(组织成分禁"没有水分"类绝对化)/§75(耐受力机制须双重防线闭环)（企鹅脚不怕冻 投喂学习）*
+*Version: v3.1 | 2026-08-10 | + CHECKLIST §76(Q段问答一致性)/§77(术语先定性后注名+成对概念双标注)/§78(排名型表述加限定范围与状态前提) + §73案例(同一机制的两个结果)（雪是白色的 投喂学习）*
