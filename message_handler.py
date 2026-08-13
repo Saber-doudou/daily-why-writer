@@ -3,6 +3,8 @@
 message_handler.py — Agent间消息处理模块
 处理内容生成Agent和审核发布Agent之间的消息传递。
 
+⚠️ 历史遗留：非当前默认执行路径（v1.1 同步式审校已取消子 agent 消息通道，本文件仅作参考保留）
+
 用法：
     python message_handler.py send --from content-generator --to quality-reviewer --message '{"type":"article_draft",...}'
     python message_handler.py receive --agent quality-reviewer --message '{"type":"article_draft",...}'

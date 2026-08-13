@@ -6,7 +6,7 @@ description: >
   标点纠错（GB/T 15834）。触发词：每日一个为什么、每日一个为什么写作、
   dailywhy、dailywhy写作、每日冷知识。
 agent_created: true
-last_updated: 2026-08-06
+last_updated: 2026-08-13
 ---
 
 # daily-why-writer
@@ -16,7 +16,7 @@ last_updated: 2026-08-06
 ## 元规则
 
 1. **教训没有不可泛化的** — 每次出错分析根因，提炼为可复用规则，记录到 FEEDBACK_LOG
-2. **三层分离，按需加载**：本文件 = 核心法典（Always Load）；`references/CHECKLIST.md` = 科学准确性自检（写后加载）；`references/FORBIDDEN.md` = 黑名单 FP-01~65（写后加载）；`references/FEEDBACK_LOG.md` = 活跃教训（30天内，审校时按需检索）；`references/FEEDBACK_ARCHIVE.md` = 休眠教训（30天未再犯，手动查阅）；`references/EXAMPLES.md` = 好/坏案例（写作时按需查阅）
+2. **三层分离，按需加载**：本文件 = 核心法典（Always Load）；`references/CHECKLIST.md` = 科学准确性自检（写后加载）；`references/FORBIDDEN.md` = 黑名单 FP-01 到 65（写后加载）；`references/FEEDBACK_LOG.md` = 活跃教训（30天内，审校时按需检索）；`references/FEEDBACK_ARCHIVE.md` = 休眠教训（30天未再犯，手动查阅）；`references/EXAMPLES.md` = 好/坏案例（写作时按需查阅）
 3. **数值规则内联**：本文已内联所有关键阈值，`writing_rules.json` 仅供 `validate_article.py` 程序化验证
 
 ---
@@ -31,27 +31,35 @@ last_updated: 2026-08-06
 
 ---
 
-## Phase 0：选题与去重
+## Phase 0：选题（外部源拉取优先）
 
-1. **读取已有话题**：读 `F:\WorkBuddy\daily-why\config\topics_context.json` 的 `topic_summaries` 数组，了解所有已用话题
-2. **选题**：自己想一个新话题（不在 topic_summaries 中），分类从 6 个标准中选一：人体奥秘 / 自然科学 / 生活常识 / 宇宙探索 / 动物世界 / 物理化学
-3. **检查点**（非自动模式）：展示已选话题，等待用户确认
+1. **刷新话题库**：运行 `F:\WorkBuddy\daily-why\scripts\prepare_topics.py` 刷新 topics_context.json（确保包含最新文章记录）
+2. **读取已有话题**：读 `F:\WorkBuddy\daily-why\config\topics_context.json` 的 `topic_summaries` 数组，了解所有已用话题
+3. **外部源拉取（主源）**：用 WebSearch 检索 1 到 2 个关键词（如"冷知识 有趣""你知道吗 科学现象"，或指定源：维基百科/百度百科你知道吗、果壳、知乎科普），从搜索结果中筛选 3 个候选话题（要求：现象具体、有科学反转点、与已有话题不重复）
+4. **去重**：按顺序对每个候选运行 Phase 0.5 的 `check_topic.py --angle` 校验；退出码 0 且无"⚠️ 角度相关"提示 → 选中；含"⚠️ 角度相关"提示 → 确认写作角度与已有话题不同后采用；退出码 1 → 换下一个候选（最多 3 个）；退出码 2 → 参数错误
+5. **降级链**（外部源拉取失败或无可用候选时按序降级）：
+   - 降级① 脑洞选题：自己想一个新话题（不在 topic_summaries 中），分类从 6 个标准中选一：人体奥秘 / 自然科学 / 生活常识 / 宇宙探索 / 动物世界 / 物理化学
+   - 降级② 素材池兜底：从 `F:\WorkBuddy\daily-why\config\topic_candidates.json` 的 candidates 数组取候选
+   - 降级③ 仍失败 → 输出"⚠️ 今日选题失败"上报（见 Phase 0.5），不得静默终止
+6. **落选话题回写素材池**：本轮拉取/筛选未采用的候选（含查证后放弃的）追加/更新到 `topic_candidates.json` 的 candidates 数组（source=external/rejected，已有则跳过，保持 JSON 合法）
+7. **检查点**（非自动模式）：展示已选话题，等待用户确认
 
 ### Phase 0.5：去重校验（强制，不可跳过）
 
 选题后、写文章前，**必须**运行机械校验脚本：
 
 ```bash
-C:/Users/admin/.workbuddy/binaries/python/versions/3.13.12/python.exe F:/WorkBuddy/daily-why/scripts/check_topic.py "你选的话题"
+C:/Users/admin/.workbuddy/binaries/python/versions/3.13.12/python.exe F:/WorkBuddy/daily-why/scripts/check_topic.py --angle "你选的话题"
 ```
 
-- **退出码 0** → 通过，进入 Phase 1
-- **退出码 1** → 重复！回到 Phase 0 重选（最多 3 轮，仍失败则终止并报告）
+- **退出码 0 且输出无"⚠️ 角度相关"提示** → 通过，进入 Phase 1
+- **退出码 0 但输出含"⚠️ 角度相关（相似度 X%）"提示** → 角度放宽：确认写作角度与已有话题确实不同后允许采用，进入 Phase 1
+- **退出码 1** → 重复！回到 Phase 0 重选（外部源/脑洞/素材池最多 3 轮，仍失败则终止并上报）
 - **退出码 2** → 参数错误，检查话题格式
 
 > ⚠️ 此步骤是机械性防护网，不依赖 AI 判断力。即使你确信话题没写过，也必须跑这个脚本。
 >
-> 若 3 轮选题均被 check_topic.py 判定重复，终止并报告"⚠️ 今日选题失败，需人工介入"。
+> 若外部源拉取、脑洞选题、素材池兜底全部失败（候选均被 check_topic.py 判重复），必须输出"⚠️ 今日选题失败：失败候选列表 + 3 个建议新方向"，不得静默终止。
 
 ---
 
@@ -106,7 +114,7 @@ C:/Users/admin/.workbuddy/binaries/python/versions/3.13.12/python.exe F:/WorkBud
 ## Phase 3：写后自检
 
 1. 加载 `references/CHECKLIST.md` 逐项检查科学准确性
-2. 加载 `references/FORBIDDEN.md` 扫描 FP-01~65
+2. 加载 `references/FORBIDDEN.md` 扫描 FP-01 到 65
 3. **标点自查**（5 项高频陷阱，GB/T 15834-2011）：
 
 | # | 陷阱 | 错误 → 正确 |
@@ -161,19 +169,19 @@ L3: daily-why-publish — 匹配检查+IMA备份+GitHub推送+记忆归档
 
 ---
 
-## 🤖 多 Agent 执行模式（v1.0）
+## 🤖 多 Agent 执行模式（v1.1 同步式审校）
 
-> **1 Agent spawn 模式**：Orchestrator 亲自选题+写作+自检+精修，只 spawn Reviewer 做独立审校。
+> ⚠️ 执行权威：本段（多 Agent 执行模式 v1.1）是自动化运行的唯一权威工作流。下文 Phase 0 到 4（单 Agent 描述）为写作规范与格式细节的参考实现，供理解规则使用，不构成独立的第二套流程。
+
+> **同步审校模式**：Orchestrator 选题+写作+自检+精修+审校全同步执行，不 spawn 子 agent（子 agent 回传通道在本环境不可靠，08-06/08-13 两次实证，spawn 阻塞调用无法被异常规则打断）。
 
 | 角色 | 职责 | 阶段 | 加载模块 | 预估 Token |
 |------|------|------|---------|:---:|
-| **Orchestrator**（Automation 自身） | 选题 + 写作 + 自检 + 精修 + 输出 + 记忆更新 | Phase 0-2, 4-5 | 写作阶段: SKILL.md + topics_context.json；精修阶段: + CHECKLIST.md + FORBIDDEN.md | 峰值~20K |
-| **reviewer**（spawn） | 独立审校 + 脚本审核 + 判例检索 | Phase 3 | reviewer_prompt.md + CHECKLIST.md + FORBIDDEN.md | ~12K |
+| **Orchestrator**（Automation 自身） | 选题 + 写作 + 自检 + 精修 + 同步审校 + 输出 + 记忆更新 | Phase 0-5 | 写作阶段: SKILL.md + topics_context.json；审校阶段: + CHECKLIST.md + FORBIDDEN.md | 峰值约20K |
 
 ### 模块化设计原则
 - Orchestrator 写作阶段不加载 CHECKLIST.md/FORBIDDEN.md —— 避免"知道考纲做题"
-- Orchestrator 精修阶段加载 CHECKLIST.md/FORBIDDEN.md —— 精准修复
-- Reviewer 不加载 SKILL.md 写作规则 —— 纯粹的审核视角
+- Orchestrator 审校阶段加载 CHECKLIST.md/FORBIDDEN.md —— 脚本先行 + 人工对照，弥补"独立视角"缺失
 - CASE_STUDIES.md 按需检索，不塞进上下文
 
 ### 执行流程
@@ -185,21 +193,19 @@ Phase 1: 【Orchestrator】选题 + check_topic.py 去重 + WebSearch 查证
     ↓
 Phase 2: 【Orchestrator】A+C+F 写作 + 写后自检
     ↓
-Phase 3: 【Orchestrator】初稿写入文件 → spawn reviewer
-    ↓
-Phase 3.5: 【reviewer 独立审校】
-    - 读取初稿
-    - 运行 validate_article.py
-    - 按 CHECKLIST + FORBIDDEN 逐项检查
-    - 按需 Grep CASE_STUDIES.md
-    - 输出 review_report.json
+Phase 3: 【Orchestrator】初稿写入文件 → 同步审校（主代理亲自执行）
+    - 运行 validate_article.py --json（记录 P0/P1/P2 与得分）
+    - 可选项: auto_fix.py --verify（脚本报出可自动修复项时，修复后重跑 validate）
+    - 按 CHECKLIST + FORBIDDEN 逐项人工对照
+    - 最小结构验证（A 段引用块 / C 段 Q 格式 / F 段"冷知识反转"标签 / 结尾风格表格）
+    - 就地输出审核报告（Markdown 表格或 JSON）
     ↓
     若 P0=0 且 P1≤2 → Phase 4（通过）
     否则 → Phase 4（修复循环）
     ↓
-Phase 4: 【Orchestrator】收到审核报告
+Phase 4: 【Orchestrator】根据自审报告
     - 通过 → 直接输出 + 记忆更新
-    - 不通过 → 按报告修复 → 写入文件 → re-spawn reviewer（最多 2 轮）
+    - 不通过 → 按报告修复 → 写入文件 → 重跑同步审校（最多 2 轮）
     - 2 轮后仍不通过 → 标记"⚠️ 需人工审核"，输出当前最佳版本
     ↓
 Phase 5: 【Orchestrator】输出全文 + update_history.py + 记忆更新
@@ -207,27 +213,27 @@ Phase 5: 【Orchestrator】输出全文 + update_history.py + 记忆更新
 
 **效率规范**：网络请求上限3次；记忆更新合并为1次。
 
-### Agent 级异常处理
+### 异常处理（同步审校口径）
 
 | 场景 | 处理策略 |
 |------|---------|
-| reviewer 超时（10分钟无响应） | Orchestrator 跳过审校，直接输出初稿 + 标注"⚠️ 未审校" |
-| reviewer spawn 失败 | 重试 1 次 → 仍失败 → 跳过审校 |
-| reviewer 返回空结果 | Orchestrator 重试 1 次，仍为空则跳过审校 |
-| validate_article.py 脚本执行失败 | reviewer 降级为纯 AI 审校（不依赖脚本） |
+| validate_article.py 执行失败 | 先 `auto_fix.py --verify` 修复再重试；仍失败则记录错误并继续人工对照，不阻塞流程 |
+| 审校过程中任意步骤异常（无法完成人工对照等） | 输出"⚠️ 审校降级为主代理自审"标记并继续，不得阻塞 |
+| （防御性）历史遗留 spawn 的子 agent 空返回 / 非 JSON | 立即放弃该子 agent，切主代理自审（见 Phase 3），记录"⚠️ 审校降级为主代理自审"，流程继续，不等待重试 |
 
 ### 迭代终结条件
 
 - 审校通过（P0=0 且 P1≤2）→ 输出文章
-- 审校不通过 → Orchestrator 直接修复 → reviewer 重新审校（最多 2 轮）
+- 审校不通过 → Orchestrator 直接修复 → 重跑同步审校（最多 2 轮）
 - 2 轮后仍不通过 → 标记"⚠️ 需人工审核"，输出当前最佳版本
 
 ### 消息协议
 
-reviewer → orchestrator：
+审校结果由主代理就地输出（不依赖子 agent / SendMessage 回传通道）：
 ```json
-{ "agent": "reviewer", "status": "done", "file": "{date}_review.json", "p0_count": 0, "p1_count": 1, "pass": true, "score": 95 }
+{ "pass": true, "p0_count": 0, "p1_count": 1, "p2_count": 0, "score": 95, "issues": [] }
 ```
+或以 Markdown 表格形式输出，包含 pass / p0_count / p1_count / p2_count / score / issues（每项含 level/category/description/suggestion）。
 
 ---
 
@@ -235,8 +241,8 @@ reviewer → orchestrator：
 
 | 文件 | 用途 | 加载时机 |
 |------|------|---------|
-| `references/CHECKLIST.md` | 82 项科学准确性自检（含 FP 交叉引用） | Phase 3 |
-| `references/FORBIDDEN.md` | 65 条禁止模式 FP-01~65 | Phase 3 |
+| `references/CHECKLIST.md` | 86 项科学准确性自检（含 FP 交叉引用） | Phase 3 |
+| `references/FORBIDDEN.md` | 65 条禁止模式 FP-01 到 65 | Phase 3 |
 | `references/FEEDBACK_LOG.md` | 教训→规则转化记录（30天内活跃） | 按需检索 |
 | `references/FEEDBACK_ARCHIVE.md` | 休眠教训库（30天未再犯） | 手动查阅 |
 | `references/EXAMPLES.md` | A段/F段/Q格式好/坏案例 | 写作时查阅 |
@@ -244,7 +250,7 @@ reviewer → orchestrator：
 | `writing_rules.json` | 程序化验证数据源 | validate_article.py |
 | `validate_article.py` | 格式+质量自动审核 | Phase 4 |
 | `update_history.py` | 话题去重记录更新 | Phase 4 |
-| `reviewer_prompt.md` | Reviewer Agent 审校 prompt | Phase 3（spawn 时加载） |
+| `reviewer_prompt.md` | Reviewer Agent 审校 prompt（保留文件，不再作为默认执行路径） | 按需参考 |
 
 ## 风格样本
 
@@ -292,3 +298,4 @@ reviewer → orchestrator：
 *Version: v3.1 | 2026-08-11 | + CHECKLIST §79(机制归因禁"不是A而是B"绝对否定)/§80(抽象统计概念给数量级对比落地句) + FP-17案例(化学命名黑话省略)（橡皮筋弹回 投喂学习）*
 *Version: v3.1 | 2026-08-10 | + CHECKLIST §76(Q段问答一致性)/§77(术语先定性后注名+成对概念双标注)/§78(排名型表述加限定范围与状态前提) + §73案例(同一机制的两个结果)（雪是白色的 投喂学习）*
 *Version: v3.1 | 2026-08-12 | + CHECKLIST §19(术语密度案例:蛋白连珠炮拆密度)/§66(数据对象限定案例:遗传度注明纹型) + FP-24(存争议结论限定案例:防滑说)/FP-05(反转认知翻转案例:设计→混乱) 案例补充，无新增编号（指纹独一无二 投喂学习）*
+*Version: v3.1 | 2026-08-13 | + CHECKLIST §83(分子与受体相互作用表述精度:撞上→结合并激活)/§84(生理类比避免暗示真实病理:像发烧→错误地降温)/§85(发现史表述说清"用什么发现什么":在辣椒素上找到→用辣椒素作为工具找到)/§86(提问避免强化错误预设:有没有专门味蕾→辣到底算不算味觉)（辣椒为什么辣 投喂学习）*

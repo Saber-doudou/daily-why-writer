@@ -47,7 +47,10 @@ def load_rules() -> dict:
 
 
 def load_skill(compact: bool = False) -> str:
-    """加载 SKILL.md（精简版或完整版）"""
+    """加载 SKILL.md（精简版或完整版）
+    compact=True 时若 SKILL_COMPACT.md 不存在，自动降级为完整版 SKILL.md"""
+    if compact and not SKILL_COMPACT_PATH.exists():
+        compact = False  # 降级：回退到完整版
     path = SKILL_COMPACT_PATH if compact else SKILL_PATH
     if not path.exists():
         raise FileNotFoundError(f"Skill 文件不存在: {path}")
@@ -75,11 +78,10 @@ def get_fp_range() -> str:
     """从 FORBIDDEN.md 读取当前 FP 编号上限，避免 prompt 漏扫新规则"""
     fp_path = Path(r"C:\Users\admin\.workbuddy\skills\daily-why-writer\references\FORBIDDEN.md")
     if fp_path.exists():
-        import re as _re
-        nums = _re.findall(r"FP-(\d+):", fp_path.read_text(encoding="utf-8"))
+        nums = re.findall(r"FP-(\d+):", fp_path.read_text(encoding="utf-8"))
         if nums:
-            return f"FP-01~{max(int(n) for n in nums)}"
-    return "FP-01~45"
+            return f"FP-01到{max(int(n) for n in nums)}"
+    return "FP-01到45"
 
 
 def check_consistency(rules: dict, skill: str) -> list:
@@ -87,9 +89,11 @@ def check_consistency(rules: dict, skill: str) -> list:
     issues = []
 
     # 1. 字数：rules vs skill
+    # 注意：只匹配真正的字数区间（如 300-600 字/中文字符），
+    # 避免误匹配 SKILL.md 中"关键词2-6字"这类非字数区间（单数字 → \d{3,} 排除）
     wc_min = rules["word_count"]["min"]
     wc_max = rules["word_count"]["max"]
-    wc_pattern = r"(\d+)[-~](\d+)\s*字"
+    wc_pattern = r"(\d{3,})[-~](\d{3,})\s*中?文?字"
     skill_wc = re.findall(wc_pattern, skill)
     if skill_wc:
         s_min, s_max = int(skill_wc[-1][0]), int(skill_wc[-1][1])
@@ -108,9 +112,16 @@ def check_consistency(rules: dict, skill: str) -> list:
     if q_format not in skill:
         issues.append(f"Q 格式: rules 要求 '{q_format}', SKILL.md 中未找到完全匹配")
 
-    # 4. 风格表格行数
+    # 4. 风格表格行数（支持阿拉伯数字与中文数字，如"4 行"与"四行"）
+    cn_num_map = {"一": "1", "二": "2", "三": "3", "四": "4",
+                  "五": "5", "六": "6", "七": "7", "八": "8", "九": "9", "十": "10"}
     table_rows = rules["formatting"]["style_table_rows"]
-    if f"{table_rows} 行" not in skill and f"统一 {table_rows}" not in skill:
+    table_reprs = {str(table_rows)}
+    for cn, arabic in cn_num_map.items():
+        if str(table_rows) == arabic:
+            table_reprs.add(cn)
+    if not any(f"{r}行" in skill or f"{r} 行" in skill or f"统一 {r}" in skill
+               for r in table_reprs):
         issues.append(f"风格表格行数: rules={table_rows}, SKILL.md 中未明确")
 
     # 5. 反转标签
@@ -153,7 +164,7 @@ def generate_prompt(rules: dict, recent_topics: list = None) -> str:
 ## 步骤
 1. 加载 **daily-why-writer** skill，按其中 A+C+F 结构、排版格式、语言风格和黑名单写文章
 2. 运行 `{PYTHON} F:/WorkBuddy/daily-why/scripts/prepare_topics.py` 刷新话题库（确保 topics_context.json 包含最新文章记录）
-3. 读取 `F:/WorkBuddy/daily-why/config/topics_context.json`，从 `topic_summaries` 数组选一个**未曾使用**的话题。优先选自然科学 / 生活常识 / 人体奥秘类，避免高度重复的话题领域
+3. **外部源拉取优先**：用 WebSearch 检索 1 到 2 个关键词（如"冷知识 有趣""你知道吗 科学现象"），筛选 3 个候选话题（要求：现象具体、有科学反转点），逐个运行 `{PYTHON} F:/WorkBuddy/daily-why/scripts/check_topic.py --angle "候选"` 去重（退出码 0 → 选中；含"⚠️ 角度相关"提示 → 确认角度不同后采用；1 → 换下一个候选，最多 3 个；2 → 参数错误）。外部源失败 → 降级脑洞选题：读 `topics_context.json` 的 topic_summaries 选一个未曾使用的话题（优先选自然科学 / 生活常识 / 人体奥秘类）；仍失败 → 素材池兜底：从 `F:/WorkBuddy/daily-why/config/topic_candidates.json` 的 candidates 数组取候选；再失败 → 输出"⚠️ 今日选题失败"上报。落选候选用 Bash 回写素材池（source=external/rejected，已有则跳过，保持 JSON 合法）
 {dedup_section}4. **写前快速查证**：用 WebSearch 搜 1-2 个该话题的关键词（中文），查证关键数字、研究者引用完整性（机构+年份+发表期刊）和引用准确性
 5. **边写边自检**：按 A+C+F 结构写文章，字数 {wc_min}-{wc_max} 字。每写完一段（A/C/F），立即检查：
    - A段：是否以场景或小故事切入，避免套话开头
@@ -174,7 +185,7 @@ def generate_prompt(rules: dict, recent_topics: list = None) -> str:
 
 
 def generate_multi_agent_prompt(rules: dict, recent_topics: list = None) -> str:
-    """生成多Agent版本的 automation prompt（Orchestrator + Reviewer 真双Agent）"""
+    """生成多Agent版本的 automation prompt（Orchestrator 同步式审校，不 spawn 子 agent）"""
     wc_min = rules["word_count"]["min"]
     wc_max = rules["word_count"]["max"]
 
@@ -182,7 +193,7 @@ def generate_multi_agent_prompt(rules: dict, recent_topics: list = None) -> str:
     SKILL_DIR = "C:/Users/admin/.workbuddy/skills/daily-why-writer"
     fp_range = get_fp_range()
 
-    prompt = f"""每日冷知识自动化：Orchestrator + Reviewer 真双Agent模式。
+    prompt = f"""每日冷知识自动化：Orchestrator 同步执行模式（选题+写作+审校，不 spawn 子 agent）。
 
 前置：用 glob `F:/WorkBuddy/daily-why/articles/**/{{今天日期}}-每日冷知识*.md` 检查，已存在则跳过。{{今天日期}}截取自系统 current_time。失败处理：任意步骤出错立即停止并报告。
 
@@ -195,39 +206,56 @@ def generate_multi_agent_prompt(rules: dict, recent_topics: list = None) -> str:
    `{SKILL_DIR}/SKILL.md`
    将读取到的完整内容作为本轮写作 SOP。
 
-加载完成后，写作、自查、精修三个阶段严格以 SKILL.md 的最新内容为准。本 prompt 内关于写法的描述仅作对齐参考，若与 SKILL.md 冲突，以 SKILL.md 为准。
+加载完成后，写作、自查、精修三个阶段严格以 SKILL.md 的最新内容为准。
+
+加载成功后，必须在对话中显式输出确认："✅ SOP已加载：daily-why-writer SKILL.md，含A+C+F结构、排版格式、黑名单等全部写作规范。"未输出此确认不得进入阶段1。
 
 ## 阶段1：选题+写作（Orchestrator 亲自执行）
 
-前置：阶段0的 SOP 已加载。所有写作规范以 SOP 为准，本 prompt 内写法描述仅作对齐参考。
+前置：阶段0的 SOP 已加载。所有写作规范以 SOP 为准。
 
 1. 运行 `{PYTHON} F:/WorkBuddy/daily-why/scripts/prepare_topics.py --compact` 刷新话题库
-2. 读 `F:/WorkBuddy/daily-why/config/topics_context_compact.json` 的 topic_summaries，选新话题（不在列表中）。去重强制：运行 `{PYTHON} F:/WorkBuddy/daily-why/scripts/check_topic.py "话题"`，退出码0→继续，1→重选（最多3轮），2→参数错误
-3. WebSearch 查证 1-2 个关键词：关键数字、研究者引用完整性（机构+年份+期刊）、引用准确性
-4. 按阶段0加载的 SOP（SKILL.md）中的 A+C+F 结构、排版格式、语言风格和黑名单写文章，字数{wc_min}-{wc_max}，边写边自检
-5. 保存到 `F:/WorkBuddy/daily-why/articles/{{年月}}/{{今天日期}}-每日冷知识-{{关键词}}.md`（关键词2-6字，{{年月}}为YYYY-MM格式）
+2. **外部源拉取（选题主源，优先执行）**：用 WebSearch 检索 1 到 2 个关键词（如"冷知识 有趣""你知道吗 科学现象"，或指定源：维基百科/百度百科你知道吗、果壳、知乎科普），从搜索结果中筛选 3 个候选话题（要求：现象具体、有科学反转点、与已有话题不重复）
+3. **去重校验**：按顺序对每个候选运行 `{PYTHON} F:/WorkBuddy/daily-why/scripts/check_topic.py --angle "候选话题"`：
+   - 退出码 0 且输出无"⚠️ 角度相关"提示 → 选中该候选，进入步骤 4
+   - 退出码 0 但输出含"⚠️ 角度相关（相似度 X%）"提示 → 角度放宽：确认写作角度与已有话题确实不同后允许采用
+   - 退出码 1 → 换下一个候选（最多试 3 个候选）
+   - 退出码 2 → 参数错误，修正话题文本后重试
+4. **选中后查证**：用 WebSearch 查证 1 到 2 个关键词：关键数字、研究者引用完整性（机构+年份+期刊）、引用准确性
+5. **落选话题回写素材池**：本轮拉取/筛选过程中未采用的候选（含查证后放弃的），用 Bash 追加/更新到 `F:/WorkBuddy/daily-why/config/topic_candidates.json` 的 candidates 数组（source 字段标记 `external` 或 `rejected`；已有则跳过），保持 JSON 合法
+6. **降级链**（外部源拉取失败或无可用候选时按序降级）：
+   - 降级① 脑洞选题：读 `F:/WorkBuddy/daily-why/config/topics_context_compact.json` 的 topic_summaries，自己想一个新话题，运行 `{PYTHON} F:/WorkBuddy/daily-why/scripts/check_topic.py --angle "话题"` 校验（退出码 0 → 继续；1 → 重选，最多 3 轮；2 → 参数错误）
+   - 降级② 素材池兜底：从 `F:/WorkBuddy/daily-why/config/topic_candidates.json` 的 candidates 数组取候选，同样运行 `{PYTHON} F:/WorkBuddy/daily-why/scripts/check_topic.py --angle "话题"` 校验
+   - 降级③ 仍失败 → 触发下方选题失败上报，不得静默终止
+7. 按阶段0加载的 SOP（SKILL.md）写文章，字数{wc_min}-{wc_max}
+8. 保存到 `F:/WorkBuddy/daily-why/articles/{{年月}}/{{今天日期}}-每日冷知识-{{关键词}}.md`（关键词2-6字，{{年月}}为YYYY-MM格式）
 
-## 阶段2：独立审校（spawn Reviewer）
+【硬约束】选题失败上报：若外部源拉取、脑洞选题、素材池兜底全部失败（候选均被 check_topic.py 判重复），必须输出"⚠️ 今日选题失败：失败候选列表 + 3 个建议新方向"，不得静默终止。
 
-初稿写入文件后，用 Agent 工具 spawn 一个独立审校 agent：
+## 阶段2：同步式审校（主代理亲自执行，禁止 spawn 子 agent）
 
-name: "reviewer"
-description: "Daily-Why 文章独立审校"
-prompt 内容：
-  你是 daily-why 文章的独立审校员。请完成以下步骤：
-  1. 读取文件：{{初稿文件完整路径}}
-  2. 运行脚本审核：`{PYTHON} F:/WorkBuddy/daily-why/scripts/validate_article.py "{{初稿文件完整路径}}"`
-  3. 加载 `{SKILL_DIR}/references/CHECKLIST.md` 逐项检查
-  4. 加载 `{SKILL_DIR}/references/FORBIDDEN.md`，逐条扫描文件中【全部】FP 规则（数量以文件实际内容为准，不要写死编号）
-  5. 输出 JSON 审核报告，包含：pass(布尔)、p0_count、p1_count、p2_count、score、issues数组（每项含level/category/description/suggestion）
-  通过条件：P0=0 且 P1≤2。你不加载 SKILL.md 写作规则，纯粹用审核视角判断。输出完成后用 SendMessage 将 JSON 报告发回。
+初稿写入文件后，主代理在同一轮内同步完成以下审校动作。禁止使用 Agent 工具 spawn 独立审校子 agent（该回传通道在本环境不可靠，08-06、08-13 两次实证）：
 
-等待 Reviewer 回传审核报告（超时10分钟则跳过审校，直接输出初稿+标注"⚠️ 未审校"）。
+1. 运行脚本审核（记录完整输出）：
+   `{PYTHON} F:/WorkBuddy/daily-why/scripts/validate_article.py --json "{{初稿文件完整路径}}"`
+   记录 P0/P1/P2 数量与得分。
+2. 若脚本报出可自动修复项（Q格式/分隔线数/反转标签/表格行数），运行：
+   `{PYTHON} F:/WorkBuddy/daily-why/scripts/auto_fix.py "{{初稿文件完整路径}}" --verify`
+   修复后重跑步骤1。
+3. 加载 `{SKILL_DIR}/references/CHECKLIST.md` 逐项人工对照扫描。
+4. 加载 `{SKILL_DIR}/references/FORBIDDEN.md`，逐条扫描文件中【全部】FP 规则（数量以文件实际内容为准，不要写死编号）。
+5. 最小结构验证（不依赖 SKILL.md 写作规则）：确认文章骨架完整——A段引用块（>开头）、C段Q格式（**Q1/Q2/Q3：**）、F段引用块含"冷知识反转"标签、结尾风格表格（四行）。任一缺失即 P0 结构缺失。
+6. 就地输出审核报告（Markdown 表格或 JSON 文本），包含 pass(布尔)、p0_count、p1_count、p2_count、score、issues数组（每项含level/category/description/suggestion）。
+   通过条件：P0=0 且 P1≤2。
 
-## 阶段3：修复+输出（Orchestrator 收到审核报告后）
+【硬约束】审校由主代理同步完成，绝不 spawn 独立子 agent。输出 JSON / Markdown 时，禁止使用 `~` 作为区间/范围连接符；一律用中文"到"或"至"。例如：400到700纳米，不得写 400~700。
+
+【硬约束】审校降级标记：若审校过程中任何一步异常（脚本失败、无法完成人工对照），输出带"⚠️ 审校降级为主代理自审"标记并继续，不得阻塞。
+
+## 阶段3：修复+输出（Orchestrator 根据自审报告）
 
 - 通过（P0=0且P1≤2）→ 直接进入输出
-- 不通过 → 根据 Reviewer 报告中的 issues 修复文章 → 写入文件 → re-spawn reviewer（最多2轮）
+- 不通过 → 根据报告中的 issues 修复文章 → 写入文件 → 重新执行阶段2 审校（最多2轮）
 - 2轮后仍不通过 → 标记"⚠️ 需人工审核"，输出当前最佳版本
 - 输出：文件路径、审核得分、P0/P1/P2 数
 - 运行 `{PYTHON} F:/WorkBuddy/daily-why/scripts/update_history.py` 更新记忆

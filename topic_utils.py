@@ -179,25 +179,50 @@ def extract_keywords(topic_text: str) -> list:
 
 
 def extract_topics_from_memory(memory_path: Path) -> list:
-    """从 memory.md 提取历史话题记录"""
+    """从 memory.md 提取历史话题记录（兼容新旧两种格式）
+
+    新格式（当前 automation 实际写入）：
+        ## 2026-08-13
+        - 话题：为什么辣椒会让人觉得辣？（人体奥秘）
+    旧格式（历史遗留）：
+        - 2026-04-22: 为什么打嗝停不下来？（人体奥秘/生理学）
+    """
     if not memory_path.exists():
         return []
 
     content = memory_path.read_text(encoding="utf-8")
     topics = []
+    seen = set()
 
-    # 匹配格式: - 2026-04-22: 为什么打嗝停不下来？（人体奥秘/生理学）
+    def add(date_str: str, topic: str, category: str = "未分类"):
+        key = (date_str.strip(), topic.strip())
+        if not key[1]:
+            return
+        if key not in seen:
+            seen.add(key)
+            topics.append({
+                "date": key[0],
+                "topic": key[1],
+                "category": category or "未分类",
+                "source": "memory.md",
+            })
+
+    # ── 新格式：## YYYY-MM-DD 标题 + "- 话题：xxx（分类）" ──
+    # 按 "## 日期" 分段，段体内匹配 "话题：" 行
+    sections = re.split(r"(?m)^##\s+(\d{4}-\d{2}-\d{2})\s*$", content)
+    # sections = [头部, 日期1, 段体1, 日期2, 段体2, ...]
+    for i in range(1, len(sections), 2):
+        date_str = sections[i].strip()
+        body = sections[i + 1] if i + 1 < len(sections) else ""
+        # 兼容 "- 话题：xxx（分类）" 与 "- 话题：xxx"
+        m = re.search(r"话题[：:]\s*(.+?)(?:（(.+?)）|$)", body)
+        if m:
+            add(date_str, m.group(1), m.group(2))
+
+    # ── 旧格式：- 2026-04-22: xxx（分类） ──
     pattern = r"-\s+(\d{4}-\d{2}-\d{2}):\s+(.+?)(?:（(.+?)）|$)"
     for m in re.finditer(pattern, content):
-        date_str = m.group(1)
-        topic = m.group(2).strip()
-        category = m.group(3) or "未分类"
-        topics.append({
-            "date": date_str,
-            "topic": topic,
-            "category": category,
-            "source": "memory.md",
-        })
+        add(m.group(1), m.group(2), m.group(3))
 
     return topics
 

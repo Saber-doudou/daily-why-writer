@@ -1,0 +1,32 @@
+{
+  "updated": "2026-08-13",
+  "purpose": "素材池（可再生）：流入=外部拉取落选+L2 反哺，流出=选题兜底取用，理论上只增不减",
+  "source_enum": {
+    "initial": "初始素材",
+    "external": "外部源拉取（L1 WebSearch 落选候选回收）",
+    "l2": "L2 投喂反哺（四AI讨论中的相邻话题）",
+    "rejected": "落选回收（查证后放弃的候选）"
+  },
+  "candidates": [
+    {"topic": "为什么极地冰晶会产生日晕般的彩虹？", "category": "自然科学", "why_hot": "冰晶折射/反射形成22度晕或幻日，比雨滴彩虹更冷门", "evidence": "中等，需WebSearch查证具体冰晶形态与观测条件", "source": "initial"},
+    {"topic": "为什么冬天脱毛衣会噼啪作响？", "category": "物理化学", "why_hot": "静电积累与放电是日常生活高频现象，机制常被误解为摩擦本身发光", "evidence": "强，静电摩擦起电为成熟物理常识，可少量查证", "source": "initial"},
+    {"topic": "为什么蜂巢是六边形而不是圆形？", "category": "动物世界", "why_hot": "六边形是最省材料又无缝隙的排列，背后是几何优化问题", "evidence": "中等，需WebSearch查证蜜蜂筑巢行为与几何论证", "source": "initial"},
+    {"topic": "为什么温泉鱼疗的小鱼啄人脚不疼？", "category": "生活常识", "why_hot": "温泉鱼（淡红墨头鱼）无牙刮食死皮，游客体验与鱼类行为结合", "evidence": "弱到中等，需WebSearch查证鱼种与卫生争议", "source": "initial"},
+    {"topic": "为什么月球永远以同一面朝向地球？", "category": "宇宙探索", "why_hot": "潮汐锁定机制，大众知道现象但少有人知道是引力梯度在长期作用", "evidence": "强，潮汐锁定为成熟天文常识，引用机构查证", "source": "initial"},
+    {"topic": "为什么飞蛾会扑向灯火？", "category": "动物世界", "why_hot": "最新研究质疑'趋光'说，提出背光导航假说，反转点足", "evidence": "需WebSearch查证2024年前后研究争议，避免断言", "source": "initial"},
+    {"topic": "为什么磁铁切碎后每一块仍有南北极？", "category": "物理化学", "why_hot": "磁畴理论：切断不产生单极，每块重新形成完整磁体", "evidence": "强，磁畴为成熟物理知识", "source": "initial"},
+    {"topic": "为什么秋天的树叶会变黄而不是一直变红？", "category": "自然科学", "why_hot": "叶黄素/胡萝卜素在叶绿素分解后显色，与花青素致红是两条不同机制", "evidence": "强，植物生理成熟知识，注意与'树叶变红'话题区分机制", "source": "initial"},
+    {"topic": "为什么贝壳的螺旋大多是右旋？", "category": "动物世界", "why_hot": "螺旋方向不对称（手性）在软体动物中普遍存在，反例稀少", "evidence": "中等，需WebSearch查证右旋比例与发育机制", "source": "initial"},
+    {"topic": "为什么毛衣穿久了会起球？", "category": "生活常识", "why_hot": "纤维摩擦缠结形成毛球，与面料和穿着方式相关，人人见过少有人懂", "evidence": "中等，纺织学常识，需查证纤维类型差异", "source": "initial"},
+    {"topic": "为什么玻璃破碎的裂纹是放射状的？", "category": "物理化学", "why_hot": "脆性断裂从冲击点向四周扩展，裂纹分叉规律体现应力波传播", "evidence": "中等，材料力学知识，需查证具体术语", "source": "initial"},
+    {"topic": "为什么有些山谷能听到多次回声？", "category": "物理化学", "why_hot": "声波在平行岩壁间多次反射形成回声，与山谷形状直接相关", "evidence": "中等，声学反射常识，需查证典型地点案例", "source": "initial"},
+    {"topic": "为什么钟乳石一百年才长几厘米？", "category": "自然科学", "why_hot": "碳酸钙沉积速率极慢，一滴水一滴水累积，时间尺度震撼", "evidence": "强，地质学成熟知识，需查证典型生长速率数字", "source": "initial"},
+    {"topic": "为什么北极会有持续半年的白昼？", "category": "宇宙探索", "why_hot": "地轴倾斜导致极昼极夜，极圈内体验与中纬度完全不同", "evidence": "强，天文常识，引用权威机构查证", "source": "initial"},
+    {"topic": "为什么蚂蚁搬家未必预示下雨？", "category": "动物世界", "why_hot": "民间谚语常被过度解读，实际搬巢原因多样，反转点足", "evidence": "需WebSearch查证研究，避免绝对化断言", "source": "initial"},
+    {"topic": "为什么蝉的鸣叫频率因种类而异？", "category": "动物世界", "why_hot": "每种蝉有专属鸣声频率用于求偶识别，声音也是分类依据", "evidence": "中等，需WebSearch查证具体种类与频率数据", "source": "initial"},
+    {"topic": "为什么水黾能站在水面上而不沉？", "category": "动物世界", "why_hot": "表面张力加疏水腿毛，体重被水面托住，'水上漂'的物理原理", "evidence": "强，表面张力为成熟物理知识", "source": "initial"},
+    {"topic": "为什么章鱼能瞬间改变体色？", "category": "动物世界", "why_hot": "色素细胞扩张收缩加虹膜细胞反射，变色速度以毫秒计", "evidence": "强，需WebSearch查证细胞机制与神经控制", "source": "initial"},
+    {"topic": "为什么竹子一天能长几十厘米？", "category": "自然科学", "why_hot": "节间分生组织快速伸长，竹笋生长速度是植物界纪录", "evidence": "强，需WebSearch查证毛竹日生长纪录数字", "source": "initial"},
+    {"topic": "为什么剪指甲时不会感到疼？", "category": "人体奥秘", "why_hot": "指甲是角质蛋白无神经末梢，剪到肉才会疼，日常体验背后的组织学", "evidence": "强，人体组织学常识", "source": "initial"}
+  ]
+}
