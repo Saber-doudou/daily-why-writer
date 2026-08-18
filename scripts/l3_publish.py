@@ -86,19 +86,19 @@ def confirm(prompt, force):
 def git_pull_rebase_push(repo, timeout):
     """执行 git pull --rebase + push，返回 (success, error_msg)"""
     r_pull = subprocess.run(
-        ["git", "pull", "--rebase", "origin", "main"],
+        ["git", "-c", "credential.helper=wincred", "pull", "--rebase", "origin", "main"],
         cwd=str(repo), capture_output=True, text=True
     )
     if r_pull.returncode != 0:
         # rebase 冲突，abort 后报告
         subprocess.run(
-            ["git", "rebase", "--abort"],
+            ["git", "-c", "credential.helper=wincred", "rebase", "--abort"],
             cwd=str(repo), capture_output=True
         )
         return False, f"rebase 冲突: {r_pull.stderr.strip()[:200]}"
 
     r_push = subprocess.run(
-        ["git", "push", "origin", "main"],
+        ["git", "-c", "credential.helper=wincred", "push", "origin", "main"],
         cwd=str(repo), capture_output=True, text=True,
         timeout=timeout
     )

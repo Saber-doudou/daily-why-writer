@@ -215,6 +215,8 @@ L3 daily-why-publish（手动触发）← 本 Skill
 | **优化版文件不存在** | 终止发布，提示"请先运行 L2 投喂学习生成优化版" |
 | **IMA 上传失败** | 重试 1 次；仍失败则跳过 IMA，记录 `⚠️ IMA 上传失败`，不阻塞 GitHub 推送 |
 | **GitHub 推送失败** | 重试 1 次；仍失败则记录 `⚠️ GitHub 推送失败（本地 ahead N）`，下次发布时自动补推 |
+| **GitHub 报 `git: 'credential-manager-core' is not a git command`（凭证损坏）** | 用 `git -c credential.helper=wincred pull/push` 重试（wincred 读 Windows 凭据管理器缓存的 GitHub token；08-17 实测，l3_publish.py 已内置该参数） |
+| **git status 误报 ahead N（沙箱静默阻止 packed-refs 重写，fetch/update-ref 返回 0 但不生效）** | 手动写 loose ref `.git/refs/remotes/origin/main=<HEAD sha>`，再 `git rev-list --count origin/main..HEAD` 复查归零（08-17 实测） |
 | **语义验证不通过** | 终止发布，输出未落实的改进点清单，等 Master 决定是否强制发布 |
 | **l3_publish.py 脚本不存在** | 终止，提示检查 `scripts/l3_publish.py` 路径 |
 | **Python 环境不可用** | 终止，提示检查 `C:/Users/admin/.workbuddy/binaries/python/versions/3.13.12/python.exe` |
@@ -238,6 +240,7 @@ L3 daily-why-publish（手动触发）← 本 Skill
 
 | 版本 | 日期 | 变更 |
 |------|------|------|
+| v3.3 | 2026-08-17 | 边界条件补充：wincred 凭证修复 + packed-refs/loose ref 引用坑（GitHub 推送实障排查） |
 | v3.2 | 2026-06-23 | Darwin 优化：边界条件处理(6项) + 产出汇总模板 + 依赖关系图 + CHANGELOG |
 | v3.1 | 2026-06-23 | 去掉"零 AI"假约束，关键词匹配 → AI 语义验证（三档判定+证据规则+通过线） |
 | v3.0 | 2026-06-12 | 多 Agent 架构：脚本预检 + AI 语义验证 + 脚本执行 |
@@ -246,4 +249,4 @@ L3 daily-why-publish（手动触发）← 本 Skill
 
 ---
 
-*Version: v3.2 | 2026-06-23 | Darwin 优化：补充边界条件处理 + 产出汇总模板具体化 + 依赖关系 + CHANGELOG*
+*Version: v3.3 | 2026-08-17 | 边界条件补充：wincred 凭证修复 + packed-refs/loose ref 引用坑（GitHub 推送实障排查）*
