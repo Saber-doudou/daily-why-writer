@@ -185,7 +185,7 @@ def generate_prompt(rules: dict, recent_topics: list = None) -> str:
 
 
 def generate_multi_agent_prompt(rules: dict, recent_topics: list = None) -> str:
-    """生成多Agent版本的 automation prompt（Orchestrator 同步式审校，不 spawn 子 agent）"""
+    """生成多Agent版本的 automation prompt（Orchestrator 写作 + spawn 独立 Reviewer 审校，v2.0 熔断链）"""
     wc_min = rules["word_count"]["min"]
     wc_max = rules["word_count"]["max"]
 
@@ -193,7 +193,7 @@ def generate_multi_agent_prompt(rules: dict, recent_topics: list = None) -> str:
     SKILL_DIR = "C:/Users/admin/.workbuddy/skills/daily-why-writer"
     fp_range = get_fp_range()
 
-    prompt = f"""每日冷知识自动化：Orchestrator 同步执行模式（选题+写作+审校，不 spawn 子 agent）。
+    prompt = f"""每日冷知识自动化：Orchestrator 写作 + 独立 Reviewer 审校模式（v2.0，spawn 独立审校子 agent，自审仅作熔断降级）。
 
 前置：用 glob `F:/WorkBuddy/daily-why/articles/**/{{今天日期}}-每日冷知识*.md` 检查，已存在则跳过。{{今天日期}}截取自系统 current_time。失败处理：任意步骤出错立即停止并报告。
 
@@ -232,32 +232,41 @@ def generate_multi_agent_prompt(rules: dict, recent_topics: list = None) -> str:
 
 【硬约束】选题失败上报：若外部源拉取、脑洞选题、素材池兜底全部失败（候选均被 check_topic.py 判重复），必须输出"⚠️ 今日选题失败：失败候选列表 + 3 个建议新方向"，不得静默终止。
 
-## 阶段2：同步式审校（主代理亲自执行，禁止 spawn 子 agent）
+## 阶段2：独立 Reviewer 审校（spawn 子 agent 为主路径，v2.0）
 
-初稿写入文件后，主代理在同一轮内同步完成以下审校动作。禁止使用 Agent 工具 spawn 独立审校子 agent（该回传通道在本环境不可靠，08-06、08-13 两次实证）：
+初稿写入文件后，使用 Agent 工具 **spawn 独立审校子 agent**（禁止 Orchestrator 自己审，maker-checker）。**禁止传 name 参数**（name 依赖 team 上下文，本地 automation 环境必失败；08-13 实证去掉 name 后 spawn 成功，08-20 本项目实证成功）。
 
-1. 运行脚本审核（记录完整输出）：
-   `{PYTHON} F:/WorkBuddy/daily-why/scripts/validate_article.py --json "{{初稿文件完整路径}}"`
-   记录 P0/P1/P2 数量与得分。
-2. 若脚本报出可自动修复项（Q格式/分隔线数/反转标签/表格行数），运行：
-   `{PYTHON} F:/WorkBuddy/daily-why/scripts/auto_fix.py "{{初稿文件完整路径}}" --verify`
-   修复后重跑步骤1。
-3. 加载 `{SKILL_DIR}/references/CHECKLIST.md` 逐项人工对照扫描。
-4. 加载 `{SKILL_DIR}/references/FORBIDDEN.md`，逐条扫描文件中【全部】FP 规则（数量以文件实际内容为准，不要写死编号）。
-5. 最小结构验证（不依赖 SKILL.md 写作规则）：确认文章骨架完整——A段引用块（>开头）、C段Q格式（**Q1/Q2/Q3：**）、F段引用块含"冷知识反转"标签、结尾风格表格（四行）。任一缺失即 P0 结构缺失。
-6. 就地输出审核报告（Markdown 表格或 JSON 文本），包含 pass(布尔)、p0_count、p1_count、p2_count、score、issues数组（每项含level/category/description/suggestion）。
-   通过条件：P0=0 且 P1≤2。
+**spawn 参数**：
+- subagent_type: "general-purpose"
+- model: "reasoning"
+- 任务内容（原样传入子 agent）：
+  1. Read 读取 `{{初稿文件完整路径}}`
+  2. 运行脚本审核：`{PYTHON} F:/WorkBuddy/daily-why/scripts/validate_article.py --json "{{初稿文件完整路径}}"`，记录 P0/P1/P2 与得分
+  3. Read 加载 `{SKILL_DIR}/references/CHECKLIST.md` 逐项人工对照扫描
+  4. Read 加载 `{SKILL_DIR}/references/FORBIDDEN.md`，逐条扫描文件中【全部】FP 规则（数量以文件实际内容为准，不要写死编号）
+  5. **事实断言独立核验**：对文中人物/机构/亲缘关系/年份/数据类断言，用 WebSearch 独立核实至少 2 处关键断言，发现事实错误标记 P0
+  6. 最小结构验证（不依赖 SKILL.md 写作规则）：A段引用块（>开头）、C段Q格式（**Q1/Q2/Q3：**）、F段引用块含"冷知识反转"标签、结尾风格表格（四行）。任一缺失即 P0 结构缺失
+  7. 输出审核报告**写入文件** `F:/WorkBuddy/daily-why/review/{{今天日期}}_review.json`（含 pass/p0_count/p1_count/p2_count/score/issues 数组，每项含 level/category/description/suggestion），并在最终回复文本中回报审校结论（SendMessage 在本地 automation 环境不可用，以文本回报兜底）
+  8. 通过条件：P0=0 且 P1≤2
 
-【硬约束】审校由主代理同步完成，绝不 spawn 独立子 agent。输出 JSON / Markdown 时，禁止使用 `~` 作为区间/范围连接符；一律用中文"到"或"至"。例如：400到700纳米，不得写 400~700。
+**等待策略（文件检测优先）**：
+1. spawn 成功后每 1 分钟轮询检查 `F:/WorkBuddy/daily-why/review/{{今天日期}}_review.json` 是否已生成
+2. reviewer 显式上限 15 分钟（spawn 成功起算），超时 → 按熔断降级
+3. 检测到 review.json 已生成（或收到 reviewer 文本回报）→ 继续；**不等待 SendMessage**
 
-【硬约束】审校降级标记：若审校过程中任何一步异常（脚本失败、无法完成人工对照），输出带"⚠️ 审校降级为主代理自审"标记并继续，不得阻塞。
+**熔断链（兜底路径）**：spawn 报 team 上下文错误 → 去掉 name 参数重试 1 次 → 仍失败 → **熔断**（本次不再尝试 spawn）→ Orchestrator 自审（加载 CHECKLIST.md + FORBIDDEN.md 执行审校）→ 输出标注「⚠️ 未独立审校」。自审仅为降级路径，独立 reviewer 是主路径。
 
-## 阶段3：修复+输出（Orchestrator 根据自审报告）
+【硬约束】审校由 spawn 的独立 reviewer 完成，Orchestrator 不得自己审。若降级为自审，必须标注「⚠️ 未独立审校」。输出 JSON / Markdown 时，禁止使用 `~` 作为区间/范围连接符；一律用中文"到"或"至"。例如：400到700纳米，不得写 400~700。
+
+【硬约束】审校降级标记：若熔断链触发（spawn 失败/超时/空返回），输出带「⚠️ 未独立审校」标记并继续，不得阻塞。
+
+## 阶段3：修复+输出（Orchestrator 根据审校报告）
 
 - 通过（P0=0且P1≤2）→ 直接进入输出
-- 不通过 → 根据报告中的 issues 修复文章 → 写入文件 → 重新执行阶段2 审校（最多2轮）
+- 不通过 → 根据报告中的 issues 修复文章 → 写入文件 → 重新 spawn Reviewer 审校（最多2轮）
 - 2轮后仍不通过 → 标记"⚠️ 需人工审核"，输出当前最佳版本
-- 输出：文件路径、审核得分、P0/P1/P2 数
+- **防死循环**：连续 2 轮审校指向同一 P 级问题且修复无实质改进 → 停止迭代，标记"⚠️ 需人工审核"并输出当前最佳版本
+- 输出：文件路径、审核得分、P0/P1/P2 数、审校方式（独立 reviewer / ⚠️未独立审校）
 - 运行 `{PYTHON} F:/WorkBuddy/daily-why/scripts/update_history.py` 更新记忆
 
 ## 阶段4：创建投喂素材文件夹

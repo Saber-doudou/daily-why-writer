@@ -6,7 +6,7 @@ description: >
   标点纠错（GB/T 15834）。触发词：每日一个为什么、每日一个为什么写作、
   dailywhy、dailywhy写作、每日冷知识。
 agent_created: true
-last_updated: 2026-08-19
+last_updated: 2026-08-20
 ---
 
 # daily-why-writer
@@ -114,7 +114,7 @@ C:/Users/admin/.workbuddy/binaries/python/versions/3.13.12/python.exe F:/WorkBud
 ## Phase 3：写后自检
 
 1. 加载 `references/CHECKLIST.md` 逐项检查科学准确性
-2. 加载 `references/FORBIDDEN.md` 扫描 FP-01 到 65
+2. 加载 `references/FORBIDDEN.md` 扫描 FP-01 到 66
 3. **标点自查**（5 项高频陷阱，GB/T 15834-2011）：
 
 | # | 陷阱 | 错误 → 正确 |
@@ -169,19 +169,26 @@ L3: daily-why-publish — 匹配检查+IMA备份+GitHub推送+记忆归档
 
 ---
 
-## 🤖 多 Agent 执行模式（v1.1 同步式审校）
+## 🤖 多 Agent 执行模式（v2.0 独立 Reviewer 审校）
 
-> ⚠️ 执行权威：本段（多 Agent 执行模式 v1.1）是自动化运行的唯一权威工作流。下文 Phase 0 到 4（单 Agent 描述）为写作规范与格式细节的参考实现，供理解规则使用，不构成独立的第二套流程。
+> ⚠️ 执行权威：本段（多 Agent 执行模式 v2.0）是自动化运行的唯一权威工作流。下文 Phase 0 到 4（单 Agent 描述）为写作规范与格式细节的参考实现，供理解规则使用，不构成独立的第二套流程。
 
-> **同步审校模式**：Orchestrator 选题+写作+自检+精修+审校全同步执行，不 spawn 子 agent（子 agent 回传通道在本环境不可靠，08-06/08-13 两次实证，spawn 阻塞调用无法被异常规则打断）。
+> **独立审校模式（v2.0，2026-08-20 启用）**：Orchestrator 选题+写作+精修，审校由 **spawn 的独立 Reviewer** 执行（maker-checker，EXP-005）。子 agent 回传通道在 08-06/08-13 曾两次实证不可靠，但 08-13 起已确认**去掉 name 参数即可 spawn 成功**（history-today v9.8.2 实证），08-20 在本项目 spawn 独立审校 agent（agent-649f7e2c）成功并抓到自审漏检的 2 处 P0 事实硬伤。自审仅作为熔断降级兜底，不是主路径。
 
 | 角色 | 职责 | 阶段 | 加载模块 | 预估 Token |
 |------|------|------|---------|:---:|
-| **Orchestrator**（Automation 自身） | 选题 + 写作 + 自检 + 精修 + 同步审校 + 输出 + 记忆更新 | Phase 0-5 | 写作阶段: SKILL.md + topics_context.json；审校阶段: + CHECKLIST.md + FORBIDDEN.md | 峰值约20K |
+| **Orchestrator**（Automation 自身） | 选题 + 写作 + 自检 + 精修 + 裁决 + 输出 + 记忆更新 | Phase 0-2, 4-5 | 写作阶段: SKILL.md + topics_context.json；精修阶段: + 审校报告 | 峰值约20K |
+| **reviewer**（spawn 独立 agent） | 6 维度审校 + 事实断言独立核验 + 判例检索 | Phase 3 | CHECKLIST.md + FORBIDDEN.md + reviewer_prompt.md | ~15K |
+
+### spawn 规范与熔断链（写死，硬约束）
+
+- **spawn 写法**：`Agent(subagent_type="general-purpose", model="reasoning")`——**禁止传 name 参数**（name 依赖 team 上下文，本地 automation 环境必失败；08-13 实证去掉 name 后 spawn 成功，08-20 本项目实证成功）
+- **熔断链**：spawn 报 team 上下文错误 → 去掉 name 重试 1 次 → 仍失败 → **熔断**（本次运行不再尝试 spawn）→ Orchestrator 自审（加载 CHECKLIST.md + FORBIDDEN.md 执行审校）→ 输出标注「⚠️ 未独立审校」
+- **等待策略**：spawn 成功后每 1 分钟轮询检查 `review/{YYYY-MM-DD}_review.json` 是否生成（文件检测优先）；reviewer 显式上限 15 分钟（spawn 成功起算）；收到 reviewer 文本回报或检测到文件已生成 → 继续；15 分钟未产出 → 按熔断降级（Orchestrator 自审 + 标注）
 
 ### 模块化设计原则
 - Orchestrator 写作阶段不加载 CHECKLIST.md/FORBIDDEN.md —— 避免"知道考纲做题"
-- Orchestrator 审校阶段加载 CHECKLIST.md/FORBIDDEN.md —— 脚本先行 + 人工对照，弥补"独立视角"缺失
+- Reviewer 审校阶段加载 CHECKLIST.md/FORBIDDEN.md + reviewer_prompt.md —— 纯粹审核视角，不加载写作规则
 - CASE_STUDIES.md 按需检索，不塞进上下文
 
 ### 执行流程
@@ -191,21 +198,20 @@ Phase 0: 防重跑检查（今日文章是否已存在）
     ↓
 Phase 1: 【Orchestrator】选题 + check_topic.py 去重 + WebSearch 查证
     ↓
-Phase 2: 【Orchestrator】A+C+F 写作 + 写后自检
+Phase 2: 【Orchestrator】A+C+F 写作 + 写后自检 + 初稿写入文件
     ↓
-Phase 3: 【Orchestrator】初稿写入文件 → 同步审校（主代理亲自执行）
-    - 运行 validate_article.py --json（记录 P0/P1/P2 与得分）
-    - 可选项: auto_fix.py --verify（脚本报出可自动修复项时，修复后重跑 validate）
-    - 按 CHECKLIST + FORBIDDEN 逐项人工对照
-    - 最小结构验证（A 段引用块 / C 段 Q 格式 / F 段"冷知识反转"标签 / 结尾风格表格）
-    - 就地输出审核报告（Markdown 表格或 JSON）
+Phase 3: 【spawn 独立 Reviewer 审校】（主路径，禁止 Orchestrator 自己审）
+    - Agent(subagent_type="general-purpose", model="reasoning")，禁止传 name
+    - Reviewer 执行：validate_article.py --json → CHECKLIST 逐项 → FORBIDDEN 扫描
+      → 事实断言独立核验（WebSearch 复核人物/机构/亲缘/数字类断言）→ 最小结构验证
+    - Reviewer 输出 review/{YYYY-MM-DD}_review.json（含 P0/P1/P2/score/issues）
     ↓
     若 P0=0 且 P1≤2 → Phase 4（通过）
     否则 → Phase 4（修复循环）
     ↓
-Phase 4: 【Orchestrator】根据自审报告
+Phase 4: 【Orchestrator】根据审校报告
     - 通过 → 直接输出 + 记忆更新
-    - 不通过 → 按报告修复 → 写入文件 → 重跑同步审校（最多 2 轮）
+    - 不通过 → 按报告修复 → 写入文件 → 重新 spawn Reviewer 审校（最多 2 轮）
     - 2 轮后仍不通过 → 标记"⚠️ 需人工审核"，输出当前最佳版本
     ↓
 Phase 5: 【Orchestrator】输出全文 + update_history.py + 记忆更新
@@ -213,25 +219,27 @@ Phase 5: 【Orchestrator】输出全文 + update_history.py + 记忆更新
 
 **效率规范**：网络请求上限3次；记忆更新合并为1次。
 
-### 异常处理（同步审校口径）
+### 异常处理（v2.0 熔断口径）
 
 | 场景 | 处理策略 |
 |------|---------|
+| spawn 报 team 上下文错误 | 去掉 name 参数重试 1 次 → 仍失败 → 熔断（本次不再尝试 spawn）→ Orchestrator 自审 + 标注「⚠️ 未独立审校」 |
+| reviewer 超时（spawn 成功后 15 分钟无响应/未产出 review.json） | 按熔断降级：Orchestrator 自审 + 标注「⚠️ 未独立审校」 |
+| reviewer 返回空结果 / 非 JSON | Orchestrator 重试 1 次，仍为空 → 按熔断降级（Orchestrator 自审 + 标注「⚠️ 未独立审校」） |
 | validate_article.py 执行失败 | 先 `auto_fix.py --verify` 修复再重试；仍失败则记录错误并继续人工对照，不阻塞流程 |
-| 审校过程中任意步骤异常（无法完成人工对照等） | 输出"⚠️ 审校降级为主代理自审"标记并继续，不得阻塞 |
-| （防御性）历史遗留 spawn 的子 agent 空返回 / 非 JSON | 立即放弃该子 agent，切主代理自审（见 Phase 3），记录"⚠️ 审校降级为主代理自审"，流程继续，不等待重试 |
 
 ### 迭代终结条件
 
 - 审校通过（P0=0 且 P1≤2）→ 输出文章
-- 审校不通过 → Orchestrator 直接修复 → 重跑同步审校（最多 2 轮）
+- 审校不通过 → Orchestrator 直接修复 → 重新 spawn Reviewer 审校（最多 2 轮）
 - 2 轮后仍不通过 → 标记"⚠️ 需人工审核"，输出当前最佳版本
+- **防死循环（v2.0）**：连续 2 轮审校指向同一 P 级问题且修复无实质改进 → 停止迭代，标记"⚠️ 需人工审核"并输出当前最佳版本
 
 ### 消息协议
 
-审校结果由主代理就地输出（不依赖子 agent / SendMessage 回传通道）：
+审校结果由 reviewer 写入 `review/{YYYY-MM-DD}_review.json`（文件落盘，不依赖 SendMessage 回传）：
 ```json
-{ "pass": true, "p0_count": 0, "p1_count": 1, "p2_count": 0, "score": 95, "issues": [] }
+{ "article_id": "YYYY-MM-DD", "review_timestamp": "ISO时间", "pass": true, "p0_count": 0, "p1_count": 1, "p2_count": 0, "score": 95, "issues": [{"level": "P1", "category": "...", "location": "...", "description": "...", "suggestion": "..."}] }
 ```
 或以 Markdown 表格形式输出，包含 pass / p0_count / p1_count / p2_count / score / issues（每项含 level/category/description/suggestion）。
 
@@ -241,8 +249,8 @@ Phase 5: 【Orchestrator】输出全文 + update_history.py + 记忆更新
 
 | 文件 | 用途 | 加载时机 |
 |------|------|---------|
-| `references/CHECKLIST.md` | 86 项科学准确性自检（含 FP 交叉引用） | Phase 3 |
-| `references/FORBIDDEN.md` | 65 条禁止模式 FP-01 到 65 | Phase 3 |
+| `references/CHECKLIST.md` | 94 项科学准确性自检（含 FP 交叉引用） | Phase 3 |
+| `references/FORBIDDEN.md` | 66 条禁止模式 FP-01 到 66 | Phase 3 |
 | `references/FEEDBACK_LOG.md` | 教训→规则转化记录（30天内活跃） | 按需检索 |
 | `references/FEEDBACK_ARCHIVE.md` | 休眠教训库（30天未再犯） | 手动查阅 |
 | `references/EXAMPLES.md` | A段/F段/Q格式好/坏案例 | 写作时查阅 |
@@ -250,7 +258,7 @@ Phase 5: 【Orchestrator】输出全文 + update_history.py + 记忆更新
 | `writing_rules.json` | 程序化验证数据源 | validate_article.py |
 | `validate_article.py` | 格式+质量自动审核 | Phase 4 |
 | `update_history.py` | 话题去重记录更新 | Phase 4 |
-| `reviewer_prompt.md` | Reviewer Agent 审校 prompt（保留文件，不再作为默认执行路径） | 按需参考 |
+| `reviewer_prompt.md` | Reviewer Agent 独立审校 prompt（v2.0 主路径，spawn 时作为审校指令） | Phase 3 |
 
 ## 风格样本
 
@@ -303,3 +311,5 @@ Phase 5: 【Orchestrator】输出全文 + update_history.py + 记忆更新
 *Version: v3.1 | 2026-08-17 | + CHECKLIST §89(实验装置/操作描述须忠实于真实研究设置:摆锤模拟≠真人跺脚) + §20案例(结论须配一秒自检/辨别方法)/FP-20案例(类比须精确物理过程阶段:再入大气层)（鞋带松开 投喂学习）*
 *Version: v3.1 | 2026-08-17 | + CHECKLIST §90(收尾金句"A是X其实是Y"对照词须情绪一致且语法完整:突然/终于→不是背叛而是偷偷松了一路)（鞋带松开 Master真人反馈）*
 *Version: v3.1 | 2026-08-18 | + FP-05/FP-22/FP-33 案例补充（喷嚏闭眼：F段辟谣重复Q3无增量、喷嚏速度"接近高铁"类比失准+Wells高估值与Tang实测争议、千问"MIT实测30-50km/h"单位/机构双错）+ CHECKLIST §1案例（泪腺位置）*
+*Version: v3.1 | 2026-08-20 | + CHECKLIST §94(客观物理/光学结果不得称「错觉」:可逆的错觉→可逆的光学现象) + §2案例(干时"根本没进楼"绝对化)/§16案例(光在纤维间多次往返弹跳)/§82案例(折射率匹配术语锚点)/§93案例(金句收尾聚光灯位置)（湿了变深 投喂学习）*
+*Version: v2.0-审校 | 2026-08-20 | 多Agent执行模式从 v1.1 同步自审升级为 v2.0 独立 Reviewer 审校：spawn 独立 agent 为主路径（Agent(subagent_type="general-purpose", model="reasoning")，禁止传 name），熔断链（去 name 重试→熔断→Orchestrator 自审+标注「⚠️ 未独立审校」）、文件检测等待（review/{date}_review.json 落盘轮询，15min 上限）、Reviewer 不加载写作规则、防死循环。实证：08-20 spawn agent-649f7e2c 成功，抓到自审漏检 2 处 P0（汤姆森亲缘关系+机构归属）。依据橙皮书 EXP-005(maker-checker)/EXP-015(P2 独立审稿专家) + 达尔文 8 维度评估（42.6→目标85分）*

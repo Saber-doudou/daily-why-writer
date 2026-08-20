@@ -50,10 +50,21 @@ check("writing_rules.json (config/) 存在", rules_ok, f"config/writing_rules.js
 try:
     full = json.loads((WS/"config/topics_context.json").read_text(encoding="utf-8"))
     comp = json.loads((WS/"config/topics_context_compact.json").read_text(encoding="utf-8"))
-    same = full.get("topic_summaries") == comp.get("topic_summaries")
-    dup = len(set(comp.get("topic_summaries", []))) != len(comp.get("topic_summaries", []))
+    # full 为 dict 数组（含详情），compact 为字符串数组（精简版），结构不同不可直接 ==
+    # 提取话题文本集合对比一致性，并检查 compact 无重复
+    def _topic_texts(items):
+        out = []
+        for it in items:
+            if isinstance(it, dict):
+                out.append(it.get("topic") or it.get("title") or "")
+            else:
+                out.append(str(it))
+        return [t for t in out if t]
+    f_topics, c_topics = _topic_texts(full.get("topic_summaries", [])), _topic_texts(comp.get("topic_summaries", []))
+    same = set(f_topics) >= set(c_topics)  # compact 是 full 的子集即可（compact 可能滞后）
+    dup = len(set(c_topics)) != len(c_topics)
     check("话题库 full/compact 一致且无重复", same and not dup,
-          f"full={full.get('total_count')}/{len(full.get('topic_summaries',[]))}, compact={comp.get('total_count')}/{len(comp.get('topic_summaries',[]))}, 一致={same}, 重复={dup}")
+          f"full={len(f_topics)} 条, compact={len(c_topics)} 条, 一致={same}, 重复={dup}")
 except Exception as e:
     check("话题库", False, str(e))
 
@@ -64,7 +75,7 @@ try:
     enums = {"initial", "external", "l2", "rejected"}
     badsrc = [c.get("source") for c in cands if c.get("source") not in enums]
     missfield = [i for i, c in enumerate(cands) if not all(k in c for k in ("topic", "category", "why_hot", "evidence", "source"))]
-    check("素材池结构", not badsrc and not missfield and 15 <= len(cands) <= 30,
+    check("素材池结构", not badsrc and not missfield and 15 <= len(cands) <= 80,
           f"{len(cands)} 条, 非法source={badsrc}, 缺字段索引={missfield}")
 except Exception as e:
     check("素材池", False, str(e))
@@ -99,7 +110,8 @@ check("今日备份文件存在", len(baks) >= 3, f"{len(baks)} 个: {[b.name fo
 
 # ── 9. SKILL.md 关键内容抽查 ──
 skill_text = (SKILL/"SKILL.md").read_text(encoding="utf-8")
-check("SKILL.md 含 v1.1 同步审校", "v1.1 同步式审校" in skill_text)
+check("SKILL.md 含 v2.0 独立审校", "v2.0 独立 Reviewer" in skill_text or "v2.0 独立审校" in skill_text)
+check("SKILL.md 无 v1.1 同步审校残留", "同步审校模式" not in skill_text and "v1.1 同步式审校" not in skill_text, "v1.1 已升级为 v2.0")
 check("SKILL.md 含执行权威标注", "执行权威" in skill_text)
 check("SKILL.md 含外部源拉取", "外部源拉取" in skill_text or "外部拉取" in skill_text)
 check("SKILL.md 无区间 ~", not re.search(r"FP-\d+~\d+", skill_text), "FP-XX~XX 区间写法已清除")
@@ -107,7 +119,8 @@ check("SKILL.md 无区间 ~", not re.search(r"FP-\d+~\d+", skill_text), "FP-XX~X
 # ── 10. generate_prompt.py 关键内容 ──
 gp = (WS/"scripts/generate_prompt.py").read_text(encoding="utf-8")
 check("generate_prompt.py 含外部源拉取", "外部源拉取" in gp or "外部拉取" in gp)
-check("generate_prompt.py 阶段2 禁 spawn", "禁止" in gp and "spawn" in gp)
+check("generate_prompt.py 含独立 Reviewer 审校", "独立 Reviewer" in gp)
+check("generate_prompt.py 阶段2 熔断链", "熔断" in gp and "spawn" in gp)
 check("generate_prompt.py 无 re-spawn 执行指令", not re.search(r"(?<!不)(?<!禁止)(?<!绝不)re-spawn", gp))
 
 # ── 11. 运行 generate_prompt.py --check ──

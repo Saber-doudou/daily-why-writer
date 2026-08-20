@@ -511,6 +511,8 @@ def phase3_git(date_str, topic, dry_run, force, res):
     src_base = Path(CFG["references_dir"]).parent  # ~/.workbuddy/skills/daily-why-writer/
     skill_md = src_base / "SKILL.md"
     refs = ["references/FORBIDDEN.md", "references/CHECKLIST.md", "references/FEEDBACK_LOG.md"]
+    # Reviewer 独立审校 prompt（v2.0 主路径资产，纳入推送）
+    reviewer_prompt = src_base / "reviewer_prompt.md"
     # L3 发布技能文件
     publish_skill = Path("C:/Users/admin/.workbuddy/skills/daily-why-publish/SKILL.md")
     l3_script = Path(CFG["scripts_dir"]) / "l3_publish.py"
@@ -524,6 +526,9 @@ def phase3_git(date_str, topic, dry_run, force, res):
         dst = repo / ref
         if src.exists():
             files_to_copy.append((src, dst))
+    # Reviewer 独立审校 prompt
+    if reviewer_prompt.exists():
+        files_to_copy.append((reviewer_prompt, repo / "reviewer_prompt.md"))
     # L3 发布
     if publish_skill.exists():
         files_to_copy.append((publish_skill, repo / "daily-why-publish" / "SKILL.md"))
