@@ -249,7 +249,7 @@ Phase 5: 【Orchestrator】输出全文 + update_history.py + 记忆更新
 
 | 文件 | 用途 | 加载时机 |
 |------|------|---------|
-| `references/CHECKLIST.md` | 94 项科学准确性自检（含 FP 交叉引用） | Phase 3 |
+| `references/CHECKLIST.md` | 95 项科学准确性自检（含 FP 交叉引用） | Phase 3 |
 | `references/FORBIDDEN.md` | 66 条禁止模式 FP-01 到 66 | Phase 3 |
 | `references/FEEDBACK_LOG.md` | 教训→规则转化记录（30天内活跃） | 按需检索 |
 | `references/FEEDBACK_ARCHIVE.md` | 休眠教训库（30天未再犯） | 手动查阅 |
@@ -313,3 +313,4 @@ Phase 5: 【Orchestrator】输出全文 + update_history.py + 记忆更新
 *Version: v3.1 | 2026-08-18 | + FP-05/FP-22/FP-33 案例补充（喷嚏闭眼：F段辟谣重复Q3无增量、喷嚏速度"接近高铁"类比失准+Wells高估值与Tang实测争议、千问"MIT实测30-50km/h"单位/机构双错）+ CHECKLIST §1案例（泪腺位置）*
 *Version: v3.1 | 2026-08-20 | + CHECKLIST §94(客观物理/光学结果不得称「错觉」:可逆的错觉→可逆的光学现象) + §2案例(干时"根本没进楼"绝对化)/§16案例(光在纤维间多次往返弹跳)/§82案例(折射率匹配术语锚点)/§93案例(金句收尾聚光灯位置)（湿了变深 投喂学习）*
 *Version: v2.0-审校 | 2026-08-20 | 多Agent执行模式从 v1.1 同步自审升级为 v2.0 独立 Reviewer 审校：spawn 独立 agent 为主路径（Agent(subagent_type="general-purpose", model="reasoning")，禁止传 name），熔断链（去 name 重试→熔断→Orchestrator 自审+标注「⚠️ 未独立审校」）、文件检测等待（review/{date}_review.json 落盘轮询，15min 上限）、Reviewer 不加载写作规则、防死循环。实证：08-20 spawn agent-649f7e2c 成功，抓到自审漏检 2 处 P0（汤姆森亲缘关系+机构归属）。依据橙皮书 EXP-005(maker-checker)/EXP-015(P2 独立审稿专家) + 达尔文 8 维度评估（42.6→目标85分）*
+*Version: v3.1 | 2026-08-21 | + CHECKLIST §95(术语家族首次出现须锚定上下位关系、成员对照说明机制差异而非绝对排除:视觉暂留→正后像/负后像同属后像) + §68案例(24帧单帧0.04秒与残留0.1秒数值对应)/§20案例(结论配"你现在就可以试试"即时验证)/§79案例(术语对照用机制差异)/§82案例(视觉暂留=历史统称,正后像=现代术语双锚点)/§91案例(韦特海默格式塔心理学家身份核实) + FP-55案例（关灯留亮光 投喂学习）*
