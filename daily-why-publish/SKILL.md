@@ -3,7 +3,7 @@ name: daily-why-publish
 description: >
   验证发布技能 — AI 语义验证 + 脚本执行：检查优化版是否匹配自动化产出，记笔记到IMA，推送技能更新到GitHub，记忆归档。
   当用户需要发布当日文章到 IMA 和 GitHub 时触发。
-  触发词：每日一个为什么发布、每日一个为什么推送、每日一个为什么审计、dailywhy发布、dailywhy推送、dailywhy审计。
+  触发词：每日一个为什么发布、每日一个为什么推送、每日一个为什么审计、每日一个为什么备份、每日一个为什么推送备份、每日一个为什么发布备份、dailywhy发布、dailywhy推送、dailywhy审计、dailywhy备份、dailywhy推送备份、dailywhy发布备份。
 agent_created: true
 ---
 
