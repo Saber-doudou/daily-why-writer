@@ -9,7 +9,7 @@ description: >
 agent_created: true
 ---
 
-# daily-why-publish v3.1
+# daily-why-publish v3.4
 
 AI 语义验证 + 脚本执行，各司其职。
 
@@ -172,7 +172,7 @@ AI 汇总完整报告，格式如下：
 ## 参数速查
 
 ```bash
-l3_publish.py [YYYY-MM-DD] [--dry-run] [--force] [--no-git] [--no-ima] [--skip-match]
+l3_publish.py [YYYY-MM-DD] [--dry-run] [--force] [--no-git] [--no-ima] [--skip-match] [--no-verify]
 ```
 
 | 参数 | 说明 |
@@ -183,6 +183,26 @@ l3_publish.py [YYYY-MM-DD] [--dry-run] [--force] [--no-git] [--no-ima] [--skip-m
 | `--no-git` | 跳过 GitHub 推送 |
 | `--no-ima` | 跳过 IMA 备份 |
 | `--skip-match` | 跳过 Phase 1（Step 3 使用） |
+| `--no-verify` | 跳过 Phase 3 发布后的远端核验（沙箱网络不通时可用，默认核验） |
+
+---
+
+## Phase 3 远端核验（v3.1 起内置）
+
+**背景（铁律）**：判断 commit 是否推上远程，**禁止只看本地 `git status` 的 ahead 数**。沙箱下 `git fetch` / `update-ref` 传输成功但引用**静默不落盘**，`origin/main` 陈旧会**误报 `ahead N`**（08-21、08-28 两次踩坑）。
+
+脚本在 push 成功后**自动**执行核验，无需 AI 手动介入：
+
+| 核验结果 | 含义 | 脚本行为 |
+|----------|------|----------|
+| `verified` | `ls-remote` 远程 main 与本地 HEAD 一致（或本地 HEAD 是远程 main 的祖先） | ✅ 通过，并**自动同步 `origin/main` 引用**消除误报 |
+| `ok_unfixed` | 核验一致，但引用同步失败（罕见） | ⚠️ 警告，不阻塞 |
+| `unverified` | 网络不通 / 超时，无法核验 | ⚠️ 提示「未核验」，**不阻塞**（push 已成功返回） |
+| `mismatch` | 本地 HEAD 未包含在远程 main 中（真正未落盘） | ❌ 判失败，返回 `push_fail` |
+
+**引用修复机制**：沙箱下 `git update-ref` / `git fetch` 在 `.git/refs/remotes/origin/` 目录缺失时会**静默失败**（不报错也不写入）。脚本改用 `mkdir -p` + 直接写 loose ref 文件绕过，写后立即用 `rev-list --count origin/main..HEAD` 复查归零。
+
+> **AI 注意**：`unverified` 是沙箱常态（git 出网被隔离），**不代表推送失败**，禁止据此判定「未发布」。若需权威确认，在沙箱外手动执行 `git ls-remote origin HEAD` 与本地 HEAD 对比即可。
 
 ---
 
@@ -256,6 +276,8 @@ L3 daily-why-publish（手动触发）← 本 Skill
 
 | 版本 | 日期 | 变更 |
 |------|------|------|
+| v3.4 | 2026-08-28 | Phase 3 内置远端核验：push 后自动 `ls-remote` 比对 + 写 loose ref 修复 `origin/main`（verified/ok_unfixed/unverified/mismatch 四态；新增 `--no-verify`）。**注：`l3_publish.py` 内版本号此前长期滞留 v3.0（git 历史 6 次改动均未更新该字段），本次一次性对齐至 SOP 版本 v3.4，非新增 4 代功能** |
+| v3.4 | 2026-08-28 | 同步清单补全：B 组文件（`FEEDBACK_ARCHIVE.md`/`CASE_STUDIES.md`/`generate_prompt.py`/`message_handler.py`/`topic_candidates.json` 等）此前在 `git_add_files` 却不在 `files_to_copy`，源改动从不复制进 repo，已纳入复制清单 |
 | v3.3 | 2026-08-17 | 边界条件补充：wincred 凭证修复 + packed-refs/loose ref 引用坑（GitHub 推送实障排查） |
 | v3.2 | 2026-06-23 | Darwin 优化：边界条件处理(6项) + 产出汇总模板 + 依赖关系图 + CHANGELOG |
 | v3.1 | 2026-06-23 | 去掉"零 AI"假约束，关键词匹配 → AI 语义验证（三档判定+证据规则+通过线） |
@@ -265,4 +287,4 @@ L3 daily-why-publish（手动触发）← 本 Skill
 
 ---
 
-*Version: v3.3 | 2026-08-17 | 边界条件补充：wincred 凭证修复 + packed-refs/loose ref 引用坑（GitHub 推送实障排查）*
+*Version: v3.4 | 2026-08-28 | Phase 3 内置远端核验（铁律固化：不信本地 ahead 数，push 后 ls-remote 比对 + 自动写 loose ref 修复 origin/main）*

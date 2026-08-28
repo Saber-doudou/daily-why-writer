@@ -21,6 +21,7 @@
 | 2026-06-04 | 伤口愈合发痒 | 跨系统类比不当 | FP-09 | CS-009 |
 | 2026-06-04 | 伤口愈合发痒 | 机制遗漏+安全提示缺失 | 读者体验优先 | CS-010 |
 | 2026-06-05 | 打哈欠 | 研究者引用不完整 | FP-12 | CS-011 |
+| 2026-07-07 | 全话题 | 自动化prompt措辞模糊导致Skill工具调用不一致 | 自动化SOP | CS-012 |
 
 ---
 
@@ -340,38 +341,44 @@ F段: 指纹形成是基因+环境共同作用（换种说法）
 
 **关联规则**：FP-12 研究者引用不完整
 
-### CS-012: 自动化未调用 Skill 工具（2026-07-07）
+---
 
-**话题**：猫呼噜声（通用型——所有每日冷知识文章）
+### CS-012: 自动化 prompt 中"加载 skill"的模糊措辞导致 Skill 工具调用不一致（2026-07-07）
+
+**话题**：全话题（L1 自动化流程）
 
 **问题描述**：
-- `automation-1778312519754` 的 prompt 中包含的是自然语言描述"加载 daily-why-writer skill"，而非 `Skill("daily-why-writer")` 工具调用指令
-- 模型按描述执行了 A+C+F 规则（prompt 内联了规则副本），但从未触发 Skill 工具
-- 导致 `usage-log.json` 中 daily-why-writer 和 daily-why-feed-learning 调用次数均为 0
-- history-today 项目也存在相同问题但未暴露（其自动化使用 Read 实时加载规则文件）
+- `generate_prompt.py` 生成的自动化 prompt 中写的是"加载 daily-why-writer skill"
+- 这是一个自然语言描述，模型有时理解为"调用 Skill 工具"，有时理解为"按内联规则写文章"
+- 导致 Skill 工具调用行为**不一致**：某些运行日确实调用了，某些日没有
 
 **错误表现**：
 ```
-usage-log.json 无 daily-why-writer 记录
-→ 6 条记录均为系统元数据，无任何 writer/feed-learning 记录
-→ daily-why-publish 因手动触发关键词调用而存在记录
-问题：SKILL.md 的写作指导变更不传至自动化
-（如新增的 FP-45 约束、§39 检查需通过 CHECKLIST/FORBIDDEN 间接生效）
+prompt 原文："4. 加载 daily-why-writer skill，按 A+C+F 结构……"
+问题：这句话没有明确写工具名和参数，给了模型两种解释空间
+后果1：usage-log.json 中 daily-why-writer 记录不连续/缺失
+后果2：未调用 Skill 工具时，自动化用的是 prompt 内联副本而非实时 SKILL.md
+后果3：SKILL.md 修改后不一定会被自动化感知（漂移风险）
 ```
 
 **根因分析**：
-- generate_prompt.py 生成的 automation prompt 中包含了完整的 A+C+F 规则内联副本
-- 模型读到"加载 daily-why-writer skill"的自然语言描述后，直接使用内联规则而非调用 Skill 工具
-- `Skill()` 是唯一能被 `usage-log` 追踪的工具调用方式，Read 不算
-- 误以为"说了加载就会调用"，实际需要显式 `Skill("skill-name")` 指令
+1. "加载 daily-why-writer skill"是给人看的描述，不是给机器执行的指令
+2. `generate_multi_agent_prompt()` 生成 prompt 时，原作者（AI）用自然语言描述了意图，但未意识到这需要是工具调用语法
+3. 模型有时主动调用 Skill 工具（表现出色），有时只按内联描述执行（合规但机制错）
+4. CHECKLIST.md / FORBIDDEN.md 在 Reviewer 阶段按绝对路径现场读（保持最新），制造了虚假的安全感——文章质量合格就无法发现问题
+5. usage-log.json 不在任何质量检查流程的范围内，无人盯屏监控
 
 **修正方案**：
-1. generate_prompt.py 的 generate_multi_agent_prompt() 阶段 1 最前面插入强制第 0 步：调用 Skill 工具，参数 skill=`daily-why-writer`，失败则回退 Read SKILL.md
-2. Reviewer 阶段 FP 编号从硬编码改为逐条扫描文件
-3. 验证通过后删除 prompt 内 A+C+F 内联副本，只保留编排壳
-4. 已沉淀判例：CS-012
+1. 在 `generate_multi_agent_prompt()` 中插入**阶段0**（在所有写作之前）：
+   - ① 强制指令：`调用 Skill 工具，参数 skill=daily-why-writer`（A 路径）
+   - ② 兜底：若工具不可用，按路径读取 SKILL.md 全文（B 路径）
+   - "未完成 SOP 加载不得进入阶段1"
+2. Reviewer 阶段 FP 编号从硬编码改为"逐条扫描文件中全部 FP 规则"
+3. 判例沉淀为 CS-012（本次），供未来自动化 prompt 维护参考
 
-**关联规则**：自动化流程规范（跨技能）
+**关联规则**：自动化 SOP（生成 prompt 时，skill 引用必须用工具调用语法，不能用自然语言描述）
+
+---
 
 ### 何时检索判例
 - 审校发现 P0/P1 时

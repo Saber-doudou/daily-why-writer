@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 """
-L3 Publish v3.0 — daily-why 自包含发布脚本
+L3 Publish v3.4 — daily-why 自包含发布脚本
 零 AI 依赖，一条命令跑完：匹配检查、IMA 备份、GitHub 推送、执行日志归档
 
 Usage:
-    python l3_publish.py [YYYY-MM-DD] [--dry-run] [--force] [--no-git] [--no-ima] [--skip-match] [--skip-archive]
+    python l3_publish.py [YYYY-MM-DD] [--dry-run] [--force] [--no-git] [--no-ima] [--skip-match] [--skip-archive] [--no-verify]
 """
 
 import argparse
@@ -108,10 +108,100 @@ def git_pull_rebase_push(repo, timeout):
     return True, ""
 
 
+def force_write_remote_ref(repo, sha):
+    """强写 origin/main loose ref。
+    沙箱下 git update-ref / fetch 传输成功但引用静默不落盘，且当
+    .git/refs/remotes/origin/ 目录缺失时二者均「不报错也不写入」，
+    故直接 mkdir + 写文件绕过（08-28 实证）。
+    """
+    try:
+        ref_dir = repo / ".git" / "refs" / "remotes" / "origin"
+        ref_dir.mkdir(parents=True, exist_ok=True)
+        (ref_dir / "main").write_text(sha + "\n", encoding="utf-8")
+    except OSError as e:
+        return f"写 loose ref 失败: {e}"
+
+    r = subprocess.run(["git", "rev-list", "--count", "origin/main..HEAD"],
+                       cwd=str(repo), capture_output=True, text=True)
+    try:
+        ahead = int((r.stdout or "0").strip() or 0)
+    except ValueError:
+        ahead = -1
+    if ahead != 0:
+        return f"写 ref 后 ahead 仍为 {ahead}"
+    return ""
+
+
+def verify_remote_sync(repo, timeout):
+    """铁律：判定 commit 是否真正推上远程，禁止只看本地 git status 的 ahead 数。
+    返回 (status, msg)；status ∈ verified / ok_unfixed / unverified / mismatch
+    """
+    try:
+        r = subprocess.run(["git", "ls-remote", "origin", "refs/heads/main"],
+                           cwd=str(repo), capture_output=True, text=True, timeout=timeout)
+    except subprocess.TimeoutExpired:
+        return "unverified", f"ls-remote 超时 >{timeout}s（沙箱网络隔离），未核验"
+    if r.returncode != 0:
+        return "unverified", f"ls-remote 失败: {r.stderr.strip()[:120]}"
+
+    parts = r.stdout.split()
+    if not parts:
+        return "unverified", "ls-remote 返回空"
+
+    remote_main = parts[0]
+    r2 = subprocess.run(["git", "rev-parse", "HEAD"], cwd=str(repo),
+                        capture_output=True, text=True)
+    local_head = r2.stdout.strip() if r2.returncode == 0 else ""
+    if not local_head:
+        return "unverified", "本地 HEAD 解析失败"
+
+    if remote_main != local_head:
+        # 远程领先或分叉：仅当本地持有该对象才能判祖先，否则无法判定
+        e = subprocess.run(["git", "cat-file", "-e", remote_main + "^{commit}"],
+                           cwd=str(repo), capture_output=True, text=True)
+        if e.returncode != 0:
+            return "unverified", (f"远程 main={remote_main[:8]} 本地={local_head[:8]} 不一致，"
+                                  "本地无该对象（沙箱 fetch 不落盘），无法判定")
+        a = subprocess.run(["git", "merge-base", "--is-ancestor", local_head, remote_main],
+                           cwd=str(repo), capture_output=True, text=True)
+        if a.returncode != 0:
+            return "mismatch", f"本地 {local_head[:8]} 未包含在远程 main={remote_main[:8]}"
+
+    err = force_write_remote_ref(repo, remote_main)
+    if err:
+        return "ok_unfixed", f"核验一致（远程={remote_main[:8]}）但引用未同步: {err}"
+    return "verified", f"远端核验一致（远程 main={remote_main[:8]}），origin/main 引用已同步"
+
+
+def report_git_result(res, repo, prefix_msg, verify):
+    """push 成功后的统一收尾：远端核验 + 结果上报。返回 git_result。
+    mismatch → 判失败（真正的未落盘）；unverified → 不阻塞（push 已成功返回，仅网络不通）
+    """
+    if not verify:
+        res.ok(3, prefix_msg)
+        return prefix_msg
+
+    verify_timeout = CFG.get("git_verify_timeout", 20)
+    status, vmsg = verify_remote_sync(repo, verify_timeout)
+    if status == "mismatch":
+        res.fail(3, f"{prefix_msg}｜远端核验未落盘: {vmsg}")
+        return "push_fail"
+    if status == "verified":
+        res.ok(3, f"{prefix_msg} ✅{vmsg}")
+    elif status == "ok_unfixed":
+        res.warn(3, f"{prefix_msg}｜{vmsg}")
+    else:
+        res.ok(3, f"{prefix_msg}（⚠️ 未核验：{vmsg}）")
+
+    # git_result 供 Phase 4 判定发布状态
+    m = re.search(r"commit=(\S+)", prefix_msg)
+    return m.group(1) if m else prefix_msg
+
+
 # ── Phase 0: 解析参数 & 日期探测 ─────────────────────
 
 def parse_args():
-    p = argparse.ArgumentParser(description="L3 Publish v3.0 — daily-why 发布脚本")
+    p = argparse.ArgumentParser(description="L3 Publish v3.4 — daily-why 发布脚本")
     p.add_argument("date", nargs="?", default=None,
                    help="文章日期 (YYYY-MM-DD)，默认自动探测最新文章")
     p.add_argument("--dry-run", action="store_true",
@@ -126,6 +216,8 @@ def parse_args():
                    help="跳过匹配度检查（Phase 1）")
     p.add_argument("--skip-archive", action="store_true",
                    help="跳过 FEEDBACK 休眠归档（Phase 5）")
+    p.add_argument("--no-verify", action="store_true",
+                   help="跳过发布后的远端核验（沙箱网络不通时可用，默认核验）")
     return p.parse_args()
 
 
@@ -501,7 +593,7 @@ def phase2_ima(date_str, dry_run, force, res):
 
 # ── Phase 3: GitHub 推送 ─────────────────────────────
 
-def phase3_git(date_str, topic, dry_run, force, res):
+def phase3_git(date_str, topic, dry_run, force, res, verify=True):
     repo = Path(CFG["git_repo_path"])
     if not (repo / ".git").exists():
         res.fail(3, f"Git 仓库不存在: {repo}")
@@ -537,6 +629,39 @@ def phase3_git(date_str, topic, dry_run, force, res):
     if l3_config.exists():
         files_to_copy.append((l3_config, repo / "scripts" / "config.json"))
 
+    # B 组补全（08-28 审计）：这些文件列在 config.json 的 git_add_files 里，
+    # 但历史上从未纳入 files_to_copy —— 源改动从不复制进 repo，副本长期脱节
+    # （实测 FEEDBACK_ARCHIVE.md 源 189 行 vs repo 35 行）。现统一纳入复制。
+    scripts_dir = Path(CFG["scripts_dir"])
+    project_dir = Path(CFG.get("base_dir", "F:/WorkBuddy/daily-why"))
+    extra_sync = [
+        (src_base / "references" / "FEEDBACK_ARCHIVE.md", "references/FEEDBACK_ARCHIVE.md"),
+        (project_dir / "review" / "CASE_STUDIES.md", "review/CASE_STUDIES.md"),
+        (scripts_dir / "generate_prompt.py", "scripts/generate_prompt.py"),
+        (scripts_dir / "generate_prompt.py", "generate_prompt.py"),
+        (scripts_dir / "check_topic.py", "check_topic.py"),
+        (scripts_dir / "topic_utils.py", "topic_utils.py"),
+        (scripts_dir / "full_selfcheck.py", "full_selfcheck.py"),
+        (scripts_dir / "message_handler.py", "message_handler.py"),
+        (project_dir / "config" / "topic_candidates.json", "topic_candidates.json"),
+    ]
+    for src, rel in extra_sync:
+        if src.exists():
+            files_to_copy.append((src, repo / rel))
+
+    # 自检：git_add_files 的每一项都必须有对应复制源，否则该文件的源改动
+    # 永远进不了 repo（08-28 审计：漏配导致 FEEDBACK_ARCHIVE.md 脱节 154 行）
+    copied = set()
+    for _, dst in files_to_copy:
+        try:
+            copied.add(str(dst.relative_to(repo)).replace("\\", "/"))
+        except ValueError:
+            pass
+    missing = [f for f in CFG.get("git_add_files", []) if f not in copied]
+    if missing:
+        res.warn(3, f"git_add_files 中 {len(missing)} 项无复制源（改动不会同步）: "
+                    f"{', '.join(missing)}")
+
     if not dry_run:
         for src, dst in files_to_copy:
             dst.parent.mkdir(parents=True, exist_ok=True)
@@ -570,8 +695,7 @@ def phase3_git(date_str, topic, dry_run, force, res):
                 cwd=str(repo), capture_output=True, text=True
             )
             commit_hash = r.stdout.strip() if r.returncode == 0 else "unknown"
-            res.ok(3, f"补推已提交 commit={commit_hash}")
-            return commit_hash
+            return report_git_result(res, repo, f"补推已提交 commit={commit_hash}", verify)
         res.skip(3, "无新变更，跳过")
         return "no_changes"
 
@@ -637,8 +761,7 @@ def phase3_git(date_str, topic, dry_run, force, res):
         with open(auto_mem, "a", encoding="utf-8") as f:
             f.write(f"- GitHub: commit {commit_hash}\n")
 
-    res.ok(3, f"commit={commit_hash}")
-    return commit_hash
+    return report_git_result(res, repo, f"commit={commit_hash}", verify)
 
 
 # ── Phase 4: 记忆归档 ────────────────────────────────
@@ -741,7 +864,7 @@ def main():
             sys.exit(1)
 
     print("=" * 50)
-    print(f"  L3 Publish v3.0 — daily-why")
+    print(f"  L3 Publish v3.4 — daily-why")
     print(f"  目标日期: {date_str}")
     if args.dry_run:
         print("  模式: --dry-run（只检查不执行）")
@@ -806,7 +929,8 @@ def main():
         res.skip(3, "--no-git 跳过")
         git_result = "skip"
     else:
-        git_result = phase3_git(date_str, v1_meta["topic"], args.dry_run, args.force, res)
+        git_result = phase3_git(date_str, v1_meta["topic"], args.dry_run, args.force, res,
+                                verify=not args.no_verify)
 
     # Phase 4: 记忆归档
     phase4_memory(date_str, v1_meta, v2_meta, ima_result, git_result, args.dry_run, res)
