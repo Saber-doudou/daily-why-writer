@@ -4,7 +4,9 @@ description: >
   每日冷知识科普文章写作助手。按 A+C+F 结构（故事开头→疑问驱动→反转收尾）
   撰写 300-600 字趣味科普。含排版规范、科学准确性自检（CHECKLIST.md）、
   标点纠错（GB/T 15834）。触发词：每日一个为什么、每日一个为什么写作、
-  dailywhy、dailywhy写作、每日冷知识。
+  dailywhy写、dailywhy写作、每日冷知识。
+  路由排除：输入含「学习/投喂/总结/发布/推送/审计/备份」等动作词时，
+  即使包含 dailywhy 前缀，也不属于本技能（分别属于 L2 学习 / L3 发布），勿触发。
 agent_created: true
 last_updated: 2026-08-26
 ---
@@ -12,6 +14,12 @@ last_updated: 2026-08-26
 # daily-why-writer
 
 每日冷知识（"每日一个为什么"）文章的写作 skill。
+
+## 触发边界（路由裁决，2026-08-28 新增）
+
+- 本技能只响应「写作」意图（选题/写作/精修/冷知识文章）。
+- **路由排除**：输入含「学习/投喂/总结」动作词 → 属于 L2（daily-why-feed-learning）；含「发布/推送/审计/备份」→ 属于 L3（daily-why-publish）。即使输入包含 `dailywhy` 前缀，也不触发本技能。
+- 路由以 `F:\WorkBuddy\daily-why\config\skill-trigger-map.json` 为唯一权威源，触发前先读该表核对。
 
 ## 元规则
 
