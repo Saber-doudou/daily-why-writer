@@ -512,20 +512,25 @@ def _detect_ima_version():
 
 
 def _append_ima_history(note_id, version, date_str):
-    """追加一行到 MEMORY.md 的 IMA 备份历史表"""
+    """追加一行到 MEMORY.md 的 IMA 备份历史表。
+
+    08-31 修复：原实现用 4 列管道表格正则，而 MEMORY.md 该节实为一行纯文本
+    （如 `v6.6(08-26) ...`），正则永远匹配不到 → 静默 return、从未生效。
+    现改为在 `## IMA 备份历史` 标题行后插入，表格与纯文本均兼容。
+    返回 bool 供调用方校验，失败不静默。
+    """
     memory_md = Path(CFG["memory_md_path"])
     if not memory_md.exists():
-        return
+        return False
     content = memory_md.read_text(encoding="utf-8")
-    new_row = f"| v{version} | {note_id} | {date_str} | l3_publish.py 自动备份 |"
-    # 在 IMA 备份历史表末尾追加（匹配最后一个 | 开头的行之后）
-    pattern = r"(## IMA 备份历史[^\n]*\n\|.*\|.*\|.*\|.*\|(?:\n\|.*\|.*\|.*\|.*\|)*)"
-    m = re.search(pattern, content, re.DOTALL)
+    new_row = f"- v{version} | note_id={note_id} | {date_str} | l3_publish.py 自动备份"
+    pattern = r"(## IMA 备份历史[^\n]*\n)"
+    m = re.search(pattern, content)
     if m:
-        table_block = m.group(1)
-        updated = table_block + "\n" + new_row
-        content = content.replace(table_block, updated)
+        content = content.replace(m.group(1), m.group(1) + new_row + "\n", 1)
         memory_md.write_text(content, encoding="utf-8")
+        return True
+    return False
 
 
 def phase2_ima(date_str, dry_run, force, res):
@@ -579,7 +584,8 @@ def phase2_ima(date_str, dry_run, force, res):
 
         # 追加到 MEMORY.md 的 IMA 备份历史表（防止版本号撞车）
         if note_id:
-            _append_ima_history(note_id, version, date_str)
+            if not _append_ima_history(note_id, version, date_str):
+                res.warn(2, "MEMORY.md IMA 备份历史追加失败（标题行未找到），请人工补记")
 
         return note_id or "ok"
 
@@ -725,8 +731,21 @@ def phase3_git(date_str, topic, dry_run, force, res, verify=True):
         res.skip(3, "规则文件无变更，跳过")
         return "no_rule_changes"
 
-    # git commit
-    commit_msg = f"daily-why {date_str}: {topic} + 投喂优化 + 规则更新"
+    # git commit（08-31 修复：消息由实际 staged 文件反推，不再硬编码模板）
+    staged = r_staged.stdout.strip().splitlines()
+    parts = [topic] if topic else []
+    if any(("FORBIDDEN" in s or "CHECKLIST" in s or "FEEDBACK" in s or "SKILL.md" in s
+            or "reviewer_prompt" in s) for s in staged):
+        parts.append("规则更新")
+    if any(("generate_prompt" in s or "l3_publish" in s or "config.json" in s
+            or "check_topic" in s or "message_handler" in s or "full_selfcheck" in s
+            or "topic_utils" in s) for s in staged):
+        parts.append("脚本更新")
+    if any("topic_candidates" in s for s in staged):
+        parts.append("素材池更新")
+    if not parts:
+        parts = ["维护"]
+    commit_msg = f"daily-why {date_str}: " + " + ".join(parts)
     r = subprocess.run(
         ["git", "commit", "-m", commit_msg],
         cwd=str(repo), capture_output=True, text=True
@@ -737,6 +756,22 @@ def phase3_git(date_str, topic, dry_run, force, res, verify=True):
             return "no_changes"
         res.fail(3, f"commit 失败: {r.stderr.strip()[:200]}")
         return "commit_fail"
+
+    # 08-31 新增：commit 后一致性自检（push 前）——若任一同步文件在 commit 之后又被
+    # 改写（典型：写该文件的 Phase 排在 Phase 3 之后，如归档在 git 之后），repo 副本
+    # 已脱节，此处及时发现并告警，避免把脱节版本推上远程。
+    # 通用约束：git_add_files 内文件的生产 Phase 必须先于 Phase 3 执行。
+    sync_mismatch = []
+    for _src, _dst in files_to_copy:
+        if _src.exists() and _dst.exists() and _src.read_bytes() != _dst.read_bytes():
+            try:
+                sync_mismatch.append(str(_dst.relative_to(repo)))
+            except ValueError:
+                sync_mismatch.append(str(_dst))
+    if sync_mismatch:
+        res.warn(3, f"commit 后检测到源与 repo 脱节 {len(sync_mismatch)} 项: "
+                    f"{', '.join(sync_mismatch[:5])}。请检查是否存在 Phase 在 git 之后"
+                    f"修改同步文件（时序约束：git_add_files 内文件的生产 Phase 必须先于 Phase 3）")
 
     # git pull --rebase + push（含重试）
     push_timeout = CFG.get("git_push_timeout", 30)
@@ -924,6 +959,12 @@ def main():
     else:
         ima_result = phase2_ima(date_str, args.dry_run, args.force, res)
 
+    # Phase 5: FEEDBACK 休眠归档（08-31 时序修复：必须早于 Phase 3 git commit，
+    # 否则归档产生的 FEEDBACK_LOG/ARCHIVE 变更永远赶不上当天提交，每日脱节。
+    # 归档失败仅 warn，不得阻塞发布主链路）
+    if not args.skip_archive:
+        phase5_feedback_archive(args.dry_run, res)
+
     # Phase 3: GitHub 推送
     if args.no_git:
         res.skip(3, "--no-git 跳过")
@@ -934,10 +975,6 @@ def main():
 
     # Phase 4: 记忆归档
     phase4_memory(date_str, v1_meta, v2_meta, ima_result, git_result, args.dry_run, res)
-
-    # Phase 5: FEEDBACK 休眠归档
-    if not args.skip_archive:
-        phase5_feedback_archive(args.dry_run, res)
 
     res.summary()
     if res.errors:
