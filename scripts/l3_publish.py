@@ -966,7 +966,7 @@ def main():
             sys.exit(1)
 
     print("=" * 50)
-    print(f"  L3 Publish v3.4 — daily-why")
+    print(f"  L3 Publish v3.6 — daily-why")
     print(f"  目标日期: {date_str}")
     if args.dry_run:
         print("  模式: --dry-run（只检查不执行）")
