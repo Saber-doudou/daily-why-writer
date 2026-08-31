@@ -196,6 +196,7 @@ def generate_multi_agent_prompt(rules: dict, recent_topics: list = None) -> str:
     prompt = f"""每日冷知识自动化：Orchestrator 写作 + 独立 Reviewer 审校模式（v2.0，spawn 独立审校子 agent，自审仅作熔断降级）。
 
 前置：用 glob `F:/WorkBuddy/daily-why/articles/**/{{今天日期}}-每日冷知识*.md` 检查，已存在则跳过。{{今天日期}}截取自系统 current_time。失败处理：任意步骤出错立即停止并报告。
+历史读取约束（08-31 分片后）：读取自动化执行历史 `.workbuddy/automations/automation-1778312519754/memory.md` 时，必须用 Bash `tail -n 120` 只读尾部最近记录，**禁止全文读取**；确需查更早历史时再读同目录归档 `memory_archive_2026H1.md`。
 
 ## 阶段0：强制加载写作SOP（必须在写任何字之前完成）
 

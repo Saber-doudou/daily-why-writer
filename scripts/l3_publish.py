@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-L3 Publish v3.5 — daily-why 自包含发布脚本
+L3 Publish v3.6 — daily-why 自包含发布脚本
 零 AI 依赖，一条命令跑完：匹配检查、IMA 备份、GitHub 推送、执行日志归档
 
 Usage:
@@ -36,30 +36,44 @@ CFG = load_config()
 
 
 class Result:
-    """收集各 Phase 的执行结果"""
+    """收集各 Phase 的执行结果（v3.5 起同时写入 l3_run.log）"""
 
-    def __init__(self):
+    def __init__(self, log_path="F:/WorkBuddy/daily-why/l3_run.log"):
         self.phases = []
         self.warnings = 0
         self.errors = 0
+        self._log_path = log_path
+
+    def _log(self, phase, status, msg):
+        """追加一行到运行日志（08-31 重建，此前 l3_run.log 停更于 08-14 且无任何写入逻辑）"""
+        try:
+            ts = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+            with open(self._log_path, "a", encoding="utf-8") as f:
+                f.write(f"[{ts}] [Phase {phase}] {status} {msg}\n")
+        except OSError:
+            pass  # 日志失败不阻塞主流程
 
     def ok(self, phase, msg):
         self.phases.append((phase, "✅", msg))
         print(f"[Phase {phase}] ✅ {msg}")
+        self._log(phase, "✅", msg)
 
     def skip(self, phase, msg):
         self.phases.append((phase, "⏭️", msg))
         print(f"[Phase {phase}] ⏭️ {msg}")
+        self._log(phase, "⏭️", msg)
 
     def warn(self, phase, msg):
         self.phases.append((phase, "⚠️", msg))
         print(f"[Phase {phase}] ⚠️ {msg}", file=sys.stderr)
         self.warnings += 1
+        self._log(phase, "⚠️", msg)
 
     def fail(self, phase, msg):
         self.phases.append((phase, "❌", msg))
         print(f"[Phase {phase}] ❌ {msg}", file=sys.stderr)
         self.errors += 1
+        self._log(phase, "❌", msg)
 
     def summary(self):
         print("=" * 50)
@@ -70,6 +84,12 @@ class Result:
         else:
             print("  完成！")
         print("=" * 50)
+        try:
+            ts = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+            with open(self._log_path, "a", encoding="utf-8") as f:
+                f.write("=" * 50 + f"\n[{ts}] 完成（errors={self.errors}, warnings={self.warnings}）\n\n")
+        except OSError:
+            pass
 
 
 def confirm(prompt, force):
@@ -201,7 +221,7 @@ def report_git_result(res, repo, prefix_msg, verify):
 # ── Phase 0: 解析参数 & 日期探测 ─────────────────────
 
 def parse_args():
-    p = argparse.ArgumentParser(description="L3 Publish v3.5 — daily-why 发布脚本")
+    p = argparse.ArgumentParser(description="L3 Publish v3.6 — daily-why 发布脚本")
     p.add_argument("date", nargs="?", default=None,
                    help="文章日期 (YYYY-MM-DD)，默认自动探测最新文章")
     p.add_argument("--dry-run", action="store_true",
@@ -801,6 +821,53 @@ def phase3_git(date_str, topic, dry_run, force, res, verify=True):
 
 # ── Phase 4: 记忆归档 ────────────────────────────────
 
+def render_report(date_str, v1_meta, v2_meta, ima_result, git_result, res):
+    """渲染发布报告到 deliverables/{date}-发布报告.md（08-31 起替代 AI 手写，
+    杜绝字数/得分/commit 失真。骨架全部由脚本数据生成，语义验证表留 AI 补充区）"""
+    try:
+        deliverables = Path(CFG["base_dir"]) / "deliverables"
+        deliverables.mkdir(parents=True, exist_ok=True)
+        report_path = deliverables / f"{date_str}-发布报告.md"
+
+        lines = [f"# 发布报告 — {date_str} {v1_meta['topic']}", ""]
+        # 基本信息
+        lines.append("## 基本信息")
+        lines.append(f"- 话题：{v1_meta['topic']}")
+        lines.append(f"- 分类：{v1_meta['category']}")
+        lines.append(f"- 初版：{v1_meta['chinese_chars']} 字，{v1_meta['q_count']} 个Q")
+        if v2_meta:
+            lines.append(f"- 优化版：{v2_meta['chinese_chars']} 字，{v2_meta['q_count']} 个Q")
+        lines.append(f"- 注：字数为全文口径（含标题与结尾表格），与 validate 正文口径不同属正常")
+        lines.append("")
+        # 执行结果（来自 Result.phases，脚本收集，非 AI 手写）
+        lines.append("## 执行结果（脚本逐 Phase 记录）")
+        for phase, status, msg in res.phases:
+            lines.append(f"- Phase {phase} {status} {msg}")
+        lines.append("")
+        # 发布状态
+        fail_indicators = ("fail", "timeout", "not_found", "push_fail", "commit_fail", "no_repo")
+        all_ok = (ima_result not in fail_indicators and git_result not in fail_indicators)
+        lines.append("## 发布状态")
+        lines.append(f"- 总体：{'✅ 发布成功' if all_ok else '⚠️ 部分成功'}")
+        if res.errors:
+            lines.append(f"- 错误：{res.errors} 个")
+        if res.warnings:
+            lines.append(f"- 警告：{res.warnings} 个")
+        lines.append("")
+        # AI 补充区
+        lines.append("## AI 语义验证补充区（由执行 AI 填充）")
+        lines.append("")
+        lines.append("<!-- 在此追加 Step 2 语义验证：改进点 | 判定 | 证据（行号）。"
+                     "禁止改动上方由脚本生成的部分。 -->")
+        lines.append("")
+
+        report_path.write_text("\n".join(lines), encoding="utf-8")
+        return str(report_path)
+    except OSError as e:
+        res.warn(4, f"发布报告渲染失败（不影响发布）: {e}")
+        return None
+
+
 def phase4_memory(date_str, v1_meta, v2_meta, ima_result, git_result, dry_run, res):
     if dry_run:
         res.skip(4, "dry-run 不写入日志")
@@ -975,6 +1042,12 @@ def main():
 
     # Phase 4: 记忆归档
     phase4_memory(date_str, v1_meta, v2_meta, ima_result, git_result, args.dry_run, res)
+
+    # 发布报告脚本渲染（08-31 起替代 AI 手写，杜绝数据失真）
+    if not args.dry_run:
+        report_path = render_report(date_str, v1_meta, v2_meta, ima_result, git_result, res)
+        if report_path:
+            res.ok(4, f"发布报告已渲染: {report_path}")
 
     res.summary()
     if res.errors:
