@@ -1,5 +1,5 @@
 {
-  "updated": "2026-08-28",
+  "updated": "2026-08-31",
   "purpose": "素材池（可再生）：流入=外部拉取落选+L2 反哺，流出=选题兜底取用，理论上只增不减",
   "source_enum": {
     "initial": "初始素材",
@@ -481,6 +481,48 @@
       "category": "自然科学",
       "why_hot": "降水机制分两种：暖云（温度高于0°C）靠水滴碰撞并合，冷云靠冰晶效应（Bergeron过程），大众常以为下雨只有一种机制，反转点足",
       "evidence": "强，云物理学成熟知识，可少量查证",
+      "source": "l2"
+    },
+    {
+      "topic": "热水有时候比冷水先结冰",
+      "category": "物理化学",
+      "why_hot": "外部源拉取候选，check_topic判重(已有热水比冷水结冰更快)",
+      "evidence": "强",
+      "source": "rejected"
+    },
+    {
+      "topic": "自己的录音听起来和平时说话不一样",
+      "category": "人体奥秘",
+      "why_hot": "外部源拉取候选，check_topic判重(已有录音声音不一样)",
+      "evidence": "强",
+      "source": "rejected"
+    },
+    {
+      "topic": "咖啡容易溢出来",
+      "category": "生活常识",
+      "why_hot": "外部源拉取候选未采用，流体动力学与走路摇摆",
+      "evidence": "中",
+      "source": "external"
+    },
+    {
+      "topic": "茶壶嘴滴水毛细现象",
+      "category": "生活常识",
+      "why_hot": "外部源拉取候选未采用，液体毛细作用",
+      "evidence": "中",
+      "source": "external"
+    },
+    {
+      "topic": "为什么滚烫的液滴滴在冰冷表面也会蹦蹦跳跳（反向莱顿弗罗斯特）",
+      "category": "物理化学",
+      "why_hot": "普通莱顿弗罗斯特是水滴落在超热表面悬浮，反向版则是滚烫液滴滴到冰冷表面同样会蹦跳，冷热镜像反直觉，与冰悬浮实验形成闭环",
+      "evidence": "中强，Ars Technica/Phys Rev Fluids 提及 inverted Leidenfrost（热球滴入冰浴），需WebSearch查证具体条件",
+      "source": "l2"
+    },
+    {
+      "topic": "为什么有人赤脚过火堆却不会被烫伤",
+      "category": "生活常识",
+      "why_hot": "赤脚过火堆前沾湿脚、皮肤水分瞬间汽化形成蒸气膜短暂隔热，是莱顿弗罗斯特效应的生活应用，但原理成立不等于人人可试，反转点足",
+      "evidence": "中，需WebSearch查证过火堆蒸气隔热机制与安全边界",
       "source": "l2"
     }
   ]
