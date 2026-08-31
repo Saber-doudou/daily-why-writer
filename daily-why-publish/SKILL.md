@@ -276,6 +276,7 @@ L3 daily-why-publish（手动触发）← 本 Skill
 
 | 版本 | 日期 | 变更 |
 |------|------|------|
+| v3.5 | 2026-08-31 | **Phase 时序修复**：Phase 5（FEEDBACK 休眠归档）前移至 Phase 2 之后、Phase 3（git commit）之前——否则归档产生的文件变更永远赶不上当天提交，FEEDBACK_ARCHIVE 每日脱节 8 行（08-31 实证：commit 11:58:45 早于归档 11:59:06）。同步修复：① `_append_ima_history` 正则兼容纯文本（原要求 4 列管道表格，MEMORY.md 实为一行文本，从未生效）并加失败告警；② commit message 由实际 staged 文件反推（原硬编码「+ 投喂优化 + 规则更新」）；③ commit 后 push 前新增源与 repo 一致性自检（脱节即 warn）。**通用约束：git_add_files 内文件的生产 Phase 必须先于 Phase 3** |
 | v3.4 | 2026-08-28 | Phase 3 内置远端核验：push 后自动 `ls-remote` 比对 + 写 loose ref 修复 `origin/main`（verified/ok_unfixed/unverified/mismatch 四态；新增 `--no-verify`）。**注：`l3_publish.py` 内版本号此前长期滞留 v3.0（git 历史 6 次改动均未更新该字段），本次一次性对齐至 SOP 版本 v3.4，非新增 4 代功能** |
 | v3.4 | 2026-08-28 | 同步清单补全：B 组文件（`FEEDBACK_ARCHIVE.md`/`CASE_STUDIES.md`/`generate_prompt.py`/`message_handler.py`/`topic_candidates.json` 等）此前在 `git_add_files` 却不在 `files_to_copy`，源改动从不复制进 repo，已纳入复制清单 |
 | v3.3 | 2026-08-17 | 边界条件补充：wincred 凭证修复 + packed-refs/loose ref 引用坑（GitHub 推送实障排查） |
@@ -287,4 +288,4 @@ L3 daily-why-publish（手动触发）← 本 Skill
 
 ---
 
-*Version: v3.4 | 2026-08-28 | Phase 3 内置远端核验（铁律固化：不信本地 ahead 数，push 后 ls-remote 比对 + 自动写 loose ref 修复 origin/main）*
+*Version: v3.5 | 2026-08-31 | Phase 5 前移至 git 之前（归档脱节根因修复）+ IMA 历史表正则修复 + commit 消息反推 + 一致性自检；v3.4（2026-08-28）Phase 3 内置远端核验（铁律固化：不信本地 ahead 数，push 后 ls-remote 比对 + 自动写 loose ref 修复 origin/main）*

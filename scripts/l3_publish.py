@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-L3 Publish v3.4 — daily-why 自包含发布脚本
+L3 Publish v3.5 — daily-why 自包含发布脚本
 零 AI 依赖，一条命令跑完：匹配检查、IMA 备份、GitHub 推送、执行日志归档
 
 Usage:
@@ -201,7 +201,7 @@ def report_git_result(res, repo, prefix_msg, verify):
 # ── Phase 0: 解析参数 & 日期探测 ─────────────────────
 
 def parse_args():
-    p = argparse.ArgumentParser(description="L3 Publish v3.4 — daily-why 发布脚本")
+    p = argparse.ArgumentParser(description="L3 Publish v3.5 — daily-why 发布脚本")
     p.add_argument("date", nargs="?", default=None,
                    help="文章日期 (YYYY-MM-DD)，默认自动探测最新文章")
     p.add_argument("--dry-run", action="store_true",
