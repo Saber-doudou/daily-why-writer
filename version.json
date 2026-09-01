@@ -1,0 +1,30 @@
+{
+  "_comment": "Daily Why 四技能版本号唯一权威源（2026-09-01 建，打破「版本号易腐」反复复发）。l3_publish.py 发布前读取本文件，校验各技能 SKILL.md 实际版本号与之一致，不一致告警。新增/修改技能版本号必须先改本文件。",
+  "_updated": "2026-09-01",
+  "skills": {
+    "daily-why-writer": {
+      "version": "v3.2",
+      "version_field": "frontmatter.version",
+      "file": "C:/Users/admin/.workbuddy/skills/daily-why-writer/SKILL.md",
+      "repo_file": "SKILL.md"
+    },
+    "daily-why-publish": {
+      "version": "v3.7",
+      "version_field": "title_and_footer",
+      "file": "C:/Users/admin/.workbuddy/skills/daily-why-publish/SKILL.md",
+      "repo_file": "daily-why-publish/SKILL.md"
+    },
+    "daily-why-feed-learning": {
+      "version": "v3.3",
+      "version_field": "frontmatter.version",
+      "file": "C:/Users/admin/.workbuddy/skills/daily-why-feed-learning/SKILL.md",
+      "repo_file": null
+    },
+    "daily-why-health-audit": {
+      "version": "v1.2",
+      "version_field": "title",
+      "file": "C:/Users/admin/.workbuddy/skills/daily-why-health-audit/SKILL.md",
+      "repo_file": null
+    }
+  }
+}

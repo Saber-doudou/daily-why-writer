@@ -172,13 +172,17 @@ def update_memory(filepath: Path, dry_run: bool = False, validation: dict = None
 
 
 def find_latest_article(workspace: Path) -> Path:
-    """找最新的文章文件"""
+    """找最新的文章文件（支持新旧两种文件名格式）"""
     today = datetime.now().strftime("%Y-%m-%d")
-    today_file = workspace / f"{today}-每日冷知识.md"
-    if today_file.exists():
-        return today_file
+    # 支持：{日期}-每日冷知识.md / {日期}-每日冷知识-{关键词}.md
+    today_files = sorted(
+        [f for f in workspace.glob(f"articles/**/{today}-每日冷知识*.md")],
+        key=lambda p: p.stat().st_mtime, reverse=True
+    )
+    if today_files:
+        return today_files[0]
 
-    md_files = sorted(workspace.glob("*-每日冷知识.md"),
+    md_files = sorted(workspace.glob("articles/**/*-每日冷知识*.md"),
                      key=lambda p: p.stat().st_mtime, reverse=True)
     if md_files:
         return md_files[0]

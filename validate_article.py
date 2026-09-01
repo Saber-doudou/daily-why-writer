@@ -32,7 +32,7 @@ from format_checker import (
 )
 
 # ── 从 writing_rules.json 加载规则（唯一来源） ──
-RULES_PATH = Path(__file__).parent / "writing_rules.json"
+RULES_PATH = Path(__file__).parent.parent / "config" / "writing_rules.json"
 RULES = {}
 if RULES_PATH.exists():
     try:
@@ -158,24 +158,6 @@ class ValidationResult:
     @property
     def p0p1_passed(self) -> bool:
         return self.has_passed_p0p1()
-
-
-def count_chinese_chars(text: str) -> int:
-    """统计中文字符数"""
-    return len(re.findall(r"[\u4e00-\u9fff]", text))
-
-
-def strip_markdown(text: str) -> str:
-    """去掉 markdown 格式，返回纯文本"""
-    text = re.sub(r"^#{1,6}\s+", "", text, flags=re.MULTILINE)
-    text = re.sub(r"\*\*(.+?)\*\*", r"\1", text)
-    text = re.sub(r"\*(.+?)\*", r"\1", text)
-    text = re.sub(r"^>\s+", "", text, flags=re.MULTILINE)
-    text = re.sub(r"^[-*+]\s+", "", text, flags=re.MULTILINE)
-    text = re.sub(r"---+", "", text)
-    text = re.sub(r"\|.+\|", "", text)
-    text = re.sub(r"\n{3,}", "\n\n", text)
-    return text
 
 
 def validate_content_quality(content: str, result: ValidationResult):
@@ -417,6 +399,18 @@ def print_report(result: ValidationResult, use_json: bool = False, verbose: bool
                 print(f"  {k}: {v}")
         print()
 
+    if result.errors:
+        print("--- ⚠️ 错误 ---")
+        for e in result.errors:
+            print(f"  ✗ {e}")
+        print()
+
+    if result.warnings:
+        print("--- ⚡ 警告 ---")
+        for w in result.warnings:
+            print(f"  ! {w}")
+        print()
+
     if result.p0:
         print("--- 🔴 P0 致命问题（必须清零） ---")
         for p in result.p0:
@@ -506,7 +500,7 @@ def main():
         for f in args.files:
             files_to_check.append(Path(f))
     elif args.latest:
-        md_files = sorted(workspace.glob("*-每日冷知识.md"),
+        md_files = sorted(workspace.glob("articles/**/*-每日冷知识*.md"),
                           key=lambda p: p.stat().st_mtime, reverse=True)
         if md_files:
             files_to_check.append(md_files[0])
@@ -516,11 +510,15 @@ def main():
     else:
         from datetime import datetime
         today = datetime.now().strftime("%Y-%m-%d")
-        today_file = workspace / f"{today}-每日冷知识.md"
-        if today_file.exists():
-            files_to_check.append(today_file)
+        # 支持新旧两种文件名格式：{日期}-每日冷知识.md / {日期}-每日冷知识-{关键词}.md
+        today_files = sorted(
+            [f for f in workspace.glob(f"articles/**/{today}-每日冷知识*.md")],
+            key=lambda p: p.stat().st_mtime, reverse=True
+        )
+        if today_files:
+            files_to_check.append(today_files[0])
         else:
-            md_files = sorted(workspace.glob("*-每日冷知识.md"),
+            md_files = sorted(workspace.glob("articles/**/*-每日冷知识*.md"),
                               key=lambda p: p.stat().st_mtime, reverse=True)
             if md_files:
                 files_to_check.append(md_files[0])
@@ -543,7 +541,6 @@ def main():
         # 同时检查 result.passed（文件缺失等致命错误）和 p0p1 通过条件
         any_fail = any(not r.passed or not r.has_passed_p0p1() for r in all_results)
         if any_fail:
-            import sys
             sys.exit(1)
 
 

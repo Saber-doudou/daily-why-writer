@@ -730,6 +730,16 @@ def phase3_git(date_str, topic, dry_run, force, res, verify=True):
         (scripts_dir / "full_selfcheck.py", "full_selfcheck.py"),
         (scripts_dir / "message_handler.py", "message_handler.py"),
         (project_dir / "config" / "topic_candidates.json", "topic_candidates.json"),
+        # C 组补全（09-01 验收审查 S-1）：format_checker/validate_article/prepare_topics/
+        # update_history 4 文件长期不在同步清单（6 月整体提交进 repo 后 3 个月未同步，
+        # 仓库 validate/prepare_topics/update_history 已漂移为旧版）。现纳入复制，
+        # 与 git_add_files 同步补入（双向自检见下）。
+        (scripts_dir / "format_checker.py", "format_checker.py"),
+        (scripts_dir / "validate_article.py", "validate_article.py"),
+        (scripts_dir / "prepare_topics.py", "prepare_topics.py"),
+        (scripts_dir / "update_history.py", "update_history.py"),
+        (project_dir / "config" / "version.json", "version.json"),
+        (project_dir / "config" / "writing_rules.json", "writing_rules.json"),
     ]
     for src, rel in extra_sync:
         if src.exists():
@@ -747,6 +757,23 @@ def phase3_git(date_str, topic, dry_run, force, res, verify=True):
     if missing:
         res.warn(3, f"git_add_files 中 {len(missing)} 项无复制源（改动不会同步）: "
                     f"{', '.join(missing)}")
+
+    # 反向自检（09-01 S-1 升级）：repo 中已被 git 跟踪但不在 git_add_files 的文件
+    # （灰区）——它们不在 files_to_copy 复制范围，源改动永远不会同步进 repo，
+    # 版本随工作区演进而陈旧（历史实证：format_checker 等 4 文件 6 月整体提交后
+    # 3 个月未同步，repo 版本漂移）。双向自检 = 白名单内缺失 + 白名单外灰区都暴露。
+    r_ls = subprocess.run(
+        ["git", "ls-files"], cwd=str(repo), capture_output=True, text=True
+    )
+    tracked = {f for f in (r_ls.stdout or "").splitlines() if f.strip()}
+    whitelist = set(CFG.get("git_add_files", []))
+    # .gitignore 为仓库私有文件（git 约定），无需从工作区同步，豁免
+    gray = sorted(tracked - whitelist - {".gitignore"})
+    if gray:
+        res.warn(3, f"repo 有 {len(gray)} 个文件不在 git_add_files（灰区，改动不会同步）: "
+                    f"{', '.join(gray)}")
+    else:
+        res.ok(3, "同步清单双向自检通过（白名单全覆盖，无灰区文件）")
 
     if not dry_run:
         for src, dst in files_to_copy:
@@ -1030,6 +1057,64 @@ def phase5_feedback_archive(dry_run, res):
         res.warn(5, f"存档脚本异常: {e}")
 
 
+def check_version_consistency(res):
+    """09-01 新增（版本号易腐根治，验收 S-2）：读 config/version.json 唯一权威源，
+    校验各技能 SKILL.md 实际版本号与之一致。不一致 warn（不阻断发布）。
+    version_field 取值：
+      - frontmatter.version : 匹配 `^version: vX.Y`
+      - title               : 匹配 `# <name> vX.Y`
+      - title_and_footer    : 标题 + 脚注 `*Version: vX.Y` + l3_publish.py VERSION 三处都须一致
+    """
+    base_dir = Path(CFG.get("base_dir", "F:/WorkBuddy/daily-why"))
+    vp = base_dir / "config" / "version.json"
+    if not vp.exists():
+        res.warn(0, "[版本] config/version.json 缺失（版本号权威源不存在，跳过校验）")
+        return
+    try:
+        vdata = json.loads(vp.read_text(encoding="utf-8"))
+    except Exception as e:
+        res.warn(0, f"[版本] config/version.json 读取失败: {e}")
+        return
+    skills = vdata.get("skills", {})
+    if not skills:
+        res.warn(0, "[版本] version.json 无 skills 条目")
+        return
+    for name, info in skills.items():
+        expected = info.get("version", "")
+        fpath = info.get("file", "")
+        field = info.get("version_field", "frontmatter.version")
+        if not fpath or not Path(fpath).exists():
+            res.warn(0, f"[版本] {name}: SKILL 文件不存在 {fpath}")
+            continue
+        content = Path(fpath).read_text(encoding="utf-8")
+        if field == "frontmatter.version":
+            m = re.search(r"^version:\s*(\S+)", content, re.MULTILINE)
+            actual = m.group(1) if m else None
+            consistent = (actual == expected)
+        elif field == "title":
+            m = re.search(r"^#\s+\S+\s*([vV]\d[\w.-]*)", content, re.MULTILINE)
+            actual = m.group(1) if m else None
+            consistent = (actual == expected)
+        elif field == "title_and_footer":
+            m1 = re.search(r"^#\s+\S+\s*([vV]\d[\w.-]*)", content, re.MULTILINE)
+            m2 = re.search(r"\*Version:\s*([vV]\d[\w.-]*)", content)
+            a1 = m1.group(1) if m1 else None
+            a2 = m2.group(1) if m2 else None
+            l3 = Path(CFG["scripts_dir"]) / "l3_publish.py"
+            m3 = re.search(r'VERSION\s*=\s*"([^"]+)"',
+                           l3.read_text(encoding="utf-8")) if l3.exists() else None
+            a3 = m3.group(1) if m3 else None
+            actual = f"{a1}/{a2}/script:{a3}"
+            consistent = (a1 == expected and a2 == expected and a3 == expected)
+        else:
+            actual, consistent = None, False
+        if consistent:
+            res.ok(0, f"[版本] {name}: {actual} 与权威源 {expected} 一致")
+        else:
+            res.warn(0, f"[版本] {name}: 权威源={expected} 实际={actual}"
+                        "（不一致！改版本号前必须先改 config/version.json）")
+
+
 # ── Main ─────────────────────────────────────────────
 
 def main():
@@ -1098,6 +1183,9 @@ def main():
         res.warn(0, f"{date_str} 已发布过，跳过（使用 --force 强制重新执行）")
         res.summary()
         sys.exit(0)
+
+    # Phase 0: 版本号一致性校验（09-01 S-2：权威源 config/version.json）
+    check_version_consistency(res)
 
     # Phase 0: 扫描文件
     articles = scan_articles(date_str)

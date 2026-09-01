@@ -31,7 +31,7 @@ def scan_all(workspace: Path, limit: int = 50) -> dict:
     all_topics = []
 
     # 1. 扫描文章文件
-    md_files = sorted(workspace.glob("*-每日冷知识.md"), reverse=True)
+    md_files = sorted(workspace.glob("articles/**/*-每日冷知识*.md"), reverse=True)
     for fp in md_files[:limit]:
         info = extract_topic_from_article(fp)
         if info:
@@ -107,7 +107,7 @@ def main():
     parser = argparse.ArgumentParser(description="扫描历史文章提取已用话题")
     parser.add_argument("--workspace", default=r"F:\WorkBuddy\daily-why",
                         help="工作目录路径")
-    parser.add_argument("--output", default="topics_context.json",
+    parser.add_argument("--output", default="config/topics_context.json",
                         help="输出文件名（相对于工作目录）")
     parser.add_argument("--limit", type=int, default=50,
                         help="最多扫描的文章数")
@@ -120,8 +120,8 @@ def main():
     workspace = Path(args.workspace)
 
     # 精简版模式：自动切换输出路径（除非用户显式指定了 --output）
-    if args.compact and args.output == "topics_context.json":
-        output_filename = "topics_context_compact.json"
+    if args.compact and args.output == "config/topics_context.json":
+        output_filename = "config/topics_context_compact.json"
     else:
         output_filename = args.output
     output_path = workspace / output_filename
