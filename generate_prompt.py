@@ -245,7 +245,7 @@ def generate_multi_agent_prompt(rules: dict, recent_topics: list = None) -> str:
   2. 运行脚本审核：`{PYTHON} F:/WorkBuddy/daily-why/scripts/validate_article.py --json "{{初稿文件完整路径}}"`，记录 P0/P1/P2 与得分
   3. Read 加载 `{SKILL_DIR}/references/CHECKLIST.md` 逐项人工对照扫描
   4. Read 加载 `{SKILL_DIR}/references/FORBIDDEN.md`，逐条扫描文件中【全部】FP 规则（数量以文件实际内容为准，不要写死编号）
-  5. Read 加载 `{SKILL_DIR}/reviewer_prompt.md`，**严格执行其中的 P0/P1/P2 分级标准**：P0=事实错误/逻辑矛盾/结构缺失；P1=AI味/连接词≥3、字数>600、类比失准、**绝对化**；P2=措辞微调。凡命中「绝对化/类比失准/字数>600」至少标 P1，**禁止降为 P2**
+  5. Read 加载 `{SKILL_DIR}/reviewer_prompt.md`，**严格执行其中的 P0/P1/P2 分级标准**：P0=事实错误/逻辑矛盾/结构缺失；P1=AI味/连接词≥3、字数>690、类比失准、**绝对化**；P2=措辞微调。凡命中「绝对化/类比失准/字数>690」至少标 P1，**禁止降为 P2**
   6. **事实断言独立核验**：对文中人物/机构/亲缘关系/年份/数据类断言，用 WebSearch 独立核实至少 2 处关键断言，发现事实错误标记 P0
   7. 最小结构验证（不依赖 SKILL.md 写作规则）：A段引用块（>开头）、C段Q格式（**Q1/Q2/Q3：**）、F段引用块含"冷知识反转"标签、结尾风格表格（四行）。任一缺失即 P0 结构缺失
   8. 输出审核报告**写入文件** `F:/WorkBuddy/daily-why/review/{{今天日期}}_review.json`（含 pass/p0_count/p1_count/p2_count/score/review_timestamp/issues 数组，每项含 level/category/description/suggestion）。**`review_timestamp` 必须先用 Bash 执行 `date +%Y-%m-%dT%H:%M:%S%z` 取系统真实时间写入，禁止自行推断或编造时间**。并在最终回复文本中回报审校结论（SendMessage 在本地 automation 环境不可用，以文本回报兜底）
@@ -268,6 +268,7 @@ def generate_multi_agent_prompt(rules: dict, recent_topics: list = None) -> str:
 - 不通过 → 根据报告中的 issues 修复文章 → 写入文件 → 重新 spawn Reviewer 审校（最多2轮）
 - 2轮后仍不通过 → 标记"⚠️ 需人工审核"，输出当前最佳版本
 - **防死循环**：连续 2 轮审校指向同一 P 级问题且修复无实质改进 → 停止迭代，标记"⚠️ 需人工审核"并输出当前最佳版本
+- **P2 采纳闭环（09-01 强制）**：无论通过与否，凡按 Reviewer 意见修改过文章（含采纳 P2），修改后必须重跑 `validate_article.py --json` 确认得分不回退，并同步更新 `review/{{今天日期}}_review.json` 的 `script_result.char_count/score` 或标注 `"revised_after_review": true`；禁止"改完即落盘不重验"
 - 输出：文件路径、审核得分、P0/P1/P2 数、审校方式（独立 reviewer / ⚠️未独立审校）
 - 运行 `{PYTHON} F:/WorkBuddy/daily-why/scripts/update_history.py` 更新记忆
 
