@@ -1,25 +1,41 @@
 #!/usr/bin/env python3
 """
-L3 Publish v3.6 — daily-why 自包含发布脚本
+L3 Publish v3.7 — daily-why 自包含发布脚本
 零 AI 依赖，一条命令跑完：匹配检查、IMA 备份、GitHub 推送、执行日志归档
 
 Usage:
-    python l3_publish.py [YYYY-MM-DD] [--dry-run] [--force] [--no-git] [--no-ima] [--skip-match] [--skip-archive] [--no-verify]
+    python l3_publish.py [YYYY-MM-DD] [--dry-run] [--force] [--no-git] [--no-ima] [--skip-match] [--skip-archive] [--no-verify] [--retry]
 """
 
 import argparse
+import hashlib
 import json
 import re
 import shutil
 import subprocess
 import sys
+import time
 from datetime import datetime
 from pathlib import Path
 
 # ── 常量 ──────────────────────────────────────────────
 
+VERSION = "v3.7"               # 09-01 版本号统一：脚本/SKILL 标题/SKILL 脚注三处一致
 MIN_A_CONTENT_CHARS = 50   # A 段最少有效字符数
 MAX_IMPROVEMENTS_CHECK = 10  # 最多检查的改进点数量
+
+# 网络类错误关键字（09-01 修复：此前网络失败被误标为 rebase 冲突，误导排查方向）
+NETWORK_ERROR_HINTS = (
+    "unable to access",
+    "could not connect",
+    "failed to connect",
+    "timed out",
+    "connection timed out",
+    "could not resolve host",
+    "connection refused",
+    "network is unreachable",
+    "operation timed out",
+)
 
 # ── 全局 ──────────────────────────────────────────────
 
@@ -103,19 +119,61 @@ def confirm(prompt, force):
         return False
 
 
-def git_pull_rebase_push(repo, timeout):
-    """执行 git pull --rebase + push，返回 (success, error_msg)"""
-    r_pull = subprocess.run(
-        ["git", "-c", "credential.helper=wincred", "pull", "--rebase", "origin", "main"],
-        cwd=str(repo), capture_output=True, text=True
-    )
-    if r_pull.returncode != 0:
-        # rebase 冲突，abort 后报告
-        subprocess.run(
-            ["git", "-c", "credential.helper=wincred", "rebase", "--abort"],
-            cwd=str(repo), capture_output=True
+def classify_git_error(stderr):
+    """区分 git 错误类型：network / conflict / other（09-01 修复）。
+    此前所有 pull 非零一律报「rebase 冲突」并执行 --abort，网络失败也被归入此桶。"""
+    s = (stderr or "").lower()
+    for hint in NETWORK_ERROR_HINTS:
+        if hint in s:
+            return "network", (stderr or "").strip()[:200]
+    if "conflict" in s or "could not apply" in s or "could not rebase" in s:
+        return "conflict", (stderr or "").strip()[:200]
+    return "other", (stderr or "").strip()[:200]
+
+
+def github_reachable(timeout=8):
+    """探活 github.com（网络层连通性）。返回 True/False。"""
+    try:
+        r = subprocess.run(
+            ["curl", "-s", "-o", "NUL", "-w", "%{http_code}",
+             "--connect-timeout", str(timeout), "--max-time", str(timeout + 2),
+             "https://github.com"],
+            capture_output=True, text=True, timeout=timeout + 5
         )
-        return False, f"rebase 冲突: {r_pull.stderr.strip()[:200]}"
+        return r.returncode == 0 and r.stdout.strip() == "200"
+    except (subprocess.TimeoutExpired, OSError):
+        return False
+
+
+def git_pull_rebase_push(repo, timeout, retries=3, backoff=(10, 30, 60)):
+    """git pull --rebase + push，带网络探活与退避重试（09-01 增强）。
+    返回 (success, error_msg, kind)；kind ∈ ok/network/conflict/other。
+    - 网络失败：探活确认网络可达后按 backoff 退避重试 retries 次，均失败才报人工介入；
+    - 真冲突：abort 后报告，不重试。
+    """
+    for attempt in range(retries + 1):
+        if attempt > 0:
+            if not github_reachable():
+                return False, "网络失败（不可重试）：github.com 探活失败，请检查网络/VPN", "network"
+            time.sleep(backoff[min(attempt - 1, len(backoff) - 1)])
+
+        r_pull = subprocess.run(
+            ["git", "-c", "credential.helper=wincred", "pull", "--rebase", "origin", "main"],
+            cwd=str(repo), capture_output=True, text=True
+        )
+        if r_pull.returncode != 0:
+            kind, err_msg = classify_git_error(r_pull.stderr)
+            if kind == "network" and attempt < retries:
+                continue  # 退避重试
+            if kind == "network":
+                return False, f"网络失败（已退避重试 {retries} 次仍不可达）: {err_msg}", "network"
+            # 真冲突或其他：abort 后报告（仅冲突类执行 abort）
+            subprocess.run(
+                ["git", "-c", "credential.helper=wincred", "rebase", "--abort"],
+                cwd=str(repo), capture_output=True
+            )
+            return False, f"rebase 冲突: {err_msg}", "conflict"
+        break  # pull 成功
 
     r_push = subprocess.run(
         ["git", "-c", "credential.helper=wincred", "push", "origin", "main"],
@@ -123,9 +181,9 @@ def git_pull_rebase_push(repo, timeout):
         timeout=timeout
     )
     if r_push.returncode != 0:
-        return False, f"push 失败: {r_push.stderr.strip()[:200]}"
-
-    return True, ""
+        kind, err_msg = classify_git_error(r_push.stderr)
+        return False, f"push 失败: {err_msg}", kind
+    return True, "", "ok"
 
 
 def force_write_remote_ref(repo, sha):
@@ -221,7 +279,7 @@ def report_git_result(res, repo, prefix_msg, verify):
 # ── Phase 0: 解析参数 & 日期探测 ─────────────────────
 
 def parse_args():
-    p = argparse.ArgumentParser(description="L3 Publish v3.6 — daily-why 发布脚本")
+    p = argparse.ArgumentParser(description=f"L3 Publish {VERSION} — daily-why 发布脚本")
     p.add_argument("date", nargs="?", default=None,
                    help="文章日期 (YYYY-MM-DD)，默认自动探测最新文章")
     p.add_argument("--dry-run", action="store_true",
@@ -238,6 +296,8 @@ def parse_args():
                    help="跳过 FEEDBACK 休眠归档（Phase 5）")
     p.add_argument("--no-verify", action="store_true",
                    help="跳过发布后的远端核验（沙箱网络不通时可用，默认核验）")
+    p.add_argument("--retry", action="store_true",
+                   help="仅重推已提交 commit（09-01 新增：人工补推必须走脚本，禁止裸 git push）")
     return p.parse_args()
 
 
@@ -710,12 +770,11 @@ def phase3_git(date_str, topic, dry_run, force, res, verify=True):
             ahead_n = 0
         if ahead_n > 0:
             push_timeout = CFG.get("git_push_timeout", 30)
-            success, err_msg = git_pull_rebase_push(repo, push_timeout)
+            # 09-01 增强：函数内置网络探活+退避重试，外层不再二次调用
+            success, err_msg, _ = git_pull_rebase_push(repo, push_timeout)
             if not success:
-                success, err_msg = git_pull_rebase_push(repo, push_timeout)
-                if not success:
-                    res.fail(3, err_msg)
-                    return "push_fail"
+                res.fail(3, err_msg)
+                return "push_fail"
             r = subprocess.run(
                 ["git", "rev-parse", "--short", "HEAD"],
                 cwd=str(repo), capture_output=True, text=True
@@ -793,15 +852,12 @@ def phase3_git(date_str, topic, dry_run, force, res, verify=True):
                     f"{', '.join(sync_mismatch[:5])}。请检查是否存在 Phase 在 git 之后"
                     f"修改同步文件（时序约束：git_add_files 内文件的生产 Phase 必须先于 Phase 3）")
 
-    # git pull --rebase + push（含重试）
+    # git pull --rebase + push（含重试；09-01 增强：探活 + 退避重试内聚到函数内）
     push_timeout = CFG.get("git_push_timeout", 30)
-    success, err_msg = git_pull_rebase_push(repo, push_timeout)
+    success, err_msg, _ = git_pull_rebase_push(repo, push_timeout)
     if not success:
-        # 重试一次
-        success, err_msg = git_pull_rebase_push(repo, push_timeout)
-        if not success:
-            res.fail(3, err_msg)
-            return "push_fail"
+        res.fail(3, err_msg)
+        return "push_fail"
 
     # 获取 commit hash
     r = subprocess.run(
@@ -821,13 +877,41 @@ def phase3_git(date_str, topic, dry_run, force, res, verify=True):
 
 # ── Phase 4: 记忆归档 ────────────────────────────────
 
+def _report_script_zone_md5(text):
+    """对脚本生成区（checksum 行之前的内容）计算 md5，用于人工改动检测"""
+    cut = text.find("<!-- checksum:")
+    if cut != -1:
+        text = text[:cut]
+    return hashlib.md5(text.encode("utf-8")).hexdigest()
+
+
+def check_report_tampered(report_path, res):
+    """渲染前校验既有报告的脚本生成区是否被手工改动（09-01 修复：
+    今日报告被 AI 手工补写「15:58 重试成功」导致 errors=0 与 l3_run.log 矛盾）"""
+    if not report_path.exists():
+        return
+    try:
+        text = report_path.read_text(encoding="utf-8", errors="replace")
+    except OSError:
+        return
+    m = re.search(r"<!-- checksum: ([0-9a-f]{32}) -->", text)
+    if not m:
+        res.warn(4, f"发布报告 {report_path.name} 无 checksum 标记（旧版生成），本次渲染后首次写入")
+        return
+    if m.group(1) != _report_script_zone_md5(text):
+        res.warn(4, f"发布报告 {report_path.name} 脚本生成区已被手工改动（checksum 不匹配），本次渲染将覆盖")
+
+
 def render_report(date_str, v1_meta, v2_meta, ima_result, git_result, res):
     """渲染发布报告到 deliverables/{date}-发布报告.md（08-31 起替代 AI 手写，
-    杜绝字数/得分/commit 失真。骨架全部由脚本数据生成，语义验证表留 AI 补充区）"""
+    杜绝字数/得分/commit 失真。骨架全部由脚本数据生成，语义验证表留 AI 补充区；
+    09-01 起脚本生成区写入 checksum 标记，防人工改动）"""
     try:
         deliverables = Path(CFG["base_dir"]) / "deliverables"
         deliverables.mkdir(parents=True, exist_ok=True)
         report_path = deliverables / f"{date_str}-发布报告.md"
+
+        check_report_tampered(report_path, res)
 
         lines = [f"# 发布报告 — {date_str} {v1_meta['topic']}", ""]
         # 基本信息
@@ -853,6 +937,10 @@ def render_report(date_str, v1_meta, v2_meta, ima_result, git_result, res):
             lines.append(f"- 错误：{res.errors} 个")
         if res.warnings:
             lines.append(f"- 警告：{res.warnings} 个")
+        lines.append("")
+        # 脚本生成区结束标记（09-01 新增）：AI 补充区在标记之后，追加内容不影响 checksum
+        script_zone = "\n".join(lines)
+        lines.append(f"<!-- checksum: {hashlib.md5(script_zone.encode('utf-8')).hexdigest()} -->")
         lines.append("")
         # AI 补充区
         lines.append("## AI 语义验证补充区（由执行 AI 填充）")
@@ -951,6 +1039,39 @@ def main():
     args = parse_args()
     res = Result()
 
+    # --retry 模式（09-01 新增 P5）：仅重推已提交 commit。
+    # 背景：今日 15:58 网络失败后人工裸 git push 导致 l3_run.log 断裂、发布报告被手工改写。
+    # 约束：任何补推必须走本脚本（探活+退避重试+远端核验+日志留痕），禁止裸 git push。
+    if args.retry:
+        repo = Path(CFG["git_repo_path"])
+        if not (repo / ".git").exists():
+            res.fail(0, f"git 仓库不存在: {repo}")
+            res.summary()
+            sys.exit(1)
+        # 安全守卫：--retry 只允许在 main 分支执行（避免在优化/其他分支误推）
+        cur = subprocess.run(["git", "branch", "--show-current"], cwd=str(repo),
+                             capture_output=True, text=True)
+        if (cur.stdout or "").strip() != "main":
+            res.fail(0, f"--retry 仅允许在 main 分支执行（当前分支: {(cur.stdout or '').strip() or '(detached)'}）。"
+                        "请先 checkout main 再重试")
+            res.summary()
+            sys.exit(1)
+        res.ok(0, "--retry 模式：仅重推已提交 commit（走完整脚本留日志）")
+        push_timeout = CFG.get("git_push_timeout", 90)
+        success, err_msg, kind = git_pull_rebase_push(repo, push_timeout)
+        if not success:
+            res.fail(3, err_msg)
+            res.summary()
+            sys.exit(1)
+        r = subprocess.run(
+            ["git", "rev-parse", "--short", "HEAD"],
+            cwd=str(repo), capture_output=True, text=True
+        )
+        commit_hash = r.stdout.strip() if r.returncode == 0 else "unknown"
+        report_git_result(res, repo, f"补推已提交 commit={commit_hash}", verify=not args.no_verify)
+        res.summary()
+        sys.exit(0 if res.errors == 0 else 1)
+
     # Phase 0: 确定日期
     if args.date:
         if not re.match(r"^\d{4}-\d{2}-\d{2}$", args.date):
@@ -966,7 +1087,7 @@ def main():
             sys.exit(1)
 
     print("=" * 50)
-    print(f"  L3 Publish v3.6 — daily-why")
+    print(f"  L3 Publish {VERSION} — daily-why")
     print(f"  目标日期: {date_str}")
     if args.dry_run:
         print("  模式: --dry-run（只检查不执行）")
