@@ -1,13 +1,13 @@
 {
   "_comment": "Daily Why 写作规范 — 唯一规则来源。validate_article.py 从本文件读取数值规则。skill 文档引用本文件。",
-  "_version": "1.4",
-  "_updated": "2026-05-28",
+  "_version": "1.5",
+  "_updated": "2026-09-01",
 
   "word_count": {
     "min": 300,
-    "max": 600,
-    "p1_threshold": 600,
-    "_usage": "中文字符数（不含标点/格式）。300-600 正常，>600 打 P1。"
+    "max": 690,
+    "p1_threshold": 690,
+    "_usage": "中文字符数，全文口径（含标题与结尾风格表格，与 l3_publish.py 一致）。300-690 正常（正文目标 300-600 + 结尾表格约 90 字余量），>690 打 P1。09-01 起由 validate 正文口径统一为全文口径（Master 决策）。"
   },
 
   "structure": {

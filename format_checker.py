@@ -22,7 +22,7 @@ from typing import Optional
 from pathlib import Path
 import json
 
-RULES_PATH = Path(__file__).parent / "writing_rules.json"
+RULES_PATH = Path(__file__).parent.parent / "config" / "writing_rules.json"
 RULES = {}
 if RULES_PATH.exists():
     try:
@@ -176,9 +176,10 @@ def check_style_table(content: str, result):
 
 
 def check_word_count(content: str, result):
-    """检查字数"""
-    plain = strip_markdown(content)
-    char_count = count_chinese_chars(plain)
+    """检查字数（09-01 统一为全文口径：直接统计原文，不再 strip 结尾表格，
+    与 l3_publish.py 的 chinese_chars 一致。Master 决策：上限 600 → 690 =
+    正文 600 + 结尾风格表格约 90 字余量，同步 writing_rules.json）"""
+    char_count = count_chinese_chars(content)
     result.info["char_count"] = char_count
     if char_count < WC_MIN:
         result.p2_error(f"字数偏少（{char_count} 字），建议 {WC_MIN}-{WC_MAX} 字")

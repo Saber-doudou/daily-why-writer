@@ -921,7 +921,7 @@ def render_report(date_str, v1_meta, v2_meta, ima_result, git_result, res):
         lines.append(f"- 初版：{v1_meta['chinese_chars']} 字，{v1_meta['q_count']} 个Q")
         if v2_meta:
             lines.append(f"- 优化版：{v2_meta['chinese_chars']} 字，{v2_meta['q_count']} 个Q")
-        lines.append(f"- 注：字数为全文口径（含标题与结尾表格），与 validate 正文口径不同属正常")
+        lines.append(f"- 注：字数为全文口径（含标题与结尾表格），09-01 起与 validate_article.py 统一（上限 690）")
         lines.append("")
         # 执行结果（来自 Result.phases，脚本收集，非 AI 手写）
         lines.append("## 执行结果（脚本逐 Phase 记录）")
