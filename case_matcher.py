@@ -17,7 +17,7 @@ from typing import List, Dict, Optional
 
 
 # 判例库路径
-CASE_STUDIES_PATH = Path(__file__).parent / "review" / "CASE_STUDIES.md"
+CASE_STUDIES_PATH = Path(__file__).parent.parent / "review" / "CASE_STUDIES.md"
 
 
 def load_case_studies() -> List[Dict]:

@@ -29,7 +29,7 @@ from datetime import datetime
 from dataclasses import dataclass, field
 
 # 从 writing_rules.json 加载规则
-RULES_PATH = Path(__file__).parent / "writing_rules.json"
+RULES_PATH = Path(__file__).parent.parent / "config" / "writing_rules.json"
 RULES = {}
 if RULES_PATH.exists():
     try:

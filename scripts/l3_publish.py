@@ -740,6 +740,11 @@ def phase3_git(date_str, topic, dry_run, force, res, verify=True):
         (scripts_dir / "update_history.py", "update_history.py"),
         (project_dir / "config" / "version.json", "version.json"),
         (project_dir / "config" / "writing_rules.json", "writing_rules.json"),
+        # D 组补全（09-01 灰区清零）：v3.0/v3.1 整体提交进 repo 但白名单遗漏的在用文件
+        (src_base / "CODE_REVIEW_GUIDE.md", "CODE_REVIEW_GUIDE.md"),
+        (src_base / "references" / "EXAMPLES.md", "references/EXAMPLES.md"),
+        (scripts_dir / "auto_fix.py", "auto_fix.py"),
+        (scripts_dir / "case_matcher.py", "case_matcher.py"),
     ]
     for src, rel in extra_sync:
         if src.exists():
