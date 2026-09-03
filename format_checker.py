@@ -51,10 +51,11 @@ BOLD_MIN = _r("formatting.bold_min", 2)
 Q_FORMAT = _r("formatting.q_format", "**Q1：xxx？**")
 TWIST_LABEL = _r("formatting.twist_label", "冷知识反转")
 
-# 字数规则
+# 字数规则（fallback 为 writing_rules.json 缺失时的兜底值；09-02 由 600 对齐至 690，
+# 与 rules 及本文件 check_word_count 文档串的「Master 决策：上限 600 → 690」一致）
 WC_MIN = _r("word_count.min", 300)
-WC_MAX = _r("word_count.max", 600)
-WC_P1_THRESHOLD = _r("word_count.p1_threshold", 600)
+WC_MAX = _r("word_count.max", 690)
+WC_P1_THRESHOLD = _r("word_count.p1_threshold", 690)
 
 
 def count_chinese_chars(text: str) -> int:

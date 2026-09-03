@@ -20,7 +20,7 @@ from pathlib import Path
 
 # ── 常量 ──────────────────────────────────────────────
 
-VERSION = "v3.7"               # 09-01 版本号统一：脚本/SKILL 标题/SKILL 脚注三处一致
+VERSION = "v3.8"               # 09-02 P1-3 方案A：恢复 Phase 1 脚本验证，版本号三处一致
 MIN_A_CONTENT_CHARS = 50   # A 段最少有效字符数
 MAX_IMPROVEMENTS_CHECK = 10  # 最多检查的改进点数量
 
@@ -555,7 +555,8 @@ def phase1_match_check(v1_path, v2_path, summary_path, dry_run, res):
     print(f"  总体判定:   {'✅ PASS' if all_ok else '❌ FAIL'}")
     print(f"{'=' * 50}\n")
 
-    return all_ok
+    report["ok"] = all_ok
+    return report
 
 
 # ── Phase 2: IMA 云端备份 ────────────────────────────
@@ -934,7 +935,7 @@ def check_report_tampered(report_path, res):
         res.warn(4, f"发布报告 {report_path.name} 脚本生成区已被手工改动（checksum 不匹配），本次渲染将覆盖")
 
 
-def render_report(date_str, v1_meta, v2_meta, ima_result, git_result, res):
+def render_report(date_str, v1_meta, v2_meta, ima_result, git_result, res, match_report=None):
     """渲染发布报告到 deliverables/{date}-发布报告.md（08-31 起替代 AI 手写，
     杜绝字数/得分/commit 失真。骨架全部由脚本数据生成，语义验证表留 AI 补充区；
     09-01 起脚本生成区写入 checksum 标记，防人工改动）"""
@@ -960,6 +961,30 @@ def render_report(date_str, v1_meta, v2_meta, ima_result, git_result, res):
         for phase, status, msg in res.phases:
             lines.append(f"- Phase {phase} {status} {msg}")
         lines.append("")
+        # 匹配度检查（09-02 方案A：脚本生成，位于 checksum 保护区，防 AI 手工篡改）
+        if match_report:
+            s = match_report.get("structure", {})
+            c = match_report.get("content", {})
+            a = match_report.get("audit", {})
+            ru = match_report.get("rules", {})
+            lines.append("## 匹配度检查（脚本生成，checksum 保护区）")
+            lines.append(f"- 结构一致性: {'✅' if s.get('ok') else '❌'}  "
+                         f"话题={'✅' if s.get('topic_match') else '❌'} "
+                         f"分类={'✅' if s.get('category_match') else '❌'} "
+                         f"Q数={s.get('q_count', '?')} {s.get('acf', '')}")
+            if c.get("skipped"):
+                lines.append("- 内容改进: ⏭️ 跳过（无学习总结）")
+            else:
+                lines.append(f"- 内容改进: 🤖 待 AI 语义验证 改进点={c.get('total', 0)}条")
+            if a.get("status") == "ok":
+                lines.append(f"- 审核一致性: {'✅' if a.get('ok') else '❌'} "
+                             f"P0={a.get('p0', '?')} P1={a.get('p1', '?')} 得分={a.get('score', '?')}")
+            else:
+                lines.append(f"- 审核一致性: ❌ {a.get('error', '')}")
+            lines.append(f"- 规则同步: {'✅' if ru.get('ok') else '❌'} "
+                         f"{ru.get('forbidden_last', '?')} / {ru.get('checklist_last', '?')}")
+            lines.append(f"- 总体判定: {'✅ PASS' if match_report.get('ok') else '❌ FAIL'}")
+            lines.append("")
         # 发布状态
         fail_indicators = ("fail", "timeout", "not_found", "push_fail", "commit_fail", "no_repo")
         all_ok = (ima_result not in fail_indicators and git_result not in fail_indicators)
@@ -1212,19 +1237,22 @@ def main():
     else:
         res.warn(0, "无学习总结，跳过匹配度检查")
 
-    # Phase 1: 匹配度检查
+    # Phase 1: 匹配度检查（09-02 方案A：默认开启，结果渲染进报告 checksum 保护区；
+    # --skip-match 仅作手动逃生阀，SKILL.md Step 3 不再默认传入）
     match_pass = True
+    match_report = None
     if args.skip_match:
-        res.skip(1, "--skip-match 跳过匹配度检查")
+        res.skip(1, "--skip-match 手动跳过匹配度检查（逃生阀）")
     elif articles["v2"] is None:
         res.skip(1, "无优化版，跳过匹配度检查")
     elif articles["learning_summary"] is None:
         res.skip(1, "无学习总结，跳过匹配度检查")
     else:
-        match_pass = phase1_match_check(
+        match_report = phase1_match_check(
             articles["v1"], articles["v2"], articles["learning_summary"],
             args.dry_run, res
         )
+        match_pass = match_report["ok"]
         if not match_pass:
             if args.force:
                 res.warn(1, "匹配度检查 FAIL，--force 强制继续")
@@ -1259,7 +1287,7 @@ def main():
 
     # 发布报告脚本渲染（08-31 起替代 AI 手写，杜绝数据失真）
     if not args.dry_run:
-        report_path = render_report(date_str, v1_meta, v2_meta, ima_result, git_result, res)
+        report_path = render_report(date_str, v1_meta, v2_meta, ima_result, git_result, res, match_report=match_report)
         if report_path:
             res.ok(4, f"发布报告已渲染: {report_path}")
 

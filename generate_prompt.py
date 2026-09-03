@@ -33,6 +33,7 @@ WORKSPACE = Path(r"F:\WorkBuddy\daily-why")
 RULES_PATH = WORKSPACE / "config" / "writing_rules.json"
 SKILL_PATH = Path(r"C:\Users\admin\.workbuddy\skills\daily-why-writer\SKILL.md")
 SKILL_COMPACT_PATH = Path(r"C:\Users\admin\.workbuddy\skills\daily-why-writer\SKILL_COMPACT.md")
+REVIEWER_PROMPT_PATH = Path(r"C:\Users\admin\.workbuddy\skills\daily-why-writer\reviewer_prompt.md")
 PYTHON_PATH = r"C:/Users/admin/.workbuddy/binaries/python/versions/3.13.12/python.exe"
 TOPICS_CONTEXT = WORKSPACE / "config" / "topics_context.json"
 TOPICS_CONTEXT_COMPACT = WORKSPACE / "config" / "topics_context_compact.json"
@@ -55,6 +56,16 @@ def load_skill(compact: bool = False) -> str:
     if not path.exists():
         raise FileNotFoundError(f"Skill 文件不存在: {path}")
     return path.read_text(encoding="utf-8")
+
+
+def load_reviewer_prompt() -> str:
+    """加载 reviewer_prompt.md（供一致性自检使用）
+
+    缺失时返回空串而非抛错：审校 prompt 是可选检查项，不应阻断 prompt 生成。
+    """
+    if not REVIEWER_PROMPT_PATH.exists():
+        return ""
+    return REVIEWER_PROMPT_PATH.read_text(encoding="utf-8")
 
 
 def load_recent_topics(limit: int = 0, compact: bool = False) -> list:
@@ -84,8 +95,12 @@ def get_fp_range() -> str:
     return "FP-01到45"
 
 
-def check_consistency(rules: dict, skill: str) -> list:
-    """检查 writing_rules.json、SKILL.md、prompt 之间的一致性"""
+def check_consistency(rules: dict, skill: str, reviewer: str = "") -> list:
+    """检查 writing_rules.json、SKILL.md、reviewer_prompt.md 之间的一致性
+
+    09-02 新增 reviewer 参数：此前只校 SKILL.md，reviewer_prompt.md 的阈值残留
+    （字数>600 vs 690）从未被覆盖，是「改一半」类缺陷的检出盲区。
+    """
     issues = []
 
     # 1. 字数：rules vs skill
@@ -94,6 +109,8 @@ def check_consistency(rules: dict, skill: str) -> list:
     wc_min = rules["word_count"]["min"]
     wc_max = rules["word_count"]["max"]
     wc_pattern = r"(\d{3,})[-~](\d{3,})\s*中?文?字"
+
+    # 1a. 区间写法（如 300-690 字）：SKILL.md
     skill_wc = re.findall(wc_pattern, skill)
     if skill_wc:
         s_min, s_max = int(skill_wc[-1][0]), int(skill_wc[-1][1])
@@ -101,6 +118,23 @@ def check_consistency(rules: dict, skill: str) -> list:
             issues.append(
                 f"字数不一致: writing_rules.json={wc_min}-{wc_max}, "
                 f"SKILL.md={s_min}-{s_max}")
+
+    # 1b. 阈值写法（如 字数>600）：SKILL.md + reviewer_prompt.md
+    # 09-02 新增：09-01 W5 把口径统一为 690 时，reviewer_prompt.md 第 63 行（区间写法）
+    # 已改、第 70 行（阈值写法 字数>600）漏改，而旧版只查区间写法且从不读 reviewer_prompt.md，
+    # 导致阈值残留 600 长期未被发现、每日虚报 P1。此处补齐两类写法 + 两个文件的覆盖。
+    # 需前置"字数"二字，避免误伤">600 是正文软目标"这类说明文字。
+    wc_thresh_pattern = r"字数\s*[>＞]\s*(\d{3,})"
+    for label, text in (("SKILL.md", skill), ("reviewer_prompt.md", reviewer)):
+        if not text:
+            continue
+        for m in re.finditer(wc_thresh_pattern, text):
+            val = int(m.group(1))
+            if val != wc_max:
+                line_no = text[:m.start()].count("\n") + 1
+                issues.append(
+                    f"字数阈值不一致: writing_rules.json 要求 >{wc_max}，"
+                    f"{label} 第 {line_no} 行写的是 字数>{val}")
 
     # 2. 分隔线数量
     sep_exact = rules["formatting"]["separator_exact"]
@@ -388,8 +422,8 @@ def main():
     rules = load_rules()
     skill = load_skill(compact=args.compact)
 
-    # 一致性检查
-    issues = check_consistency(rules, skill)
+    # 一致性检查（09-02 起同时覆盖 reviewer_prompt.md）
+    issues = check_consistency(rules, skill, load_reviewer_prompt())
     if issues:
         print("⚠️  规则一致性问题:")
         for issue in issues:

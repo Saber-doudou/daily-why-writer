@@ -7,9 +7,10 @@ description: >
   路由规则：凡输入含「发布/推送/审计/备份」动作词（如 dailywhy发布），本技能优先于
   其他 dailywhy 系列技能触发（动作词优先），触发即执行 L3 发布流程。
 agent_created: true
+last_updated: 2026-09-02
 ---
 
-# daily-why-publish v3.7
+# daily-why-publish v3.8
 
 AI 语义验证 + 脚本执行，各司其职。
 
@@ -122,10 +123,10 @@ C:/Users/admin/.workbuddy/binaries/python/versions/3.13.12/python.exe F:/WorkBud
 
 AI 判断通过后：
 ```bash
-C:/Users/admin/.workbuddy/binaries/python/versions/3.13.12/python.exe F:/WorkBuddy/daily-why/scripts/l3_publish.py [YYYY-MM-DD] --skip-match --force
+C:/Users/admin/.workbuddy/binaries/python/versions/3.13.12/python.exe F:/WorkBuddy/daily-why/scripts/l3_publish.py [YYYY-MM-DD] --force
 ```
 
-脚本执行 Phase 2/3/4（IMA 备份、GitHub 推送、记忆归档）。
+脚本执行 Phase 1（匹配度检查，默认开启）+ Phase 2/3/4（IMA 备份、GitHub 推送、记忆归档）。匹配度检查结果由脚本渲染进发布报告 checksum 保护区（防篡改）。
 
 **⚠️ IMA 备份约束（2026-06-23 修复）**：
 - Phase 2 的 IMA 备份使用 `--config-only` 参数，**只备份 MEMORY.md 配置**
@@ -182,7 +183,7 @@ l3_publish.py [YYYY-MM-DD] [--dry-run] [--force] [--no-git] [--no-ima] [--skip-m
 | `--force` | 跳过所有交互确认 |
 | `--no-git` | 跳过 GitHub 推送 |
 | `--no-ima` | 跳过 IMA 备份 |
-| `--skip-match` | 跳过 Phase 1（Step 3 使用） |
+| `--skip-match` | 手动逃生阀：默认运行 Phase 1；仅当 Phase 1 误判需人工放行时由 AI 临时加传 |
 | `--no-verify` | 跳过 Phase 3 发布后的远端核验（沙箱网络不通时可用，默认核验） |
 
 ---
@@ -263,7 +264,7 @@ L3 daily-why-publish（手动触发）← 本 Skill
 
 | 产出物 | 说明 |
 |-------|------|
-| 匹配度检查报告 | AI 汇总（结构 + 审核 + 规则 + 语义验证） |
+| 匹配度检查 | 脚本渲染进发布报告 checksum 保护区（结构+审核+规则；语义验证仍由 AI 在补充区填） |
 | IMA 笔记 | 上传到 IMA 知识库 |
 | Git commit + push | 推送到 GitHub |
 | 记忆归档 | 追加到 memory/{date}.md |
@@ -276,6 +277,7 @@ L3 daily-why-publish（手动触发）← 本 Skill
 
 | 版本 | 日期 | 变更 |
 |------|------|------|
+| v3.8 | 2026-09-02 | **P1-3 方案A：恢复 L3 Phase 1 脚本验证**：① SKILL.md Step 3 默认不再传 `--skip-match`，Phase 1 匹配度检查真实开启（设计残留 fd1dedb v3.0 起被跳过，08-31 v3.6 用 AI 补充区合理化）；② `phase1_match_check` 返回结构化 report，主流程传入 `render_report` 并在 checksum 保护区渲染「匹配度检查」区块（结构/审核/规则结果防篡改，语义验证仍由 AI 补充区填）；③ `--skip-match` 保留为手动逃生阀（AI 误判时临时加传）；④ 版本号三处对齐 v3.8 |
 | v3.7 | 2026-09-01 | **网络容错+防篡改**：① `git_pull_rebase_push()` 错误分类（网络失败不再误标「rebase 冲突」，仅真冲突才 `--abort`）；② 网络探活 + 退避重试（10s/30s/60s，最多 3 次）；③ 发布报告脚本生成区写入 checksum 标记，渲染前校验既有报告是否被手工改动（09-01 实证：报告被 AI 手工补写「15:58 重试成功」致 errors=0 与日志矛盾）；④ 新增 `--retry` 模式（仅重推已提交 commit，且强制 main 分支，禁止裸 git push，补推留日志）；⑤ 版本号统一：脚本/SKILL 标题/SKILL 脚注三处对齐 v3.7（此前标题 v3.4 与脚注 v3.6 自相矛盾） |
 | v3.6 | 2026-08-31 | **可观测性+报告**：① Result 类恢复 l3_run.log 写入（此前停更于 08-14 且无任何写入逻辑，每次运行带时间戳，summary 写分隔线）；② 新增 `render_report()` 脚本渲染发布报告到 `deliverables/{date}-发布报告.md`（骨架全部来自脚本数据，杜绝 AI 手写字数/commit 失真；语义验证表留 AI 补充区） |
 | v3.5 | 2026-08-31 | **Phase 时序修复**：Phase 5（FEEDBACK 休眠归档）前移至 Phase 2 之后、Phase 3（git commit）之前——否则归档产生的文件变更永远赶不上当天提交，FEEDBACK_ARCHIVE 每日脱节 8 行（08-31 实证：commit 11:58:45 早于归档 11:59:06）。同步修复：① `_append_ima_history` 正则兼容纯文本（原要求 4 列管道表格，MEMORY.md 实为一行文本，从未生效）并加失败告警；② commit message 由实际 staged 文件反推（原硬编码「+ 投喂优化 + 规则更新」）；③ commit 后 push 前新增源与 repo 一致性自检（脱节即 warn）。**通用约束：git_add_files 内文件的生产 Phase 必须先于 Phase 3** |
@@ -290,4 +292,4 @@ L3 daily-why-publish（手动触发）← 本 Skill
 
 ---
 
-*Version: v3.7 | 2026-09-01 | 网络容错（错误分类+探活+退避重试）+ 发布报告 checksum 防篡改 + --retry 模式禁止裸 push + 版本号三处统一（达尔文 Round 1）；v3.6（2026-08-31）恢复 l3_run.log + 发布报告脚本渲染；v3.5（2026-08-31）Phase 5 前移至 git 之前 + IMA 历史表正则修复 + commit 消息反推 + 一致性自检；v3.4（2026-08-28）Phase 3 内置远端核验（铁律固化：不信本地 ahead 数，push 后 ls-remote 比对 + 自动写 loose ref 修复 origin/main）*
+*Version: v3.8 | 2026-09-02 | P1-3 方案A：恢复 Phase 1 脚本验证（默认开启+checksum 保护区渲染），--skip-match 降级手动逃生阀；v3.7（2026-09-01）网络容错（错误分类+探活+退避重试）+ 发布报告 checksum 防篡改 + --retry 模式禁止裸 push + 版本号三处统一（达尔文 Round 1）；v3.6（2026-08-31）恢复 l3_run.log + 发布报告脚本渲染；v3.5（2026-08-31）Phase 5 前移至 git 之前 + IMA 历史表正则修复 + commit 消息反推 + 一致性自检；v3.4（2026-08-28）Phase 3 内置远端核验（铁律固化：不信本地 ahead 数，push 后 ls-remote 比对 + 自动写 loose ref 修复 origin/main）*

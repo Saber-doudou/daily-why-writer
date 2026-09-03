@@ -58,10 +58,11 @@ P0_MUST_BE_ZERO = _r("quality.p0_must_be_zero", True)
 P1_MAX_ALLOWED = _r("quality.p1_max_allowed", 2)
 EXIT_ON_FAIL = _r("exit_on_fail", True)
 
-# 字数
+# 字数（fallback 为 writing_rules.json 缺失时的兜底值；09-02 由 600 对齐至 690，
+# 与 rules 的全文口径一致。正常路径始终读 rules，改此值不影响正常行为）
 WC_MIN = _r("word_count.min", 300)
-WC_MAX = _r("word_count.max", 600)
-WC_P1_THRESHOLD = _r("word_count.p1_threshold", 600)
+WC_MAX = _r("word_count.max", 690)
+WC_P1_THRESHOLD = _r("word_count.p1_threshold", 690)
 
 # 结构
 QUESTIONS_P0_THRESHOLD = _r("structure.questions_p0_threshold", 2)

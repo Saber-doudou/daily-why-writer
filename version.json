@@ -1,6 +1,6 @@
 {
   "_comment": "Daily Why 四技能版本号唯一权威源（2026-09-01 建，打破「版本号易腐」反复复发）。l3_publish.py 发布前读取本文件，校验各技能 SKILL.md 实际版本号与之一致，不一致告警。新增/修改技能版本号必须先改本文件。",
-  "_updated": "2026-09-01",
+  "_updated": "2026-09-02",
   "skills": {
     "daily-why-writer": {
       "version": "v3.2",
@@ -9,7 +9,7 @@
       "repo_file": "SKILL.md"
     },
     "daily-why-publish": {
-      "version": "v3.7",
+      "version": "v3.8",
       "version_field": "title_and_footer",
       "file": "C:/Users/admin/.workbuddy/skills/daily-why-publish/SKILL.md",
       "repo_file": "daily-why-publish/SKILL.md"
@@ -21,10 +21,11 @@
       "repo_file": null
     },
     "daily-why-health-audit": {
-      "version": "v1.2",
+      "version": "v1.3",
       "version_field": "title",
       "file": "C:/Users/admin/.workbuddy/skills/daily-why-health-audit/SKILL.md",
-      "repo_file": null
+      "repo_file": null,
+      "_note": "09-02 v1.3：新增 Step 8.5 审校有效性量化 + 常驻缺陷 20 到 29。注：该技能校验字段为 title，脚注未纳入校验；09-02 同理发现 feed-learning 脚注 v1.0 与 frontmatter v3.3 脱节未被 Phase 0 检出（P2-1），建议后续统一为 frontmatter+title+footer 三式校验"
     }
   }
 }
