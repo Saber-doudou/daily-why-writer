@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-L3 Publish v3.7 — daily-why 自包含发布脚本
+L3 Publish v3.9 — daily-why 自包含发布脚本
 零 AI 依赖，一条命令跑完：匹配检查、IMA 备份、GitHub 推送、执行日志归档
 
 Usage:
@@ -20,7 +20,7 @@ from pathlib import Path
 
 # ── 常量 ──────────────────────────────────────────────
 
-VERSION = "v3.8"               # 09-02 P1-3 方案A：恢复 Phase 1 脚本验证，版本号三处一致
+VERSION = "v3.9"               # 09-03 复查修复：A-1 改进点提取多模式+零命中告警 / A-2 版本号降级路径删除 / A-3 Phase1 落日志
 MIN_A_CONTENT_CHARS = 50   # A 段最少有效字符数
 MAX_IMPROVEMENTS_CHECK = 10  # 最多检查的改进点数量
 
@@ -432,23 +432,46 @@ def phase1_match_check(v1_path, v2_path, summary_path, dry_run, res):
     }
 
     # 1.2 内容改进验证（提取改进点，语义判断由 AI 完成）
+    #
+    # 09-03 修复（A-1）：原实现用单一硬编码正则 `^## v1 → v2 改进点`，而 L2 学习总结
+    # 的章节标题由 AI 自由生成，两者无契约 —— 09-01 用「到」、09-03 用「三、采纳清单」
+    # 均失配 → improvements 恒为空 → content.ok 硬编码 True → AI 在 Step 2 看到
+    # 「改进点 0 条」顺势判定「无可验证内容」并跳过语义验证，L2 的改进全部绕过发布前门。
+    # 现改为：① 多模式回退匹配（v1→v2 前缀优先，其次纯中文标题）；② 零命中即判该
+    # 维度失败，不再静默恒真。
+    # 依据橙皮书 EXP-004（约束优于指令：用校验代替建议）+ EXP-014（报告诚实性）。
+    #
+    # 匹配原则：只认「改进点/采纳清单/优化点/核心差距」类标题；「质量概览」等只含
+    # 表格与结论、不含改进列表的章节必须排除（09-03 实证：误抓概览会取到噪音）。
+    IMPROVEMENT_HEADING_PATTERNS = (
+        # 模式1：带 v1→v2 前缀（→/到/->/～ 多连接符；08-31/09-01/09-02 格式）
+        r"^##\s*(?:[一二三四五六七八九十]+[、.]\s*)?"
+        r"v1\s*(?:→|到|->|～)\s*v2\s*(?:改进点|优化点|采纳清单|核心差距)"
+        r"[^\n]*\n(.*?)(?=^##\s|\Z)",
+        # 模式2：纯中文标题（不带 v1/v2 前缀），如「## 三、采纳清单（v2 实际落地）」
+        r"^##\s*(?:[一二三四五六七八九十]+[、.]\s*)?"
+        r"(?:采纳清单|改进点|优化点|核心差距)"
+        r"[^\n]*\n(.*?)(?=^##\s|\Z)",
+    )
+    # bullet 提取：列表符号后必须有空白，避免把 `**加粗**` / `---` 误当列表项
+    BULLET_RE = r"(?:^[-*]\s+|^\d+[.、]\s+)(.+)"
     if summary_path:
         summary_text = summary_path.read_text(encoding="utf-8")
-        improvement_section = re.search(
-            r"^##\s*v1\s*→\s*v2\s*改进点\s*\n(.*?)(?=^##\s|\Z)",
-            summary_text, re.MULTILINE | re.DOTALL
-        )
-        if improvement_section:
-            improvements = re.findall(
-                r"(?:^[-*]\s*|^\d+[.、]\s*)(.+)",
-                improvement_section.group(1), re.MULTILINE
-            )
-        else:
-            improvements = []
+        improvements = []
+        for pat in IMPROVEMENT_HEADING_PATTERNS:
+            m = re.search(pat, summary_text, re.MULTILINE | re.DOTALL)
+            if not m:
+                continue
+            improvements = re.findall(BULLET_RE, m.group(1), re.MULTILINE)
+            # 过滤破折号残段与空串噪音
+            improvements = [x.strip() for x in improvements if x.strip() and x.strip() != "-"]
+            if improvements:
+                break
         check_count = min(len(improvements), MAX_IMPROVEMENTS_CHECK)
         # 只做存在性检查（有改进点列表即可），语义验证交给 AI
         report["content"] = {
-            "ok": True,  # AI 另行判断
+            # 零命中 = 提取失败（非「确实没有改进点」），判失败并告警
+            "ok": bool(improvements),
             "improvements": improvements[:MAX_IMPROVEMENTS_CHECK],
             "total": check_count,
             "ai_required": True,
@@ -538,8 +561,9 @@ def phase1_match_check(v1_path, v2_path, summary_path, dry_run, res):
           f"分类={s['category_match']}  Q数={s['q_count']}  {s['acf']}")
     if not c.get("skipped"):
         if c.get("ai_required"):
-            print(f"  内容改进:   🤖 待 AI 验证  "
-                  f"改进点={c['total']}条（关键词匹配已移除）")
+            _note = '' if c['ok'] else '（零命中 = 提取失败，AI 须人工读学习总结补验）'
+            print(f"  内容改进:   {'✅' if c['ok'] else '❌'}  🤖 待 AI 验证  "
+                  f"改进点={c['total']}条{_note}")
             for i, imp in enumerate(c.get("improvements", []), 1):
                 print(f"            {i}. {imp[:80]}{'…' if len(imp) > 80 else ''}")
         else:
@@ -556,16 +580,33 @@ def phase1_match_check(v1_path, v2_path, summary_path, dry_run, res):
     print(f"{'=' * 50}\n")
 
     report["ok"] = all_ok
+
+    # 09-03 修复（A-3）：Phase 1 此前全程只 print 不调 res.*，l3_run.log 无任何
+    # Phase 1 行，成功路径完全无痕，事后无法区分「跑了且通过」与「根本没跑」。
+    # 现统一落一行摘要日志（橙皮书 EXP-014：可观测性即诚实性）。
+    if all_ok:
+        res.ok(1, f"匹配度检查 PASS（结构 ✅ 内容改进={c.get('total', 0)}条 "
+                  f"审核 P0={a.get('p0')} P1={a.get('p1')} "
+                  f"规则 {rule_info['forbidden_last']}/{rule_info['checklist_last']}）")
+    else:
+        res.warn(1, f"匹配度检查 FAIL（结构 {'✅' if s['ok'] else '❌'} "
+                    f"内容改进={c.get('total', 0)}条 "
+                    f"审核 P0={a.get('p0')} P1={a.get('p1')} "
+                    f"规则 {rule_info['forbidden_last']}/{rule_info['checklist_last']}）")
     return report
 
 
 # ── Phase 2: IMA 云端备份 ────────────────────────────
 
 def _detect_ima_version():
-    """从 MEMORY.md 检测最新版本号 → 进位（minor 满 9 进 1）
+    """从 MEMORY.md 的 IMA 备份历史章节取最新版本号 → 进位（minor 满 9 进 1）
 
     十进制版本语义：3.9 → 4.0（不是 3.10）。
-    降级策略：IMA 备份历史章节找不到 → 全文搜索。
+
+    09-03 修复（A-2）：删除「章节缺失 → 全文搜索」的降级路径。原降级把 MEMORY.md 中
+    任何 `vN.N`（技能版本号/脚本版本号/架构版本号，与备份序号无关）当成备份版本，
+    实测序列被污染成 v5.5 → v5.6 → v2027.0 → v2027.1 → v2027.3 → v2027.4 → v3.7。
+    现改为：章节缺失即返回 "1.0"（宁从头编号，也不猜 —— 橙皮书 EXP-014）。
     """
     memory_md = Path(CFG["memory_md_path"])
     if not memory_md.exists():
@@ -573,23 +614,25 @@ def _detect_ima_version():
 
     content = memory_md.read_text(encoding="utf-8")
 
-    # 优先从 IMA 备份历史章节取（兼容「最近5条」等后缀）
+    # 只从 IMA 备份历史章节取（兼容「最近5条」等后缀）
     section = re.search(r"## IMA 备份历史[^\n]*\n(.*?)(?=\n## |\Z)", content, re.DOTALL)
-    if section:
-        versions = re.findall(r"\bv(\d+\.\d+)\b", section.group(1))
-    else:
-        # 降级：全文搜索
-        versions = re.findall(r"\bv(\d+\.\d+)\b", content)
+    if not section:
+        return "1.0"
 
-    if versions:
-        latest = max(versions, key=lambda v: [int(x) for x in v.split(".")])
-        major, minor = [int(x) for x in latest.split(".")]
-        minor += 1
-        if minor >= 10:
-            major += 1
-            minor = 0
-        return f"{major}.{minor}"
-    return "1.0"
+    versions = re.findall(r"\bv(\d+\.\d+)\b", section.group(1))
+    if not versions:
+        return "1.0"
+
+    latest = max(versions, key=lambda v: [int(x) for x in v.split(".")])
+    major, minor = [int(x) for x in latest.split(".")]
+    # 合理性护栏：备份版本不应出现荒谬量级（> 1000 说明章节混入了非备份版本号）
+    if major >= 1000:
+        return "1.0"
+    minor += 1
+    if minor >= 10:
+        major += 1
+        minor = 0
+    return f"{major}.{minor}"
 
 
 def _append_ima_history(note_id, version, date_str):
@@ -609,9 +652,13 @@ def _append_ima_history(note_id, version, date_str):
     m = re.search(pattern, content)
     if m:
         content = content.replace(m.group(1), m.group(1) + new_row + "\n", 1)
-        memory_md.write_text(content, encoding="utf-8")
-        return True
-    return False
+    else:
+        # 自愈：标题行缺失则新建章节，避免每次发布告警 + 版本碰撞防护失效
+        if not content.endswith("\n"):
+            content += "\n"
+        content += f"\n## IMA 备份历史\n{new_row}\n"
+    memory_md.write_text(content, encoding="utf-8")
+    return True
 
 
 def phase2_ima(date_str, dry_run, force, res):
@@ -625,6 +672,12 @@ def phase2_ima(date_str, dry_run, force, res):
 
     # 预检测版本号，显式传给 ima_archive.py 避免版本撞车
     version = _detect_ima_version()
+    if version == "1.0":
+        # 章节缺失/混入异常 → 重置为 1.0。此时必须显式告警，否则 AI 会把
+        # 「IMA 版本回到 v1.0」当成正常进位而忽视（09-03 教训：v2027.x → v3.7
+        # 的暴跌曾被视为正常）。另将本次写入的脏历史在追加阶段标注（见 _append_ima_history）。
+        res.warn(2, "MEMORY.md 无有效 IMA 备份历史章节，备份版本重置为 v1.0，"
+                    "请人工确认 MEMORY.md 结构与真实备份序列")
 
     cmd = [
         CFG["python_path"],

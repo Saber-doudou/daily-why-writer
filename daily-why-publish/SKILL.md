@@ -7,10 +7,11 @@ description: >
   路由规则：凡输入含「发布/推送/审计/备份」动作词（如 dailywhy发布），本技能优先于
   其他 dailywhy 系列技能触发（动作词优先），触发即执行 L3 发布流程。
 agent_created: true
-last_updated: 2026-09-02
+version: v3.9
+last_updated: 2026-09-03
 ---
 
-# daily-why-publish v3.8
+# daily-why-publish v3.9
 
 AI 语义验证 + 脚本执行，各司其职。
 
@@ -118,6 +119,14 @@ C:/Users/admin/.workbuddy/binaries/python/versions/3.13.12/python.exe F:/WorkBud
 4. 按三档标准判定，引用原文行号
 5. 按 2.4 模板输出
 6. 根据 2.3 通过线返回结论
+
+**⚠️ 改进点 0 条处理（09-03 v3.9 新增）**：脚本报「改进点=0条」时**禁止**自动判定「无可验证内容、自动通过」。
+0 条 = 脚本从学习总结提取改进点失败（标题格式无契约），不是「确实没有改进点」—— L2 学习总结必有
+采纳清单。此时必须：
+1. 用 Read 直接读当日 `投喂素材/{YYYYMMDD}/学习总结.md`，从「采纳清单 / 改进点 / 核心分歧」等章节
+   人工提取改进点（至少 3 到 7 条）；
+2. 按 2.1 到 2.4 正常执行语义验证，逐条给判定与行号证据；
+3. 汇总里显式注明「⚠️ 脚本提取失败，本表为 AI 人工补验」，不得伪装成脚本输出。
 
 ### Step 3：执行发布
 
@@ -277,6 +286,7 @@ L3 daily-why-publish（手动触发）← 本 Skill
 
 | 版本 | 日期 | 变更 |
 |------|------|------|
+| v3.9 | 2026-09-03 | **09-03 复查修复（A-1/A-2/A-3 联动）**：① 脚本侧改进点提取改多模式回退（v1→v2 前缀 / 纯中文标题均可命中，排除「质量概览」噪音）+ **零命中即判 FAIL**（不再恒 True），见 l3_publish.py phase1_match_check；② 本 Skill Step 2.5 新增「改进点 0 条处理」硬约束：禁止自动通过，必须人工读学习总结补验（EXP-004 约束优于指令）；③ `_detect_ima_version` 删除全文扫描降级路径（版本号污染根治，宁从头编号不猜）；④ Phase 1 结果落 l3_run.log（此前成功路径无痕）；⑤ frontmatter 补 version 字段（四技能统一机读版本号） |
 | v3.8 | 2026-09-02 | **P1-3 方案A：恢复 L3 Phase 1 脚本验证**：① SKILL.md Step 3 默认不再传 `--skip-match`，Phase 1 匹配度检查真实开启（设计残留 fd1dedb v3.0 起被跳过，08-31 v3.6 用 AI 补充区合理化）；② `phase1_match_check` 返回结构化 report，主流程传入 `render_report` 并在 checksum 保护区渲染「匹配度检查」区块（结构/审核/规则结果防篡改，语义验证仍由 AI 补充区填）；③ `--skip-match` 保留为手动逃生阀（AI 误判时临时加传）；④ 版本号三处对齐 v3.8 |
 | v3.7 | 2026-09-01 | **网络容错+防篡改**：① `git_pull_rebase_push()` 错误分类（网络失败不再误标「rebase 冲突」，仅真冲突才 `--abort`）；② 网络探活 + 退避重试（10s/30s/60s，最多 3 次）；③ 发布报告脚本生成区写入 checksum 标记，渲染前校验既有报告是否被手工改动（09-01 实证：报告被 AI 手工补写「15:58 重试成功」致 errors=0 与日志矛盾）；④ 新增 `--retry` 模式（仅重推已提交 commit，且强制 main 分支，禁止裸 git push，补推留日志）；⑤ 版本号统一：脚本/SKILL 标题/SKILL 脚注三处对齐 v3.7（此前标题 v3.4 与脚注 v3.6 自相矛盾） |
 | v3.6 | 2026-08-31 | **可观测性+报告**：① Result 类恢复 l3_run.log 写入（此前停更于 08-14 且无任何写入逻辑，每次运行带时间戳，summary 写分隔线）；② 新增 `render_report()` 脚本渲染发布报告到 `deliverables/{date}-发布报告.md`（骨架全部来自脚本数据，杜绝 AI 手写字数/commit 失真；语义验证表留 AI 补充区） |
@@ -292,4 +302,4 @@ L3 daily-why-publish（手动触发）← 本 Skill
 
 ---
 
-*Version: v3.8 | 2026-09-02 | P1-3 方案A：恢复 Phase 1 脚本验证（默认开启+checksum 保护区渲染），--skip-match 降级手动逃生阀；v3.7（2026-09-01）网络容错（错误分类+探活+退避重试）+ 发布报告 checksum 防篡改 + --retry 模式禁止裸 push + 版本号三处统一（达尔文 Round 1）；v3.6（2026-08-31）恢复 l3_run.log + 发布报告脚本渲染；v3.5（2026-08-31）Phase 5 前移至 git 之前 + IMA 历史表正则修复 + commit 消息反推 + 一致性自检；v3.4（2026-08-28）Phase 3 内置远端核验（铁律固化：不信本地 ahead 数，push 后 ls-remote 比对 + 自动写 loose ref 修复 origin/main）*
+*Version: v3.9 | 2026-09-03 | 09-03 复查修复（见变更日志 v3.9 行）：改进点提取多模式+零命中告警、Step 2.5 加 0 条处理硬约束、IMA 版本号降级路径删除、Phase 1 落日志、frontmatter 补 version；v3.8（2026-09-02）P1-3 方案A：恢复 Phase 1 脚本验证（默认开启+checksum 保护区渲染），--skip-match 降级手动逃生阀；v3.7（2026-09-01）网络容错（错误分类+探活+退避重试）+ 发布报告 checksum 防篡改 + --retry 模式禁止裸 push + 版本号三处统一（达尔文 Round 1）；v3.6（2026-08-31）恢复 l3_run.log + 发布报告脚本渲染；v3.5（2026-08-31）Phase 5 前移至 git 之前 + IMA 历史表正则修复 + commit 消息反推 + 一致性自检；v3.4（2026-08-28）Phase 3 内置远端核验（铁律固化：不信本地 ahead 数，push 后 ls-remote 比对 + 自动写 loose ref 修复 origin/main）*
