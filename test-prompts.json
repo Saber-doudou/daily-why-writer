@@ -1,0 +1,65 @@
+{
+  "_comment": "达尔文优化测试集（2026-09-04 建立）。全部采用历史真实案例 —— 优势：每篇的缺陷已由 L2 四 AI 实战发现并经人工核实，ground truth 明确，可精确测量漏判率。这是比人工构造用例更严格的测试集。",
+  "_ground_truth_source": "投喂素材/{YYYYMMDD}/学习总结.md 的「核心差距」小节（L2 四 AI 共识 + 人工核实）",
+  "target_file": "reviewer_prompt.md",
+  "tests": [
+    {
+      "id": 1,
+      "name": "事实硬伤检出（最高优先级）",
+      "prompt": "审校 F:/WorkBuddy/daily-why/articles/2026-09/2026-09-04-每日冷知识-冰淇淋头痛.md",
+      "article": "2026-09-04-每日冷知识-冰淇淋头痛.md",
+      "ground_truth": [
+        "冰饮≠冰淇淋：BMJ 2002 Kaczorowski 实验用的是 100ml 冰淇淋，不是冰饮（P0）",
+        "学童≠中学生：受试者为加拿大 Dalewood 中学平均 12.7 岁学生（P0）",
+        "漏实验条件：实验在 2001年12月至次年1月 加拿大寒冬进行（P1）",
+        "漏 RR 2.2 风险翻倍量级（P1）",
+        "漏 79% 终生发生率数据（P1）"
+      ],
+      "expected": "至少标出 1 条 P0 事实硬伤；理想状态标出全部 5 处",
+      "targets_steps": ["Step 5", "Step 5.7"],
+      "known_result_v25": "❌ P0=0，5 处全漏判"
+    },
+    {
+      "id": 2,
+      "name": "引用精度 + 机制要素缺失",
+      "prompt": "审校 F:/WorkBuddy/daily-why/articles/2026-09/2026-09-03-每日冷知识-贝壳听海.md",
+      "article": "2026-09-03-每日冷知识-贝壳听海.md",
+      "ground_truth": [
+        "引用精度：初稿写《墨子》「瓮听」把大陶罂「埋进井里」，《备穴》原文是「置井中」（P1）",
+        "术语归属：环境宽频噪声≠白噪音，白噪音是功率谱平坦的特例（P1）",
+        "机制要素缺失：只讲「共振放大」，漏「螺旋腔体多次谐振、层层叠加」增强环节（P1）"
+      ],
+      "expected": "标出引用精度 1 条 + 机制要素缺失 1 条",
+      "targets_steps": ["Step 5.5", "Step 5.7"],
+      "known_result_v25": "❌ 全部漏判（L2 千问/IMA 救回）"
+    },
+    {
+      "id": 3,
+      "name": "归因完整性 + 行为建议安全",
+      "prompt": "审校 F:/WorkBuddy/daily-why/articles/2026-09/2026-09-02-每日冷知识-刷牙橙汁发苦.md",
+      "article": "2026-09-02-每日冷知识-刷牙橙汁发苦.md",
+      "ground_truth": [
+        "归因偏漏：初稿写橙汁含「黄酮类」苦味物质，主因实为柠檬苦素 limonin（三萜类非黄酮）（P1）",
+        "行为建议错误（健康安全类）：初稿「先喝橙汁再刷牙，或者刷完耐心等一阵子，都行」——酸性软化牙釉质后立即刷牙会刷伤，应等约 30 分钟（P0 候选）"
+      ],
+      "expected": "标出归因偏漏 P1 + 行为建议错误 P0",
+      "targets_steps": ["Step 5.6", "类型 D 行为建议"],
+      "known_result_v25": "❌ 全部漏判（v1 判 0 问题）"
+    },
+    {
+      "id": 4,
+      "name": "输出 schema 一致性（机械可校验）",
+      "prompt": "审校任一文章，检查输出 JSON 的 script_result 字段完整性",
+      "article": "any",
+      "ground_truth": [
+        "reviewer_prompt.md 第 101-107 行模板：script_result = {exit_code, score, p0, p1, p2}（无 char_count）",
+        "reviewer_prompt.md 第 130-131 行强制要求：script_result.char_count 必填",
+        "09-04 实测 v1 输出：script_result = {char_count, score}（缺 exit_code/p0/p1/p2）",
+        "09-04 实测 v2 输出：script_result = {exit_code, passed, score, char_count, p0_count, p1_count, p2_count}（用 p0_count 非模板的 p0，多出 passed）"
+      ],
+      "expected": "模板与强制要求、实际输出三者完全一致",
+      "targets_steps": ["输出格式 schema 强制统一"],
+      "known_result_v25": "❌ 三处互相矛盾（模板缺 char_count / 强制要求 char_count / 实测输出各不相同）"
+    }
+  ]
+}
