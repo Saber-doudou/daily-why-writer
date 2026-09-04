@@ -9,7 +9,7 @@ description: >
   即使包含 dailywhy 前缀，也不属于本技能（分别属于 L2 学习 / L3 发布），勿触发。
 agent_created: true
 version: v3.2
-last_updated: 2026-09-01
+last_updated: 2026-09-04
 ---
 
 # daily-why-writer
