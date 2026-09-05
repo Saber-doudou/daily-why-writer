@@ -1,2 +1,5 @@
 ﻿timestamp	commit	skill	old_score	new_score	status	dimension	note	eval_mode
 2026-09-04T12:30	baseline	reviewer_prompt.md	-	57.3	baseline	-	初始评估：结构维度主agent打分(维1-7)，效果维度维8用09-02/03/04三日实战数据(漏判率4/4、2/2、3/3=100%)	dry_run
+2026-09-04T16:59	v2.6实测	reviewer_prompt.md	57.3	部分生效(partial)	事实/机制/术语	事实硬伤明确标出问题2/5(冰饮P0+学童P2)，真相核对4-5/5(含冬季/RR翻倍/79%)；机制定论化1/1命中；术语上颚到上腭0/1未检。实测标出问题3条(事实2+机制1)/应检缺陷7。结论：核心根因(冰饮不等于冰淇淋)从v2.5漏判到v2.6 P0命中，detail_verified约束生效；但未达≥3/5事实硬伤+机制/术语门槛，术语与上颚到上腭及漏信息=缺陷仍盲区。建议不回滚，补2项机械化规则(遗漏关键数据=P1；术语上颚到上腭)	independent_subagent	
+2026-09-04T17:05	v2.6实测(双agent一致)	reviewer_prompt.md	57.3	部分生效(事实矛盾2/2全命中)	事实/机制/术语	事实矛盾错误2/2全命中(冰饮P0+学童)，机制定论化1/1命中；术语上颊→上臣 0/1未检。双agent核实：冬季/RR2.2/79%原文确有、文章未引属合理省略非缺陷(v2.6不检遗漏)。核心根因(冰饮≠冰淇淋)从v2.5漏判→v2.6 P0命中，detail_verified约束生效。建议不回滚+补术语机械化	independent_subagent
+2026-09-05T13:10	v2.7	reviewer_prompt.md	57.3	生效(effective)	术语/遗漏	术语上颚→上腭1/1命中(term_checks exact=false)；事实硬伤2/2(冰饮P0+学童)全命中；机制定论化1/1；omission_severity 冬季/RR/79%均判minor不误标P1。独立子agent实测检出P0=1/P1=1/P2=1(含术语P2)，6项自检清单全过。两项新机制(Step5.8+omission_severity)均真实生效，不回滚	independent_subagent

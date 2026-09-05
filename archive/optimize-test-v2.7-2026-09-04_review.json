@@ -1,0 +1,131 @@
+{
+  "article_id": "2026-09-04",
+  "review_timestamp": "2026-09-05T13:07:34+0800",
+  "pass": false,
+  "p0_count": 1,
+  "p1_count": 1,
+  "p2_count": 1,
+  "score": 82,
+  "script_result": {
+    "exit_code": 0,
+    "score": 100,
+    "char_count": 552,
+    "p0_count": 0,
+    "p1_count": 0,
+    "p2_count": 0
+  },
+  "issues": [
+    {
+      "level": "P0",
+      "category": "FACT-CHECK/CHECKLIST-§101",
+      "description": "Q3 转述 BMJ 2002 ICE-H 研究时干预物与受试者描述失真：文中写『5秒内猛灌冰饮』，原文干预物是 100ml 香草冰淇淋（vanilla ice cream），『猛灌』亦不准确（是快速吃冰淇淋而非灌饮）；『145名学童』实为加拿大汉密尔顿 Dalewood 中学的中学生（Maya Kaczorowski 本人 13 岁），非泛指学童。核心数字 27%/13% 与原文一致，但干预物类型错误属事实硬伤。",
+      "location": "Q3（第11行）",
+      "suggestion": "改为『2002年《英国医学杂志》一项145名中学生（加拿大汉密尔顿 Dalewood 中学）的研究里，5秒内吃完100毫升冰淇淋的人约27%会头痛，慢慢吃超过30秒的只有13%』；或将『学童』明确为『中学生』、『冰饮』改为『冰淇淋』。"
+    },
+    {
+      "level": "P1",
+      "category": "CHECKLIST-§102/机制定论化",
+      "description": "Q1 将『血管先收缩再反弹扩张』写成唯一确定的事实，未加『目前主流认为』等限定，也未提及并行的其他假说（如颅内前动脉血流假说、三叉神经节神经源性机制）。权威源（Johns Hopkins、维基）将其列为『多种理论中最说得通的一种』，并非定论。",
+      "location": "Q1（第7行）",
+      "suggestion": "在机制句前加『目前主流观点认为』，或在段末补『也有研究提出其他可能机制』。"
+    },
+    {
+      "level": "P2",
+      "category": "TERM-CHECK/Step5.8/用词精准",
+      "description": "全文用『上颚』指口腔上壁（A段、Q1、F段多处），正确解剖术语应为『上腭』。『颚』=颌骨（上颌骨/下颌骨），『腭』=口腔顶壁（硬腭+软腭）；口腔上壁是腭非颚。Q1 虽括号注『口腔顶部的硬腭』（用字正确），但主用词『上颚』仍为音近形近误用。",
+      "location": "A段第3行 / Q1第7行 / F段第15行",
+      "suggestion": "将『上颚』统一改为『上腭』；Q1 括号注『硬腭』保留。"
+    }
+  ],
+  "fact_checks": [
+    {
+      "claim": "2002年《英国医学杂志》145名学童研究：5秒内猛灌冰饮者约27%会头痛，慢慢吃超过30秒者仅13%",
+      "source_verified": true,
+      "detail_verified": false,
+      "omission_severity": "minor",
+      "verdict": "mismatch",
+      "note": "研究真实存在（Kaczorowski M & Kaczorowski J. Ice cream evoked headaches (ICE-H) study. BMJ 2002;325:1445-6）。但细节与原文不符：①干预物是 100ml 香草冰淇淋（vanilla ice cream），非『冰饮/冰镇饮料』，『猛灌』亦不准确；②受试者特指加拿大汉密尔顿 Dalewood 中学的中学生（Maya Kaczorowski 13 岁），非泛指『学童』。核心数字 27%/13% 与原文一致。冬季重复实验、RR≈2.2、79% 既往发生率三处文章未提，均属合理省略（minor，见下三条）。"
+    },
+    {
+      "claim": "原文报告实验在夏季与冬季各做一次，结果不受天气影响，冷天同样可诱发冰淇淋头痛（推翻『仅热天发生』旧说）",
+      "source_verified": true,
+      "detail_verified": true,
+      "omission_severity": "minor",
+      "verdict": "omitted",
+      "note": "文章未提实验季节。CBC/BMJ 报道：研究夏季与冬季均实施，『incidence didn't appear to be affected by the weather』，冷天同样诱发。属补充性背景，不提不会误导读者对『快慢进食→头痛率差异』这一核心结论的判断 → minor。"
+    },
+    {
+      "claim": "原文结论『狼吞虎咽使 likelihood more than doubles』（约 RR=2.2，27÷13≈2.08）",
+      "source_verified": true,
+      "detail_verified": true,
+      "omission_severity": "minor",
+      "verdict": "omitted",
+      "note": "文章已给出 27% vs 13% 的具体比例，读者可自行判断风险约翻倍（≈2.08 倍），未单独写 RR=2.2 不误导对核心结论（快吃风险更高）的判断 → minor。"
+    },
+    {
+      "claim": "原文报告参与者既往冰淇淋头痛经历达 79%（终生/既往发生率）；另 29 例头痛中 59% 持续 <10 秒",
+      "source_verified": true,
+      "detail_verified": true,
+      "omission_severity": "minor",
+      "verdict": "omitted",
+      "note": "属补充性统计（既往发生率与头痛时长），不提不影响『冷刺激→血管反射→头痛』核心机制与快慢对照结论 → minor。"
+    }
+  ],
+  "quote_checks": [
+    {
+      "claim": "文中引用『2002年《英国医学杂志》』（期刊+年份）",
+      "verbatim_match": true,
+      "source": "BMJ 2002;325:1445-6 (British Medical Journal, Dec 25 issue)"
+    }
+  ],
+  "mechanism_checks": [
+    {
+      "claim": "冷食贴到上腭→局部血管先猛地收缩、再反弹张开→这一收一放是痛的来源",
+      "direction_ok": true,
+      "elements_complete": true,
+      "note": "方向自洽：冷刺激→血管痉挛收缩→反应性扩张→痛觉，是主流（trigeminal-vascular reflex）机制方向，无方向矛盾。因果链完整。但表述为定论缺『目前主流认为』限定（见 P1 条目，CHECKLIST §102）。"
+    },
+    {
+      "claim": "上腭痛觉由三叉神经送进大脑，大脑误将来源标为额头（牵涉痛），与心脏病肩痛同类",
+      "direction_ok": true,
+      "elements_complete": true,
+      "note": "方向自洽：三叉神经（脸上最大脑神经）同时支配硬腭与额颞部痛觉，中枢牵涉性误定位，机制方向正确、环节齐备。"
+    },
+    {
+      "claim": "F段：先缩后张的反应『本是身体为保住核心体温拉起的保温本能』",
+      "direction_ok": true,
+      "elements_complete": false,
+      "note": "方向无误，但『为保住核心体温拉起的保温本能』属通俗化归因，将脑冻结血管反射直接等同于体温保护本能略牵强（血管对冷的反应确有体温调节成分，但脑冻结的具体触发机制是否即为『保温本能』未被原文证实），属机制要素/归因偏完整性的通俗化处理，建议弱化措辞或加『可以理解为』。"
+    }
+  ],
+  "attribution_checks": [
+    {
+      "claim": "上腭（口腔顶壁）受冷是冰淇淋头痛的触发部位",
+      "is_primary_cause": true,
+      "note": "原文明确 cold foods touch the roof of the mouth (palate) 诱发，硬腭/上腭冷刺激是确立的主触发点，主因判定正确。"
+    },
+    {
+      "claim": "血管先收缩再反弹扩张是痛的来源（主因）",
+      "is_primary_cause": true,
+      "note": "主流 trigeminal-vascular reflex 视血管反应为疼痛主因，主因判定成立；但如前所述应注明这是多种理论中『最说得通的一种』，非唯一机制。"
+    }
+  ],
+  "term_checks": [
+    {
+      "term": "上颚",
+      "used": "上颚（A段『窜上上颚』、Q1『冷食贴到上颚』、F段『上颚血管』；Q1 并括号注『口腔顶部的硬腭』）",
+      "correct": "上腭",
+      "exact": false,
+      "note": "『颚』=颌骨（上颌骨/下颌骨，构成颌部骨架）；『腭』=口腔顶壁（硬腭+软腭）。口腔上壁应称『上腭』，非『上颚』。文中 Q1 括号已写『硬腭』（用字正确），但主用词『上颚』为音近形近误用，应统一改为『上腭』。"
+    },
+    {
+      "term": "硬腭",
+      "used": "硬腭（Q1 括号注『口腔顶部的硬腭』）",
+      "correct": "硬腭",
+      "exact": true,
+      "note": "Q1 括号注『口腔顶部的硬腭』用字准确，符合解剖学规范（palate 之硬腭）。"
+    }
+  ],
+  "forbidden_violations": [],
+  "overall_comment": "脚本客观检查满分（552字、结构齐全、无 FP 命中），但独立事实核验与术语核验仍检出 3 处问题：①P0 事实硬伤——Q3 把 BMJ 2002 ICE-H 研究的干预物『100ml 香草冰淇淋』误写为『冰饮』、受试者『中学生』泛化为『学童』（detail_verified=false，与 CHECKLIST §101 实证盲区一致，v2.7 已成功捕获）；②P1 机制定论化——血管先缩后张写成唯一事实，缺『目前主流认为』限定（CHECKLIST §102）；③P2 术语精度——『上颚』应为『上腭』（Step 5.8 专项，v2.7 已成功捕获）。冬季实验/RR≈2.2/79% 既往发生率三处未提均判 minor，不标 P1（与手册 09-04 实证一致）。故 pass=false（P0=1）。"
+}
