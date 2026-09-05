@@ -1,0 +1,233 @@
+{
+  "article_id": "2026-09-04",
+  "article_file": "F:/WorkBuddy/daily-why/articles/2026-09/2026-09-04-每日冷知识-冰淇淋头痛.md",
+  "review_timestamp": "2026-09-04T17:00:34+0800",
+  "reviewer": "general-purpose-1 (independent third-party, testing reviewer_prompt v2.6 enforcement)",
+  "manual_version": "reviewer_prompt v2.6",
+  "note_on_file": "目标文件 optimize-test-v2.6-2026-09-04_review.json 已由 16:59:38 的先行运行写入（结论一致：P0=1，冰饮误为冰淇淋）。为遵守『绝对不要覆盖项目已有的任何 review 文件』，本独立审校结果写入 -gp1 后缀文件，不覆盖既有文件。",
+  "summary": {
+    "p0_count": 1,
+    "p1_count": 2,
+    "p2_count": 3,
+    "total_issues": 6,
+    "pass": false,
+    "pass_condition": "P0=0 且 P1<=2（v2.6 Step8）；当前 P0=1，故不通过",
+    "core_finding": "validate_article.py 输出 score=100 全绿，但它只做结构/格式/字数检查，无法识别事实细节错误。P0 事实错误（冰饮误为冰淇淋）由独立 WebSearch + fact_checks.detail_verified=false 留痕机制捕获——正是 v2.6 的修复目标，已验证生效。"
+  },
+  "script_result": {
+    "exit_code": 0,
+    "score": 100,
+    "char_count": 552,
+    "p0_count": 0,
+    "p1_count": 0,
+    "p2_count": 0,
+    "checks_passed": 12,
+    "raw_keys_from_script": "脚本原始输出使用 p0/p1/p2（数组），此处按 v2.6 模板统一为 p0_count/p1_count/p2_count，char_count 取自 info.char_count=552"
+  },
+  "fact_checks": [
+    {
+      "id": "FC-1",
+      "dimension": "事实准确性（干预物）",
+      "severity": "P0",
+      "description": "Q3 称『5秒内猛灌冰饮』，但所引 BMJ 2002 Kaczorowski 研究的干预物是香草冰淇淋（约 100 ml / 3 盎司 / 两勺），并非冰饮/冰水。论文题名即 'Ice Cream Evoked Headaches (ICE-H) Study'。文章主题为冰淇淋却把被引研究写成『冰饮』，属事实错误（与 v2.6 手册示例中的已知错配完全一致）。",
+      "article_claim": "2002年《英国医学杂志》一项145名学童的研究里，5秒内猛灌冰饮的人约27%会头痛",
+      "ground_truth": "干预物是冰淇淋（vanilla ice cream, ~100 ml / 3 oz / about two scoops），非冰饮/冰水。BMJ 2002;325:1445-1446，题名 'Ice Cream Evoked Headaches (ICE-H) Study: Randomised Trial of Accelerated Versus Cautious Ice Cream Eating Regimen'。加速组被要求 <5 秒吃完 100 ml 冰淇淋。",
+      "detail_verified": false,
+      "evidence": "BMJ 2002;325:1445-1446（Scilit 全文摘要）; https://www.cbc.ca/1.353385 ; https://faculty.washington.edu/chudler//news72.html ; https://www.cbsnews.com/news/brain-freeze"
+    },
+    {
+      "id": "FC-2",
+      "dimension": "事实准确性/术语规范（受试者群体）",
+      "severity": "P1",
+      "description": "Q3 称『145名学童』，真实受试者为加拿大安大略省汉密尔顿市 Dalewood 中学的初中生（middle school students，约 6 至 8 年级、约 11 到 14 岁；主研 Maya Kaczorowski 当时 13 岁），并非泛指『学童』。表述不精确、未逐字核实（与 v2.6 手册示例中『受试者是中学生非学童』相印证）。",
+      "article_claim": "145名学童",
+      "ground_truth": "145 名 Dalewood Middle School（加拿大安大略省汉密尔顿市）中学生；摘要列明班级 63/81/82/83/84/85。二手综述有的称 'high-school students'，但学校语境为 middle school，准确应是『中学生』。",
+      "detail_verified": false,
+      "evidence": "BMJ 2002;325:1445-1446（Scilit 摘要：'All 145 students at Dalewood Middle School in Hamilton'）; https://faculty.washington.edu/chudler//news72.html ; https://www.cbc.ca/1.353385"
+    },
+    {
+      "id": "FC-3",
+      "dimension": "事实准确性（数字/年份/期刊）",
+      "severity": "P2",
+      "description": "Q3 的 27% / 13% 与 145 样本量、2002 年份、期刊中文名《英国医学杂志》(=BMJ) 经原始研究逐字核验，均正确无误。列此条目以验证 detail_verified=true 的判别能力。",
+      "article_claim": "145名…5秒内…约27%会头痛，慢慢吃超过30秒的只有13%",
+      "ground_truth": "加速组(<5s) 27%（20/73）、谨慎组(>30s) 13%（9/72）；n=145；BMJ 2002;325:1445-1446。数字吻合。",
+      "detail_verified": true,
+      "evidence": "BMJ 2002;325:1445-1446（Scilit 摘要）; https://www.cbc.ca/1.353385 ; https://faculty.washington.edu/chudler//news72.html"
+    },
+    {
+      "id": "FC-4",
+      "dimension": "事实准确性（地点/季节）",
+      "severity": "P2",
+      "description": "文章未陈述研究地点与季节（信息省略，非错误）。原始研究事实已逐字核验：地点为加拿大安大略省汉密尔顿市 Dalewood 中学；试验在冬季进行（摘要：'six eating sessions between December 2001 and January 2002'）。这是 v2.6 手册强调『漏冬季实验』的关键点，本文已独立核实。",
+      "article_claim": "（文章未提及地点/季节）",
+      "ground_truth": "加拿大安大略省汉密尔顿市 Dalewood 中学；冬季试验（2001年12月至2002年1月，加拿大冬季）。CBC 二手报道称『夏季与冬季都做过、天气不影响结果』，但 BMJ 摘要原文明确为 12 月-1 月（冬季）。",
+      "detail_verified": true,
+      "evidence": "BMJ 2002;325:1445-1446（Scilit 摘要）; https://www.clinician.com/articles/28471-clinical-briefs-in-primary-care ; https://u.osu.edu/buckmdblog?p=1246"
+    },
+    {
+      "id": "FC-5",
+      "dimension": "事实准确性（RR 与终生发生率）",
+      "severity": "P2",
+      "description": "任务第4步(d)要求核实原始研究是否报告 RR 值与『79% 终生发生率』。结论：原始 BMJ 2002 研究【确实报告】了这两项。文章未引用它们（属合理省略，非错误）。（1）RR：摘要给出 relative risk 2.2（95% CI 1.03 到 4.94），number needed to harm 6.71。（2）终生发生率：摘要给出『lifetime prevalence of ice cream headache among the participants was 115/145 (79% (73% to 86%))』。所以『79%』是真实出自原始研究的数字，并非杜撰；此前审校『漏 79% 数据』指的是没核到它确实存在。",
+      "article_claim": "（文章未引用 RR 或 79%）",
+      "ground_truth": "原始研究报告 RR=2.2（95%CI 1.03-4.94）与终生发生率 79%（115/145，73%-86%）。文章未引用，无错误。",
+      "detail_verified": true,
+      "evidence": "BMJ 2002;325:1445-1446（Scilit 摘要正文：'relative risk 2.2 (95% confidence interval 1.03 to 4.94)... The lifetime prevalence of ice cream headache among the participants was 115/145 (79% (73% to 86%))'）"
+    }
+  ],
+  "quote_checks": [
+    {
+      "id": "QC-1",
+      "dimension": "引用精度",
+      "severity": "P1",
+      "description": "对 BMJ 2002 研究引用的核验：期刊名《英国医学杂志》(=BMJ)、年份 2002、样本 145、27%/13% 与原始研究一致（verbatim_match 在『数字/期刊』层面为 true）；但引用中『冰饮』『学童』两处事实偏差（见 FC-1/FC-2）使整句转述未逐字忠实于原文，故 verbatim_match 整体判 false。",
+      "article_claim": "2002年《英国医学杂志》一项145名学童的研究里，5秒内猛灌冰饮的人约27%会头痛，慢慢吃超过30秒的只有13%",
+      "verbatim_match": false,
+      "note": "核心数字与期刊事实逐字匹配；但『冰饮』应为『冰淇淋』、『学童』应为『中学生』，属事实层错配，导致转述未忠实原文。",
+      "evidence": "BMJ 2002;325:1445-1446 ; https://www.clinician.com/articles/28471-clinical-briefs-in-primary-care"
+    }
+  ],
+  "mechanism_checks": [
+    {
+      "id": "MC-1",
+      "dimension": "机制方向自洽+完整性",
+      "severity": "P1",
+      "description": "Q1：冷食贴硬腭→血管先收缩再反弹扩张→痛。因果方向自洽，链条完整。但文章将其表述为唯一/定论（『这一收一放才是痛的来源』），未加『目前主流认为』等限定；存在并行机制（大脑前动脉血流假说、三叉神经节神经源性机制）。按 CHECKLIST §102（2026-09-04 新增，且明确以『本篇』为例）属假说定论化，判 P1。",
+      "article_claim": "冷食贴到上颚时，那里的血管先猛地收缩、再反弹似的张开。这一收一放才是痛的来源。",
+      "direction_ok": true,
+      "elements_complete": true,
+      "note": "方向自洽、环节完整；缺陷在『定为唯一机制』缺限定词（CHECKLIST §102）。"
+    },
+    {
+      "id": "MC-2",
+      "dimension": "机制方向自洽+完整性",
+      "severity": "P2",
+      "description": "Q2：上颚痛觉经三叉神经传入，该神经同时支配额头→牵涉痛，类比心梗肩痛。方向自洽，环节完整。三叉神经为最大脑神经、牵涉痛类比合理。",
+      "article_claim": "上颚的痛觉信号由三叉神经送进大脑…大脑把来源标错成了额头，医学上叫牵涉痛，和心脏病发作肩膀疼是同一类误会。",
+      "direction_ok": true,
+      "elements_complete": true,
+      "note": "牵涉痛类比合理，方向无矛盾。"
+    },
+    {
+      "id": "MC-3",
+      "dimension": "机制方向自洽+完整性",
+      "severity": "P2",
+      "description": "Q3：吃冰速度→头痛发生率（快吃 27% vs 慢吃 13%）。方向自洽。所引研究实际只变速（固定 100 ml），故『速度』是有效变量；但文章同时写『速度和量』，『量』未被该研究隔离（见 AC-2）。",
+      "article_claim": "差别在速度和量。",
+      "direction_ok": true,
+      "elements_complete": true,
+      "note": "速度机制自洽；『量』的归因问题见 attribution_checks AC-2。"
+    },
+    {
+      "id": "MC-4",
+      "dimension": "机制方向自洽+完整性（要素缺失）",
+      "severity": "P2",
+      "description": "F段将『先缩后张』解释为『身体为保住核心体温拉起的保温本能』。血管收缩确有保温效应（方向自洽），但把该头痛反射的『存在目的』归结为『保温本能』属要素缺失/过度引申——目前主流机制是冷刺激腭部触发三叉神经-血管反射，并无文献支持其『功能就是保温』；且未加『可能/目前认为』。elements_complete=false。",
+      "article_claim": "这套先缩后张的反应，本是身体为保住核心体温拉起的保温本能，痛感只是顺带产生的副产品",
+      "direction_ok": true,
+      "elements_complete": false,
+      "note": "方向成立但机制/功能解释不完整，缺『该解释是否为主流机制』的关键环节；与 attribution_checks AC-3 对应。"
+    }
+  ],
+  "attribution_checks": [
+    {
+      "id": "AC-1",
+      "dimension": "归因完整性（主因/定论化）",
+      "severity": "P1",
+      "description": "Q1 把痛源归于『血管收缩-反弹扩张』并表述为唯一主因（『这一收一放才是痛的来源』）。该解释属科普常用，但存在竞争性理论（大脑前动脉血流假说、三叉神经节神经源性机制），文中未提。按 CHECKLIST §102 应加『目前主流认为』限定，属归因定论化。",
+      "article_claim": "这一收一放才是痛的来源",
+      "is_primary_cause": false,
+      "note": "属简化/竞争性机制表述，非确证唯一主因；与 MC-1 对应，判 P1。"
+    },
+    {
+      "id": "AC-2",
+      "dimension": "归因完整性（多因/变量隔离）",
+      "severity": "P2",
+      "description": "Q3『差别在速度和量』。所引 BMJ 2002 研究两组均给固定 100 ml 冰淇淋，只操纵『速度』（<5s vs >30s），『量』并非该研究隔离出的变量。把『量』与『速度』并列归因，超出所引研究支持范围；现实场景『吃得多+吃得快』可叠加，但文中用研究数据背书『速度和量』时，『量』未被该研究验证。",
+      "article_claim": "差别在速度和量。",
+      "is_primary_cause": false,
+      "note": "『速度』为研究所证变量；『量』未被该 RCT 隔离，属归因扩展（P2）。建议改为『差别主要在速度』。"
+    },
+    {
+      "id": "AC-3",
+      "dimension": "归因完整性（推测性归因）",
+      "severity": "P2",
+      "description": "F段『本是身体为保住核心体温拉起的保温本能』为推测性功能性归因，缺乏文献支撑，属归因偏漏/过度引申（只给了一种未经证实的『主因/目的』解释，且未加『可能』）。",
+      "article_claim": "本是身体为保住核心体温拉起的保温本能",
+      "is_primary_cause": false,
+      "note": "未逐字验证此功能性解释（detail_verified=false）；与 MC-4 对应。"
+    },
+    {
+      "id": "AC-4",
+      "dimension": "归因完整性（正确归因，非缺陷）",
+      "severity": "P2",
+      "description": "Q1『这阵疼跟冻脑细胞毫无关系』归因正确：冰淇淋头痛是腭部血管/神经反射，并非脑细胞冻结。属准确辟谣，列此作为正向核查。",
+      "article_claim": "这阵疼跟冻脑细胞毫无关系",
+      "is_primary_cause": true,
+      "note": "有机制支撑，非缺陷。"
+    }
+  ],
+  "forbidden_violations": [],
+  "forbidden_scan_note": "已按 FORBIDDEN.md 扫描全文：未发现 FP-25（无 ~ 与 ——）、FP-02（无 AI 味排比≥3）、FP-21（无负面拟人）、FP-07（无空洞修饰）等命中；连接词≤2、字数 552 在 300-690 内。",
+  "issues": [
+    {
+      "level": "P0",
+      "category": "CHECKLIST-§101 / 事实错误",
+      "description": "Q3『5秒内猛灌冰饮』误将被引 BMJ 2002 研究的干预物写成冰饮；真实干预物是约 100 ml 香草冰淇淋（论文题名即 ICE-H = Ice Cream Evoked Headaches）。",
+      "location": "Q3（第11行）",
+      "suggestion": "改为『5秒内吃完100毫升冰淇淋』或『猛吃冰淇淋』；删除『冰饮』。"
+    },
+    {
+      "level": "P1",
+      "category": "CHECKLIST-§101 / 事实准确（受试者）",
+      "description": "Q3『145名学童』未逐字核实；真实受试者为加拿大汉密尔顿 Dalewood 中学初中生（6-8年级，约11-14岁），非泛指学童。",
+      "location": "Q3（第11行）",
+      "suggestion": "改为『145名中学生』或『某中学145名学生』。"
+    },
+    {
+      "level": "P1",
+      "category": "CHECKLIST-§102 / 机制定论化",
+      "description": "Q1/F段将『血管先收缩再反弹扩张』及『保温本能』表述为唯一/定论，缺『目前主流认为』限定，且未提并行机制（大脑前动脉血流假说、三叉神经节神经源性机制）。",
+      "location": "Q1（第7行）、F段（第15行）",
+      "suggestion": "加『目前主流观点认为』『也有研究提出其他可能』等限定词。"
+    },
+    {
+      "level": "P2",
+      "category": "CHECKLIST-§89 / 归因扩展",
+      "description": "Q3『差别在速度和量』中『量』未被所引 RCT 隔离（两组均固定 100 ml，只变速）。",
+      "location": "Q3（第11行）",
+      "suggestion": "改为『差别主要在速度』，或注明『现实中吃得多也会叠加』。"
+    },
+    {
+      "level": "P2",
+      "category": "CHECKLIST-§17 / 推测性归因",
+      "description": "F段『保温本能』功能性推测无文献支撑、未加限定词。",
+      "location": "F段（第15行）",
+      "suggestion": "加『目前认为/可能』等限定。"
+    },
+    {
+      "level": "P2",
+      "category": "结构 / 风格表格",
+      "description": "结尾风格表格仅 2 行（话题/核心机制），手册 Step6 提及『四行』；分类『人体奥秘』属 6 选 1 枚举有效。是否构成缺陷取决于模板约定，置信度低。",
+      "location": "结尾表格（第17-18行）",
+      "suggestion": "确认 daily-why 风格表格标准行数；若需四行请补足（如加一句话总结行、适用场景行）。"
+    }
+  ],
+  "self_check_list": {
+    "item1_fact_checks_ge2_with_detail_verified": "PASS（fact_checks 共 5 条，每条均含 detail_verified 字段）",
+    "item2_three_keys_present": "PASS（quote_checks / mechanism_checks / attribution_checks 三键均存在且非空）",
+    "item3_char_count_matches_script": "PASS（script_result.char_count=552，与 validate_article.py info.char_count=552 完全一致）",
+    "item4_counts_match_issues": "PASS（summary: p0=1, p1=2, p2=3；与 issues 实际条数 1/2/3 一致）",
+    "item5_quote_checks_ge1_when_citation": "PASS（文中有 BMJ 2002 具体研究引用，quote_checks 含 QC-1）"
+  },
+  "detail_verified_false_list": [
+    "FC-1（冰饮 vs 冰淇淋：未逐字验证，文章说法与原始研究不符，detail_verified=false）",
+    "FC-2（学童 vs 中学生/特定学校：未逐字验证，称谓不精确，detail_verified=false）",
+    "QC-1（引用转述整体未忠实原文：冰饮/学童偏差，verbatim_match=false）",
+    "AC-2（『量』未被所引研究隔离：is_primary_cause=false）",
+    "MC-4（保温本能解释机制不完整：elements_complete=false）",
+    "AC-3（保温本能属推测性归因：is_primary_cause=false）"
+  ],
+  "overall_comment": "文章结构、字数、叙事闭环均合格，validate_article.py 给 100 分全绿；但脚本无法识别事实细节错误。独立 WebSearch 回原始 BMJ 2002 摘要逐字核实后，捕获 1 个 P0 事实错误（被引研究干预物是冰淇淋而非冰饮）及多项细节错配（学童→中学生、机制定论化、量未隔离）。这恰好验证 v2.6 的 fact_checks.detail_verified 强制留痕机制生效：source_verified=true（研究存在）不等于细节正确。结论：pass=false（P0=1）。另核实原始研究确实报告了 RR=2.2 与 79% 终生发生率，文章未引用属合理省略。"
+}
