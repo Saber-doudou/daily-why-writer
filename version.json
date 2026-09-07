@@ -1,13 +1,13 @@
 {
   "_comment": "Daily Why 四技能版本号唯一权威源（2026-09-01 建，打破「版本号易腐」反复复发）。l3_publish.py 发布前读取本文件，校验各技能 SKILL.md 实际版本号与之一致，不一致告警。新增/修改技能版本号必须先改本文件。",
-  "_updated": "2026-09-03",
+  "_updated": "2026-09-04",
   "skills": {
     "daily-why-writer": {
       "version": "v3.2",
       "version_field": "frontmatter.version",
       "file": "C:/Users/admin/.workbuddy/skills/daily-why-writer/SKILL.md",
       "repo_file": "SKILL.md",
-      "_note": "09-03：reviewer_prompt.md 子文件升至 v2.5（Step 5.5 扩维机制完整性 + 新增 Step 5.7 引用精度 + schema 统一）。reviewer_prompt 版本号不在此处跟踪，由文件自身标题/脚注维护"
+      "_note": "reviewer_prompt.md 子文件现 v2.7（09-05 达尔文 Round1+2+3 升级：Round1 修 schema 三处矛盾、Round2 软指令转强制输出物攻漏判率100%、Round3 新增 Step5.8 术语精度核验+fact_checks.omission_severity）。版本号仍不在此处跟踪，由文件自身标题/脚注维护"
     },
     "daily-why-publish": {
       "version": "v3.9",
@@ -23,11 +23,11 @@
       "repo_file": null
     },
     "daily-why-health-audit": {
-      "version": "v1.4",
+      "version": "v1.5",
       "version_field": "title",
       "file": "C:/Users/admin/.workbuddy/skills/daily-why-health-audit/SKILL.md",
       "repo_file": null,
-      "_note": "09-03 v1.4：新增常驻缺陷 30（Phase 1 零命中即告警）与 31（reviewer_prompt 引用精度专项），更新 Step 8.5 判读基准引用 09-03 实测 2/2"
+      "_note": "09-04 v1.5：① Step 8.5 新增头号结论（三次 prompt 补丁无执行校验 = EXP-004 反例，修复须走机械可校验 quote_checks 字段）；② 新增漏判类型 E（来源存在但细节未逐字核对）；③ Step 1 新增配额失败与人工重跑检测（429 失败极快易误读为未触发）；④ 新增常驻缺陷 32 到 37；⑤ 常驻缺陷 31 标注 v2.5 实战无效（漏判率仍 3/3）。09-03 v1.4：新增常驻缺陷 30 与 31，Step 8.5 判读基准补 09-03 实测 2/2"
     }
   }
 }
