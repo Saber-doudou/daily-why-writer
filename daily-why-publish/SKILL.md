@@ -7,11 +7,11 @@ description: >
   路由规则：凡输入含「发布/推送/审计/备份」动作词（如 dailywhy发布），本技能优先于
   其他 dailywhy 系列技能触发（动作词优先），触发即执行 L3 发布流程。
 agent_created: true
-version: v3.9
-last_updated: 2026-09-03
+version: v3.11
+last_updated: 2026-09-07
 ---
 
-# daily-why-publish v3.9
+# daily-why-publish v3.11
 
 AI 语义验证 + 脚本执行，各司其职。
 
@@ -286,6 +286,8 @@ L3 daily-why-publish（手动触发）← 本 Skill
 
 | 版本 | 日期 | 变更 |
 |------|------|------|
+| v3.11 | 2026-09-07 | **记忆治理脚本纳入 git 同步（09-07 决策3）**：① `scripts/check_memory_size.py` 与 `scripts/restructure_memory.py` 加入 config.json `git_add_files` + l3_publish.py `extra_sync`（E 组），双向自检恢复全对齐；② 同轮执行自动化记忆归档切割（2026-07-01至2026-08-31 段下沉 archive/，899 行降至 101 行）；③ 门禁维持 warn 观察至 09-14 评估升阻断（09-07 决策2） |
+| v3.10 | 2026-09-07 | **记忆分片重构联动（切断 MEMORY.md 自动写入）**：① `_detect_ima_version`/`_append_ima_history` 读写目标从 MEMORY.md 迁移到 `topics/ima_history.md`（config.json 新增 `ima_history_path`）——消除 MEMORY.md 唯一自动增长源，根治注入超限截断（09-02 8684→2932、09-07 9108→6568 两次压缩追不上日均 +1235 增长）；② Phase 0 新增记忆体积门禁 `check_memory_health`（复用 scripts/check_memory_size.py，warn 不阻断，try/except 全包；观察一周后评估升阻断）；③ 配套新增 scripts/check_memory_size.py（三目标门禁：工作空间 3000 字符/用户级 4000 字符/自动化记忆 1000 行）与 scripts/restructure_memory.py（分片零损失搬家+sha256 逐字校验，8 分片全通过）；④ MEMORY.md 重构为「简报+规则+索引」2644 字符（原 6568），历史全文下沉 topics/ 八分片 |
 | v3.9 | 2026-09-03 | **09-03 复查修复（A-1/A-2/A-3 联动）**：① 脚本侧改进点提取改多模式回退（v1→v2 前缀 / 纯中文标题均可命中，排除「质量概览」噪音）+ **零命中即判 FAIL**（不再恒 True），见 l3_publish.py phase1_match_check；② 本 Skill Step 2.5 新增「改进点 0 条处理」硬约束：禁止自动通过，必须人工读学习总结补验（EXP-004 约束优于指令）；③ `_detect_ima_version` 删除全文扫描降级路径（版本号污染根治，宁从头编号不猜）；④ Phase 1 结果落 l3_run.log（此前成功路径无痕）；⑤ frontmatter 补 version 字段（四技能统一机读版本号） |
 | v3.8 | 2026-09-02 | **P1-3 方案A：恢复 L3 Phase 1 脚本验证**：① SKILL.md Step 3 默认不再传 `--skip-match`，Phase 1 匹配度检查真实开启（设计残留 fd1dedb v3.0 起被跳过，08-31 v3.6 用 AI 补充区合理化）；② `phase1_match_check` 返回结构化 report，主流程传入 `render_report` 并在 checksum 保护区渲染「匹配度检查」区块（结构/审核/规则结果防篡改，语义验证仍由 AI 补充区填）；③ `--skip-match` 保留为手动逃生阀（AI 误判时临时加传）；④ 版本号三处对齐 v3.8 |
 | v3.7 | 2026-09-01 | **网络容错+防篡改**：① `git_pull_rebase_push()` 错误分类（网络失败不再误标「rebase 冲突」，仅真冲突才 `--abort`）；② 网络探活 + 退避重试（10s/30s/60s，最多 3 次）；③ 发布报告脚本生成区写入 checksum 标记，渲染前校验既有报告是否被手工改动（09-01 实证：报告被 AI 手工补写「15:58 重试成功」致 errors=0 与日志矛盾）；④ 新增 `--retry` 模式（仅重推已提交 commit，且强制 main 分支，禁止裸 git push，补推留日志）；⑤ 版本号统一：脚本/SKILL 标题/SKILL 脚注三处对齐 v3.7（此前标题 v3.4 与脚注 v3.6 自相矛盾） |
@@ -302,4 +304,4 @@ L3 daily-why-publish（手动触发）← 本 Skill
 
 ---
 
-*Version: v3.9 | 2026-09-03 | 09-03 复查修复（见变更日志 v3.9 行）：改进点提取多模式+零命中告警、Step 2.5 加 0 条处理硬约束、IMA 版本号降级路径删除、Phase 1 落日志、frontmatter 补 version；v3.8（2026-09-02）P1-3 方案A：恢复 Phase 1 脚本验证（默认开启+checksum 保护区渲染），--skip-match 降级手动逃生阀；v3.7（2026-09-01）网络容错（错误分类+探活+退避重试）+ 发布报告 checksum 防篡改 + --retry 模式禁止裸 push + 版本号三处统一（达尔文 Round 1）；v3.6（2026-08-31）恢复 l3_run.log + 发布报告脚本渲染；v3.5（2026-08-31）Phase 5 前移至 git 之前 + IMA 历史表正则修复 + commit 消息反推 + 一致性自检；v3.4（2026-08-28）Phase 3 内置远端核验（铁律固化：不信本地 ahead 数，push 后 ls-remote 比对 + 自动写 loose ref 修复 origin/main）*
+*Version: v3.11 | 2026-09-07 | 记忆治理脚本纳入 git 同步（check_memory_size.py/restructure_memory.py 入 extra_sync + git_add_files，双向自检全对齐）+ 自动化记忆归档切割（07-01至08-31 段下沉 archive/）；v3.10（2026-09-07）记忆分片重构：IMA 历史读写迁移 topics/ima_history.md（切断 MEMORY.md 自动写入）+ Phase 0 记忆体积门禁（warn 不阻断）+ 新增 check_memory_size.py/restructure_memory.py；v3.9（2026-09-03）改进点提取多模式+零命中告警、Step 2.5 加 0 条处理硬约束、IMA 版本号降级路径删除、Phase 1 落日志、frontmatter 补 version；v3.8（2026-09-02）P1-3 方案A：恢复 Phase 1 脚本验证（默认开启+checksum 保护区渲染），--skip-match 降级手动逃生阀；v3.7（2026-09-01）网络容错（错误分类+探活+退避重试）+ 发布报告 checksum 防篡改 + --retry 模式禁止裸 push + 版本号三处统一（达尔文 Round 1）；v3.6（2026-08-31）恢复 l3_run.log + 发布报告脚本渲染；v3.5（2026-08-31）Phase 5 前移至 git 之前 + IMA 历史表正则修复 + commit 消息反推 + 一致性自检；v3.4（2026-08-28）Phase 3 内置远端核验（铁律固化：不信本地 ahead 数，push 后 ls-remote 比对 + 自动写 loose ref 修复 origin/main）*

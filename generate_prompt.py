@@ -95,11 +95,17 @@ def get_fp_range() -> str:
     return "FP-01到45"
 
 
-def check_consistency(rules: dict, skill: str, reviewer: str = "") -> list:
+def check_consistency(rules: dict, skill: str, reviewer: str = "",
+                      extra_files: dict | None = None) -> list:
     """检查 writing_rules.json、SKILL.md、reviewer_prompt.md 之间的一致性
 
     09-02 新增 reviewer 参数：此前只校 SKILL.md，reviewer_prompt.md 的阈值残留
     （字数>600 vs 690）从未被覆盖，是「改一半」类缺陷的检出盲区。
+
+    09-07 新增 extra_files 参数：09-02 建的防线只覆盖上述两个文件，漏了
+    daily-why-feed-learning/SKILL.md（其第 215 行「字数>600 至少 P1」残留至今，
+    09-07 实证导致 668 字优化版——合规（<690）——被虚报 P1，学习总结被迫写
+    「软超限」解释）。防线自身有覆盖盲区，故此处支持纳入任意多个附加文件。
     """
     issues = []
 
@@ -125,7 +131,11 @@ def check_consistency(rules: dict, skill: str, reviewer: str = "") -> list:
     # 导致阈值残留 600 长期未被发现、每日虚报 P1。此处补齐两类写法 + 两个文件的覆盖。
     # 需前置"字数"二字，避免误伤">600 是正文软目标"这类说明文字。
     wc_thresh_pattern = r"字数\s*[>＞]\s*(\d{3,})"
-    for label, text in (("SKILL.md", skill), ("reviewer_prompt.md", reviewer)):
+    # 09-07 起把 extra_files（如 L2 技能 SKILL.md）一并纳入扫描，堵住覆盖盲区
+    scan_targets = [("SKILL.md", skill), ("reviewer_prompt.md", reviewer)]
+    if extra_files:
+        scan_targets.extend(extra_files.items())
+    for label, text in scan_targets:
         if not text:
             continue
         for m in re.finditer(wc_thresh_pattern, text):
@@ -422,8 +432,17 @@ def main():
     rules = load_rules()
     skill = load_skill(compact=args.compact)
 
-    # 一致性检查（09-02 起同时覆盖 reviewer_prompt.md）
-    issues = check_consistency(rules, skill, load_reviewer_prompt())
+    # 一致性检查（09-02 起覆盖 reviewer_prompt.md；09-07 起纳入 L2 技能 SKILL.md）
+    extra_files = {}
+    for _label, _path in (
+        ("daily-why-feed-learning/SKILL.md",
+         r"C:\Users\admin\.workbuddy\skills\daily-why-feed-learning\SKILL.md"),
+    ):
+        try:
+            extra_files[_label] = Path(_path).read_text(encoding="utf-8")
+        except OSError as e:
+            print(f"⚠️  无法读取 {_label}（跳过其一致性检查）: {e}")
+    issues = check_consistency(rules, skill, load_reviewer_prompt(), extra_files)
     if issues:
         print("⚠️  规则一致性问题:")
         for issue in issues:

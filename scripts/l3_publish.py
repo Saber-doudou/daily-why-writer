@@ -20,7 +20,7 @@ from pathlib import Path
 
 # ── 常量 ──────────────────────────────────────────────
 
-VERSION = "v3.9"               # 09-03 复查修复：A-1 改进点提取多模式+零命中告警 / A-2 版本号降级路径删除 / A-3 Phase1 落日志
+VERSION = "v3.11"              # 09-07 决策3：记忆治理脚本纳入 git 同步（check_memory_size.py / restructure_memory.py 入 extra_sync + git_add_files）
 MIN_A_CONTENT_CHARS = 50   # A 段最少有效字符数
 MAX_IMPROVEMENTS_CHECK = 10  # 最多检查的改进点数量
 
@@ -579,6 +579,56 @@ def phase1_match_check(v1_path, v2_path, summary_path, dry_run, res):
     print(f"  总体判定:   {'✅ PASS' if all_ok else '❌ FAIL'}")
     print(f"{'=' * 50}\n")
 
+    # 1.4 review.json schema 机械校验（09-07 新增，A 方案「换判定主体」的脚本层）
+    #
+    # 背景：09-02 至 09-07 漏判率连续四天 100%（4/4、2/2、3/3、3/3）。期间
+    # v2.5 / v2.6 / v2.7 三轮 prompt 补丁**全部只改文本、无执行校验** → 实战零改善。
+    # v2.8 引入 Step 5.9 对照检查（gap_checks），本段负责机械校验「审校到底做没做」。
+    #
+    # 当前策略：**warn 不阻断**（新校验器未经实战，直接阻断有回归风险）。
+    # 观察一周后由 Master 决定是否升级为阻断。
+    _date_m = re.search(r"(\d{4}-\d{2}-\d{2})", v2_path.name)
+    if _date_m:
+        _d = _date_m.group(1)
+        _base = Path(CFG["base_dir"])
+        _scripts_dir = Path(__file__).resolve().parent
+        if str(_scripts_dir) not in sys.path:
+            sys.path.insert(0, str(_scripts_dir))
+        try:
+            import validate_review as _vr
+        except ImportError:
+            _vr = None
+            res.warn(1, "review schema 校验器不可用（validate_review.py 导入失败）")
+        if _vr:
+            for _tag, _rp in (("v1", _base / "review" / f"{_d}_review.json"),
+                              ("v2", _base / "review" / f"{_d}_v2_review.json")):
+                if not _rp.exists():
+                    continue
+                try:
+                    _v = _vr.validate(_rp)
+                except Exception as _e:      # 校验器自身异常不得影响发布主流程
+                    res.warn(1, f"[review schema {_tag}] 校验器异常: {_e}")
+                    continue
+                report.setdefault("review_schema", {})[_tag] = {
+                    "ok": _v["ok"],
+                    "errors": _v["errors"],
+                    "warnings": _v["warnings"],
+                    "stats": _v["stats"],
+                }
+                _ne, _nw = len(_v["errors"]), len(_v["warnings"])
+                if _ne:
+                    for _e in _v["errors"][:3]:
+                        res.warn(1, f"[review schema {_tag}] {_e}")
+                    if _ne > 3:
+                        res.warn(1, f"[review schema {_tag}] 另有 {_ne - 3} 项错误")
+                elif _nw:
+                    res.ok(1, f"review schema {_tag} 校验通过（{_nw} 项提示）")
+                    # 提示内容也落日志，否则只有数量、事后无法复盘（EXP-014 可观测性）
+                    for _w in _v["warnings"][:2]:
+                        res.ok(1, f"  ↳ {_tag} 提示: {_w}")
+                else:
+                    res.ok(1, f"review schema {_tag} 校验通过（无异常）")
+
     report["ok"] = all_ok
 
     # 09-03 修复（A-3）：Phase 1 此前全程只 print 不调 res.*，l3_run.log 无任何
@@ -599,33 +649,35 @@ def phase1_match_check(v1_path, v2_path, summary_path, dry_run, res):
 # ── Phase 2: IMA 云端备份 ────────────────────────────
 
 def _detect_ima_version():
-    """从 MEMORY.md 的 IMA 备份历史章节取最新版本号 → 进位（minor 满 9 进 1）
+    """从 topics/ima_history.md 取最新备份版本号 → 进位（minor 满 9 进 1）
 
     十进制版本语义：3.9 → 4.0（不是 3.10）。
 
-    09-03 修复（A-2）：删除「章节缺失 → 全文搜索」的降级路径。原降级把 MEMORY.md 中
-    任何 `vN.N`（技能版本号/脚本版本号/架构版本号，与备份序号无关）当成备份版本，
-    实测序列被污染成 v5.5 → v5.6 → v2027.0 → v2027.1 → v2027.3 → v2027.4 → v3.7。
-    现改为：章节缺失即返回 "1.0"（宁从头编号，也不猜 —— 橙皮书 EXP-014）。
+    09-03 修复（A-2）：删除「章节缺失 → 全文搜索」的降级路径。
+    09-07 重构（记忆分片）：写入目标从 MEMORY.md 迁移到 topics/ima_history.md
+    （切断对 MEMORY.md 的自动写入，防注入超限）。检测逻辑：
+    1) 优先找「## IMA 备份历史」章节块，只在该块内取版本；
+    2) 章节未建立时（迁移初期）取全文 vN.N —— 分片正文当前仅含备份序列
+       v3.7 至 v4.1，无其他版本号，安全；major>=1000 护栏保留。
+    章节缺失且全文无版本号 → 返回 "1.0"（宁从头编号，也不猜 —— EXP-014）。
     """
-    memory_md = Path(CFG["memory_md_path"])
-    if not memory_md.exists():
+    hist = Path(CFG.get("ima_history_path", ""))
+    if not hist.exists():
         return "1.0"
 
-    content = memory_md.read_text(encoding="utf-8")
+    content = hist.read_text(encoding="utf-8")
 
-    # 只从 IMA 备份历史章节取（兼容「最近5条」等后缀）
+    # 优先：只从 IMA 备份历史章节取（兼容「最近5条」等后缀）
     section = re.search(r"## IMA 备份历史[^\n]*\n(.*?)(?=\n## |\Z)", content, re.DOTALL)
-    if not section:
-        return "1.0"
+    scope = section.group(1) if section else content
 
-    versions = re.findall(r"\bv(\d+\.\d+)\b", section.group(1))
+    versions = re.findall(r"\bv(\d+\.\d+)\b", scope)
     if not versions:
         return "1.0"
 
     latest = max(versions, key=lambda v: [int(x) for x in v.split(".")])
     major, minor = [int(x) for x in latest.split(".")]
-    # 合理性护栏：备份版本不应出现荒谬量级（> 1000 说明章节混入了非备份版本号）
+    # 合理性护栏：备份版本不应出现荒谬量级（> 1000 说明混入了非备份版本号）
     if major >= 1000:
         return "1.0"
     minor += 1
@@ -636,28 +688,28 @@ def _detect_ima_version():
 
 
 def _append_ima_history(note_id, version, date_str):
-    """追加一行到 MEMORY.md 的 IMA 备份历史表。
+    """追加一行到 topics/ima_history.md 的 IMA 备份历史表。
 
-    08-31 修复：原实现用 4 列管道表格正则，而 MEMORY.md 该节实为一行纯文本
-    （如 `v6.6(08-26) ...`），正则永远匹配不到 → 静默 return、从未生效。
-    现改为在 `## IMA 备份历史` 标题行后插入，表格与纯文本均兼容。
+    09-07 重构（记忆分片）：写入目标从 MEMORY.md 迁移到 topics/ima_history.md
+    （切断对 MEMORY.md 的自动写入 —— 防注入超限的唯一自动增长源）。
+    08-31 修复保留：在 `## IMA 备份历史` 标题行后插入；标题缺失则自愈新建章节。
     返回 bool 供调用方校验，失败不静默。
     """
-    memory_md = Path(CFG["memory_md_path"])
-    if not memory_md.exists():
+    hist = Path(CFG.get("ima_history_path", ""))
+    if not hist.exists():
         return False
-    content = memory_md.read_text(encoding="utf-8")
+    content = hist.read_text(encoding="utf-8")
     new_row = f"- v{version} | note_id={note_id} | {date_str} | l3_publish.py 自动备份"
     pattern = r"(## IMA 备份历史[^\n]*\n)"
     m = re.search(pattern, content)
     if m:
         content = content.replace(m.group(1), m.group(1) + new_row + "\n", 1)
     else:
-        # 自愈：标题行缺失则新建章节，避免每次发布告警 + 版本碰撞防护失效
+        # 自愈：标题行缺失则新建章节（topics/ima_history.md 迁移初期无此标题）
         if not content.endswith("\n"):
             content += "\n"
         content += f"\n## IMA 备份历史\n{new_row}\n"
-    memory_md.write_text(content, encoding="utf-8")
+    hist.write_text(content, encoding="utf-8")
     return True
 
 
@@ -675,9 +727,9 @@ def phase2_ima(date_str, dry_run, force, res):
     if version == "1.0":
         # 章节缺失/混入异常 → 重置为 1.0。此时必须显式告警，否则 AI 会把
         # 「IMA 版本回到 v1.0」当成正常进位而忽视（09-03 教训：v2027.x → v3.7
-        # 的暴跌曾被视为正常）。另将本次写入的脏历史在追加阶段标注（见 _append_ima_history）。
-        res.warn(2, "MEMORY.md 无有效 IMA 备份历史章节，备份版本重置为 v1.0，"
-                    "请人工确认 MEMORY.md 结构与真实备份序列")
+        # 的暴跌曾被视为正常）。
+        res.warn(2, "topics/ima_history.md 无有效备份版本号，备份版本重置为 v1.0，"
+                    "请人工确认 topics/ima_history.md 与真实备份序列")
 
     cmd = [
         CFG["python_path"],
@@ -716,10 +768,10 @@ def phase2_ima(date_str, dry_run, force, res):
             with open(auto_mem, "a", encoding="utf-8") as f:
                 f.write(f"- IMA: note_id {note_id}\n")
 
-        # 追加到 MEMORY.md 的 IMA 备份历史表（防止版本号撞车）
+        # 追加到 topics/ima_history.md 的备份历史表（防止版本号撞车；09-07 起不再写 MEMORY.md）
         if note_id:
             if not _append_ima_history(note_id, version, date_str):
-                res.warn(2, "MEMORY.md IMA 备份历史追加失败（标题行未找到），请人工补记")
+                res.warn(2, "topics/ima_history.md 追加失败（文件缺失或写入异常），请人工补记")
 
         return note_id or "ok"
 
@@ -742,7 +794,9 @@ def phase3_git(date_str, topic, dry_run, force, res, verify=True):
     # Step 3.1: 同步技能文件到 Git 仓库
     src_base = Path(CFG["references_dir"]).parent  # ~/.workbuddy/skills/daily-why-writer/
     skill_md = src_base / "SKILL.md"
-    refs = ["references/FORBIDDEN.md", "references/CHECKLIST.md", "references/FEEDBACK_LOG.md"]
+    # 09-07 新增 GAP_PATTERNS.md（A 方案数据层，reviewer_prompt v2.8 Step 5.9 依赖）
+    refs = ["references/FORBIDDEN.md", "references/CHECKLIST.md",
+            "references/FEEDBACK_LOG.md", "references/GAP_PATTERNS.md"]
     # Reviewer 独立审校 prompt（v2.0 主路径资产，纳入推送）
     reviewer_prompt = src_base / "reviewer_prompt.md"
     # L3 发布技能文件
@@ -790,6 +844,8 @@ def phase3_git(date_str, topic, dry_run, force, res, verify=True):
         # 与 git_add_files 同步补入（双向自检见下）。
         (scripts_dir / "format_checker.py", "format_checker.py"),
         (scripts_dir / "validate_article.py", "validate_article.py"),
+        # 09-07 新增：review.json schema 校验器（A 方案脚本层，校验 gap_checks 等强制输出物）
+        (scripts_dir / "validate_review.py", "scripts/validate_review.py"),
         (scripts_dir / "prepare_topics.py", "prepare_topics.py"),
         (scripts_dir / "update_history.py", "update_history.py"),
         (project_dir / "config" / "version.json", "version.json"),
@@ -799,6 +855,10 @@ def phase3_git(date_str, topic, dry_run, force, res, verify=True):
         (src_base / "references" / "EXAMPLES.md", "references/EXAMPLES.md"),
         (scripts_dir / "auto_fix.py", "auto_fix.py"),
         (scripts_dir / "case_matcher.py", "case_matcher.py"),
+        # E 组补全（09-07 决策3）：记忆治理脚本纳入同步（方案 C v2 落地产物；
+        # Master 拍板「加入 git 同步」，双向自检要求 git_add_files 与 extra_sync 逐项对齐）
+        (scripts_dir / "check_memory_size.py", "scripts/check_memory_size.py"),
+        (scripts_dir / "restructure_memory.py", "scripts/restructure_memory.py"),
     ]
     for src, rel in extra_sync:
         if src.exists():
@@ -846,15 +906,18 @@ def phase3_git(date_str, topic, dry_run, force, res, verify=True):
     )
     if not r.stdout.strip():
         # 工作树干净：仍可能有「已提交但未推送」的 commit（如网络失败重试场景）
-        ahead = subprocess.run(
-            ["git", "rev-list", "--count", "origin/main..HEAD"],
-            cwd=str(repo), capture_output=True, text=True
-        )
-        try:
-            ahead_n = int((ahead.stdout or "").strip() or 0)
-        except ValueError:
-            ahead_n = 0
-        if ahead_n > 0:
+        #
+        # ⚠️ 09-07 P0 修复（常驻缺陷 38）：禁止用本地 origin/main 判 ahead。
+        # 实证：origin/main 引用变 [gone] 时，`git rev-list --count origin/main..HEAD`
+        # 报错且错误信息进 stderr，stdout 为空 → int("") → 0 → 判「无新变更，跳过」
+        # → 已提交的 commit 永远推不上去，而日志看起来完全正常。
+        # 09-07 实测：本地 bcc6dca 未推送、远端停在 3cb3e1f，正是走这条路径。
+        #
+        # 改用权威校验 verify_remote_sync()：其内含 ls-remote 取远端真值，并调用
+        # force_write_remote_ref() 自愈写 loose ref，可正确处理 [gone] 场景。
+        vstatus, vmsg = verify_remote_sync(repo, CFG.get("git_verify_timeout", 20))
+        if vstatus == "mismatch":
+            # 远端确实落后于本地 → 补推已提交但未推送的 commit
             push_timeout = CFG.get("git_push_timeout", 30)
             # 09-01 增强：函数内置网络探活+退避重试，外层不再二次调用
             success, err_msg, _ = git_pull_rebase_push(repo, push_timeout)
@@ -867,7 +930,15 @@ def phase3_git(date_str, topic, dry_run, force, res, verify=True):
             )
             commit_hash = r.stdout.strip() if r.returncode == 0 else "unknown"
             return report_git_result(res, repo, f"补推已提交 commit={commit_hash}", verify)
-        res.skip(3, "无新变更，跳过")
+        if vstatus == "unverified":
+            # 网络不通/远端不可判：绝不能当「无新变更」静默跳过（09-07 头号教训：
+            # 假绿比报错更危险 —— 今日 bcc6dca 未推送却显示「无变更，跳过」）
+            res.warn(3, f"远端状态未核验，无法确定是否存在未推送 commit: {vmsg}")
+            return "unverified"
+        if vstatus == "ok_unfixed":
+            res.warn(3, f"远端核验一致，但本地 origin/main 引用未能同步: {vmsg}")
+            return "no_changes"
+        res.skip(3, "无新变更（远端 ls-remote 核验一致），跳过")
         return "no_changes"
 
     changed_count = len(r.stdout.strip().splitlines())
@@ -1198,6 +1269,35 @@ def check_version_consistency(res):
                         "（不一致！改版本号前必须先改 config/version.json）")
 
 
+def check_memory_health(res):
+    """Phase 0 记忆体积门禁（09-07 新增，记忆分片重构配套）：warn 不阻断。
+
+    复用 scripts/check_memory_size.py 的目标表（工作空间/用户级 MEMORY.md 字符上限
+    + automation memory.md 行数上限）。EXP-004：约束优于指令，体积必须机械校验。
+    策略与 validate_review.py（Phase 1.4）一致：新门禁先 warn 观察一周，无误报后升阻断。
+    try/except 全包：门禁自身故障不得影响发布主流程。
+    """
+    try:
+        sys.path.insert(0, str(Path(__file__).resolve().parent))
+        import check_memory_size as _cms
+        for name, path, limit, warn_at, metric in _cms.DEFAULT_TARGETS:
+            r = _cms.check_one(name, path, limit, warn_at, metric)
+            if r.get("error"):
+                continue
+            unit = r.get("unit", "字符")
+            tag = "[记忆]"
+            if r.get("over"):
+                res.warn(0, f"{tag} {name} 超限: {r['chars']} / {limit} {unit}，"
+                            "须先压缩或分片（记忆只准经 topics/ 分片全文下沉，禁止删历史）")
+            elif r.get("warn"):
+                res.warn(0, f"{tag} {name} 接近上限: {r['chars']} / {limit} {unit}，"
+                            "本次写入请只做合并索引，勿增新段")
+            else:
+                res.ok(0, f"{tag} {name} 合规 ({r['chars']} {unit})")
+    except Exception as e:  # noqa: BLE001 门禁故障不阻断发布
+        res.warn(0, f"[记忆] 体积门禁执行异常（不阻断）: {e}")
+
+
 # ── Main ─────────────────────────────────────────────
 
 def main():
@@ -1269,6 +1369,9 @@ def main():
 
     # Phase 0: 版本号一致性校验（09-01 S-2：权威源 config/version.json）
     check_version_consistency(res)
+
+    # Phase 0: 记忆体积门禁（09-07 新增：warn 不阻断，观察一周后评估升阻断）
+    check_memory_health(res)
 
     # Phase 0: 扫描文件
     articles = scan_articles(date_str)
