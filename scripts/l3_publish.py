@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-L3 Publish v3.9 — daily-why 自包含发布脚本
+L3 Publish v3.12 — daily-why 自包含发布脚本
 零 AI 依赖，一条命令跑完：匹配检查、IMA 备份、GitHub 推送、执行日志归档
 
 Usage:
@@ -20,7 +20,7 @@ from pathlib import Path
 
 # ── 常量 ──────────────────────────────────────────────
 
-VERSION = "v3.11"              # 09-07 决策3：记忆治理脚本纳入 git 同步（check_memory_size.py / restructure_memory.py 入 extra_sync + git_add_files）
+VERSION = "v3.12"              # 09-08 记忆治理 v3 全量落地（阶段5 门禁前置 L1 + 强制输出物接线 + 动态配额 + 衰减/零损失/写入准入脚本入 extra_sync）
 MIN_A_CONTENT_CHARS = 50   # A 段最少有效字符数
 MAX_IMPROVEMENTS_CHECK = 10  # 最多检查的改进点数量
 
@@ -859,6 +859,12 @@ def phase3_git(date_str, topic, dry_run, force, res, verify=True):
         # Master 拍板「加入 git 同步」，双向自检要求 git_add_files 与 extra_sync 逐项对齐）
         (scripts_dir / "check_memory_size.py", "scripts/check_memory_size.py"),
         (scripts_dir / "restructure_memory.py", "scripts/restructure_memory.py"),
+        # F 组（09-08 v3 闸门 4）：铁律衰减与淘汰门禁（10 天降级 / 20 天下沉 / 再犯即升）
+        (scripts_dir / "memory_decay.py", "scripts/memory_decay.py"),
+        # 零损失校验：记忆下沉后核对被删事实能否在 topics/ 找回（v3 闸门 0）
+        (scripts_dir / "verify_memory_migration.py", "scripts/verify_memory_migration.py"),
+        # 写入准入：写 MEMORY.md 前先算账，回答「加 N 字符后总量与该区是否还放得下」（v3 闸门 5）
+        (scripts_dir / "memory_budget.py", "scripts/memory_budget.py"),
     ]
     for src, rel in extra_sync:
         if src.exists():
@@ -1294,6 +1300,16 @@ def check_memory_health(res):
                             "本次写入请只做合并索引，勿增新段")
             else:
                 res.ok(0, f"{tag} {name} 合规 ({r['chars']} {unit})")
+
+            # v3 闸门 2/3（09-08 新增）：分区配额 + 单行长度。
+            # 背景：总量合规不等于各区合规，09-08 实测 0.72x 时架构区已超配额 133。
+            # 只报不阻断，与总量门禁同一策略（先 warn 观察）。
+            for s in r.get("section_issues", []):
+                res.warn(0, f"{tag} 分区超配额: {s['section']} {s['chars']}/{s['quota']} 字符"
+                            f"（超 {s['over']}）→ 须把该区细节下沉到 topics/ 分片，主文件只留指针行")
+            for ln in r.get("long_lines", []):
+                res.warn(0, f"{tag} 超长行 L{ln['line']}: {ln['chars']} 字符"
+                            f"（上限 {_cms.MAX_LINE_CHARS}）→ 须拆行或下沉，禁止把内容压进更长的单行")
     except Exception as e:  # noqa: BLE001 门禁故障不阻断发布
         res.warn(0, f"[记忆] 体积门禁执行异常（不阻断）: {e}")
 

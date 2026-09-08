@@ -292,8 +292,14 @@ def generate_multi_agent_prompt(rules: dict, recent_topics: list = None) -> str:
   5. Read 加载 `{SKILL_DIR}/reviewer_prompt.md`，**严格执行其中的 P0/P1/P2 分级标准**：P0=事实错误/逻辑矛盾/结构缺失；P1=AI味/连接词≥3、字数>690、类比失准、**绝对化**；P2=措辞微调。凡命中「绝对化/类比失准/字数>690」至少标 P1，**禁止降为 P2**
   6. **事实断言独立核验**：对文中人物/机构/亲缘关系/年份/数据类断言，用 WebSearch 独立核实至少 2 处关键断言，发现事实错误标记 P0
   7. 最小结构验证（不依赖 SKILL.md 写作规则）：A段引用块（>开头）、C段Q格式（**Q1/Q2/Q3：**）、F段引用块含"冷知识反转"标签、结尾风格表格（四行）。任一缺失即 P0 结构缺失
-  8. 输出审核报告**写入文件** `F:/WorkBuddy/daily-why/review/{{今天日期}}_review.json`（含 pass/p0_count/p1_count/p2_count/score/review_timestamp/issues 数组，每项含 level/category/description/suggestion）。**`review_timestamp` 必须先用 Bash 执行 `date +%Y-%m-%dT%H:%M:%S%z` 取系统真实时间写入，禁止自行推断或编造时间**。并在最终回复文本中回报审校结论（SendMessage 在本地 automation 环境不可用，以文本回报兜底）
-  9. 通过条件：P0=0 且 P1≤2
+  8. **强制输出物（v2.8 无条件强制，缺一即判审校无效）**：写入的 review.json 必须包含以下 6 个键：
+     - `fact_checks` ≥2 条，每条含 `detail_verified` 字段
+     - `quote_checks` / `mechanism_checks` / `attribution_checks` 三个键**必须存在**（可为空数组，键名不得省略）
+     - `term_checks`：文中含医学或解剖学术语时 ≥1 条（含 `term`/`used`/`correct`/`exact`）
+     - `gap_checks`：**必须 7 条**（G-01 至 G-07；条数以 `{SKILL_DIR}/references/GAP_PATTERNS.md` 实际类型总数为准，不要写死），每条含 `pattern_id`/`triggered`/`checked`/`finding`，**且全部 `checked=true`**
+     判定方式：上述任一缺失 → 本次审校无效，要求 Reviewer 补写后重新判定，**不得据此放行**。G-01（安全性闭环）与 G-02（绝对化）为当前最高发漏判类型，重点核查
+  9. 输出审核报告**写入文件** `F:/WorkBuddy/daily-why/review/{{今天日期}}_review.json`（含 pass/p0_count/p1_count/p2_count/score/review_timestamp/issues 数组，每项含 level/category/description/suggestion）。**`review_timestamp` 必须先用 Bash 执行 `date +%Y-%m-%dT%H:%M:%S%z` 取系统真实时间写入，禁止自行推断或编造时间**。并在最终回复文本中回报审校结论（SendMessage 在本地 automation 环境不可用，以文本回报兜底）
+  10. 通过条件：P0=0 且 P1≤2（且第 8 条的强制输出物齐备）
 
 **等待策略（文件检测优先）**：
 1. spawn 成功后每 1 分钟轮询检查 `F:/WorkBuddy/daily-why/review/{{今天日期}}_review.json` 是否已生成
@@ -308,6 +314,11 @@ def generate_multi_agent_prompt(rules: dict, recent_topics: list = None) -> str:
 
 ## 阶段3：修复+输出（Orchestrator 根据审校报告）
 
+- **先机械校验，再使用审校结论（09-08 新增，v3 闸门）**：拿到 review.json 后，先运行
+  `{PYTHON} F:/WorkBuddy/daily-why/scripts/validate_review.py "F:/WorkBuddy/daily-why/review/{{今天日期}}_review.json"`
+  - 输出含「🔴 错误」→ **本次审校无效**：把错误清单原样回传 Reviewer 要求补写，重新 spawn（计入下方 2 轮上限）
+  - 仅含「⚠️ 提示」→ 在回报中列出，继续流程
+  - **禁止跳过此步直接按审校结论放行**（09-08 实证：v1 review.json 缺 6 个键，因无人机械校验而一路放行到发布）
 - 通过（P0=0且P1≤2）→ 直接进入输出
 - 不通过 → 根据报告中的 issues 修复文章 → 写入文件 → 重新 spawn Reviewer 审校（最多2轮）
 - 2轮后仍不通过 → 标记"⚠️ 需人工审核"，输出当前最佳版本
@@ -325,7 +336,22 @@ def generate_multi_agent_prompt(rules: dict, recent_topics: list = None) -> str:
    ```bash
    mkdir -p "F:/WorkBuddy/daily-why/投喂素材/{{YYYYMMDD}}" && touch "F:/WorkBuddy/daily-why/投喂素材/{{YYYYMMDD}}/ds.txt" "F:/WorkBuddy/daily-why/投喂素材/{{YYYYMMDD}}/ima.txt" "F:/WorkBuddy/daily-why/投喂素材/{{YYYYMMDD}}/千问.txt" "F:/WorkBuddy/daily-why/投喂素材/{{YYYYMMDD}}/豆包.txt"
    ```
-3. 输出：✅ 已创建投喂素材文件夹 `F:/WorkBuddy/daily-why/投喂素材/{{YYYYMMDD}}/`，含4个空txt文件（ds.txt、ima.txt、千问.txt、豆包.txt）"""
+3. 输出：✅ 已创建投喂素材文件夹 `F:/WorkBuddy/daily-why/投喂素材/{{YYYYMMDD}}/`，含4个空txt文件（ds.txt、ima.txt、千问.txt、豆包.txt）
+
+## 阶段5：记忆体积门禁（收尾前必执行，v3 闸门 1 至 3）
+
+1. 运行 `{PYTHON} F:/WorkBuddy/daily-why/scripts/check_memory_size.py --strict-sections`
+2. 退出码 0 → 回报中输出「✅ 记忆门禁通过（实际字符数 / 3000）」并收尾
+3. 退出码非 0 → **先修复再收尾，禁止带着红线结束**：
+   - 分区超配额 → 把该区细节下沉到 `.workbuddy/memory/topics/` 对应分片，主文件只留一行指针
+   - 超长行（>120 字符）→ 拆成多行。**禁止把内容压进更长的单行**（那是伪精简，history 项目已踩过）
+   - 总量超限 → 优先下沉铁律区与架构区
+4. 下沉前先快照：`cp .workbuddy/memory/MEMORY.md archive/MEMORY-pre-{{动作描述}}-{{今天日期}}.md`
+5. 下沉后必须校验零损失：`{PYTHON} F:/WorkBuddy/daily-why/scripts/verify_memory_migration.py --snapshot archive/MEMORY-pre-{{动作描述}}-{{今天日期}}.md`
+   退出码非 0（存在 LOST）→ 把丢失内容补回分片后重跑，不得留着丢失项收尾
+6. 附带运行 `{PYTHON} F:/WorkBuddy/daily-why/scripts/memory_decay.py`；若输出含「待降级」或「待下沉」，在回报中列出条目编号，本次不强制处理
+
+【硬约束】本阶段未完成，不得输出最终总结。门禁结果必须写进最终回报，写明「通过 / 修复了什么 / 下沉到哪个分片」，**禁止只说「已检查」**——只说「已检查」等同于没做（EXP-014 可观测性即诚实性）。"""
 
     return prompt
 
