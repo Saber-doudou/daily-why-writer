@@ -1,13 +1,13 @@
 {
   "_comment": "Daily Why 四技能版本号唯一权威源（2026-09-01 建，打破「版本号易腐」反复复发）。l3_publish.py 发布前读取本文件，校验各技能 SKILL.md 实际版本号与之一致，不一致告警。新增/修改技能版本号必须先改本文件。",
-  "_updated": "2026-09-07",
+  "_updated": "2026-09-08",
   "skills": {
     "daily-why-writer": {
-      "version": "v3.2",
+      "version": "v3.3",
       "version_field": "frontmatter.version",
       "file": "C:/Users/admin/.workbuddy/skills/daily-why-writer/SKILL.md",
       "repo_file": "SKILL.md",
-      "_note": "reviewer_prompt.md 子文件现 v2.7（09-05 达尔文 Round1+2+3 升级：Round1 修 schema 三处矛盾、Round2 软指令转强制输出物攻漏判率100%、Round3 新增 Step5.8 术语精度核验+fact_checks.omission_severity）。版本号仍不在此处跟踪，由文件自身标题/脚注维护"
+      "_note": "09-08 v3.3：+FP-68(生化作用程度说满+同文存活机制自相矛盾)+CHECKLIST §91案例补充(流传轶事须查辟谣源)。09-01 v3.2：达尔文 Round2。reviewer_prompt.md 子文件现 v2.7（09-05 达尔文 Round1+2+3 升级）。版本号仍不在此处跟踪，由文件自身标题/脚注维护"
     },
     "daily-why-publish": {
       "version": "v3.11",
