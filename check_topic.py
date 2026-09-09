@@ -185,6 +185,9 @@ def check_topic(topic: str, workspace: Path, threshold: float = OVERLAP_THRESHOL
             with open(context_file, 'r', encoding='utf-8') as f:
                 context = json.load(f)
 
+            # 注意：topic_summaries 为字符串列表（无 date 字段），无法按 exclude_date 排除当日自身。
+            # 依赖时序假设：L3 发布流程在 dedup_gate_check 之后才将当日话题写入 topics_context，
+            # 故查重时 topic_summaries 不含当日条目。若改为「先写后查」，须给 topic_summaries 条目补 date 字段并加排除逻辑。
             # 精确匹配 + 收集话题
             for existing in context.get("topic_summaries", []):
                 norm_existing = normalize_topic(existing)

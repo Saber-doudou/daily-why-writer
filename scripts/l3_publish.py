@@ -21,7 +21,7 @@ from pathlib import Path
 
 # ── 常量 ──────────────────────────────────────────────
 
-VERSION = "v3.14"              # 09-09 去重卡点自匹配修复（check_topic --exclude-date 排除当日自身，v3.13 硬卡点首跑 100% 误杀）；09-09 v3.13 去重硬卡点接入 L3 自动化+ 09-08 记忆治理 v3 全量落地（阶段5 门禁前置 L1 + 强制输出物接线 + 动态配额 + 衰减/零损失/写入准入脚本入 extra_sync）
+VERSION = "v3.16"              # 09-09 v3.16：引用机械门禁（正文含引用且 quote_checks 空 → 硬阻断）；CHANGELOG 补记 v3.15；去重自匹配修复 v3.14；去重硬卡点 v3.13 补记机制落地（补 09-07/08/09 三波欠账 + L3 SKILL 加「重大改造必更新 CHANGELOG」步骤 + git_add_files 纳入 CHANGELOG.md 真进 GitHub）；顺带修 S1(topics_context 当日写入时序约定) / S2(date_str 缺失静默退化改 warn)；v3.14 去重卡点自匹配修复（check_topic --exclude-date）；v3.13 去重硬卡点接入 L3 + 09-08 记忆治理 v3 落地
 MIN_A_CONTENT_CHARS = 50   # A 段最少有效字符数
 MAX_IMPROVEMENTS_CHECK = 10  # 最多检查的改进点数量
 
@@ -462,6 +462,8 @@ def dedup_gate_check(articles, res, date_str=None):
         cmd = [py, str(ck), topic]
         if date_str:
             cmd += ["--exclude-date", date_str]
+        else:
+            res.warn(0, "dedup_gate_check 未收到 date_str，去重不排除当日自身（潜在自匹配误杀风险）")
         try:
             r = subprocess.run(
                 cmd,
@@ -685,12 +687,22 @@ def phase1_match_check(v1_path, v2_path, summary_path, dry_run, res):
             _vr = None
             res.warn(1, "review schema 校验器不可用（validate_review.py 导入失败）")
         if _vr:
+            # 09-09 引用门禁：定位当日文章正文（优先优化版），供 validate_review 检测正文引用
+            _arts_dir = _base / "articles"
+            _article_path = None
+            for _pat in (f"{_d}-优化版-每日冷知识-*.md", f"{_d}-每日冷知识-*.md"):
+                _cands = sorted(_arts_dir.rglob(_pat)) if _arts_dir.exists() else []
+                if _cands:
+                    _article_path = _cands[-1]   # 取最新一篇（articles/YYYY-MM 子目录下递归查找）
+                    break
+            if _article_path is None:
+                res.warn(1, "未找到当日文章正文，引用门禁 fail-open 跳过（请确认 articles/ 下存在当日文件）")
             for _tag, _rp in (("v1", _base / "review" / f"{_d}_review.json"),
                               ("v2", _base / "review" / f"{_d}_v2_review.json")):
                 if not _rp.exists():
                     continue
                 try:
-                    _v = _vr.validate(_rp)
+                    _v = _vr.validate(_rp, article_path=_article_path)
                 except Exception as _e:      # 校验器自身异常不得影响发布主流程
                     res.warn(1, f"[review schema {_tag}] 校验器异常: {_e}")
                     continue
@@ -700,6 +712,13 @@ def phase1_match_check(v1_path, v2_path, summary_path, dry_run, res):
                     "warnings": _v["warnings"],
                     "stats": _v["stats"],
                 }
+                # 09-09 引用门禁：命中「正文有引用但 quote_checks 空」→ 硬阻断 L3 发布
+                # （与 dedup_gate_check 同构：检测到即 sys.exit(1)，逼回 Reviewer 补 quote_checks）
+                if _v.get("blocking"):
+                    for _b in _v["blocking"][:3]:
+                        res.fail(1, f"[review schema {_tag}] 引用门禁未过: {_b}")
+                    res.fail(1, f"[review schema {_tag}] 引用门禁未过，L3 终止发布（回到 Reviewer 补 quote_checks 后重试）")
+                    sys.exit(1)
                 _ne, _nw = len(_v["errors"]), len(_v["warnings"])
                 if _ne:
                     for _e in _v["errors"][:3]:

@@ -56,17 +56,52 @@ REQUIRED_TOP_ANY = {
 }
 
 # 命中这些特征说明文中含「具体研究引用」，按 reviewer_prompt 自检清单第 5 项
-# 要求 quote_checks ≥ 1 条
+# 要求 quote_checks ≥ 1 条。
+# 09-09 改造：收窄为精确信号，避免泛词（研究显示/实验表明/大学/期刊/论文）误杀正常科普文。
+#   可靠信号：① 书名号包裹且含年份的文献；② 明确期刊名（《自然》《Science》等）；
+#            ③ 年份+机构+研究动词；④ et al. / DOI 等文献标识。
 CITATION_HINT = re.compile(
-    r"(19|20)\d{2}\s*年|《[^》]+》|期刊|论文|研究团队|大学|样本|受试者|"
-    r"et al\.|Journal|University|研究显示|实验表明|数据来自",
+    r"(?:"
+    r"《[^》]{2,}》.*?(?:19|20)\d{2}"                                  # 《XX》+年份（引用文献通常带年份）
+    r"|《(?:自然|科学|细胞|物理|化学|Nature|Science|Cell)[^》]*》"        # 明确期刊名
+    r"|(?:19|20)\d{2}\s*年[^。，]{0,20}?(?:大学|研究院|学院|团队|实验室|机构)"
+      r"[^。，]{0,10}?(?:研究|发表|发现|实验|报告)"                       # 年份+机构+研究动词
+    r"|\bet al\.|DOI:|doi:"                                            # 文献标识
+    r")",
     re.I,
 )
 
 
-def validate(path: Path) -> dict:
-    """返回 {ok, errors, warnings, stats}"""
+def _has_quote_verification(data: dict) -> bool:
+    """文中含具体引用时，是否已存在逐字核验留痕。
+
+    留痕可能位于 quote_checks（理想位置）或 fact_checks（Reviewer 实际常把引用核验
+    放入 fact_checks，含 DOI/期刊/作者年份逐项 match）。两者任一存在即视为已核验，
+    避免门禁误杀真实已做核验的文章（EXP-004：约束要对准真问题，而非字段僵化）。
+    """
+    qc = data.get("quote_checks")
+    if isinstance(qc, list) and len(qc) > 0:
+        return True
+    fc = data.get("fact_checks")
+    if isinstance(fc, list):
+        for item in fc:
+            if not isinstance(item, dict):
+                continue
+            src = item.get("source", "") or ""
+            # 只查 source（引用留痕指向原始论文/期刊），不查 claim（claim 提到期刊名只是断言内容）
+            if re.search(
+                r"doi\.org|arxiv|10\.\d{4,9}/|《[^》]{2,}》|"
+                r"(?:nature|science|cell)\b|(?:\.edu|\.ac\.|\.gov)",
+                src, re.I,
+            ):
+                return True
+    return False
+
+
+def validate(path: Path, article_path: Path | None = None) -> dict:
+    """返回 {ok, errors, warnings, stats, blocking}"""
     errors, warnings = [], []
+    blocking = []   # 会触发 L3 发布中断的错误（引用门禁）
     stats = {}
 
     try:
@@ -110,14 +145,26 @@ def validate(path: Path) -> dict:
 
     # 5. 条件非空：文中含具体研究引用时 quote_checks 至少 1 条
     #    （reviewer_prompt v2.6 落盘前自检清单第 5 项）
-    blob = json.dumps(data, ensure_ascii=False)
-    has_citation = bool(CITATION_HINT.search(blob))
-    qc = data.get("quote_checks", [])
-    if has_citation and isinstance(qc, list) and len(qc) == 0:
-        warnings.append(
-            "文中疑似含具体研究引用（期刊/年份/样本/机构），但 `quote_checks` 为空 —— "
-            "按 reviewer_prompt 自检清单第 5 项应 ≥1 条；若确认无逐字引用可忽略"
+    #    09-09 改造：优先用「文章正文」检测引用（article_path），避免只查 review json 漏检正文引用；
+    #    article_path 缺失时 fail-open 退回 review blob（不误杀，但可能漏检——仅 warn 不阻断）。
+    _search_text = ""
+    if article_path and Path(article_path).exists():
+        try:
+            _search_text = Path(article_path).read_text(encoding="utf-8")
+        except OSError:
+            _search_text = ""
+    if not _search_text:
+        _search_text = json.dumps(data, ensure_ascii=False)
+    has_citation = bool(CITATION_HINT.search(_search_text))
+    if has_citation and not _has_quote_verification(data):
+        _msg = (
+            "引用门禁未过：文中含具体研究引用（期刊/年份/机构），但 `quote_checks` 与 `fact_checks` "
+            "均未发现逐字引用核验留痕 —— 按 reviewer_prompt 自检清单第 5 项必须 ≥1 条逐字引用核验；"
+            "请回到 Reviewer 补 `quote_checks`（或确保 fact_checks 含 DOI/期刊/作者年份的逐项核验）后重试"
+            "（机械门禁，EXP-004 约束优于指令）"
         )
+        errors.append(_msg)
+        blocking.append(_msg)
 
     # 6. 全字段判 true 的可疑信号（EXP-004 反例：填了字段≠填对）
     #    若 mechanism/attribution 全部为 true 且条数 ≥2，提示人工复核而非判错
@@ -174,7 +221,7 @@ def validate(path: Path) -> dict:
                 (errors if enforce else warnings).append(msg)
 
     ok = not errors and not warnings
-    return {"ok": ok, "errors": errors, "warnings": warnings, "stats": stats}
+    return {"ok": ok, "errors": errors, "warnings": warnings, "stats": stats, "blocking": blocking}
 
 
 def count_gap_patterns() -> int:
@@ -192,6 +239,7 @@ def main() -> int:
     p.add_argument("review_json", help="review.json 路径")
     p.add_argument("--json", action="store_true", help="输出机器可读 JSON")
     p.add_argument("--strict", action="store_true", help="有警告也判失败")
+    p.add_argument("--article", help="文章正文路径（引用门禁检测源，优先于 review blob）")
     args = p.parse_args()
 
     path = Path(args.review_json)
@@ -199,7 +247,7 @@ def main() -> int:
         print(f"❌ 文件不存在: {path}", file=sys.stderr)
         return 2
 
-    r = validate(path)
+    r = validate(path, article_path=Path(args.article) if args.article else None)
 
     if args.json:
         print(json.dumps({"file": str(path), **r}, ensure_ascii=False, indent=2))
