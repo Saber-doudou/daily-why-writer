@@ -969,6 +969,9 @@ def phase3_git(date_str, topic, dry_run, force, res, verify=True):
         (scripts_dir / "verify_memory_migration.py", "scripts/verify_memory_migration.py"),
         # 写入准入：写 MEMORY.md 前先算账，回答「加 N 字符后总量与该区是否还放得下」（v3 闸门 5）
         (scripts_dir / "memory_budget.py", "scripts/memory_budget.py"),
+        # 09-09 v3.16 修复：CHANGELOG.md 此前仅入 git_add_files 漏加复制源，
+        # 导致自身从未进 repo（09-09 审计发现）。现补复制（EXP-004：约束要对齐真问题）
+        (project_dir / "CHANGELOG.md", "CHANGELOG.md"),
     ]
     for src, rel in extra_sync:
         if src.exists():
