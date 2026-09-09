@@ -155,7 +155,8 @@ def extract_topic_from_article(filepath: Path) -> str | None:
 
 
 def check_topic(topic: str, workspace: Path, threshold: float = OVERLAP_THRESHOLD,
-                angle_mode: bool = False) -> tuple[bool, str]:
+                angle_mode: bool = False,
+                exclude_date: str | None = None) -> tuple[bool, str]:
     """
     检查话题是否已使用过（两层检测：精确匹配 + 语义相似）。
 
@@ -165,6 +166,9 @@ def check_topic(topic: str, workspace: Path, threshold: float = OVERLAP_THRESHOL
         threshold: 判重复的相似度阈值（默认 0.70，可被 --threshold 覆盖）
         angle_mode: 角度模式；开启后相似度落在 [ANGLE_THRESHOLD, threshold) 区间的话题放行，
                     返回 False 且 detail 含"⚠️ 角度相关（相似度 X%）"提示
+        exclude_date: 排除该日期（YYYY-MM-DD）的自身记录，避免「自己匹配自己」。
+                     09-09 修复：L3 去重卡点校验当日文章时，articles/ 中当日文件与
+                     topics_context 当日条目均须排除，否则恒判重复。
 
     返回: (is_duplicate: bool, detail: str)
     """
@@ -190,6 +194,8 @@ def check_topic(topic: str, workspace: Path, threshold: float = OVERLAP_THRESHOL
 
             for entry in context.get("topics", []):
                 entry_topic = entry.get("topic", "")
+                if exclude_date and str(entry.get("date", "")) == exclude_date:
+                    continue  # 排除当日自身条目
                 norm_entry = normalize_topic(entry_topic)
                 if norm_entry == normalized:
                     return True, (
@@ -203,6 +209,8 @@ def check_topic(topic: str, workspace: Path, threshold: float = OVERLAP_THRESHOL
 
     # === 检查 2: 扫描已有文章文件 ===
     for md_file in sorted(workspace.glob("articles/**/*-每日冷知识*.md")):
+        if exclude_date and md_file.name.startswith(exclude_date):
+            continue  # 排除当日自身文章（初版/优化版互不匹配）
         file_topic = extract_topic_from_article(md_file)
         if file_topic:
             if normalize_topic(file_topic) == normalized:
@@ -253,6 +261,8 @@ def main():
                         help="角度模式：相似度 0.50 到阈值之间的角度相关话题放行并输出提示")
     parser.add_argument("--workspace", "-w", default=r"F:\WorkBuddy\daily-why",
                         help="工作目录路径")
+    parser.add_argument("--exclude-date", default=None,
+                        help="排除该日期(YYYY-MM-DD)的自身记录，避免自匹配（L3 去重卡点必传）")
     args = parser.parse_args()
 
     if args.threshold <= 0 or args.threshold > 1:
@@ -277,7 +287,8 @@ def main():
 
     workspace = Path(args.workspace)
     is_dup, detail = check_topic(topic, workspace,
-                                 threshold=args.threshold, angle_mode=args.angle)
+                                 threshold=args.threshold, angle_mode=args.angle,
+                                 exclude_date=args.exclude_date)
 
     if is_dup:
         print(f"[check_topic] ❌ 重复: {detail}")

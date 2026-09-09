@@ -15,12 +15,13 @@ import shutil
 import subprocess
 import sys
 import time
+import os
 from datetime import datetime
 from pathlib import Path
 
 # ── 常量 ──────────────────────────────────────────────
 
-VERSION = "v3.12"              # 09-08 记忆治理 v3 全量落地（阶段5 门禁前置 L1 + 强制输出物接线 + 动态配额 + 衰减/零损失/写入准入脚本入 extra_sync）
+VERSION = "v3.14"              # 09-09 去重卡点自匹配修复（check_topic --exclude-date 排除当日自身，v3.13 硬卡点首跑 100% 误杀）；09-09 v3.13 去重硬卡点接入 L3 自动化+ 09-08 记忆治理 v3 全量落地（阶段5 门禁前置 L1 + 强制输出物接线 + 动态配额 + 衰减/零损失/写入准入脚本入 extra_sync）
 MIN_A_CONTENT_CHARS = 50   # A 段最少有效字符数
 MAX_IMPROVEMENTS_CHECK = 10  # 最多检查的改进点数量
 
@@ -397,6 +398,90 @@ def check_idempotency(date_str, force):
             return False
         return True
     return False
+
+
+# ── Phase 0: 话题去重硬卡点（09-09 新增）─────────────────────
+# 把"话题去重"从 AI 软约束升级为代码硬卡点，防止重复选题落盘发布。
+# 设计原则（呼应铁律 EXP-004 约束优于指令 / EXP-014 可观测性）：
+#   1. fail-open：check_topic 自身故障（异常/超时/缺失/参数错）→ 放行+warn，绝不拖垮发布。
+#   2. 人机区分：默认软模式（warn 不阻断）；DAILY_WHY_DEDUP_ENFORCE=1 才硬拦截。
+#   3. 紧急总开关：DAILY_WHY_DEDUP_OFF=1 整体关闭。
+#   4. 话题提取：读文章首行去 emoji（兼容无 '#' 标题新格式），传 check_topic.py 严格模式。
+
+_EMOJI_RE = re.compile(
+    r'[\U0001F000-\U0001FFFF\U00002700-\U000027BF\U0000FE00-\U0000FE0F'
+    r'\U0000200D\U00002600-\U000026FF\U00002300-\U000023FF\U00002B50'
+    r'\U0000231A-\U0000231B\U00002934-\U00002935\U000025AA-\U000025FE'
+    r'\U00002B05-\U00002B07\U00002B1B-\U00002B1C\U00003030\U0000303D'
+    r'\U00003297\U00003299\U0001FA00-\U0001FA6F\U0001FA70-\U0001FAFF'
+    r'\U00002702-\U000027B0]+'
+)
+
+
+def _extract_topic_from_file(path):
+    """读文章首行，去 emoji / markdown 标记，作为话题传给 check_topic。"""
+    try:
+        first = path.read_text(encoding="utf-8").splitlines()[0].strip()
+    except Exception:
+        return None
+    first = _EMOJI_RE.sub("", first).strip()
+    first = re.sub(r"^#+\s*", "", first)  # 去 markdown 标题
+    return first or None
+
+
+def dedup_gate_check(articles, res, date_str=None):
+    """Phase 0 话题去重卡点：对当日待发布文章跑 check_topic.py 严格模式。
+
+    09-09 修复：check_topic 必须传 --exclude-date {date_str}，排除当日自身文章，
+    否则初版/优化版互相精确匹配 → 恒判重复 → 硬卡点 100% 误杀（v3.13 首跑即暴雷）。
+
+    返回 True 表示已硬拦截（enforce 模式命中重复），调用方应中止发布。
+    """
+    if os.environ.get("DAILY_WHY_DEDUP_OFF") == "1":
+        res.skip(0, "去重卡点已被 DAILY_WHY_DEDUP_OFF 关闭")
+        return False
+
+    ck = Path(__file__).resolve().parent / "check_topic.py"
+    if not ck.exists():
+        res.warn(0, "check_topic.py 缺失，去重卡点跳过（fail-open）")
+        return False
+
+    py = sys.executable or "python"
+    enforce = os.environ.get("DAILY_WHY_DEDUP_ENFORCE") == "1"
+    blocked = False
+    seen = set()
+    for key in ("v1", "v2"):
+        f = articles.get(key)
+        if not f or f in seen:
+            continue
+        seen.add(f)
+        topic = _extract_topic_from_file(f)
+        if not topic:
+            res.warn(0, f"无法从 {f.name} 提取话题，去重跳过（fail-open）")
+            continue
+        cmd = [py, str(ck), topic]
+        if date_str:
+            cmd += ["--exclude-date", date_str]
+        try:
+            r = subprocess.run(
+                cmd,
+                capture_output=True, text=True, timeout=30, encoding="utf-8",
+            )
+        except (subprocess.TimeoutExpired, OSError) as e:
+            res.warn(0, f"check_topic 执行异常({e})，去重跳过（fail-open）")
+            continue
+        if r.returncode == 1:
+            detail = (r.stdout or r.stderr).strip()
+            if enforce:
+                res.fail(0, f"去重拦截：{f.name} 话题「{topic}」已存在 → {detail}")
+                blocked = True
+            else:
+                res.warn(0, f"去重命中（软告警，未阻断）：{f.name} 话题「{topic}」→ {detail}")
+        elif r.returncode == 2:
+            res.warn(0, f"check_topic 参数错误，去重跳过（fail-open）：{(r.stderr or '').strip()}")
+        else:
+            res.ok(0, f"去重通过：{f.name} 话题「{topic}」")
+    return blocked
 
 
 # ── Phase 1: 匹配度检查 ─────────────────────────────
@@ -1391,6 +1476,12 @@ def main():
 
     # Phase 0: 扫描文件
     articles = scan_articles(date_str)
+
+    # Phase 0: 话题去重硬卡点（09-09 新增：默认软模式 warn 不阻断）
+    if dedup_gate_check(articles, res, date_str):
+        res.summary()
+        sys.exit(1)
+
     if articles["v1"] is None:
         res.fail(0, f"当日初版文章不存在: {date_str}")
         res.summary()

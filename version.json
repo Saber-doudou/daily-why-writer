@@ -1,6 +1,6 @@
 {
   "_comment": "Daily Why 四技能版本号唯一权威源（2026-09-01 建，打破「版本号易腐」反复复发）。l3_publish.py 发布前读取本文件，校验各技能 SKILL.md 实际版本号与之一致，不一致告警。新增/修改技能版本号必须先改本文件。",
-  "_updated": "2026-09-08",
+  "_updated": "2026-09-09",
   "skills": {
     "daily-why-writer": {
       "version": "v3.3",
@@ -10,11 +10,11 @@
       "_note": "09-08 v3.3：+FP-68(生化作用程度说满+同文存活机制自相矛盾)+CHECKLIST §91案例补充(流传轶事须查辟谣源)。09-01 v3.2：达尔文 Round2。reviewer_prompt.md 子文件现 v2.7（09-05 达尔文 Round1+2+3 升级）。版本号仍不在此处跟踪，由文件自身标题/脚注维护"
     },
     "daily-why-publish": {
-      "version": "v3.12",
+      "version": "v3.14",
       "version_field": "title_and_footer",
       "file": "C:/Users/admin/.workbuddy/skills/daily-why-publish/SKILL.md",
       "repo_file": "daily-why-publish/SKILL.md",
-      "_note": "09-08 v3.12：记忆治理 v3 全量落地（阶段5 门禁前置 L1 + P0-1 强制输出物接线 + check_memory_size v1.2 动态配额/NON_BLOCKING + 新增 memory_decay/verify_memory_migration/memory_budget 入 F 组，git_add_files 33→36）。09-07 v3.11：记忆治理脚本纳入 git 同步（check_memory_size.py/restructure_memory.py 入 git_add_files + extra_sync E 组）+ 自动化记忆归档切割；09-07 v3.10：记忆分片重构联动——IMA 历史读写迁移 topics/ima_history.md（切断 MEMORY.md 自动写入）+ Phase 0 记忆体积门禁（warn 不阻断）+ 新增 check_memory_size.py/restructure_memory.py；改动项见 SKILL.md 变更日志"
+      "_note": "09-09 v3.14：去重卡点自匹配缺陷修复——check_topic.py 新增 --exclude-date 参数（排除当日自身文章/topics 条目），dedup_gate_check 调用时必传当日日期（v3.13 首跑即 100% 误杀：初版与优化版互相精确匹配）。09-09 v3.13：记忆治理 v3 全量落地（阶段5 门禁前置 L1 + P0-1 强制输出物接线 + check_memory_size v1.2 动态配额/NON_BLOCKING + 新增 memory_decay/verify_memory_migration/memory_budget 入 F 组，git_add_files 33→36）。09-07 v3.11：记忆治理脚本纳入 git 同步（check_memory_size.py/restructure_memory.py 入 git_add_files + extra_sync E 组）+ 自动化记忆归档切割；09-07 v3.10：记忆分片重构联动——IMA 历史读写迁移 topics/ima_history.md（切断 MEMORY.md 自动写入）+ Phase 0 记忆体积门禁（warn 不阻断）+ 新增 check_memory_size.py/restructure_memory.py；改动项见 SKILL.md 变更日志"
     },
     "daily-why-feed-learning": {
       "version": "v3.3",
