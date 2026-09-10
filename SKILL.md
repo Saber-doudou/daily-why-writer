@@ -9,7 +9,7 @@ description: >
   即使包含 dailywhy 前缀，也不属于本技能（分别属于 L2 学习 / L3 发布），勿触发。
 agent_created: true
 version: v3.3
-last_updated: 2026-09-04
+last_updated: 2026-09-10
 ---
 
 # daily-why-writer
@@ -25,7 +25,7 @@ last_updated: 2026-09-04
 ## 元规则
 
 1. **教训没有不可泛化的** — 每次出错分析根因，提炼为可复用规则，记录到 FEEDBACK_LOG
-2. **三层分离，按需加载**：本文件 = 核心法典（Always Load）；`references/CHECKLIST.md` = 科学准确性自检（写后加载）；`references/FORBIDDEN.md` = 黑名单 FP-01~69（含 FP-58 空缺，实际 68 条，写后加载）；`references/FEEDBACK_LOG.md` = 活跃教训（30天内，审校时按需检索）；`references/FEEDBACK_ARCHIVE.md` = 休眠教训（30天未再犯，手动查阅）；`references/EXAMPLES.md` = 好/坏案例（写作时按需查阅）
+2. **三层分离，按需加载**：本文件 = 核心法典（Always Load）；`references/CHECKLIST.md` = 科学准确性自检（写后加载）；`references/FORBIDDEN.md` = 黑名单 FP-01~70（含 FP-58 空缺，实际 69 条，写后加载）；`references/FEEDBACK_LOG.md` = 活跃教训（30天内，审校时按需检索）；`references/FEEDBACK_ARCHIVE.md` = 休眠教训（30天未再犯，手动查阅）；`references/EXAMPLES.md` = 好/坏案例（写作时按需查阅）
 3. **数值规则内联**：本文已内联所有关键阈值，`writing_rules.json` 仅供 `validate_article.py` 程序化验证
 
 ---
@@ -126,7 +126,7 @@ C:/Users/admin/.workbuddy/binaries/python/versions/3.13.12/python.exe F:/WorkBud
    - **🔥 活跃区（必查）**：近30天被教训引用，当前高发问题，逐条核对
    - 🛡️ 预防区（按需）：有教训但近期零触发，规则有效，抽查即可
    - 🔬 待验证区（手动）：从未被引用，新规则，写作时主动对照
-2. 加载 `references/FORBIDDEN.md` 扫描 FP-01~69
+2. 加载 `references/FORBIDDEN.md` 扫描 FP-01~70
 3. **标点自查**（5 项高频陷阱，GB/T 15834-2011）：
 
 | # | 陷阱 | 错误 → 正确 |
@@ -267,7 +267,7 @@ Phase 5: 【Orchestrator】输出全文 + update_history.py + 记忆更新
 | 文件 | 用途 | 加载时机 |
 |------|------|---------|
 | `references/CHECKLIST.md` | 100 项自检（活跃区46必查 + 预防区35 + 待验证区19） | Phase 3 |
-| `references/FORBIDDEN.md` | 68 条禁止模式 FP-01~69（含 FP-58 空缺） | Phase 3 |
+| `references/FORBIDDEN.md` | 69 条禁止模式 FP-01~70（含 FP-58 空缺） | Phase 3 |
 | `references/FEEDBACK_LOG.md` | 教训→规则转化记录（30天内活跃） | 按需检索 |
 | `references/FEEDBACK_ARCHIVE.md` | 休眠教训库（30天未再犯） | 手动查阅 |
 | `references/EXAMPLES.md` | A段/F段/Q格式好/坏案例 | 写作时查阅 |
@@ -337,3 +337,4 @@ Phase 5: 【Orchestrator】输出全文 + update_history.py + 记忆更新
 *Version: v3.1 | 2026-09-01 | + FP-67(界面变形机制混淆：重量下沉 vs 毛细润湿凸起，4家AI一致指出初版"重量压出上翘小弧"方向矛盾，v1独立审校员漏判属审校盲区)（谷物圈聚拢 投喂学习）**
 *Version: v3.2 | 2026-09-01 | 达尔文 Round2：① frontmatter 新增 version 字段（版本号正式化，与 config/version.json 权威源对齐）；② W5 字数统一全文口径上限 690（validate 不再 strip 结尾表格，与 l3_publish 一致）；③ 审校 Step 5.5 第7维机制自洽核验 + 分类 6选1 枚举硬约束（reviewer_prompt v2.2）；④ P2 采纳闭环（改后必重验）*
 *Version: v3.3 | 2026-09-09 | + FP-69(机制解释混用两套矛盾物理图景：一篇只立一个统一图景，优先用论文原始框架) + CHECKLIST §103(图景统一) + §16 案例补充(前提动作不能整体省略：注空气关键步骤)（反转浮力 投喂学习）；前版: 2026-09-08 | + FP-68(生化/微生物作用程度说满：杀菌动词留余地+多重防线分主次+与同文存活机制自洽+发酵多步链不跳步) + CHECKLIST §91 案例补充(流传度高的传奇轶事须先查辟谣源，讹传可作反转素材)（蜂蜜不坏 投喂学习）*；另修正三处 FP 编号表述不一致（"FP-01 到 66"/"67条 FP-01 到 67"统一为 FP-01~68 实际 67 条）
+*Version: v3.3 | 2026-09-10 | + FP-70(相变潜热方向表述错误：凝固放热被写成"热量被及时导走"，写相变前先问"放热还是吸热") + CHECKLIST §104(微滴过冷归因须区分"太小缺核"vs"太纯")/§105(采纳 AI 建议须校验项目枚举与硬约束) + §2/§100 案例补充(机翼结霜→积冰、"沙冰"承诺 vs"冻实"矛盾)（过冷水 投喂学习）*
