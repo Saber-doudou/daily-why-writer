@@ -270,7 +270,7 @@ L3 daily-why-publish（手动触发）← 本 Skill
 | **IMA 上传失败** | 重试 1 次；仍失败则跳过 IMA，记录 `⚠️ IMA 上传失败`，不阻塞 GitHub 推送 |
 | **GitHub 推送失败** | 重试 1 次；仍失败则记录 `⚠️ GitHub 推送失败（本地 ahead N）`，下次发布时自动补推 |
 | **GitHub 报 `git: 'credential-manager-core' is not a git command`（凭证损坏）** | 用 `git -c credential.helper=wincred pull/push` 重试（wincred 读 Windows 凭据管理器缓存的 GitHub token；08-17 实测，l3_publish.py 已内置该参数） |
-| **Phase 3 报「网络失败：github.com 探活失败」但本地 commit 已生成** | **先查 `git log -1` 确认 commit 存在**。沙箱网络隔离常态：沙箱内 push 必失败（Connection reset），属环境限制非凭证/非冲突。处置：沙箱外执行 `git -c credential.helper=wincred push origin main`，再用 `curl -s https://api.github.com/repos/{owner}/{repo}/commits/main` 取 remote sha 与本地 HEAD 比对一致即确认成功（禁止以本地 ahead 数判定）。发布报告脚本区为 checksum 保护区不可改写，补推结论写入「AI 语义验证补充区」并在标题注明「补推记录（修正脚本区首轮结论）」 |
+| **Phase 3 报「网络失败：github.com 探活失败」但本地 commit 已生成** | **先查 `git log -1` 确认 commit 存在**。沙箱网络隔离常态：沙箱内 push 必失败（Connection reset），属环境限制非凭证/非冲突。处置：沙箱外执行 `git -c credential.helper=wincred push origin main`，再用 `curl -s https://api.github.com/repos/{owner}/{repo}/commits/main` 取 remote sha 与本地 HEAD 比对一致即确认成功（禁止以本地 ahead 数判定）。**github.com 可达性是间歇性的**（09-10 实测：11:14 通、11:20 至 11:26 连 3 次超时、11:27 又通），push 失败应隔数分钟重试 1 到 2 次再判失败，勿急改走 REST API 写入（本机通常无 GITHUB_TOKEN，`gh` CLI 亦不可用：node22 报 TypeError 且依赖被安全策略黑名单的 wmic.exe）。发布报告脚本区为 checksum 保护区不可改写，补推结论写入「AI 语义验证补充区」并在标题注明「补推记录（修正脚本区首轮结论）」 |
 | **git status 误报 ahead N（沙箱静默阻止 packed-refs 重写，fetch/update-ref 返回 0 但不生效）** | 手动写 loose ref `.git/refs/remotes/origin/main=<HEAD sha>`，再 `git rev-list --count origin/main..HEAD` 复查归零（08-17 实测） |
 | **语义验证不通过** | 终止发布，输出未落实的改进点清单，等 Master 决定是否强制发布 |
 | **l3_publish.py 脚本不存在** | 终止，提示检查 `scripts/l3_publish.py` 路径 |
