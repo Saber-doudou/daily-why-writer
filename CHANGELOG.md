@@ -4,6 +4,20 @@
 
 ---
 
+## v4.7 — 2026-09-10 沙箱网络隔离 push 失败处置固化（L3 发布线 v3.16→v3.17）
+
+**背景（09-10 实踩）**：L3 发布时 Phase 3 报「❌ 网络失败（不可重试）：github.com 探活失败」，`--retry` 在沙箱内重试同样失败，发布报告判「⚠️ 部分成功 / 错误 1 个」。但 `git log -1` 显示本地 commit `9ee9882` 已正常生成——失败发生在 push 阶段，非 commit 阶段。沙箱内 `git ls-remote origin HEAD` 直接 `Recv failure: Connection was reset`，证实为沙箱网络隔离，与凭证损坏、rebase 冲突均无关。
+
+**根因**：既有 SOP 已固化「`unverified` 是沙箱常态不代表推送失败」，但只覆盖「push 成功返回后核验不了」这一种；未覆盖「沙箱内根本连不上、push 直接失败」这种，导致 AI 易误判为发布失败并留下错误的报告状态。
+
+**改造（v3.17，SOP 层，不改脚本）**：边界条件表新增该场景处置链——① 先 `git log -1` 确认 commit 已生成（区分 commit 失败与 push 失败）；② 沙箱外 `git -c credential.helper=wincred push origin main`；③ 权威核验走 `curl -s https://api.github.com/repos/{owner}/{repo}/commits/main` 取 remote sha 与本地 HEAD 比对（延续铁律「不信本地 ahead 数」，且 gh CLI 在当前环境不可用：node 22 下 `gh` 报 TypeError + 依赖被黑名单的 wmic.exe）；④ 发布报告脚本生成区属 checksum 保护区不可改写，补推结论写入「AI 语义验证补充区」并注明「修正脚本区首轮结论」，保证报告反映真实最终态（EXP-014 可观测性即诚实性）。
+
+**顺带修复**：SKILL 变更日志表补记 v3.16 行（此前标题已升 v3.16 但表格漏行），内容据 l3_publish.py 注释还原——引用机械门禁（正文含引用且 quote_checks/fact_checks 均无逐字核验 → blocking 硬阻断）。
+
+**验证**：本次实际执行该链路成功，remote main sha = `9ee9882e89b90f62810a375d345cf1863d146c8a`，与本地 HEAD 一致。
+
+---
+
 ## v4.6 — 2026-09-09 v3.16 引用门禁落地修复（两处）
 
 **修复1（门禁误杀）**：v3.16 引用门禁首跑即误杀当日已发布文章——检测逻辑只认 `quote_checks` 字段，而 Reviewer 实际把逐字引用核验放在 `fact_checks`（含 DOI `10.1038/s41586-020-2643-8`、Nature 585、作者与团队逐项 match）。修正 `validate_review.py`：新增 `_has_quote_verification()`，命中「正文含引用」时，只要 `quote_checks` 或 `fact_checks` 任一处存在逐字引用核验留痕（source 指向 DOI/期刊/学术域名）即视为已核验、放行；两者皆空才 `blocking` 硬拦。单测 4 例（真实今日+构造场景）全过。

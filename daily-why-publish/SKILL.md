@@ -11,7 +11,7 @@ version: v3.13
 last_updated: 2026-09-09
 ---
 
-# daily-why-publish v3.16
+# daily-why-publish v3.17
 
 AI 语义验证 + 脚本执行，各司其职。
 
@@ -270,6 +270,7 @@ L3 daily-why-publish（手动触发）← 本 Skill
 | **IMA 上传失败** | 重试 1 次；仍失败则跳过 IMA，记录 `⚠️ IMA 上传失败`，不阻塞 GitHub 推送 |
 | **GitHub 推送失败** | 重试 1 次；仍失败则记录 `⚠️ GitHub 推送失败（本地 ahead N）`，下次发布时自动补推 |
 | **GitHub 报 `git: 'credential-manager-core' is not a git command`（凭证损坏）** | 用 `git -c credential.helper=wincred pull/push` 重试（wincred 读 Windows 凭据管理器缓存的 GitHub token；08-17 实测，l3_publish.py 已内置该参数） |
+| **Phase 3 报「网络失败：github.com 探活失败」但本地 commit 已生成** | **先查 `git log -1` 确认 commit 存在**。沙箱网络隔离常态：沙箱内 push 必失败（Connection reset），属环境限制非凭证/非冲突。处置：沙箱外执行 `git -c credential.helper=wincred push origin main`，再用 `curl -s https://api.github.com/repos/{owner}/{repo}/commits/main` 取 remote sha 与本地 HEAD 比对一致即确认成功（禁止以本地 ahead 数判定）。发布报告脚本区为 checksum 保护区不可改写，补推结论写入「AI 语义验证补充区」并在标题注明「补推记录（修正脚本区首轮结论）」 |
 | **git status 误报 ahead N（沙箱静默阻止 packed-refs 重写，fetch/update-ref 返回 0 但不生效）** | 手动写 loose ref `.git/refs/remotes/origin/main=<HEAD sha>`，再 `git rev-list --count origin/main..HEAD` 复查归零（08-17 实测） |
 | **语义验证不通过** | 终止发布，输出未落实的改进点清单，等 Master 决定是否强制发布 |
 | **l3_publish.py 脚本不存在** | 终止，提示检查 `scripts/l3_publish.py` 路径 |
@@ -294,6 +295,8 @@ L3 daily-why-publish（手动触发）← 本 Skill
 
 | 版本 | 日期 | 变更 |
 |------|------|------|
+| v3.17 | 2026-09-10 | **沙箱网络隔离导致 push 失败的处置固化（09-10 实踩）**：① 现象——Phase 3 报「❌ 网络失败：github.com 探活失败」，但本地 commit 已正常生成，脚本 `--retry` 沙箱内重试同样失败；② 根因——沙箱网络隔离，沙箱内 `git ls-remote` 直接 Connection reset，与凭证/冲突无关；③ 修复（SOP 层，不改脚本）——边界条件表新增该场景处置：先 `git log -1` 确认 commit 存在 → 沙箱外 `git -c credential.helper=wincred push origin main` → `curl -s https://api.github.com/repos/{owner}/{repo}/commits/main` 取 remote sha 与本地 HEAD 比对做权威核验（呼应既有铁律「不信本地 ahead 数」）→ 补推结论写进发布报告「AI 语义验证补充区」（脚本区为 checksum 保护区不可改）；④ 版本号三处对齐 v3.17 + CHANGELOG v4.7 |
+| v3.16 | 2026-09-09 | **引用机械门禁（补记，此前表格漏行）**：validate_review 检测正文含引用标记而 `quote_checks` 为空 → blocking，l3 侧 `sys.exit` 硬阻断；`CITATION_HINT` 正则收窄防误杀。落实「引用必须有出处校验」的机械约束（EXP-004） |
 | v3.15 | 2026-09-09 | **CHANGELOG 补记机制落地（方案1）**：① 补记 09-07 记忆分片重构 / 09-08 记忆治理 v3 / 09-09 去重硬卡点三波欠账（CHANGELOG.md v4.2/v4.3/v4.4，此前因 09-07 记忆压缩丢失「重大改造→CHANGELOG」规则 + 流程无步骤 + 09-01 审计建议未进待办而停更 20 天，见缺陷 #46）；② L3 SKILL 新增「重大改造必更新 CHANGELOG」步骤（落实 EXP-004 约束优于指令，把补记从 AI 自觉变 SOP 步骤）；③ config.json `git_add_files` 纳入 CHANGELOG.md，使其真进 GitHub（此前纯本地文件）；④ 顺带修 S1（topic_summaries 无 date 字段，依赖发布时序约定并加注释锁死）/ S2（date_str 缺失由静默退化改为 res.warn 可见）；⑤ 版本号三处对齐 v3.15（config/version.json + l3_publish.py + SKILL 标题/脚注） |
 | v3.14 | 2026-09-09 | **去重卡点自匹配缺陷修复（v3.13 上线即暴雷）**：① 现象——`DAILY_WHY_DEDUP_ENFORCE=1` 首次实跑，当日初版与优化版被各自判为「精确匹配文章文件」重复，Phase 0 exit 1，L3 100% 无法执行；② 根因——`check_topic.py` 扫描 `articles/**` 时包含当日自身文件，去重卡点未做自身排除，「与历史去重」语义变成「与自己比」；③ 修复——`check_topic.py` 新增 `--exclude-date YYYY-MM-DD`（`check_topic()` 增加 `exclude_date` 参数，topics 数组按 date 剔除 + 文章文件按文件名前缀剔除），`l3_publish.py dedup_gate_check()` 增加 `date_str` 形参并在调用时必传 `--exclude-date`；④ 版本号三处对齐 v3.14（config/version.json + l3_publish.py + SKILL 标题/脚注）。**教训（EXP-004）**：硬卡点上线前必须有「对已知正常样例不误杀」的回归用例，否则约束只会 100% 阻断 |
 | v3.13 | 2026-09-09 | **去重硬卡点接入 L3 自动化（直接来硬的）**：① l3_publish.py 新增 `dedup_gate_check`（Phase 0.5 话题去重卡点，三态：默认软模式 warn 不阻断；`DAILY_WHY_DEDUP_ENFORCE=1` 硬拦截 exit 1；`DAILY_WHY_DEDUP_OFF=1` 紧急总关）；② SKILL.md Step 1 预检 + Step 3 发布命令均注入 `DAILY_WHY_DEDUP_ENFORCE=1`，使 L3 自动化实际调用即硬拦截（不再是 AI 可跳过的软提示，落实 EXP-004 约束优于指令）；③ 根因：原去重仅是 automation-prompt 内 AI 软约束 + check_topic.py 未被生产代码调用，致 09-08 蜂蜜重复暴雷 |
@@ -316,4 +319,4 @@ L3 daily-why-publish（手动触发）← 本 Skill
 
 ---
 
-*Version: v3.16 | 2026-09-09 | CHANGELOG 补记机制落地（补 09-07/08/09 三波欠账 + L3 SKILL 加「重大改造必更新 CHANGELOG」步骤 + git_add_files 纳入 CHANGELOG.md 真进 GitHub）；去重卡点自匹配修复（check_topic --exclude-date 排除当日自身，修 v3.13 首跑 100% 误杀）；v3.13（2026-09-08）记忆治理 v3 全量落地（闸门 0 至 5：阶段5 门禁前置 L1 + P0-1 强制输出物接线 + 动态配额 + NON_BLOCKING + 衰减 + 零损失校验 + 写入准入，详见变更日志）；v3.11（2026-09-07）记忆治理脚本纳入 git 同步（check_memory_size.py/restructure_memory.py 入 extra_sync + git_add_files，双向自检全对齐）+ 自动化记忆归档切割（07-01至08-31 段下沉 archive/）；v3.10（2026-09-07）记忆分片重构：IMA 历史读写迁移 topics/ima_history.md（切断 MEMORY.md 自动写入）+ Phase 0 记忆体积门禁（warn 不阻断）+ 新增 check_memory_size.py/restructure_memory.py；v3.9（2026-09-03）改进点提取多模式+零命中告警、Step 2.5 加 0 条处理硬约束、IMA 版本号降级路径删除、Phase 1 落日志、frontmatter 补 version；v3.8（2026-09-02）P1-3 方案A：恢复 Phase 1 脚本验证（默认开启+checksum 保护区渲染），--skip-match 降级手动逃生阀；v3.7（2026-09-01）网络容错（错误分类+探活+退避重试）+ 发布报告 checksum 防篡改 + --retry 模式禁止裸 push + 版本号三处统一（达尔文 Round 1）；v3.6（2026-08-31）恢复 l3_run.log + 发布报告脚本渲染；v3.5（2026-08-31）Phase 5 前移至 git 之前 + IMA 历史表正则修复 + commit 消息反推 + 一致性自检；v3.4（2026-08-28）Phase 3 内置远端核验（铁律固化：不信本地 ahead 数，push 后 ls-remote 比对 + 自动写 loose ref 修复 origin/main）*
+*Version: v3.17 | 2026-09-10 | 沙箱网络隔离 push 失败处置固化（commit 已生成 → 沙箱外 push + api.github.com 核验 remote sha，补推结论写 AI 补充区）；（补 09-07/08/09 三波欠账 + L3 SKILL 加「重大改造必更新 CHANGELOG」步骤 + git_add_files 纳入 CHANGELOG.md 真进 GitHub）；去重卡点自匹配修复（check_topic --exclude-date 排除当日自身，修 v3.13 首跑 100% 误杀）；v3.13（2026-09-08）记忆治理 v3 全量落地（闸门 0 至 5：阶段5 门禁前置 L1 + P0-1 强制输出物接线 + 动态配额 + NON_BLOCKING + 衰减 + 零损失校验 + 写入准入，详见变更日志）；v3.11（2026-09-07）记忆治理脚本纳入 git 同步（check_memory_size.py/restructure_memory.py 入 extra_sync + git_add_files，双向自检全对齐）+ 自动化记忆归档切割（07-01至08-31 段下沉 archive/）；v3.10（2026-09-07）记忆分片重构：IMA 历史读写迁移 topics/ima_history.md（切断 MEMORY.md 自动写入）+ Phase 0 记忆体积门禁（warn 不阻断）+ 新增 check_memory_size.py/restructure_memory.py；v3.9（2026-09-03）改进点提取多模式+零命中告警、Step 2.5 加 0 条处理硬约束、IMA 版本号降级路径删除、Phase 1 落日志、frontmatter 补 version；v3.8（2026-09-02）P1-3 方案A：恢复 Phase 1 脚本验证（默认开启+checksum 保护区渲染），--skip-match 降级手动逃生阀；v3.7（2026-09-01）网络容错（错误分类+探活+退避重试）+ 发布报告 checksum 防篡改 + --retry 模式禁止裸 push + 版本号三处统一（达尔文 Round 1）；v3.6（2026-08-31）恢复 l3_run.log + 发布报告脚本渲染；v3.5（2026-08-31）Phase 5 前移至 git 之前 + IMA 历史表正则修复 + commit 消息反推 + 一致性自检；v3.4（2026-08-28）Phase 3 内置远端核验（铁律固化：不信本地 ahead 数，push 后 ls-remote 比对 + 自动写 loose ref 修复 origin/main）*
