@@ -21,7 +21,7 @@ from pathlib import Path
 
 # ── 常量 ──────────────────────────────────────────────
 
-VERSION = "v3.17"              # 09-10 v3.17：沙箱网络隔离 push 失败处置固化（SKILL 边界条件表新增：commit 已生成 → 沙箱外 push + api.github.com 核验 remote sha → 补推结论写报告 AI 补充区）；v3.16：引用机械门禁（正文含引用且 quote_checks 空 → 硬阻断）；CHANGELOG 补记 v3.15；去重自匹配修复 v3.14；去重硬卡点 v3.13 补记机制落地（补 09-07/08/09 三波欠账 + L3 SKILL 加「重大改造必更新 CHANGELOG」步骤 + git_add_files 纳入 CHANGELOG.md 真进 GitHub）；顺带修 S1(topics_context 当日写入时序约定) / S2(date_str 缺失静默退化改 warn)；v3.14 去重卡点自匹配修复（check_topic --exclude-date）；v3.13 去重硬卡点接入 L3 + 09-08 记忆治理 v3 落地
+VERSION = "v3.18"              # 09-11 v3.18：灰区告警豁免清单落地（config.git_gray_exemptions 8 项=达尔文 09-04 实验一次性产物，Master 授权查证后决策；外部经验一致：实验产物不入同步通道；豁免走配置+留理由，EXP-004）；v3.17：沙箱网络隔离 push 失败处置固化（SKILL 边界条件表新增：commit 已生成 → 沙箱外 push + api.github.com 核验 remote sha → 补推结论写报告 AI 补充区）；v3.16：引用机械门禁（正文含引用且 quote_checks 空 → 硬阻断）；CHANGELOG 补记 v3.15；去重自匹配修复 v3.14；去重硬卡点 v3.13 补记机制落地（补 09-07/08/09 三波欠账 + L3 SKILL 加「重大改造必更新 CHANGELOG」步骤 + git_add_files 纳入 CHANGELOG.md 真进 GitHub）；顺带修 S1(topics_context 当日写入时序约定) / S2(date_str 缺失静默退化改 warn)；v3.14 去重卡点自匹配修复（check_topic --exclude-date）；v3.13 去重硬卡点接入 L3 + 09-08 记忆治理 v3 落地
 MIN_A_CONTENT_CHARS = 50   # A 段最少有效字符数
 MAX_IMPROVEMENTS_CHECK = 10  # 最多检查的改进点数量
 
@@ -1000,7 +1000,12 @@ def phase3_git(date_str, topic, dry_run, force, res, verify=True):
     tracked = {f for f in (r_ls.stdout or "").splitlines() if f.strip()}
     whitelist = set(CFG.get("git_add_files", []))
     # .gitignore 为仓库私有文件（git 约定），无需从工作区同步，豁免
-    gray = sorted(tracked - whitelist - {".gitignore"})
+    # 09-11 v3.18：新增灰区豁免清单（config.git_gray_exemptions）——达尔文 09-04
+    # 实验一次性产物已归档+双备份、无后续改动，「源改动同步」语义不适用，进白名单
+    # 属死条目（死文件判据）；每周重复同一条灰区告警属噪音，会诱发告警疲劳（EXP-014）。
+    # 豁免必须走配置文件并留理由，禁止口头豁免（EXP-004 约束优于指令）。
+    exemptions = set(CFG.get("git_gray_exemptions", []))
+    gray = sorted(tracked - whitelist - {".gitignore"} - exemptions)
     if gray:
         res.warn(3, f"repo 有 {len(gray)} 个文件不在 git_add_files（灰区，改动不会同步）: "
                     f"{', '.join(gray)}")
