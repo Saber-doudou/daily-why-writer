@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-L3 Publish v3.19 — daily-why 自包含发布脚本
+L3 Publish v3.20 — daily-why 自包含发布脚本
 零 AI 依赖，一条命令跑完：匹配检查、IMA 备份、GitHub 推送、执行日志归档
 
 Usage:
@@ -21,7 +21,7 @@ from pathlib import Path
 
 # ── 常量 ──────────────────────────────────────────────
 
-VERSION = "v3.19"              # 09-15 v3.19：dedup 卡点默认反转 enforce（Silent Fail-Open 根治：判定明确=重复时默认硬拦 exit 1，DAILY_WHY_DEDUP_RELAX=1 显式豁免降软 warn，检测器自身故障 fail-open 保留；依据 v3.13 SKILL bash 前缀注入在 Windows 不生效的 EXP-014 实证，外部经验 Praesidia/readysolutions fail-closed 共识）+ check_topic 排除 _废弃 后缀并修复无#标题提取盲区（#51）+ prepare_topics full/compact 同源派生断言 + 新增 dedup_selftest.py 双向自检（入 extra_sync/git_add_files）；v3.18：灰区告警豁免清单落地（config.git_gray_exemptions 8 项=达尔文 09-04 实验一次性产物，Master 授权查证后决策；外部经验一致：实验产物不入同步通道；豁免走配置+留理由，EXP-004）；v3.17：沙箱网络隔离 push 失败处置固化（SKILL 边界条件表新增：commit 已生成 → 沙箱外 push + api.github.com 核验 remote sha → 补推结论写报告 AI 补充区）；v3.16：引用机械门禁（正文含引用且 quote_checks 空 → 硬阻断）；CHANGELOG 补记 v3.15；去重自匹配修复 v3.14；去重硬卡点 v3.13 补记机制落地（补 09-07/08/09 三波欠账 + L3 SKILL 加「重大改造必更新 CHANGELOG」步骤 + git_add_files 纳入 CHANGELOG.md 真进 GitHub）；顺带修 S1(topics_context 当日写入时序约定) / S2(date_str 缺失静默退化改 warn)；v3.14 去重卡点自匹配修复（check_topic --exclude-date）；v3.13 去重硬卡点接入 L3 + 09-08 记忆治理 v3 落地
+VERSION = "v3.20"              # 09-15 v3.20：话题提取跳空行对齐 check_topic（P3 审查 P1-3 双源漂移：首行为空行时旧实现返回 None → 去重 fail-open 放行，存在静默绕过窗口；Master 确认当轮修复）+ dedup_selftest R4 回归用例；09-15 v3.19：dedup 卡点默认反转 enforce（Silent Fail-Open 根治：判定明确=重复时默认硬拦 exit 1，DAILY_WHY_DEDUP_RELAX=1 显式豁免降软 warn，检测器自身故障 fail-open 保留；依据 v3.13 SKILL bash 前缀注入在 Windows 不生效的 EXP-014 实证，外部经验 Praesidia/readysolutions fail-closed 共识）+ check_topic 排除 _废弃 后缀并修复无#标题提取盲区（#51）+ prepare_topics full/compact 同源派生断言 + 新增 dedup_selftest.py 双向自检（入 extra_sync/git_add_files）；v3.18：灰区告警豁免清单落地（config.git_gray_exemptions 8 项=达尔文 09-04 实验一次性产物，Master 授权查证后决策；外部经验一致：实验产物不入同步通道；豁免走配置+留理由，EXP-004）；v3.17：沙箱网络隔离 push 失败处置固化（SKILL 边界条件表新增：commit 已生成 → 沙箱外 push + api.github.com 核验 remote sha → 补推结论写报告 AI 补充区）；v3.16：引用机械门禁（正文含引用且 quote_checks 空 → 硬阻断）；CHANGELOG 补记 v3.15；去重自匹配修复 v3.14；去重硬卡点 v3.13 补记机制落地（补 09-07/08/09 三波欠账 + L3 SKILL 加「重大改造必更新 CHANGELOG」步骤 + git_add_files 纳入 CHANGELOG.md 真进 GitHub）；顺带修 S1(topics_context 当日写入时序约定) / S2(date_str 缺失静默退化改 warn)；v3.14 去重卡点自匹配修复（check_topic --exclude-date）；v3.13 去重硬卡点接入 L3 + 09-08 记忆治理 v3 落地
 MIN_A_CONTENT_CHARS = 50   # A 段最少有效字符数
 MAX_IMPROVEMENTS_CHECK = 10  # 最多检查的改进点数量
 
@@ -422,10 +422,21 @@ _EMOJI_RE = re.compile(
 
 
 def _extract_topic_from_file(path):
-    """读文章首行，去 emoji / markdown 标记，作为话题传给 check_topic。"""
+    """读文章首个非空行，去 emoji / markdown 标记，作为话题传给 check_topic。
+
+    09-15 v3.20：对齐 check_topic 提取策略（跳过空行取首个非空行），消除双源漂移
+    （P3 审查 P1-3，Master 确认修复）。旧实现只取 splitlines()[0]，文章首行为空行时
+    返回 None → 去重 fail-open 放行，存在静默绕过窗口。
+    """
     try:
-        first = path.read_text(encoding="utf-8").splitlines()[0].strip()
+        first = ""
+        for raw in path.read_text(encoding="utf-8").splitlines():
+            if raw.strip():
+                first = raw.strip()
+                break
     except Exception:
+        return None
+    if not first:
         return None
     first = _EMOJI_RE.sub("", first).strip()
     first = re.sub(r"^#+\s*", "", first)  # 去 markdown 标题

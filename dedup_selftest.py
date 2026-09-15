@@ -13,7 +13,7 @@ dedup_selftest.py — 去重防线双向自检（09-15 新增，v3.19 配套）
   - 任何一条 FAIL → exit 1
 
 用法：
-    python dedup_selftest.py                 # 全量 9 用例
+    python dedup_selftest.py                 # 全量 10 用例（v3.20 起，R4 首行空行提取回归）
     python dedup_selftest.py --quick         # 仅隔离区 6 用例（不碰 l3_publish）
 
 退出码：0 = 全绿；1 = 有失败
@@ -158,6 +158,15 @@ def real_cases(quick=False):
             kinds = [k for k, _ in res.events]
             record("R3 L3卡点默认+全新话题 → 放行(blocked=False)",
                    blocked is False and "fail" not in kinds, res.events[:1])
+
+        # 10. 首行空行提取（v3.20 双源对齐回归：P3 审查 P1-3——旧实现只取首行，
+        #     空行 → None → 去重 fail-open 放行静默绕过；v3.20 对齐 check_topic 跳空行）
+        with _tf.TemporaryDirectory() as td4:
+            art_empty = Path(td4) / "2099-12-31-每日冷知识-空行.md"
+            art_empty.write_text("\n\n# 为什么雨滴是球形的？\n正文", encoding="utf-8")
+            got = l3_publish._extract_topic_from_file(art_empty)
+            record("R4 首行空行文件 → 提取到标题(非 None)",
+                   got == "为什么雨滴是球形的？", repr(got))
     except Exception as e:
         record("R2/R3 l3_publish 卡点冒烟", False, f"执行异常: {e}")
 

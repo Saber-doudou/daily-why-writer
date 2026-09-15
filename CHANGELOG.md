@@ -4,6 +4,20 @@
 
 ---
 
+## v4.10 — 2026-09-15 话题提取双源漂移修复（L3 发布线 v3.19→v3.20）
+
+**来源**：代码审查机制（v4.9）首轮示范审查 P1-3，Master 确认「都确认」后当轮修复。
+
+**修复**：`l3_publish._extract_topic_from_file` 旧实现只取 `splitlines()[0]`，文章首行为空行时返回 None → 去重 fail-open 放行（静默绕过窗口）；而 `check_topic.extract_topic_from_article` 同日已修为跳空行取首个非空行——同链路两个提取器行为漂移（#51/#52 同源教训再现，旧标准查不出、人工审查抓出）。新实现跳过空行取首个非空行，emoji/markdown 处理不变。
+
+**回归**：dedup_selftest 新增 R4 用例（首行空行文件 → 提取到标题非 None），全量 10/10 ALL PASS。
+
+**版本对齐**：v3.20 三处（version.json + l3_publish.py 含文件头 docstring + SKILL 标题/页脚）+ CHANGELOG v4.10。
+
+**附带**：quality-reviewer.json 归档至 archive/（Master 确认；路径失效且已被 maker-checker v2.0 取代，agents/ 目录现空）。
+
+---
+
 ## v4.9 — 2026-09-15 代码审查机制建立（标准 + 机械工具 v2.0 + pre-commit 门禁）
 
 **背景**：Master 判定「代码质量参差不齐」，要求建立系统性代码审查机制。资产盘点发现旧版 `CODE_REVIEW_GUIDE.md`（06-05）与 `code_review_check.py` 均为死文件（无流程挂接、无迭代），且旧规则库查不出本项目任何真实缺陷（09-15 三根因 Silent Fail-Open / SSOT 漂移 / 死环境变量注入全部漏检）。
