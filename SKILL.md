@@ -25,7 +25,7 @@ last_updated: 2026-09-14
 ## 元规则
 
 1. **教训没有不可泛化的** — 每次出错分析根因，提炼为可复用规则，记录到 FEEDBACK_LOG
-2. **三层分离，按需加载**：本文件 = 核心法典（Always Load）；`references/CHECKLIST.md` = 科学准确性自检（写后加载）；`references/FORBIDDEN.md` = 黑名单 FP-01~72（含 FP-58 空缺，实际 71 条，写后加载）；`references/FEEDBACK_LOG.md` = 活跃教训（30天内，审校时按需检索）；`references/FEEDBACK_ARCHIVE.md` = 休眠教训（30天未再犯，手动查阅）；`references/EXAMPLES.md` = 好/坏案例（写作时按需查阅）
+2. **三层分离，按需加载**：本文件 = 核心法典（Always Load）；`references/CHECKLIST.md` = 科学准确性自检（写后加载）；`references/FORBIDDEN.md` = 黑名单 FP-01~74（含 FP-58 空缺，实际 73 条，写后加载）；`references/FEEDBACK_LOG.md` = 活跃教训（30天内，审校时按需检索）；`references/FEEDBACK_ARCHIVE.md` = 休眠教训（30天未再犯，手动查阅）；`references/EXAMPLES.md` = 好/坏案例（写作时按需查阅）
 3. **数值规则内联**：本文已内联所有关键阈值，`writing_rules.json` 仅供 `validate_article.py` 程序化验证
 
 ---
@@ -126,7 +126,7 @@ C:/Users/admin/.workbuddy/binaries/python/versions/3.13.12/python.exe F:/WorkBud
    - **🔥 活跃区（必查）**：近30天被教训引用，当前高发问题，逐条核对
    - 🛡️ 预防区（按需）：有教训但近期零触发，规则有效，抽查即可
    - 🔬 待验证区（手动）：从未被引用，新规则，写作时主动对照
-2. 加载 `references/FORBIDDEN.md` 扫描 FP-01~72
+2. 加载 `references/FORBIDDEN.md` 扫描 FP-01~73
 3. **标点自查**（5 项高频陷阱，GB/T 15834-2011）：
 
 | # | 陷阱 | 错误 → 正确 |
@@ -267,7 +267,7 @@ Phase 5: 【Orchestrator】输出全文 + update_history.py + 记忆更新
 | 文件 | 用途 | 加载时机 |
 |------|------|---------|
 | `references/CHECKLIST.md` | 100 项自检（活跃区46必查 + 预防区35 + 待验证区19） | Phase 3 |
-| `references/FORBIDDEN.md` | 71 条禁止模式 FP-01~72（含 FP-58 空缺） | Phase 3 |
+| `references/FORBIDDEN.md` | 72 条禁止模式 FP-01~73（含 FP-58 空缺） | Phase 3 |
 | `references/FEEDBACK_LOG.md` | 教训→规则转化记录（30天内活跃） | 按需检索 |
 | `references/FEEDBACK_ARCHIVE.md` | 休眠教训库（30天未再犯） | 手动查阅 |
 | `references/EXAMPLES.md` | A段/F段/Q格式好/坏案例 | 写作时查阅 |
@@ -317,7 +317,8 @@ Phase 5: 【Orchestrator】输出全文 + update_history.py + 记忆更新
 *Version: v3.1 | 2026-08-03 | + FP-65(用疾病/病理术语解释正常现象) + CHECKLIST §68(相关数值间须说明衔接逻辑)/§9细化(引用融入行文)/§66案例(五成为主观感受范围)（月亮错觉 投喂学习）*
 *Version: v3.1 | 2026-08-04 | + CHECKLIST §69(概括动词须覆盖并列全部机制)/§70(历史考古断言须加证据强度与前提限定) + 修复§57内容错乱（蜂蜜不坏 投喂学习）*
 *Version: v3.1 | 2026-08-05 | + CHECKLIST §71(同一现象/参数表述须前后一致)/§72(习惯化等基础学习形式勿简化为学会/学习)/§73(强因果关联知识点须点明因果链)（含羞草缩叶 投喂学习）*
-*Version: v3.4 | 2026-09-14 | + FORBIDDEN FP-72（润湿/不润湿液面凹凸方向混淆，毛巾吸水投喂学习，v1 独立审校第二轮抓出）+ CHECKLIST §106/§107（凹凸方向绑定润湿性、半径直径口径一致）+ FP 总数 69→71*
+*Version: v3.5 | 2026-09-15 | + FORBIDDEN FP-73（比例倍数省略维度指代，直径比与重量/体积比混用，云有多重投喂学习，四家AI一致抓出）+ CHECKLIST §109/§110（力学表述禁"不起作用"式省略、水汽与云滴物态术语不得混用）+ FEEDBACK_LOG 4 条（含 ima 两条指控被权威源推翻的信源甄别复训）
+*历史：v3.4 | 2026-09-14 | + FORBIDDEN FP-72（润湿/不润湿液面凹凸方向混淆，毛巾吸水投喂学习，v1 独立审校第二轮抓出）+ CHECKLIST §106/§107（凹凸方向绑定润湿性、半径直径口径一致）+ FP 总数 69→71*
 *历史：v3.3 | 2026-09-11 | + FP-71（伪反转编造机制）*
 *Version: v3.1 | 2026-08-07 | + CHECKLIST §74(组织成分禁"没有水分"类绝对化)/§75(耐受力机制须双重防线闭环)（企鹅脚不怕冻 投喂学习）*
 *Version: v3.1 | 2026-08-11 | + CHECKLIST §81(微观机制"可动/滑动"描述须符合真实分子运动模式)/§82(通俗版保留术语锚点供读者探索)（橡皮筋弹回 二轮投喂学习）*
