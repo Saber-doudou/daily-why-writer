@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-L3 Publish v3.20 — daily-why 自包含发布脚本
+L3 Publish v3.21 — daily-why 自包含发布脚本
 零 AI 依赖，一条命令跑完：匹配检查、IMA 备份、GitHub 推送、执行日志归档
 
 Usage:
@@ -21,7 +21,7 @@ from pathlib import Path
 
 # ── 常量 ──────────────────────────────────────────────
 
-VERSION = "v3.20"              # 09-15 v3.20：话题提取跳空行对齐 check_topic（P3 审查 P1-3 双源漂移：首行为空行时旧实现返回 None → 去重 fail-open 放行，存在静默绕过窗口；Master 确认当轮修复）+ dedup_selftest R4 回归用例；09-15 v3.19：dedup 卡点默认反转 enforce（Silent Fail-Open 根治：判定明确=重复时默认硬拦 exit 1，DAILY_WHY_DEDUP_RELAX=1 显式豁免降软 warn，检测器自身故障 fail-open 保留；依据 v3.13 SKILL bash 前缀注入在 Windows 不生效的 EXP-014 实证，外部经验 Praesidia/readysolutions fail-closed 共识）+ check_topic 排除 _废弃 后缀并修复无#标题提取盲区（#51）+ prepare_topics full/compact 同源派生断言 + 新增 dedup_selftest.py 双向自检（入 extra_sync/git_add_files）；v3.18：灰区告警豁免清单落地（config.git_gray_exemptions 8 项=达尔文 09-04 实验一次性产物，Master 授权查证后决策；外部经验一致：实验产物不入同步通道；豁免走配置+留理由，EXP-004）；v3.17：沙箱网络隔离 push 失败处置固化（SKILL 边界条件表新增：commit 已生成 → 沙箱外 push + api.github.com 核验 remote sha → 补推结论写报告 AI 补充区）；v3.16：引用机械门禁（正文含引用且 quote_checks 空 → 硬阻断）；CHANGELOG 补记 v3.15；去重自匹配修复 v3.14；去重硬卡点 v3.13 补记机制落地（补 09-07/08/09 三波欠账 + L3 SKILL 加「重大改造必更新 CHANGELOG」步骤 + git_add_files 纳入 CHANGELOG.md 真进 GitHub）；顺带修 S1(topics_context 当日写入时序约定) / S2(date_str 缺失静默退化改 warn)；v3.14 去重卡点自匹配修复（check_topic --exclude-date）；v3.13 去重硬卡点接入 L3 + 09-08 记忆治理 v3 落地
+VERSION = "v3.21"              # 09-16 v3.21：① 修复 #54——学习总结检索由固定名 学习总结.md 改为前缀 glob（学习总结*.md），多份命中取字典序首个并告警；L2 实际命名带话题后缀（学习总结-熊猫第六指.md），固定名零命中会让 Phase 1 匹配度检查整段被绕过（09-15 实测，靠 AI 人工补验兜住，EXP-004/EXP-014）；② 修复 #55——git_add_files 中 scripts/code_review_check.py 与 docs/code-review-standard.md（09-15 代码审查体系新增）补入 extra_sync G 组，消「无复制源」告警，源改动恢复同步进 repo。09-15 v3.20：话题提取跳空行对齐 check_topic（P3 审查 P1-3 双源漂移：首行为空行时旧实现返回 None → 去重 fail-open 放行，存在静默绕过窗口；Master 确认当轮修复）+ dedup_selftest R4 回归用例；09-15 v3.19：dedup 卡点默认反转 enforce（Silent Fail-Open 根治：判定明确=重复时默认硬拦 exit 1，DAILY_WHY_DEDUP_RELAX=1 显式豁免降软 warn，检测器自身故障 fail-open 保留；依据 v3.13 SKILL bash 前缀注入在 Windows 不生效的 EXP-014 实证，外部经验 Praesidia/readysolutions fail-closed 共识）+ check_topic 排除 _废弃 后缀并修复无#标题提取盲区（#51）+ prepare_topics full/compact 同源派生断言 + 新增 dedup_selftest.py 双向自检（入 extra_sync/git_add_files）；v3.18：灰区告警豁免清单落地（config.git_gray_exemptions 8 项=达尔文 09-04 实验一次性产物，Master 授权查证后决策；外部经验一致：实验产物不入同步通道；豁免走配置+留理由，EXP-004）；v3.17：沙箱网络隔离 push 失败处置固化（SKILL 边界条件表新增：commit 已生成 → 沙箱外 push + api.github.com 核验 remote sha → 补推结论写报告 AI 补充区）；v3.16：引用机械门禁（正文含引用且 quote_checks 空 → 硬阻断）；CHANGELOG 补记 v3.15；去重自匹配修复 v3.14；去重硬卡点 v3.13 补记机制落地（补 09-07/08/09 三波欠账 + L3 SKILL 加「重大改造必更新 CHANGELOG」步骤 + git_add_files 纳入 CHANGELOG.md 真进 GitHub）；顺带修 S1(topics_context 当日写入时序约定) / S2(date_str 缺失静默退化改 warn)；v3.14 去重卡点自匹配修复（check_topic --exclude-date）；v3.13 去重硬卡点接入 L3 + 09-08 记忆治理 v3 落地
 MIN_A_CONTENT_CHARS = 50   # A 段最少有效字符数
 MAX_IMPROVEMENTS_CHECK = 10  # 最多检查的改进点数量
 
@@ -347,10 +347,15 @@ def scan_articles(date_str):
         result["v2"] = f
         break
 
-    # 学习总结
-    summary_file = feed_dir / "学习总结.md"
-    if summary_file.exists():
-        result["learning_summary"] = summary_file
+    # 学习总结（09-16 修复 #54：L2 实际产出命名为「学习总结-{话题}.md」，
+    # 固定名 学习总结.md 检索会零命中 → Phase 1 匹配度检查整段被绕过（09-15 实测）。
+    # 改为前缀 glob；多份命中取字典序首个并告警，避免静默取错文件）
+    candidates = sorted(feed_dir.glob("学习总结*.md"))
+    if candidates:
+        result["learning_summary"] = candidates[0]
+        if len(candidates) > 1:
+            print(f"[Phase 0] ⚠️ 学习总结多份命中（{len(candidates)} 份），"
+                  f"取 {candidates[0].name}；如非预期请手工清理 feed_dir")
 
     return result
 
@@ -989,6 +994,11 @@ def phase3_git(date_str, topic, dry_run, force, res, verify=True):
         # 09-09 v3.16 修复：CHANGELOG.md 此前仅入 git_add_files 漏加复制源，
         # 导致自身从未进 repo（09-09 审计发现）。现补复制（EXP-004：约束要对齐真问题）
         (project_dir / "CHANGELOG.md", "CHANGELOG.md"),
+        # G 组补全（09-16 修复 #55）：09-15 代码审查体系 v4.9 新增的两项已进
+        # git_add_files 却漏配复制源 → 源改动永远同步不到 repo（同 v3.4 老毛病复发）。
+        # 教训：新增产出物入 git_add_files 时必须同步补复制清单（EXP-004）
+        (scripts_dir / "code_review_check.py", "scripts/code_review_check.py"),
+        (project_dir / "docs" / "code-review-standard.md", "docs/code-review-standard.md"),
     ]
     for src, rel in extra_sync:
         if src.exists():

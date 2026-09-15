@@ -4,6 +4,24 @@
 
 ---
 
+## v4.11 — 2026-09-16 两处静默绕过修复 + 版本漂移治理（L3 发布线 v3.20→v3.21）
+
+**来源**：09-15《熊猫第六指》L3 推送实跑暴露 2 个警告（AI 报告后 Master 令「修掉」），并附带报出两个未定性的版本号不一致项。
+
+**修复 1（#54 学习总结命名漂移 → Phase 1 整段被绕过）**：`scan_articles` 原按固定名 `投喂素材/{YYYYMMDD}/学习总结.md` 检索；L2 实际产出为 `学习总结-{话题}.md`（09-15 实为 `学习总结-熊猫第六指.md`）。零命中时脚本走 ⏭️ 跳过分支，**Phase 1 匹配度检查（结构一致性 / 审核一致性 / 规则同步三道机械校验）整段不执行**，当日靠 AI 人工补验兜住——性质同 #47（静默通道=防线失效），且 v3.9「零命中即判 FAIL」只覆盖改进点提取、未覆盖学习总结文件。改为前缀 glob `学习总结*.md`，多份命中取字典序首个并告警。**未升为硬 fail**：避免重蹈 #45「约束过强=全面阻断」，保留 warn + AI 补验双通道，待 Master 裁定是否收紧。
+
+**修复 2（#55 两个新增产出物漏配复制源）**：`scripts/code_review_check.py`、`docs/code-review-standard.md`（09-15 代码审查体系 v4.9 新增）在 `config.json` 的 `git_add_files` 中，但不在 `l3_publish.extra_sync` 复制清单 → 源改动永远同步不到 repo（同 v3.4「B 组文件在 git_add_files 却不在 files_to_copy」老毛病复发）。补入 G 组，双向自检由「2 项无复制源」告警转为 0。**教训**：新增产出物入 `git_add_files` 时必须同步补复制清单。
+
+**修复 3（版本漂移治理）**：① `daily-why-writer` 四处不一致——frontmatter v3.4、变更日志物理尾部 v3.3(09-11)、权威源 version.json v3.4、且 v3.4/v3.5 两条日志被误插在列表中部（08-05 与 08-07 之间）；真实最新版为 v3.5（09-15 FP-73 已落地 FORBIDDEN.md L403 / FEEDBACK_LOG L101）。已统一三处至 v3.5 并把两条日志按时间正序归位到列表末尾；② `daily-why-health-audit` v1.6（09-08）只改了 frontmatter 与标题、脚注历史串漏记，已补记。
+
+**遗留（待 Master 决策，未改脚本）**：L3 Phase 0 版本校验仅比对 frontmatter，writer 的日志区 v3.5 / audit 的脚注区漂移均检测不到——本次两处漂移都是人工核对发现，机制层无防线。建议扩展 `version.json` 的 `version_field` 支持 `footer_latest` 等第二校验位。已入缺陷 #56。
+
+**回归**：09-15 `--dry-run` 全绿（学习总结命中、Phase 1 PASS、改进点=5、审核 100、规则 FP-74 命中、双向自检 0 告警，与 AI 人工补验结论一致）；dedup_selftest 10/10 ALL PASS。
+
+**版本对齐**：v3.21 三处（version.json + l3_publish.py 含文件头 docstring + SKILL 标题/页脚/变更日志）+ CHANGELOG v4.11；writer 三处对齐 v3.5。
+
+---
+
 ## v4.10 — 2026-09-15 话题提取双源漂移修复（L3 发布线 v3.19→v3.20）
 
 **来源**：代码审查机制（v4.9）首轮示范审查 P1-3，Master 确认「都确认」后当轮修复。
