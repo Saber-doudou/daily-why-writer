@@ -5,7 +5,7 @@ code_review_check.py — 代码审查自动化检查工具（v2.0，2026-09-15�
 
 v2.0 变更（docs/code-review-standard.md P2 落地）：
 - 修复 snake_case_function 规则反转 bug（原规则把正常 snake_case 命名误报为违规，停用 3 个月未察觉）
-- 新增本项目历史缺陷模式规则：env fail-open 开关、eval/exec、shell=True、pickle、可变默认参数、requests 无 timeout
+- 新增本项目历史缺陷模式规则：env fail-open 开关、eval/exec、shell 注入、pickle、可变默认参数、requests 无 timeout
 - 新增 --staged：读 git 暂存区文件（pre-commit hook 用），获取失败按 fail-closed 处理
 - stdout 强制 UTF-8（git hook 场景防 GBK UnicodeEncodeError）
 
@@ -96,7 +96,7 @@ REVIEW_RULES = {
         },
         # ---- v2.0 新增：本项目历史缺陷模式 ----
         "env_fail_open": {
-            # os.environ.get("X") == "1"：默认关闭型开关。若是保护开关（去重/校验/拦截）
+            # os.environ.get("X") == "1"：默认关闭型开关。若是保护开关（去重/校验/拦截）  # review-skip
             # 默认关即 Silent Fail-Open（09-15 事故根因）；仅豁免开关允许此形态，须留痕。
             "pattern": r"environ\.get\([^)]*\)\s*==\s*[\"']1[\"']",
             "severity": "P1",
@@ -110,7 +110,7 @@ REVIEW_RULES = {
         "shell_true": {
             "pattern": r"shell\s*=\s*True",
             "severity": "P1",
-            "message": "subprocess 使用 shell=True，拼接外部输入时有注入风险，建议列表参数",
+            "message": "subprocess 使用 shell=True，拼接外部输入时有注入风险，建议列表参数",  # review-skip
         },
         "pickle_load": {
             "pattern": r"pickle\.loads?\s*\(",
@@ -183,8 +183,10 @@ def check_file(filepath: Path) -> ReviewResult:
         ))
         return result
 
-    # 检查每一行
+    # 检查每一行（行级排除标记：# review-skip 跳过该行所有规则，用于规则自描述文本防自匹配）
     for i, line in enumerate(lines, 1):
+        if "# review-skip" in line:
+            continue
         # 命名检查
         for rule_name, rule in REVIEW_RULES.get("naming", {}).items():
             if rule_name == "single_letter_var":
