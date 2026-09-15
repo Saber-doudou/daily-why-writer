@@ -7,8 +7,8 @@ description: >
   路由规则：凡输入含「发布/推送/审计/备份」动作词（如 dailywhy发布），本技能优先于
   其他 dailywhy 系列技能触发（动作词优先），触发即执行 L3 发布流程。
 agent_created: true
-version: v3.13
-last_updated: 2026-09-09
+version: v3.20
+last_updated: 2026-09-15
 ---
 
 # daily-why-publish v3.20
@@ -41,6 +41,7 @@ C:/Users/admin/.workbuddy/binaries/python/versions/3.13.12/python.exe F:/WorkBud
 
 脚本自动完成：
 - 文件扫描 + 幂等性检查
+- 话题去重卡点（Phase 0，check_topic 严格模式）：**默认硬拦截**——命中历史重复 exit 1 中止发布，`DAILY_WHY_DEDUP_RELAX=1` 显式豁免降软 warn（v3.19 起默认 enforce，09-15）
 - 结构一致性（A/C/F 段、分类、Q 数）
 - validate_article.py 审核（P0/P1/得分）
 - 规则文件存在性检查（FORBIDDEN/CHECKLIST）
