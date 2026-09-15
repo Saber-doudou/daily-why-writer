@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-L3 Publish v3.12 — daily-why 自包含发布脚本
+L3 Publish v3.19 — daily-why 自包含发布脚本
 零 AI 依赖，一条命令跑完：匹配检查、IMA 备份、GitHub 推送、执行日志归档
 
 Usage:

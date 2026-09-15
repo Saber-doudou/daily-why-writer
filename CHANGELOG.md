@@ -4,6 +4,20 @@
 
 ---
 
+## v4.9 — 2026-09-15 代码审查机制建立（标准 + 机械工具 v2.0 + pre-commit 门禁）
+
+**背景**：Master 判定「代码质量参差不齐」，要求建立系统性代码审查机制。资产盘点发现旧版 `CODE_REVIEW_GUIDE.md`（06-05）与 `code_review_check.py` 均为死文件（无流程挂接、无迭代），且旧规则库查不出本项目任何真实缺陷（09-15 三根因 Silent Fail-Open / SSOT 漂移 / 死环境变量注入全部漏检）。
+
+**建立（四件套）**：
+1. **`docs/code-review-standard.md` v1.0**：问题分级 🔴P0/🟡P1/💭P2 + 通过线 P0=0 且 P1≤2（继承 maker-checker）；守护类脚本红线档（fail-closed 默认、双向测试强制、版本对齐含文件头 docstring、ls-remote 权威验证、同源派生、产出物「谁读哪步读」判据）；触发时机表（守护脚本改动→自测+独立审查；git commit→hook 自动 strict）。
+2. **`code_review_check.py` v2.0**：修复 snake_case_function 规则反转 bug（误报正常 snake_case 函数，停用 3 个月未察觉）；新增本项目历史缺陷模式规则（env fail-open 开关、eval/exec P0、shell=True、pickle、可变默认参数、requests 无 timeout、assert 校验）；新增 `--staged`（读 git 暂存区，`git -C` 显式绑定 repo，fail-closed）；stdout 强制 UTF-8（hook 场景防 GBK）。探针实测：干净文件放行 / eval 文件 P0 拦截 exit 1。
+3. **pre-commit hook**（repo `daily-why-writer/.git/hooks/pre-commit`）：commit 时自动跑 `--staged --strict`，P0 非零拒绝提交——等效「L3 发布前必跑」，零侵入 l3_publish.py。
+4. **示范审查**：v3.19 四文件首轮实战（`deliverables/2026-09-15-代码审查示范报告.md`），P0=0 / P1=3，当场修复 2 条注释级（文件头 docstring v3.12→v3.19、调用点过期注释），修复后 dedup_selftest 9/9 ALL PASS（R1/R2 正好用 08-28 事故原题「云重得像一百头大象」验证拦截）；1 条话题提取双源漂移（l3_publish `splitlines()[0]` vs check_topic 跳空行版）待 Master 裁定后随下一版修复。
+
+**同步**：config.json git_add_files 36→38（+`scripts/code_review_check.py`、+`docs/code-review-standard.md`）；死文件处置建议（agents/quality-reviewer.json 归档）记录于新标准第 7 节，待 Master 确认。
+
+---
+
 ## v4.8 — 2026-09-15 去重防线三重加固（L3 发布线 v3.18→v3.19）
 
 **背景（09-15 云朵重复暴雷）**：《云有多重》与 08-28《云朵很重》同题重复（继 09-08 蜂蜜后第二次同类事故）。check_topic 判重成功但 L1 照写、L3 软 warn 放行。外部经验调研（`deliverables/2026-09-15-去重防线外部经验调研.md`）定性为业界 **Silent Fail-Open** 模式；EXP-014 独立重验更发现 v3.13 的 `DAILY_WHY_DEDUP_ENFORCE=1` SKILL 注入用的是 bash 前缀语法，在 Windows 实际执行环境**从未生效**——「文档注入≠运行时生效」。
