@@ -21,7 +21,7 @@ from pathlib import Path
 
 # ── 常量 ──────────────────────────────────────────────
 
-VERSION = "v3.18"              # 09-11 v3.18：灰区告警豁免清单落地（config.git_gray_exemptions 8 项=达尔文 09-04 实验一次性产物，Master 授权查证后决策；外部经验一致：实验产物不入同步通道；豁免走配置+留理由，EXP-004）；v3.17：沙箱网络隔离 push 失败处置固化（SKILL 边界条件表新增：commit 已生成 → 沙箱外 push + api.github.com 核验 remote sha → 补推结论写报告 AI 补充区）；v3.16：引用机械门禁（正文含引用且 quote_checks 空 → 硬阻断）；CHANGELOG 补记 v3.15；去重自匹配修复 v3.14；去重硬卡点 v3.13 补记机制落地（补 09-07/08/09 三波欠账 + L3 SKILL 加「重大改造必更新 CHANGELOG」步骤 + git_add_files 纳入 CHANGELOG.md 真进 GitHub）；顺带修 S1(topics_context 当日写入时序约定) / S2(date_str 缺失静默退化改 warn)；v3.14 去重卡点自匹配修复（check_topic --exclude-date）；v3.13 去重硬卡点接入 L3 + 09-08 记忆治理 v3 落地
+VERSION = "v3.19"              # 09-15 v3.19：dedup 卡点默认反转 enforce（Silent Fail-Open 根治：判定明确=重复时默认硬拦 exit 1，DAILY_WHY_DEDUP_RELAX=1 显式豁免降软 warn，检测器自身故障 fail-open 保留；依据 v3.13 SKILL bash 前缀注入在 Windows 不生效的 EXP-014 实证，外部经验 Praesidia/readysolutions fail-closed 共识）+ check_topic 排除 _废弃 后缀并修复无#标题提取盲区（#51）+ prepare_topics full/compact 同源派生断言 + 新增 dedup_selftest.py 双向自检（入 extra_sync/git_add_files）；v3.18：灰区告警豁免清单落地（config.git_gray_exemptions 8 项=达尔文 09-04 实验一次性产物，Master 授权查证后决策；外部经验一致：实验产物不入同步通道；豁免走配置+留理由，EXP-004）；v3.17：沙箱网络隔离 push 失败处置固化（SKILL 边界条件表新增：commit 已生成 → 沙箱外 push + api.github.com 核验 remote sha → 补推结论写报告 AI 补充区）；v3.16：引用机械门禁（正文含引用且 quote_checks 空 → 硬阻断）；CHANGELOG 补记 v3.15；去重自匹配修复 v3.14；去重硬卡点 v3.13 补记机制落地（补 09-07/08/09 三波欠账 + L3 SKILL 加「重大改造必更新 CHANGELOG」步骤 + git_add_files 纳入 CHANGELOG.md 真进 GitHub）；顺带修 S1(topics_context 当日写入时序约定) / S2(date_str 缺失静默退化改 warn)；v3.14 去重卡点自匹配修复（check_topic --exclude-date）；v3.13 去重硬卡点接入 L3 + 09-08 记忆治理 v3 落地
 MIN_A_CONTENT_CHARS = 50   # A 段最少有效字符数
 MAX_IMPROVEMENTS_CHECK = 10  # 最多检查的改进点数量
 
@@ -404,7 +404,10 @@ def check_idempotency(date_str, force):
 # 把"话题去重"从 AI 软约束升级为代码硬卡点，防止重复选题落盘发布。
 # 设计原则（呼应铁律 EXP-004 约束优于指令 / EXP-014 可观测性）：
 #   1. fail-open：check_topic 自身故障（异常/超时/缺失/参数错）→ 放行+warn，绝不拖垮发布。
-#   2. 人机区分：默认软模式（warn 不阻断）；DAILY_WHY_DEDUP_ENFORCE=1 才硬拦截。
+#   2. 默认硬拦截（09-15 v3.19 反转，根治 Silent Fail-Open：判定明确=重复时仅 warn 等于不拦）。
+#      豁免须显式：DAILY_WHY_DEDUP_RELAX=1 降级为软 warn；旧 DAILY_WHY_DEDUP_ENFORCE 不再读取。
+#      依据：v3.13 曾靠 SKILL.md 以 bash 前缀语法注入 ENFORCE，Windows 执行环境不生效（EXP-014
+#      实证「文档注入≠运行时生效」），故改代码默认值——卡点的默认值就是它的真实行为。
 #   3. 紧急总开关：DAILY_WHY_DEDUP_OFF=1 整体关闭。
 #   4. 话题提取：读文章首行去 emoji（兼容无 '#' 标题新格式），传 check_topic.py 严格模式。
 
@@ -447,7 +450,8 @@ def dedup_gate_check(articles, res, date_str=None):
         return False
 
     py = sys.executable or "python"
-    enforce = os.environ.get("DAILY_WHY_DEDUP_ENFORCE") == "1"
+    # 09-15 v3.19：默认硬拦截；DAILY_WHY_DEDUP_RELAX=1 显式豁免降级软 warn（Silent Fail-Open 根治）
+    enforce = os.environ.get("DAILY_WHY_DEDUP_RELAX") != "1"
     blocked = False
     seen = set()
     for key in ("v1", "v2"):
@@ -938,6 +942,8 @@ def phase3_git(date_str, topic, dry_run, force, res, verify=True):
         (scripts_dir / "generate_prompt.py", "scripts/generate_prompt.py"),
         (scripts_dir / "generate_prompt.py", "generate_prompt.py"),
         (scripts_dir / "check_topic.py", "check_topic.py"),
+        # 09-15 v3.19：去重防线双向自检脚本（达尔文棘轮资产化，#45 教训制度化）
+        (scripts_dir / "dedup_selftest.py", "dedup_selftest.py"),
         (scripts_dir / "topic_utils.py", "topic_utils.py"),
         (scripts_dir / "full_selfcheck.py", "full_selfcheck.py"),
         (scripts_dir / "message_handler.py", "message_handler.py"),

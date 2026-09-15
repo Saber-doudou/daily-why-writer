@@ -4,6 +4,21 @@
 
 ---
 
+## v4.8 — 2026-09-15 去重防线三重加固（L3 发布线 v3.18→v3.19）
+
+**背景（09-15 云朵重复暴雷）**：《云有多重》与 08-28《云朵很重》同题重复（继 09-08 蜂蜜后第二次同类事故）。check_topic 判重成功但 L1 照写、L3 软 warn 放行。外部经验调研（`deliverables/2026-09-15-去重防线外部经验调研.md`）定性为业界 **Silent Fail-Open** 模式；EXP-014 独立重验更发现 v3.13 的 `DAILY_WHY_DEDUP_ENFORCE=1` SKILL 注入用的是 bash 前缀语法，在 Windows 实际执行环境**从未生效**——「文档注入≠运行时生效」。
+
+**改造（三项，均经实测验证）**：
+1. **dedup 卡点默认反转 enforce**（l3_publish.py）：默认硬拦截（命中重复 → exit 1），`DAILY_WHY_DEDUP_RELAX=1` 显式豁免降软 warn；检测器自身故障 fail-open 保留（可用性设计，Praesidia/readysolutions 共识：敏感路径默认拒绝，放行须显式留痕）。SKILL Step 1/3 移除失效 ENFORCE 前缀。
+2. **check_topic.py 排除 `_废弃` 后缀文件**（Azure 软删除标记教训：标记必须被读取方识别，否则等于没删）；prepare_topics.py 扫描同步排除。
+3. **prepare_topics.py full/compact 同源派生**：一次 `scan_all()` 同时产出两份文件（compact 由本次 result 派生），写后断言 `topic_summaries` 一致，不一致 exit 1——根治「同一构建函数跑两次」的漂移（09-15 实测 full=40/compact=47）。
+
+**新增**：`scripts/dedup_selftest.py` 防线双向自检（隔离 workspace 5 用例：精确重复/语义相似/全新放行/废弃排除/当日自排除 + 真实库冒烟）——落实 #45 教训「硬卡点必须配不误杀正常样例的回归用例」的制度化。
+
+**验证**：dedup_selftest 全绿（8/8）；版本号三处对齐 v3.19（version.json + l3_publish.py + SKILL 标题/脚注）。
+
+---
+
 ## v4.7 — 2026-09-10 沙箱网络隔离 push 失败处置固化（L3 发布线 v3.16→v3.17）
 
 **背景（09-10 实踩）**：L3 发布时 Phase 3 报「❌ 网络失败（不可重试）：github.com 探活失败」，`--retry` 在沙箱内重试同样失败，发布报告判「⚠️ 部分成功 / 错误 1 个」。但 `git log -1` 显示本地 commit `9ee9882` 已正常生成——失败发生在 push 阶段，非 commit 阶段。沙箱内 `git ls-remote origin HEAD` 直接 `Recv failure: Connection was reset`，证实为沙箱网络隔离，与凭证损坏、rebase 冲突均无关。

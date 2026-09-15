@@ -141,14 +141,20 @@ def check_semantic_similarity(new_topic: str, existing_topic: str,
 
 
 def extract_topic_from_article(filepath: Path) -> str | None:
-    """从文章文件提取标题（第一行 # 开头的行）"""
+    """从文章文件提取标题（首个非空行，去 '#' 前缀；emoji 由 normalize_topic 去除）。
+
+    09-15 修复（缺陷 #51）：原实现只认 '#' 开头的行，而新格式文章首行是
+    「emoji + 标题」（无 '#'，如 09-08 蜂蜜文「🍯 为什么蜂蜜能放几千年都不坏？」），
+    导致此类文章在文件扫描路径上是去重盲区（仅靠 memory.md 兜底）。
+    现对齐 l3_publish._extract_topic_from_file 的首行策略。
+    """
     try:
         with open(filepath, 'r', encoding='utf-8') as f:
             for line in f:
                 line = line.strip()
-                if line.startswith('#'):
-                    topic = line.lstrip('#').strip()
-                    return topic
+                if not line:
+                    continue  # 跳过空行，取首个非空行
+                return line.lstrip('#').strip() or None
     except Exception:
         pass
     return None
@@ -214,6 +220,8 @@ def check_topic(topic: str, workspace: Path, threshold: float = OVERLAP_THRESHOL
     for md_file in sorted(workspace.glob("articles/**/*-每日冷知识*.md")):
         if exclude_date and md_file.name.startswith(exclude_date):
             continue  # 排除当日自身文章（初版/优化版互不匹配）
+        if "_废弃" in md_file.name:
+            continue  # 软删除标记（09-15）：Azure 教训——标记必须被读取方识别，否则等于没删
         file_topic = extract_topic_from_article(md_file)
         if file_topic:
             if normalize_topic(file_topic) == normalized:

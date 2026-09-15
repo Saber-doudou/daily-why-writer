@@ -10,6 +10,7 @@ prepare_topics.py — 扫描所有历史文章和 memory.md，提取已用话题
 """
 
 import re
+import sys
 import json
 import argparse
 from pathlib import Path
@@ -30,9 +31,11 @@ def scan_all(workspace: Path, limit: int = 50) -> dict:
     """扫描所有来源，生成 topics_context"""
     all_topics = []
 
-    # 1. 扫描文章文件
+    # 1. 扫描文章文件（排除 _废弃 软删除标记文件，与 check_topic 同规则，09-15）
     md_files = sorted(workspace.glob("articles/**/*-每日冷知识*.md"), reverse=True)
     for fp in md_files[:limit]:
+        if "_废弃" in fp.name:
+            continue
         info = extract_topic_from_article(fp)
         if info:
             info["source"] = "article"
@@ -128,9 +131,9 @@ def main():
 
     print(f"[prepare_topics] 扫描工作目录: {workspace}")
 
-    result = scan_all(workspace, limit=args.limit)
+    result = scan_all(workspace, limit=args.limit)  # 唯一一次扫描（09-15 同源原则）
 
-    # 精简版：只保留去重所需信息
+    # --compact 轻量模式：只更新 compact（仍从本次扫描结果派生，不独立扫描）
     if args.compact:
         compact_result = {
             "generated_at": result["generated_at"],
@@ -140,15 +143,45 @@ def main():
         result = compact_result
         print(f"[prepare_topics] 精简版模式：只保留 {len(result['topic_summaries'])} 个话题标题用于去重")
 
-    # 写入文件
+        indent = 2 if args.pretty else None
+        output_path.write_text(json.dumps(result, ensure_ascii=False, indent=indent),
+                               encoding="utf-8")
+        print(f"[prepare_topics] 完成! 共 {result['total_count']} 个话题")
+        print(f"[prepare_topics] 输出: {output_path}")
+        print(f"\n--- 最近 5 个话题（精简版） ---")
+        for t in result["topic_summaries"][:5]:
+            print(f"  {t}")
+        return result
+
+    # 默认模式（09-15 v1.1 同源派生，根治漂移）：写 full 后，compact 由本次 result 派生写入。
+    # 依据：旧实现 full/compact 各自独立跑 scan_all()，两次运行之间文章目录变化即漂移
+    # （09-15 实测 full=40 / compact=47）。派生数据必须是构建产物，不能是独立副本（SSOT）。
     indent = 2 if args.pretty else None
     output_path.write_text(json.dumps(result, ensure_ascii=False, indent=indent),
                            encoding="utf-8")
 
+    compact_path = workspace / "config" / "topics_context_compact.json"
+    compact_result = {
+        "generated_at": result["generated_at"],
+        "total_count": result["total_count"],
+        "topic_summaries": result["topic_summaries"],
+    }
+    compact_path.write_text(json.dumps(compact_result, ensure_ascii=False, indent=indent),
+                            encoding="utf-8")
+
+    # 一致性断言（防未来手改单侧；用显式检查而非 assert，避免 -O 跳过）
+    if compact_result["topic_summaries"] != result["topic_summaries"]:
+        print("[prepare_topics] ❌ 同源一致性断言失败: full 与 compact 的 topic_summaries 不一致",
+              file=sys.stderr)
+        sys.exit(1)
+    print(f"[prepare_topics] ✅ 同源派生: compact 从本次 full 派生，"
+          f"topic_summaries 一致 (n={len(result['topic_summaries'])})")
+
     print(f"[prepare_topics] 完成! 共 {result['total_count']} 个话题")
     print(f"[prepare_topics] 输出: {output_path}")
+    print(f"[prepare_topics] 输出: {compact_path}")
 
-    # 打印摘要（精简版不打印分类统计）
+    # 打印摘要（--compact 分支已在上方提前 return，此处仅 full 模式）
     if not args.compact:
         print(f"\n--- 分类统计 ---")
         for cat, count in sorted(result["category_stats"].items(), key=lambda x: -x[1]):
@@ -157,10 +190,6 @@ def main():
         print(f"\n--- 最近 5 个话题 ---")
         for t in result["topics"][:5]:
             print(f"  {t['date']}: {t['topic']}")
-    else:
-        print(f"\n--- 最近 5 个话题（精简版） ---")
-        for t in result["topic_summaries"][:5]:
-            print(f"  {t}")
 
     return result
 

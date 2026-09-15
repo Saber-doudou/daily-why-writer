@@ -1,6 +1,6 @@
 {
   "_comment": "Daily Why 四技能版本号唯一权威源（2026-09-01 建，打破「版本号易腐」反复复发）。l3_publish.py 发布前读取本文件，校验各技能 SKILL.md 实际版本号与之一致，不一致告警。新增/修改技能版本号必须先改本文件。",
-  "_updated": "2026-09-11",
+  "_updated": "2026-09-15",
   "skills": {
     "daily-why-writer": {
       "version": "v3.4",
@@ -10,11 +10,11 @@
       "_note": "09-14 v3.4：+FP-72(润湿/不润湿液面凹凸方向混淆，毛巾吸水投喂学习 v1 独立审校第二轮抓出)+CHECKLIST §106/§107(凹凸方向绑定润湿性、半径直径口径一致)；FP 总数 69→71。09-08 v3.3：+FP-68(生化作用程度说满+同文存活机制自相矛盾)+CHECKLIST §91案例补充(流传轶事须查辟谣源)。09-01 v3.2：达尔文 Round2。reviewer_prompt.md 子文件现 v2.7（09-05 达尔文 Round1+2+3 升级）。版本号仍不在此处跟踪，由文件自身标题/脚注维护"
     },
     "daily-why-publish": {
-      "version": "v3.18",
+      "version": "v3.19",
       "version_field": "title_and_footer",
       "file": "C:/Users/admin/.workbuddy/skills/daily-why-publish/SKILL.md",
       "repo_file": "daily-why-publish/SKILL.md",
-      "_note": "09-11 v3.18：灰区告警豁免清单落地——config.json 新增 git_gray_exemptions（8 项=达尔文 09-04 实验一次性产物：archive/optimize-* 5 项 + reviewer_prompt-v2.5-baseline + auto-optimize-results.tsv + test-prompts.json），l3_publish 灰区检测减去豁免集；Master 授权 AI 查证后决策（外部经验 FJSP-DRL/problem-drift/Research-Engineering-OS 一致：实验产物/测试结果不入版本同步，仓库保持源码+配置聚焦）；文件本身仍在 git 历史未删，仅消除每周灰区告警噪音；09-09 v3.15：CHANGELOG 补记机制落地（补 09-07/08/09 三波欠账 + L3 SKILL 加「重大改造必更新 CHANGELOG」步骤 + git_add_files 纳入 CHANGELOG.md 真进 GitHub）；09-09 v3.14：去重卡点自匹配缺陷修复——check_topic.py 新增 --exclude-date 参数（排除当日自身文章/topics 条目），dedup_gate_check 调用时必传当日日期（v3.13 首跑即 100% 误杀：初版与优化版互相精确匹配）。09-09 v3.13：记忆治理 v3 全量落地（阶段5 门禁前置 L1 + P0-1 强制输出物接线 + check_memory_size v1.2 动态配额/NON_BLOCKING + 新增 memory_decay/verify_memory_migration/memory_budget 入 F 组，git_add_files 33→36）。09-07 v3.11：记忆治理脚本纳入 git 同步（check_memory_size.py/restructure_memory.py 入 git_add_files + extra_sync E 组）+ 自动化记忆归档切割；09-07 v3.10：记忆分片重构联动——IMA 历史读写迁移 topics/ima_history.md（切断 MEMORY.md 自动写入）+ Phase 0 记忆体积门禁（warn 不阻断）+ 新增 check_memory_size.py/restructure_memory.py；改动项见 SKILL.md 变更日志；09-09 v3.16：引用机械门禁（validate_review 检测正文引用且 quote_checks 空 → blocking + l3 sys.exit 硬阻断，CITATION_HINT 收窄防误杀）"
+      "_note": "09-15 v3.19：dedup 卡点默认反转 enforce（Silent Fail-Open 根治——09-15 云朵重复实证 v3.13 的 SKILL bash 前缀注入在 Windows 不生效，改代码默认值：判定明确=重复即硬拦 exit 1，DAILY_WHY_DEDUP_RELAX=1 显式豁免降软 warn，检测器自身故障 fail-open 保留；check_topic 加 _废弃 后缀排除；prepare_topics 同源派生 full/compact+一致性断言；新增 dedup_selftest.py 双向自检）。09-11 v3.18：灰区告警豁免清单落地——config.json 新增 git_gray_exemptions（8 项=达尔文 09-04 实验一次性产物：archive/optimize-* 5 项 + reviewer_prompt-v2.5-baseline + auto-optimize-results.tsv + test-prompts.json），l3_publish 灰区检测减去豁免集；Master 授权 AI 查证后决策（外部经验 FJSP-DRL/problem-drift/Research-Engineering-OS 一致：实验产物/测试结果不入版本同步，仓库保持源码+配置聚焦）；文件本身仍在 git 历史未删，仅消除每周灰区告警噪音；09-09 v3.15：CHANGELOG 补记机制落地（补 09-07/08/09 三波欠账 + L3 SKILL 加「重大改造必更新 CHANGELOG」步骤 + git_add_files 纳入 CHANGELOG.md 真进 GitHub）；09-09 v3.14：去重卡点自匹配缺陷修复——check_topic.py 新增 --exclude-date 参数（排除当日自身文章/topics 条目），dedup_gate_check 调用时必传当日日期（v3.13 首跑即 100% 误杀：初版与优化版互相精确匹配）。09-09 v3.13：记忆治理 v3 全量落地（阶段5 门禁前置 L1 + P0-1 强制输出物接线 + check_memory_size v1.2 动态配额/NON_BLOCKING + 新增 memory_decay/verify_memory_migration/memory_budget 入 F 组，git_add_files 33→36）。09-07 v3.11：记忆治理脚本纳入 git 同步（check_memory_size.py/restructure_memory.py 入 git_add_files + extra_sync E 组）+ 自动化记忆归档切割；09-07 v3.10：记忆分片重构联动——IMA 历史读写迁移 topics/ima_history.md（切断 MEMORY.md 自动写入）+ Phase 0 记忆体积门禁（warn 不阻断）+ 新增 check_memory_size.py/restructure_memory.py；改动项见 SKILL.md 变更日志；09-09 v3.16：引用机械门禁（validate_review 检测正文引用且 quote_checks 空 → blocking + l3 sys.exit 硬阻断，CITATION_HINT 收窄防误杀）"
     },
     "daily-why-feed-learning": {
       "version": "v3.3",
