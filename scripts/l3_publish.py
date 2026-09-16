@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-L3 Publish v3.21 — daily-why 自包含发布脚本
+L3 Publish v3.22 — daily-why 自包含发布脚本
 零 AI 依赖，一条命令跑完：匹配检查、IMA 备份、GitHub 推送、执行日志归档
 
 Usage:
@@ -21,9 +21,17 @@ from pathlib import Path
 
 # ── 常量 ──────────────────────────────────────────────
 
-VERSION = "v3.21"              # 09-16 v3.21：① 修复 #54——学习总结检索由固定名 学习总结.md 改为前缀 glob（学习总结*.md），多份命中取字典序首个并告警；L2 实际命名带话题后缀（学习总结-熊猫第六指.md），固定名零命中会让 Phase 1 匹配度检查整段被绕过（09-15 实测，靠 AI 人工补验兜住，EXP-004/EXP-014）；② 修复 #55——git_add_files 中 scripts/code_review_check.py 与 docs/code-review-standard.md（09-15 代码审查体系新增）补入 extra_sync G 组，消「无复制源」告警，源改动恢复同步进 repo。09-15 v3.20：话题提取跳空行对齐 check_topic（P3 审查 P1-3 双源漂移：首行为空行时旧实现返回 None → 去重 fail-open 放行，存在静默绕过窗口；Master 确认当轮修复）+ dedup_selftest R4 回归用例；09-15 v3.19：dedup 卡点默认反转 enforce（Silent Fail-Open 根治：判定明确=重复时默认硬拦 exit 1，DAILY_WHY_DEDUP_RELAX=1 显式豁免降软 warn，检测器自身故障 fail-open 保留；依据 v3.13 SKILL bash 前缀注入在 Windows 不生效的 EXP-014 实证，外部经验 Praesidia/readysolutions fail-closed 共识）+ check_topic 排除 _废弃 后缀并修复无#标题提取盲区（#51）+ prepare_topics full/compact 同源派生断言 + 新增 dedup_selftest.py 双向自检（入 extra_sync/git_add_files）；v3.18：灰区告警豁免清单落地（config.git_gray_exemptions 8 项=达尔文 09-04 实验一次性产物，Master 授权查证后决策；外部经验一致：实验产物不入同步通道；豁免走配置+留理由，EXP-004）；v3.17：沙箱网络隔离 push 失败处置固化（SKILL 边界条件表新增：commit 已生成 → 沙箱外 push + api.github.com 核验 remote sha → 补推结论写报告 AI 补充区）；v3.16：引用机械门禁（正文含引用且 quote_checks 空 → 硬阻断）；CHANGELOG 补记 v3.15；去重自匹配修复 v3.14；去重硬卡点 v3.13 补记机制落地（补 09-07/08/09 三波欠账 + L3 SKILL 加「重大改造必更新 CHANGELOG」步骤 + git_add_files 纳入 CHANGELOG.md 真进 GitHub）；顺带修 S1(topics_context 当日写入时序约定) / S2(date_str 缺失静默退化改 warn)；v3.14 去重卡点自匹配修复（check_topic --exclude-date）；v3.13 去重硬卡点接入 L3 + 09-08 记忆治理 v3 落地
+VERSION = "v3.22"              # 09-16 v3.22：① 修复 #57a——报告 checksum 校验口径与写入口径差 1 个换行（写入侧 script_zone = join(lines) 不含 checksum 行前分隔换行，校验侧 text[:cut] 却含），导致每次渲染 md5 必不等、恒报「脚本区已被手工改动」并全量覆盖（09-15 报告实测 recorded 与 head[:-1] 精确相等、与 head 不等；与版本号是否变化无关，AI 补充区丢失是必然而非偶发）；现抽公共指纹函数 _script_zone_digest 供两侧共用（rstrip 归一化）+ 写入后回读自校验；② 修复 #57b——render_report 改为只重写 checksum 标记之前的脚本区，标记之后的 AI 补充区无条件原样保留（业界经验：SilverModel User Code Blocks / cddl-codegen keep-marker 一致指出「工具无法反推自己上次的输出」，故弃用「检测篡改」改用「标记界定所有权」；EXP-004 约束优于指令）；③ 修复 #56——check_version_consistency 由单口径升级为 frontmatter/标题/末条 *Version: 三口径全比（此前 writer 日志区 v3.5、audit 脚注区 v1.6、publish frontmatter v3.20 三处漂移全部漏判，均为人工核对才发现；且原实现取首条 *Version: 而非末条）。09-16 v3.21：① 修复 #54——学习总结检索由固定名 学习总结.md 改为前缀 glob（学习总结*.md），多份命中取字典序首个并告警；L2 实际命名带话题后缀（学习总结-熊猫第六指.md），固定名零命中会让 Phase 1 匹配度检查整段被绕过（09-15 实测，靠 AI 人工补验兜住，EXP-004/EXP-014）；② 修复 #55——git_add_files 中 scripts/code_review_check.py 与 docs/code-review-standard.md（09-15 代码审查体系新增）补入 extra_sync G 组，消「无复制源」告警，源改动恢复同步进 repo。09-15 v3.20：话题提取跳空行对齐 check_topic（P3 审查 P1-3 双源漂移：首行为空行时旧实现返回 None → 去重 fail-open 放行，存在静默绕过窗口；Master 确认当轮修复）+ dedup_selftest R4 回归用例；09-15 v3.19：dedup 卡点默认反转 enforce（Silent Fail-Open 根治：判定明确=重复时默认硬拦 exit 1，DAILY_WHY_DEDUP_RELAX=1 显式豁免降软 warn，检测器自身故障 fail-open 保留；依据 v3.13 SKILL bash 前缀注入在 Windows 不生效的 EXP-014 实证，外部经验 Praesidia/readysolutions fail-closed 共识）+ check_topic 排除 _废弃 后缀并修复无#标题提取盲区（#51）+ prepare_topics full/compact 同源派生断言 + 新增 dedup_selftest.py 双向自检（入 extra_sync/git_add_files）；v3.18：灰区告警豁免清单落地（config.git_gray_exemptions 8 项=达尔文 09-04 实验一次性产物，Master 授权查证后决策；外部经验一致：实验产物不入同步通道；豁免走配置+留理由，EXP-004）；v3.17：沙箱网络隔离 push 失败处置固化（SKILL 边界条件表新增：commit 已生成 → 沙箱外 push + api.github.com 核验 remote sha → 补推结论写报告 AI 补充区）；v3.16：引用机械门禁（正文含引用且 quote_checks 空 → 硬阻断）；CHANGELOG 补记 v3.15；去重自匹配修复 v3.14；去重硬卡点 v3.13 补记机制落地（补 09-07/08/09 三波欠账 + L3 SKILL 加「重大改造必更新 CHANGELOG」步骤 + git_add_files 纳入 CHANGELOG.md 真进 GitHub）；顺带修 S1(topics_context 当日写入时序约定) / S2(date_str 缺失静默退化改 warn)；v3.14 去重卡点自匹配修复（check_topic --exclude-date）；v3.13 去重硬卡点接入 L3 + 09-08 记忆治理 v3 落地
 MIN_A_CONTENT_CHARS = 50   # A 段最少有效字符数
 MAX_IMPROVEMENTS_CHECK = 10  # 最多检查的改进点数量
+
+# 发布报告「脚本生成区」结束标记（09-16 v3.22 新增，修复 #57）。
+# 所有权边界：该标记之前的内容归脚本所有（每次渲染无条件重写），标记之后的内容
+# 归 AI 所有（无条件原样保留）。标记里的指纹只用于「脚本区是否被人工改动」的告警，
+# 不再作为覆盖范围的判定依据——依据 cddl-codegen 的结论：生成器无法反推自己上次
+# 写了什么，因此「检测篡改」这条路本身不可靠，正确做法是「标记界定所有权」
+# （SilverModel 的 User Code Blocks 是同一思路，checksum 与保留块是两套互补机制）。
+CHECKSUM_MARK = "<!-- checksum:"
 
 # 网络类错误关键字（09-01 修复：此前网络失败被误标为 rebase 冲突，误导排查方向）
 NETWORK_ERROR_HINTS = (
@@ -1179,17 +1187,69 @@ def phase3_git(date_str, topic, dry_run, force, res, verify=True):
 
 # ── Phase 4: 记忆归档 ────────────────────────────────
 
+def _script_zone_digest(script_zone_text):
+    """脚本生成区的唯一指纹函数（写入侧与校验侧必须共用同一口径）。
+
+    09-16 v3.22 修复 #57a：原实现两侧口径差 1 个换行——
+      写入侧 script_zone 是 join(lines) 的结果，不含 checksum 行前那个分隔换行；
+      校验侧 text[:cut] 却含该换行。
+    于是每次渲染 md5 必然不等，check_report_tampered 恒报「已被手工改动」，
+    与版本号是否变化无关（09-15 报告实测：recorded 与 head[:-1] 精确相等、
+    与 head 不等）。AI 补充区被覆盖是必然结果，不是偶发。
+
+    归一规则：先把尾部换行压成**恰好 1 个**，再取 md5。
+    这样写入侧（script_zone，通常已以换行结尾）与校验侧（文件里的 text[:cut]，
+    比 script_zone 多一个分隔换行）得到同一结果。
+    注意不能用 rstrip 把尾部换行剥光：那会连 script_zone 自身那个换行也去掉，
+    反而不等于旧记录值（09-16 实测 recorded 与 rstrip 版不等、与「压成 1 个」版相等）。
+    该规则与 v3.22 之前写入的历史报告**天然兼容**，无需额外兼容分支。
+    """
+    return hashlib.md5((script_zone_text.rstrip("\n") + "\n").encode("utf-8")).hexdigest()
+
+
 def _report_script_zone_md5(text):
-    """对脚本生成区（checksum 行之前的内容）计算 md5，用于人工改动检测"""
-    cut = text.find("<!-- checksum:")
+    """对既有报告文件中的脚本生成区（checksum 标记之前的内容）计算指纹，
+    用于「是否被人工改动」的告警。口径与写入侧 _script_zone_digest 一致（#57a），
+    其归一规则同时兼容 v3.22 之前写入的历史报告，故无需额外兼容分支。"""
+    cut = text.find(CHECKSUM_MARK)
     if cut != -1:
         text = text[:cut]
-    return hashlib.md5(text.encode("utf-8")).hexdigest()
+    return _script_zone_digest(text)
+
+
+def _extract_preserved_tail(report_path):
+    """提取既有报告中 checksum 标记之后的全部内容（AI 补充区），供渲染时原样保留。
+
+    09-16 v3.22 修复 #57b：此前 render_report 全量 write_text，脚本区一有变化
+    （典型：版本号演进）就把 AI 补充区一起覆盖（09-15 实测首轮 5 条判定 + 规则
+    查证 + 处置意见被清空，只能重建）。现按「标记界定所有权」：标记之前归脚本、
+    标记之后归 AI，二者互不侵占。
+    返回 None 表示无标记或读取失败，调用方届时走首次渲染的空白模板。
+    """
+    if not report_path.exists():
+        return None
+    try:
+        text = report_path.read_text(encoding="utf-8", errors="replace")
+    except OSError:
+        return None
+    m = re.search(r"<!-- checksum: [0-9a-f]{32} -->", text)
+    if not m:
+        return None
+    nl = text.find("\n", m.end())
+    if nl == -1:
+        return None
+    return text[nl:]
 
 
 def check_report_tampered(report_path, res):
     """渲染前校验既有报告的脚本生成区是否被手工改动（09-01 修复：
-    今日报告被 AI 手工补写「15:58 重试成功」导致 errors=0 与 l3_run.log 矛盾）"""
+    今日报告被 AI 手工补写「15:58 重试成功」导致 errors=0 与 l3_run.log 矛盾）。
+
+    09-16 v3.22（#57）：口径统一后此处命中即「脚本区真被人工改动」。
+    按 cddl-codegen「never silent（绝不静默）」原则，覆盖前把旧文件另存一份并在
+    告警里给出路径，避免静默丢失；标记之后的 AI 补充区无论如何都会保留
+    （见 _extract_preserved_tail）。
+    """
     if not report_path.exists():
         return
     try:
@@ -1201,7 +1261,18 @@ def check_report_tampered(report_path, res):
         res.warn(4, f"发布报告 {report_path.name} 无 checksum 标记（旧版生成），本次渲染后首次写入")
         return
     if m.group(1) != _report_script_zone_md5(text):
-        res.warn(4, f"发布报告 {report_path.name} 脚本生成区已被手工改动（checksum 不匹配），本次渲染将覆盖")
+        note = ""
+        backup_dir = report_path.parent / ".overwritten"
+        dest = backup_dir / (f"{report_path.stem}."
+                             f"{datetime.now().strftime('%Y%m%d-%H%M%S')}{report_path.suffix}")
+        try:
+            backup_dir.mkdir(parents=True, exist_ok=True)
+            shutil.copy2(report_path, dest)
+            note = f"，旧版已备份至 {dest.relative_to(report_path.parent)}"
+        except OSError as e:
+            note = f"，旧版备份失败（{e}）"
+        res.warn(4, f"发布报告 {report_path.name} 脚本生成区已被手工改动（checksum 不匹配），"
+                    f"本次将重写脚本区、保留 AI 补充区{note}")
 
 
 def render_report(date_str, v1_meta, v2_meta, ima_result, git_result, res, match_report=None):
@@ -1264,18 +1335,38 @@ def render_report(date_str, v1_meta, v2_meta, ima_result, git_result, res, match
         if res.warnings:
             lines.append(f"- 警告：{res.warnings} 个")
         lines.append("")
-        # 脚本生成区结束标记（09-01 新增）：AI 补充区在标记之后，追加内容不影响 checksum
+        # ── 脚本生成区结束（09-16 v3.22 修复 #57）────────────────────
+        # 所有权边界：CHECKSUM_MARK 之前归脚本（每次渲染无条件重写），之后归 AI
+        # （无条件原样保留）。指纹函数与校验侧共用，口径归一（#57a）。
         script_zone = "\n".join(lines)
-        lines.append(f"<!-- checksum: {hashlib.md5(script_zone.encode('utf-8')).hexdigest()} -->")
-        lines.append("")
-        # AI 补充区
-        lines.append("## AI 语义验证补充区（由执行 AI 填充）")
-        lines.append("")
-        lines.append("<!-- 在此追加 Step 2 语义验证：改进点 | 判定 | 证据（行号）。"
-                     "禁止改动上方由脚本生成的部分。 -->")
-        lines.append("")
+        checksum_line = f"{CHECKSUM_MARK} {_script_zone_digest(script_zone)} -->"
 
-        report_path.write_text("\n".join(lines), encoding="utf-8")
+        preserved = _extract_preserved_tail(report_path)
+        if preserved is not None and preserved.strip():
+            content = script_zone + "\n" + checksum_line + preserved
+            kept = len([ln for ln in preserved.splitlines() if ln.strip()])
+            res.ok(4, f"发布报告已更新：脚本区重写，边界之后 {kept} 行 AI 补充区原样保留")
+        else:
+            content = (
+                script_zone + "\n" + checksum_line + "\n"
+                "\n## AI 语义验证补充区（由执行 AI 填充）\n"
+                "\n<!-- 在此追加 Step 2 语义验证：改进点 | 判定 | 证据（行号）。"
+                "禁止改动上方由脚本生成的部分。 -->\n\n"
+            )
+            res.ok(4, "发布报告已渲染（首次生成，AI 补充区为空白模板）")
+
+        report_path.write_text(content, encoding="utf-8")
+
+        # 09-16 v3.22 自校验（#57a 配套，EXP-014 可观测性即诚实性）：
+        # 写完立即回读并用校验侧函数复算。若不等，说明写入口径与校验口径再次
+        # 漂移，属脚本自身缺陷，直接报出来，而不是留给用户当成「有人手改」。
+        try:
+            back = report_path.read_text(encoding="utf-8", errors="replace")
+            if _report_script_zone_md5(back) != _script_zone_digest(script_zone):
+                res.warn(4, "发布报告 checksum 自校验未通过（写入与校验口径不一致），"
+                            "属脚本自身缺陷，请报修（EXP-014）")
+        except OSError:
+            pass
         return str(report_path)
     except OSError as e:
         res.warn(4, f"发布报告渲染失败（不影响发布）: {e}")
@@ -1357,12 +1448,23 @@ def phase5_feedback_archive(dry_run, res):
 
 
 def check_version_consistency(res):
-    """09-01 新增（版本号易腐根治，验收 S-2）：读 config/version.json 唯一权威源，
-    校验各技能 SKILL.md 实际版本号与之一致。不一致 warn（不阻断发布）。
-    version_field 取值：
-      - frontmatter.version : 匹配 `^version: vX.Y`
-      - title               : 匹配 `# <name> vX.Y`
-      - title_and_footer    : 标题 + 脚注 `*Version: vX.Y` + l3_publish.py VERSION 三处都须一致
+    """09-01 新增（版本号易腐根治，验收 S-2）；09-16 v3.22 升级（修复 #56）。
+
+    读 config/version.json 唯一权威源，校验各技能 SKILL.md 的实际版本号。
+    不一致 warn（不阻断发布）。
+
+    【#56 背景】原实现按 version_field 走单口径（frontmatter / title /
+    title_and_footer）。实测三处漂移全部漏判，且都是人工核对才发现：
+      - writer 变更日志物理尾部滞留在 v3.3（该口径只看 frontmatter）；
+      - audit 脚注历史串漏记 v1.6（该口径只看标题）；
+      - publish frontmatter 漏升 v3.21（title_and_footer 恰好不查 frontmatter）。
+    另外 title_and_footer 用 re.search 取**首条** `*Version:`，而变更日志是正序
+    列表，首条永远是历史上最早那条（writer 有 43 条，套上去会取到 v3.1）。
+
+    【现口径】不再依赖 version_field 的单一口径：凡文件里能取到版本的位置
+    （frontmatter / 标题 / 末条变更日志）**全部**必须等于权威源，任一不符即 warn
+    并指出具体是哪个口径。title_and_footer 原有的脚本常量校验保留（L3 线额外
+    比对 l3_publish.py 的 VERSION）。依据 EXP-004：能机械校验的约束别停留在文档。
     """
     base_dir = Path(CFG.get("base_dir", "F:/WorkBuddy/daily-why"))
     vp = base_dir / "config" / "version.json"
@@ -1381,37 +1483,40 @@ def check_version_consistency(res):
     for name, info in skills.items():
         expected = info.get("version", "")
         fpath = info.get("file", "")
-        field = info.get("version_field", "frontmatter.version")
         if not fpath or not Path(fpath).exists():
             res.warn(0, f"[版本] {name}: SKILL 文件不存在 {fpath}")
             continue
         content = Path(fpath).read_text(encoding="utf-8")
-        if field == "frontmatter.version":
-            m = re.search(r"^version:\s*(\S+)", content, re.MULTILINE)
-            actual = m.group(1) if m else None
-            consistent = (actual == expected)
-        elif field == "title":
-            m = re.search(r"^#\s+\S+\s*([vV]\d[\w.-]*)", content, re.MULTILINE)
-            actual = m.group(1) if m else None
-            consistent = (actual == expected)
-        elif field == "title_and_footer":
-            m1 = re.search(r"^#\s+\S+\s*([vV]\d[\w.-]*)", content, re.MULTILINE)
-            m2 = re.search(r"\*Version:\s*([vV]\d[\w.-]*)", content)
-            a1 = m1.group(1) if m1 else None
-            a2 = m2.group(1) if m2 else None
+
+        probes = []  # [(口径名, 实际值)]
+        m_fm = re.search(r"^version:\s*(\S+)", content, re.MULTILINE)
+        if m_fm:
+            probes.append(("frontmatter", m_fm.group(1)))
+        m_ti = re.search(r"^#\s+\S+\s*([vV]\d[\w.-]*)", content, re.MULTILINE)
+        if m_ti:
+            probes.append(("标题", m_ti.group(1)))
+        foot = re.findall(r"\*Version:\s*([vV]\d[\w.-]*)", content)
+        if foot:
+            # 取末条：变更日志正序排列，物理尾部才是当前最新版
+            probes.append(("日志末条", foot[-1]))
+        if info.get("version_field") == "title_and_footer":
             l3 = Path(CFG["scripts_dir"]) / "l3_publish.py"
-            m3 = re.search(r'VERSION\s*=\s*"([^"]+)"',
-                           l3.read_text(encoding="utf-8")) if l3.exists() else None
-            a3 = m3.group(1) if m3 else None
-            actual = f"{a1}/{a2}/script:{a3}"
-            consistent = (a1 == expected and a2 == expected and a3 == expected)
+            if l3.exists():
+                m_v = re.search(r'VERSION\s*=\s*"([^"]+)"', l3.read_text(encoding="utf-8"))
+                if m_v:
+                    probes.append(("脚本常量", m_v.group(1)))
+
+        if not probes:
+            res.warn(0, f"[版本] {name}: 各口径均取不到版本号（文件结构可能已变，请检查）")
+            continue
+
+        shown = " / ".join(f"{k}:{v}" for k, v in probes)
+        bad = [f"{k}={v}" for k, v in probes if v != expected]
+        if bad:
+            res.warn(0, f"[版本] {name}: 权威源={expected} 实际({shown})"
+                        f"（不一致口径：{', '.join(bad)}！改版本号前必须先改 config/version.json）")
         else:
-            actual, consistent = None, False
-        if consistent:
-            res.ok(0, f"[版本] {name}: {actual} 与权威源 {expected} 一致")
-        else:
-            res.warn(0, f"[版本] {name}: 权威源={expected} 实际={actual}"
-                        "（不一致！改版本号前必须先改 config/version.json）")
+            res.ok(0, f"[版本] {name}: {shown} 与权威源 {expected} 全部一致")
 
 
 def check_memory_health(res):

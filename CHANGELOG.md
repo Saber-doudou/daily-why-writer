@@ -4,6 +4,26 @@
 
 ---
 
+## v4.12 — 2026-09-16 报告 checksum 口径缺陷 + 补充区保留 + 版本校验升级（L3 发布线 v3.21→v3.22）
+
+**来源**：Master 回贴 09-15 L3 交付报告要求核实。独立复核确认昨日 5 项（#54 前缀 glob、#55 复制源补齐、writer 三处对齐 v3.5、audit 脚注补记 v1.6、commit bddb86e 与远端 main 一致）**全部属实**；同时挖出两处更深的问题，Master 令「#57 + #56 全修」。
+
+**修复 1（#57a checksum 校验口径与写入口径差 1 个换行）**：`_report_script_zone_md5` 取 `text[:cut]`，而写入侧 `script_zone = "\n".join(lines)` 不含 checksum 行前那个分隔换行，两侧差 1 个换行符。后果：**每次渲染 md5 必然不等**，`check_report_tampered` 恒报「脚本生成区已被手工改动」并全量覆盖，与版本号是否变化毫无关系。硬证据：`deliverables/2026-09-15-发布报告.md` 的 recorded checksum 与 `head[:-1]` 精确相等、与 `head` 不等。此前把该现象归因为「checksum 分不清脚本自己变了和人改的」（机制局限），**定性有误**，实为纯实现 bug。修法：抽公共指纹函数 `_script_zone_digest`（尾部换行 rstrip 归一）供写入/校验两侧共用，并新增写入后回读自校验，不等即报「脚本自身缺陷」而非甩锅给人工改动（EXP-014 可观测性即诚实性）。
+
+**修复 2（#57b AI 补充区随重渲染被清空）**：`render_report` 全量 `write_text`，脚本区一有变化（典型：版本号演进）就把 AI 补充区一起覆盖（09-15 实测首轮 5 条判定 + 规则查证 + 处置意见丢失，只能重建）。修法：改为「**标记界定所有权**」——只重写 checksum 标记之前的脚本区，标记之后的 AI 补充区无条件原样保留。业界依据（联网调研）：SilverModel 把 checksum 与 User Code Blocks 做成两套互补机制；cddl-codegen 文档明确「生成器没有上次输出的记录，无法区分『自己改写』与『用户所写』」，因此放弃「检测篡改」、改用显式 keep 标记，契约是 never silent（绝不静默）。配套：真检出脚本区被手工改动时，覆盖前自动备份旧版到 `deliverables/.overwritten/` 并在告警里给出路径。
+
+**修复 3（#56 版本校验盲区）**：`check_version_consistency` 原按 `version_field` 走单口径，实测三处漂移全部漏判、且均为人工核对才发现（writer 变更日志区滞留 v3.3、audit 脚注漏记 v1.6、publish frontmatter 漏升 v3.21）。修法：升级为**三口径全比**（frontmatter / 标题 / 末条 `*Version:`），任一不符即 warn 并指出具体是哪个口径；同时修正原实现取**首条** `*Version:` 的隐患（变更日志正序排列，首条永远是历史最早那条，writer 有 43 条会取到 v3.1）。
+
+**本轮活体案例**：修 #56 过程中发现 `daily-why-publish` 的 frontmatter 仍滞留 `v3.20` / `last_updated 09-15`（标题与页脚已是 v3.21）。即昨日刚做完版本漂移治理、同一轮就漏改一处，且因 `title_and_footer` 口径恰好不查 frontmatter，dry-run 全绿照不出来。已补升至 v3.22。
+
+**遗留（下一轮评估）**：`check_report_tampered` 仍是 warn 不阻断；是否升级为对 AI 补充区的完整性告警，待观察。
+
+**回归**：隔离日往返测试全通过（R1 首次渲染 → R2 脚本区未动时误报 0（修前恒为 1）→ R3 数据更新后脚本区重写、补充区 5 行原样保留 → R4 重渲染后误报仍 0 → R5 真篡改检出 1 + 自动备份 1、重写后补充区仍保留）；测试产物已清理。
+
+**版本对齐**：v3.22 六处（config/version.json + l3_publish.py VERSION 常量 + 文件头 docstring + SKILL frontmatter/标题/页脚/变更日志表）+ CHANGELOG v4.12。
+
+---
+
 ## v4.11 — 2026-09-16 两处静默绕过修复 + 版本漂移治理（L3 发布线 v3.20→v3.21）
 
 **来源**：09-15《熊猫第六指》L3 推送实跑暴露 2 个警告（AI 报告后 Master 令「修掉」），并附带报出两个未定性的版本号不一致项。
