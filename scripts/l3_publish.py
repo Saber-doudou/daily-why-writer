@@ -21,9 +21,11 @@ from pathlib import Path
 
 # ── 常量 ──────────────────────────────────────────────
 
-VERSION = "v3.22"              # 09-16 v3.22：① 修复 #57a——报告 checksum 校验口径与写入口径差 1 个换行（写入侧 script_zone = join(lines) 不含 checksum 行前分隔换行，校验侧 text[:cut] 却含），导致每次渲染 md5 必不等、恒报「脚本区已被手工改动」并全量覆盖（09-15 报告实测 recorded 与 head[:-1] 精确相等、与 head 不等；与版本号是否变化无关，AI 补充区丢失是必然而非偶发）；现抽公共指纹函数 _script_zone_digest 供两侧共用（rstrip 归一化）+ 写入后回读自校验；② 修复 #57b——render_report 改为只重写 checksum 标记之前的脚本区，标记之后的 AI 补充区无条件原样保留（业界经验：SilverModel User Code Blocks / cddl-codegen keep-marker 一致指出「工具无法反推自己上次的输出」，故弃用「检测篡改」改用「标记界定所有权」；EXP-004 约束优于指令）；③ 修复 #56——check_version_consistency 由单口径升级为 frontmatter/标题/末条 *Version: 三口径全比（此前 writer 日志区 v3.5、audit 脚注区 v1.6、publish frontmatter v3.20 三处漂移全部漏判，均为人工核对才发现；且原实现取首条 *Version: 而非末条）。09-16 v3.21：① 修复 #54——学习总结检索由固定名 学习总结.md 改为前缀 glob（学习总结*.md），多份命中取字典序首个并告警；L2 实际命名带话题后缀（学习总结-熊猫第六指.md），固定名零命中会让 Phase 1 匹配度检查整段被绕过（09-15 实测，靠 AI 人工补验兜住，EXP-004/EXP-014）；② 修复 #55——git_add_files 中 scripts/code_review_check.py 与 docs/code-review-standard.md（09-15 代码审查体系新增）补入 extra_sync G 组，消「无复制源」告警，源改动恢复同步进 repo。09-15 v3.20：话题提取跳空行对齐 check_topic（P3 审查 P1-3 双源漂移：首行为空行时旧实现返回 None → 去重 fail-open 放行，存在静默绕过窗口；Master 确认当轮修复）+ dedup_selftest R4 回归用例；09-15 v3.19：dedup 卡点默认反转 enforce（Silent Fail-Open 根治：判定明确=重复时默认硬拦 exit 1，DAILY_WHY_DEDUP_RELAX=1 显式豁免降软 warn，检测器自身故障 fail-open 保留；依据 v3.13 SKILL bash 前缀注入在 Windows 不生效的 EXP-014 实证，外部经验 Praesidia/readysolutions fail-closed 共识）+ check_topic 排除 _废弃 后缀并修复无#标题提取盲区（#51）+ prepare_topics full/compact 同源派生断言 + 新增 dedup_selftest.py 双向自检（入 extra_sync/git_add_files）；v3.18：灰区告警豁免清单落地（config.git_gray_exemptions 8 项=达尔文 09-04 实验一次性产物，Master 授权查证后决策；外部经验一致：实验产物不入同步通道；豁免走配置+留理由，EXP-004）；v3.17：沙箱网络隔离 push 失败处置固化（SKILL 边界条件表新增：commit 已生成 → 沙箱外 push + api.github.com 核验 remote sha → 补推结论写报告 AI 补充区）；v3.16：引用机械门禁（正文含引用且 quote_checks 空 → 硬阻断）；CHANGELOG 补记 v3.15；去重自匹配修复 v3.14；去重硬卡点 v3.13 补记机制落地（补 09-07/08/09 三波欠账 + L3 SKILL 加「重大改造必更新 CHANGELOG」步骤 + git_add_files 纳入 CHANGELOG.md 真进 GitHub）；顺带修 S1(topics_context 当日写入时序约定) / S2(date_str 缺失静默退化改 warn)；v3.14 去重卡点自匹配修复（check_topic --exclude-date）；v3.13 去重硬卡点接入 L3 + 09-08 记忆治理 v3 落地
+VERSION = "v3.23"              # 09-17 v3.23：① 修复 #58——改进点提取器两处断裂，且是同一防线第 2 次复发（v3.9 记「已根治」、v3.21 记「已修好」均失准，根因是回归样本全为同一格式=采样偏差）。闸门①「标题锚点」原要求关键词紧跟「## +可选序号」，09-17 标题 `## 一、四 AI 核心差距与采纳/拒绝决策`（关键词在中部）零命中，现改为「标题任意位置含关键词即可」并把「改写要点」纳入关键词；闸门②「章节选取」原用 re.search 只取首个命中章节，撞上「核心差距」表格章节（8 行表格 0 列表项）即空手而归、错过后面真正的改写要点列表，现改 re.finditer 遍历全部命中章节取首个非空列表；闸门③新增最高优先「契约锚点」模式（纯 `## 改进点`，L2 SKILL v3.4 强制），在生产侧立契约，终结「L2 自由命名 vs L3 硬正则」的格式漂移（历史第 5 次分叉：→/到/三、采纳清单/v2 → v3 改进点/一、四 AI 核心差距），依据 EXP-003 指令文件法则 + EXP-004 约束优于指令。② 新增 #58 兜底——`--verify-report` 子模式机械校验发布报告 AI 补充区（判 FAIL 的报告必须声明人工补验且 ≥3 行判定表格，否则 exit 1），把「记得人工补验」从人肉防线变成可校验事实（EXP-014）。③ 修复 #59——`scripts/config.json` 因含 IMA KB ID 被 repo .gitignore 有意忽略却仍留在 git_add_files + 复制清单，git add 被拒且 capture_output=True 吞掉返回码 → 静默失败；双向自检只查「有无复制源」、反向灰区算 tracked-whitelist（未跟踪=隐身），两头都不报 → 报「白名单全覆盖」假绿。现从两份清单移除，并对 git add 逐项回读校验（被拒/未跟踪即 warn 点名）。09-16 v3.22：① 修复 #57a——报告 checksum 校验口径与写入口径差 1 个换行（写入侧 script_zone = join(lines) 不含 checksum 行前分隔换行，校验侧 text[:cut] 却含），导致每次渲染 md5 必不等、恒报「脚本区已被手工改动」并全量覆盖（09-15 报告实测 recorded 与 head[:-1] 精确相等、与 head 不等；与版本号是否变化无关，AI 补充区丢失是必然而非偶发）；现抽公共指纹函数 _script_zone_digest 供两侧共用（rstrip 归一化）+ 写入后回读自校验；② 修复 #57b——render_report 改为只重写 checksum 标记之前的脚本区，标记之后的 AI 补充区无条件原样保留（业界经验：SilverModel User Code Blocks / cddl-codegen keep-marker 一致指出「工具无法反推自己上次的输出」，故弃用「检测篡改」改用「标记界定所有权」；EXP-004 约束优于指令）；③ 修复 #56——check_version_consistency 由单口径升级为 frontmatter/标题/末条 *Version: 三口径全比（此前 writer 日志区 v3.5、audit 脚注区 v1.6、publish frontmatter v3.20 三处漂移全部漏判，均为人工核对才发现；且原实现取首条 *Version: 而非末条）。09-16 v3.21：① 修复 #54——学习总结检索由固定名 学习总结.md 改为前缀 glob（学习总结*.md），多份命中取字典序首个并告警；L2 实际命名带话题后缀（学习总结-熊猫第六指.md），固定名零命中会让 Phase 1 匹配度检查整段被绕过（09-15 实测，靠 AI 人工补验兜住，EXP-004/EXP-014）；② 修复 #55——git_add_files 中 scripts/code_review_check.py 与 docs/code-review-standard.md（09-15 代码审查体系新增）补入 extra_sync G 组，消「无复制源」告警，源改动恢复同步进 repo。09-15 v3.20：话题提取跳空行对齐 check_topic（P3 审查 P1-3 双源漂移：首行为空行时旧实现返回 None → 去重 fail-open 放行，存在静默绕过窗口；Master 确认当轮修复）+ dedup_selftest R4 回归用例；09-15 v3.19：dedup 卡点默认反转 enforce（Silent Fail-Open 根治：判定明确=重复时默认硬拦 exit 1，DAILY_WHY_DEDUP_RELAX=1 显式豁免降软 warn，检测器自身故障 fail-open 保留；依据 v3.13 SKILL bash 前缀注入在 Windows 不生效的 EXP-014 实证，外部经验 Praesidia/readysolutions fail-closed 共识）+ check_topic 排除 _废弃 后缀并修复无#标题提取盲区（#51）+ prepare_topics full/compact 同源派生断言 + 新增 dedup_selftest.py 双向自检（入 extra_sync/git_add_files）；v3.18：灰区告警豁免清单落地（config.git_gray_exemptions 8 项=达尔文 09-04 实验一次性产物，Master 授权查证后决策；外部经验一致：实验产物不入同步通道；豁免走配置+留理由，EXP-004）；v3.17：沙箱网络隔离 push 失败处置固化（SKILL 边界条件表新增：commit 已生成 → 沙箱外 push + api.github.com 核验 remote sha → 补推结论写报告 AI 补充区）；v3.16：引用机械门禁（正文含引用且 quote_checks 空 → 硬阻断）；CHANGELOG 补记 v3.15；去重自匹配修复 v3.14；去重硬卡点 v3.13 补记机制落地（补 09-07/08/09 三波欠账 + L3 SKILL 加「重大改造必更新 CHANGELOG」步骤 + git_add_files 纳入 CHANGELOG.md 真进 GitHub）；顺带修 S1(topics_context 当日写入时序约定) / S2(date_str 缺失静默退化改 warn)；v3.14 去重卡点自匹配修复（check_topic --exclude-date）；v3.13 去重硬卡点接入 L3 + 09-08 记忆治理 v3 落地
 MIN_A_CONTENT_CHARS = 50   # A 段最少有效字符数
 MAX_IMPROVEMENTS_CHECK = 10  # 最多检查的改进点数量
+# 09-17 v3.23（#58 兜底）：--verify-report 要求判 FAIL 的报告至少落盘这么多行人工补验判定
+MIN_REPORT_VERIFY_ROWS = 3
 
 # 发布报告「脚本生成区」结束标记（09-16 v3.22 新增，修复 #57）。
 # 所有权边界：该标记之前的内容归脚本所有（每次渲染无条件重写），标记之后的内容
@@ -307,6 +309,9 @@ def parse_args():
                    help="跳过发布后的远端核验（沙箱网络不通时可用，默认核验）")
     p.add_argument("--retry", action="store_true",
                    help="仅重推已提交 commit（09-01 新增：人工补推必须走脚本，禁止裸 git push）")
+    p.add_argument("--verify-report", action="store_true",
+                   help="仅校验发布报告的人工补验是否真的落盘（09-17 v3.23 新增，#58 兜底；"
+                        "判 FAIL 的报告须有声明 + ≥3 行判定表格，否则 exit 1）")
     return p.parse_args()
 
 
@@ -516,6 +521,31 @@ def dedup_gate_check(articles, res, date_str=None):
 
 # ── Phase 1: 匹配度检查 ─────────────────────────────
 
+def _extract_improvements(text, patterns, bullet_re):
+    """按 pattern 优先级 + 章节顺序提取改进点列表（09-17 v3.23 新增，修复 #58 闸门②）。
+
+    【为什么需要遍历同一 pattern 的全部命中章节】
+    09-17 原实现用 `re.search(pat, text)` 只取**首个**命中章节。当日首个命中是
+    `## 一、四 AI 核心差距与采纳/拒绝决策`，其正文是 8 行 markdown 表格、0 个列表项，
+    于是 improvements 为空、循环直接结束，后面真正含 6 项编号列表的
+    `## 三、v2 改写要点` 从未被尝试（只要关键词表补上「改写要点」即可提出 6 条）。
+    现改为 re.finditer 遍历全部命中章节，返回首个非空列表。
+
+    返回 (items, source_heading)：source_heading 为该条目所在章节标题原文，
+    渲染进发布报告供人工复核（EXP-014 可观测性即诚实性）。
+    """
+    for pat in patterns:
+        for m in re.finditer(pat, text, re.MULTILINE | re.DOTALL):
+            items = re.findall(bullet_re, m.group(1), re.MULTILINE)
+            # 过滤破折号残段与空串噪音
+            items = [x.strip() for x in items if x.strip() and x.strip() != "-"]
+            if items:
+                heading = " ".join((m.group(0).splitlines() or [""])[0]
+                                   .lstrip("#").strip().split())
+                return items, heading
+    return [], None
+
+
 def phase1_match_check(v1_path, v2_path, summary_path, dry_run, res):
     """执行匹配度检查，返回 pass (bool)"""
     report = {"structure": None, "content": None, "audit": None, "rules": None}
@@ -556,32 +586,55 @@ def phase1_match_check(v1_path, v2_path, summary_path, dry_run, res):
     # 维度失败，不再静默恒真。
     # 依据橙皮书 EXP-004（约束优于指令：用校验代替建议）+ EXP-014（报告诚实性）。
     #
-    # 匹配原则：只认「改进点/采纳清单/优化点/核心差距」类标题；「质量概览」等只含
-    # 表格与结论、不含改进列表的章节必须排除（09-03 实证：误抓概览会取到噪音）。
+    # 09-17 v3.23 修复 #58（同一道防线第 2 次复发，两次都只修了「一半」）：
+    #   闸门①「标题锚点位置」——原 pattern 要求关键词紧跟「## + 可选中文序号」，
+    #     09-17 标题为 `## 一、四 AI 核心差距与采纳/拒绝决策`（关键词「核心差距」在
+    #     **中部**，且与「采纳」以「与」并列）→ 两条 pattern 全不匹配 → 零命中。
+    #     现 pattern 2 改为「标题任意位置含关键词即可」，并把「改写要点」纳入关键词。
+    #   闸门②「章节选取」——原实现用 re.search 只取**首个**命中章节；09-17 首个命中
+    #     章节正文是 8 行 markdown 表格 0 个列表项，空手而归后循环即结束，后面
+    #     `## 三、v2 改写要点`（6 项编号列表，本可抽出）从未被尝试。现改
+    #     _extract_improvements 用 re.finditer 遍历全部命中章节，取首个非空列表。
+    #   闸门③「契约锚点」——新增最高优先 pattern 0，匹配 L2 SKILL v3.4 起强制的固定
+    #     标题 `## 改进点`（无编号无修饰）。这是**在生产侧立契约**，从源头终结
+    #     「L2 自由命名 vs L3 硬正则」的格式漂移（历史第 5 次分叉：→ / 到 /
+    #     三、采纳清单 / v2 → v3 改进点 / 一、四 AI 核心差距）。继续在消费侧堆正则是
+    #     治标（EXP-003 指令文件法则 + EXP-004 约束优于指令）。
+    #
+    # 匹配原则：只认「改进点/采纳清单/优化点/核心差距/改写要点」类标题；「质量概览」
+    # 等只含表格与结论、不含改进列表的章节必须排除（09-03 实证：误抓概览会取到噪音）。
+    # 注意「各AI亮点采纳」/「采纳项落地校验」含「采纳」但非改进列表，故关键词用
+    # 「采纳清单/采纳要点」而非裸「采纳」，避免把 AI 贡献章节误当改进点。
     IMPROVEMENT_HEADING_PATTERNS = (
-        # 模式1：带 v1→v2 前缀（→/到/->/～ 多连接符；08-31/09-01/09-02 格式）
+        # 模式0（09-17 v3.23 新增，契约锚点，最高优先）：L2 SKILL v3.4 强制的固定标题
+        r"^##\s*改进点\s*$\n(.*?)(?=^##\s|\Z)",
+        # 模式1：带 v1→v2 前缀（历史主流格式，06-15 至 09-16）
         r"^##\s*(?:[一二三四五六七八九十]+[、.]\s*)?"
-        r"v1\s*(?:→|到|->|～)\s*v2\s*(?:改进点|优化点|采纳清单|核心差距)"
+        r"v1\s*(?:→|到|->|～)\s*v2\s*(?:改进点|优化点|采纳清单|核心差距|改写要点)"
         r"[^\n]*\n(.*?)(?=^##\s|\Z)",
-        # 模式2：纯中文标题（不带 v1/v2 前缀），如「## 三、采纳清单（v2 实际落地）」
-        r"^##\s*(?:[一二三四五六七八九十]+[、.]\s*)?"
-        r"(?:采纳清单|改进点|优化点|核心差距)"
-        r"[^\n]*\n(.*?)(?=^##\s|\Z)",
+        # 模式2（09-17 v3.23 放宽位置 + 显式支持 2 至 4 级标题）：标题**任意位置**
+        # 含关键词即可。两点说明：
+        #   ① 位置放宽：原要求关键词紧跟「## + 可选中文序号」，09-17 的
+        #      `## 一、四 AI 核心差距与采纳/拒绝决策`（关键词在中部）因此零命中。
+        #   ② 层级显式化：原 pattern 写成 `^##\s*(?:序号)?关键词…`，`\s*` 后必须紧跟
+        #      关键词，实际上把 `###` 级标题挡在门外（`### 核心差距` 在 `##` 之后是
+        #      `#`，既不匹配 `\s*` 也不匹配关键词）。放宽位置后 `[^\n]*` 会顺带吃掉
+        #      第三个 `#`，导致 `###`/`####` 被**隐式**纳入，实测 06-19 / 07-06 / 07-29
+        #      三份旧文件由「0 条」变「10 条」。这些 `### 核心差距` 子章节本身确实是
+        #      AI 指出的差距清单（语义等同改进点），纳入属**覆盖率提升**而非误抓，
+        #      故不退回隐式行为，改写为 `^#{2,4}` 使其**显式且有据**，避免下次有人
+        #      看到 `###` 被匹配而误判为回归。
+        #      防误抓仍靠关键词白名单收窄（见上方匹配原则），不靠标题层级。
+        r"^#{2,4}\s*(?:[一二三四五六七八九十]+[、.]\s*)?[^\n]*"
+        r"(?:采纳清单|改进点|优化点|核心差距|改写要点|采纳要点)"
+        r"[^\n]*\n(.*?)(?=^#{1,4}\s|\Z)",
     )
     # bullet 提取：列表符号后必须有空白，避免把 `**加粗**` / `---` 误当列表项
     BULLET_RE = r"(?:^[-*]\s+|^\d+[.、]\s+)(.+)"
     if summary_path:
         summary_text = summary_path.read_text(encoding="utf-8")
-        improvements = []
-        for pat in IMPROVEMENT_HEADING_PATTERNS:
-            m = re.search(pat, summary_text, re.MULTILINE | re.DOTALL)
-            if not m:
-                continue
-            improvements = re.findall(BULLET_RE, m.group(1), re.MULTILINE)
-            # 过滤破折号残段与空串噪音
-            improvements = [x.strip() for x in improvements if x.strip() and x.strip() != "-"]
-            if improvements:
-                break
+        improvements, src_heading = _extract_improvements(
+            summary_text, IMPROVEMENT_HEADING_PATTERNS, BULLET_RE)
         check_count = min(len(improvements), MAX_IMPROVEMENTS_CHECK)
         # 只做存在性检查（有改进点列表即可），语义验证交给 AI
         report["content"] = {
@@ -589,6 +642,7 @@ def phase1_match_check(v1_path, v2_path, summary_path, dry_run, res):
             "ok": bool(improvements),
             "improvements": improvements[:MAX_IMPROVEMENTS_CHECK],
             "total": check_count,
+            "source": src_heading,
             "ai_required": True,
         }
     else:
@@ -934,7 +988,10 @@ def phase3_git(date_str, topic, dry_run, force, res, verify=True):
     # L3 发布技能文件
     publish_skill = Path("C:/Users/admin/.workbuddy/skills/daily-why-publish/SKILL.md")
     l3_script = Path(CFG["scripts_dir"]) / "l3_publish.py"
-    l3_config = Path(CFG["scripts_dir"]) / "config.json"
+    # 09-17 v3.23（修复 #59）：scripts/config.json 不再复制进 repo。该文件含 IMA KB ID，
+    # repo .gitignore:2 有意忽略它（commit ea6465e「security: gitignore scripts/config.json」），
+    # 复制进去只会留一个「未跟踪且被忽略」的残留副本、对 clone 者不可见，属死操作；
+    # 且它留在 git_add_files 会触发 git add 被拒 + 静默失败（详见下方 add 回读校验）。
 
     files_to_copy = []
     if skill_md.exists():
@@ -952,8 +1009,6 @@ def phase3_git(date_str, topic, dry_run, force, res, verify=True):
         files_to_copy.append((publish_skill, repo / "daily-why-publish" / "SKILL.md"))
     if l3_script.exists():
         files_to_copy.append((l3_script, repo / "scripts" / "l3_publish.py"))
-    if l3_config.exists():
-        files_to_copy.append((l3_config, repo / "scripts" / "config.json"))
 
     # B 组补全（08-28 审计）：这些文件列在 config.json 的 git_add_files 里，
     # 但历史上从未纳入 files_to_copy —— 源改动从不复制进 repo，副本长期脱节
@@ -1105,11 +1160,31 @@ def phase3_git(date_str, topic, dry_run, force, res, verify=True):
         return "skip"
 
     # Step 3.3: git add（只 add 规则文件）
+    #
+    # 09-17 v3.23（修复 #59）：原实现 `subprocess.run(["git","add",f], capture_output=True)`
+    # 把返回码与 stderr **全部丢弃**。被 .gitignore 忽略的文件会静默 add 失败
+    # （实测 scripts/config.json：git add 报 "paths are ignored"、rc=1，而 Phase 3 依旧
+    # 打印「白名单全覆盖，无灰区文件」）。现逐项回读校验：add 返回非 0 或 add 后仍未被
+    # git 跟踪，即告警点名。EXP-014：可观测性即诚实性，工具报「已处理」不等于真处理。
     add_files = CFG.get("git_add_files", ["SKILL.md"])
+    add_failed = []
     for f in add_files:
         fp = repo / f
-        if fp.exists():
-            subprocess.run(["git", "add", f], cwd=str(repo), capture_output=True)
+        if not fp.exists():
+            continue
+        r_add = subprocess.run(["git", "add", f], cwd=str(repo),
+                               capture_output=True, text=True)
+        if r_add.returncode != 0:
+            first_err = ((r_add.stderr or "").strip().splitlines() or [""])[0][:60]
+            add_failed.append(f"{f}（add 被拒：{first_err or 'rc!=0'}）")
+            continue
+        r_chk = subprocess.run(["git", "ls-files", "--error-unmatch", f],
+                               cwd=str(repo), capture_output=True, text=True)
+        if r_chk.returncode != 0:
+            add_failed.append(f"{f}（add 后仍未被 git 跟踪，疑似被 .gitignore 忽略）")
+    if add_failed:
+        res.warn(3, f"git add 未生效 {len(add_failed)} 项（改动不会进 GitHub）: "
+                    f"{'; '.join(add_failed[:5])}")
 
     # 检查是否有文件被 staged
     r_staged = subprocess.run(
@@ -1314,8 +1389,13 @@ def render_report(date_str, v1_meta, v2_meta, ima_result, git_result, res, match
                          f"Q数={s.get('q_count', '?')} {s.get('acf', '')}")
             if c.get("skipped"):
                 lines.append("- 内容改进: ⏭️ 跳过（无学习总结）")
+            elif c.get("total", 0) > 0:
+                lines.append(f"- 内容改进: 🤖 待 AI 语义验证 改进点={c.get('total', 0)}条"
+                             f"（来源章节：{c.get('source') or '?'}）")
             else:
-                lines.append(f"- 内容改进: 🤖 待 AI 语义验证 改进点={c.get('total', 0)}条")
+                lines.append("- 内容改进: ❌ 提取失败：0 条（未命中任何改进点章节）"
+                             "→ 须走 SOP Step 2.5 人工补验，并跑 "
+                             "`l3_publish.py --verify-report` 校验补验是否落盘")
             if a.get("status") == "ok":
                 lines.append(f"- 审核一致性: {'✅' if a.get('ok') else '❌'} "
                              f"P0={a.get('p0', '?')} P1={a.get('p1', '?')} 得分={a.get('score', '?')}")
@@ -1371,6 +1451,51 @@ def render_report(date_str, v1_meta, v2_meta, ima_result, git_result, res, match
     except OSError as e:
         res.warn(4, f"发布报告渲染失败（不影响发布）: {e}")
         return None
+
+
+def verify_report_supplement(date_str):
+    """校验发布报告 AI 补充区是否真的完成了人工补验（09-17 v3.23 新增，#58 兜底）。
+
+    【要解决的问题】Phase 1 判 FAIL 后靠 SOP Step 2.5「人工补验」兜住，属**人肉防线**：
+    AI 忘了补验时，脚本与报告都无从判断，而这个 FAIL 会被后续读报告的人当成已知噪音
+    放过（与常驻缺陷 #47「引用空校验静默放过」同构，EXP-014 可观测性缺口）。
+    本命令把「记得补验」从口头承诺变成可机械校验的事实（EXP-004 约束优于指令）。
+
+    【规则】报告含 `总体判定: ❌ FAIL` 时，checksum 标记之后的 AI 补充区必须：
+      ① 明确声明为人工补验（含「人工补验 / 脚本提取失败 / 提取器未命中」之一）；
+      ② 至少 MIN_REPORT_VERIFY_ROWS 行判定表格（`| … | ✅/⚠️/❌ | …`）。
+    未判 FAIL 的报告直接通过（无需补验）。
+
+    返回 exit code：0 通过 / 1 未通过。SOP 要求补验后必跑本命令并把输出贴进报告，
+    禁止仅口头声称「已补验」。
+    """
+    report_path = Path(CFG["base_dir"]) / "deliverables" / f"{date_str}-发布报告.md"
+    if not report_path.exists():
+        print(f"❌ 报告不存在：{report_path}")
+        return 1
+    text = report_path.read_text(encoding="utf-8", errors="replace")
+    if "总体判定: ❌ FAIL" not in text:
+        print(f"✅ {report_path.name}：未判 FAIL，无需人工补验（跳过校验）")
+        return 0
+    m = re.search(r"<!-- checksum: [0-9a-f]{32} -->", text)
+    tail = text[m.end():] if m else ""
+    if not tail.strip():
+        print(f"❌ {report_path.name}：判 FAIL 但 checksum 之后无 AI 补充区"
+              f"（人工补验疑似未执行）")
+        return 1
+    rows = [ln for ln in tail.splitlines()
+            if re.match(r"^\|.*\|\s*(?:✅|⚠️|❌)", ln.strip())]
+    declared = bool(re.search(r"人工补验|脚本提取失败|提取器未命中", tail))
+    problems = []
+    if not declared:
+        problems.append("补充区未声明为人工补验")
+    if len(rows) < MIN_REPORT_VERIFY_ROWS:
+        problems.append(f"判定表格仅 {len(rows)} 行（要求 ≥ {MIN_REPORT_VERIFY_ROWS}）")
+    if problems:
+        print(f"❌ {report_path.name}：人工补验校验未通过 → {'；'.join(problems)}")
+        return 1
+    print(f"✅ {report_path.name}：人工补验已落盘（判定 {len(rows)} 行 + 已声明为人工补验）")
+    return 0
 
 
 def phase4_memory(date_str, v1_meta, v2_meta, ima_result, git_result, dry_run, res):
@@ -1566,6 +1691,17 @@ def main():
 
     args = parse_args()
     res = Result()
+
+    # --verify-report 模式（09-17 v3.23 新增，#58 兜底）：
+    # Phase 1 判 FAIL 的报告必须真的有 AI 人工补验落盘。SOP Step 2.5 完成后必跑本命令，
+    # 禁止仅口头声称「已人工补验」——那是人肉防线，没有机械校验就等于没有防线（EXP-014）。
+    if args.verify_report:
+        if args.date:
+            vd = args.date
+        else:
+            vd, _ = detect_latest_date()
+            vd = vd or datetime.now().strftime("%Y-%m-%d")
+        sys.exit(verify_report_supplement(vd))
 
     # --retry 模式（09-01 新增 P5）：仅重推已提交 commit。
     # 背景：今日 15:58 网络失败后人工裸 git push 导致 l3_run.log 断裂、发布报告被手工改写。

@@ -7,11 +7,11 @@ description: >
   路由规则：凡输入含「发布/推送/审计/备份」动作词（如 dailywhy发布），本技能优先于
   其他 dailywhy 系列技能触发（动作词优先），触发即执行 L3 发布流程。
 agent_created: true
-version: v3.22
-last_updated: 2026-09-16
+version: v3.23
+last_updated: 2026-09-17
 ---
 
-# daily-why-publish v3.22
+# daily-why-publish v3.23
 
 AI 语义验证 + 脚本执行，各司其职。
 
@@ -121,13 +121,24 @@ C:/Users/admin/.workbuddy/binaries/python/versions/3.13.12/python.exe F:/WorkBud
 5. 按 2.4 模板输出
 6. 根据 2.3 通过线返回结论
 
-**⚠️ 改进点 0 条处理（09-03 v3.9 新增）**：脚本报「改进点=0条」时**禁止**自动判定「无可验证内容、自动通过」。
-0 条 = 脚本从学习总结提取改进点失败（标题格式无契约），不是「确实没有改进点」—— L2 学习总结必有
-采纳清单。此时必须：
-1. 用 Read 直接读当日 `投喂素材/{YYYYMMDD}/学习总结.md`，从「采纳清单 / 改进点 / 核心分歧」等章节
+**⚠️ 改进点 0 条处理（09-03 v3.9 新增，09-17 v3.23 补充契约口径）**：脚本报「改进点=0条」时**禁止**自动判定「无可验证内容、自动通过」。
+0 条 = 脚本从学习总结提取改进点失败，不是「确实没有改进点」。09-17 v3.23 起提取器已支持三档回退
+（契约锚点 `## 改进点` → `v1 → v2 改进点` 类前缀 → 标题任意位置含关键词，并遍历全部命中章节），
+且 L2 SKILL v3.4 已强制学习总结必须含逐字 `## 改进点` 锚点 —— 所以 v3.4 之后**再报 0 条即等于 L2 未遵守契约**，
+应在补验的同时回查 L2 落盘自检为何未拦住（属契约违规，不是提取器问题）。此时必须：
+1. 用 Read 直接读当日 `投喂素材/{YYYYMMDD}/学习总结.md`，从「改进点 / 采纳清单 / 核心差距 / 改写要点」等章节
    人工提取改进点（至少 3 到 7 条）；
 2. 按 2.1 到 2.4 正常执行语义验证，逐条给判定与行号证据；
-3. 汇总里显式注明「⚠️ 脚本提取失败，本表为 AI 人工补验」，不得伪装成脚本输出。
+3. 汇总里显式注明「⚠️ 脚本提取失败，本表为 AI 人工补验」，不得伪装成脚本输出；
+4. **🔒 补验完成后必须跑机械校验（09-17 v3.23 新增，硬约束）**：
+   ```bash
+   C:/Users/admin/.workbuddy/binaries/python/versions/3.13.12/python.exe F:/WorkBuddy/daily-why/scripts/l3_publish.py --verify-report [YYYY-MM-DD]
+   ```
+   该命令校验发布报告的 AI 补充区：若报告判 `总体判定: ❌ FAIL`，则补充区必须有「人工补验」声明
+   且至少 3 行判定表格（`| … | ✅/⚠️/❌ | …`），否则 exit 1。
+   **exit 非 0 即视为 Step 2 未完成，禁止进入 Step 3**；命令输出须贴进报告 AI 补充区留痕。
+   依据 EXP-014：人工补验是**人肉防线**，没有机械校验就等于没有防线（AI 漏做时脚本无从知晓，
+   该 FAIL 会被后续读者当已知噪音放过，与缺陷 #47「引用空校验静默放过」同构）。
 
 ### Step 3：执行发布
 
@@ -296,6 +307,7 @@ L3 daily-why-publish（手动触发）← 本 Skill
 
 | 版本 | 日期 | 变更 |
 |------|------|------|
+| v3.23 | 2026-09-17 | **#58 改进点提取器双断裂（同防线第 2 次复发）+ 契约锚点 + #59 git add 静默失败（三处收口，Master 令「怎么推荐怎么来」全修）**：① **#58 闸门① 标题锚点位置**——原 pattern 要求关键词紧跟「`## ` + 可选中文序号」，09-17 标题为 `## 一、四 AI 核心差距与采纳/拒绝决策`（关键词「核心差距」在**中部**且与「采纳」以「与」并列），两条 pattern 全不匹配 → 改进点 0 条、匹配度检查 FAIL，靠 `--force` + SOP Step 2.5 人工补验 8/8 兜住。现改为「标题任意位置含关键词即可」，并把「改写要点」纳入关键词。② **#58 闸门② 章节选取**——原实现 `re.search` 只取**首个**命中章节；09-17 首个命中章节正文是 8 行 markdown 表格 0 个列表项，空手而归后循环即结束，后面 `## 三、v2 改写要点`（6 项编号列表）从未被尝试。现抽 `_extract_improvements` 用 `re.finditer` **遍历全部命中章节**取首个非空列表，并把来源章节渲染进报告（EXP-014）。③ **#58 闸门③ 契约锚点**——新增最高优先模式匹配 L2 SKILL **v3.4** 强制的逐字 `## 改进点`（无编号无修饰），**在生产侧立契约**，终结「L2 自由命名 vs L3 硬正则」的格式漂移（历史第 5 次分叉：`→` / `到` / `三、采纳清单` / `v2 → v3 改进点` / `一、四 AI 核心差距`）。依据 EXP-003 指令文件法则 + EXP-004 约束优于指令：继续在消费侧堆正则是治标。④ **#58 兜底**——新增 `--verify-report` 子模式：判 `总体判定: ❌ FAIL` 的报告，AI 补充区必须有「人工补验」声明 + ≥3 行判定表格，否则 exit 1；本 SKILL Step 2.5 硬约束「补验后必跑，exit 非 0 禁止进入 Step 3」。人工补验是人肉防线，没有机械校验就等于没有防线（与 #47 静默放过同构）。⑤ **#59**——`scripts/config.json` 因含 IMA KB ID 被 repo `.gitignore:2` **有意**忽略（commit ea6465e）却仍留在 `git_add_files` + 复制清单，`git add` 被拒且调用处 `capture_output=True` 吞掉返回码 → **静默失败**；双向自检只查「有无复制源」、反向灰区又算 `tracked - whitelist`（未跟踪 = 隐身），两头都不报 → 输出「白名单全覆盖」**假绿**。现从两份清单移除，并对 `git add` 逐项**回读校验**（被拒/未跟踪即 warn 点名）。⑥ **回归（双向，非抽样）**——工作区副本 vs repo v3.22 副本正则经 AST 原样提取对跑 **70 份历史学习总结全量**：零命中 **5 → 0**，条数变化 5 份**全部是「由 0 变非 0」**（06-19 / 07-06 / 07-29 / 08-11 二轮 / 09-17），65 份历史命中文件**条数零下降**，防误抓抽检「来源章节不含关键词」为 0 例；`--verify-report` 正例（今日真实报告 8 行判定 → exit 0）+ 4 类反例（无补充区 / 未声明且不足 3 行 / PASS 报告 / 报告不存在 → 符合预期）全通过。⑦ 版本号对齐——version.json + l3_publish.py（VERSION 常量 + 文件头 docstring）+ 本 SKILL frontmatter/标题/页脚/变更日志表 + feed-learning SKILL v3.4 + CHANGELOG v4.13 |
 | v3.22 | 2026-09-16 | **#57 报告 checksum 缺陷 + 补充区保留 + #56 版本校验盲区（三处收口，Master 令全修）**：① **#57a 口径统一**——`_report_script_zone_md5` 与写入侧口径差 1 个换行（写入侧 `script_zone = join(lines)` 不含 checksum 行前那个分隔换行，校验侧 `text[:cut]` 却含），导致每次渲染 md5 必不等、`check_report_tampered` 恒报「脚本区已被手工改动」并全量覆盖，**与版本号是否变化无关**（09-15 报告实测：recorded 与 `head[:-1]` 精确相等、与 `head` 不等）；AI 补充区被清空是必然而非偶发。现抽公共指纹函数 `_script_zone_digest` 供写入/校验两侧共用（尾部换行 rstrip 归一），并新增**写入后回读自校验**（不等即报脚本自身缺陷，不再甩锅给「有人手改」，EXP-014）。② **#57b 补充区保留**——`render_report` 由全量 `write_text` 改为「只重写 checksum 标记之前的脚本区，标记之后的 AI 补充区无条件原样保留」。依据业界经验：SilverModel 把 checksum 与 User Code Blocks 做成两套互补机制、cddl-codegen 明确「生成器无法反推自己上次的输出，故放弃检测、改用显式标记」——**用标记界定所有权，而不是用 checksum 猜谁改的**。③ **#56 版本校验升级**——`check_version_consistency` 由单口径（frontmatter / title / title_and_footer）升级为**三口径全比**（frontmatter / 标题 / 末条 `*Version:`），任一不符即 warn 并指出具体是哪个口径；顺带修正原实现取**首条** `*Version:` 的隐患（变更日志正序排列，首条永远是历史最早那条，writer 有 43 条会取到 v3.1）。④ 配套——publish frontmatter 补升 v3.22 + `last_updated` 09-16（此前滞留 v3.20/09-15，因 title_and_footer 口径恰好不查 frontmatter，dry-run 全绿也照不出来，正是 #56 的活体案例）。⑤ 回归——隔离日往返测试全通过（首次渲染 → 补充区保留 → 脚本区随数据更新 → 真篡改检出+自动备份），dry-run 四处版本一致；CHANGELOG v4.12 |
 | v3.21 | 2026-09-16 | **#54 学习总结检索 glob 化 + #55 复制清单补齐（两处静默绕过修复）**：① #54——`scan_articles` 原按固定名 `投喂素材/{YYYYMMDD}/学习总结.md` 检索，而 L2 实际产出为 `学习总结-{话题}.md`（09-15 为 `学习总结-熊猫第六指.md`），零命中时 Phase 1 匹配度检查（结构/审核/规则三道机械校验）整段被跳过，当日靠 AI 人工补验兜住；改为前缀 glob `学习总结*.md`，多份命中取字典序首个并告警。回归：09-15 重跑 dry-run 已命中学习总结，Phase 1 真实执行（改进点=5、审核 100 分、规则 FP-74 命中）。② #55——`scripts/code_review_check.py` 与 `docs/code-review-standard.md`（09-15 代码审查体系 v4.9 新增）在 `git_add_files` 但漏配复制源，源改动永远同步不到 repo（同 v3.4 老毛病复发）；补入 `extra_sync` G 组，双向自检由 2 项告警转 0。③ 版本号三处对齐 v3.21 + CHANGELOG v4.11 |
 | v3.20 | 2026-09-15 | **话题提取跳空行对齐 check_topic（双源漂移修复）**：① 来源——代码审查机制首轮示范审查（v4.9 体系）P1-3 发现 `l3_publish._extract_topic_from_file` 只取 `splitlines()[0]`，文章首行为空行时返回 None → 去重 fail-open 放行（静默绕过窗口），而 `check_topic.extract_topic_from_article` 09-15 已修为跳空行取首个非空行——同链路两个提取器行为漂移（#51/#52 同源教训再现）；② 修复——提取器改为跳过空行取首个非空行（emoji/markdown 处理不变），Master 确认后当轮修复；③ 回归——dedup_selftest 新增 R4 用例（首行空行文件 → 提取到标题非 None），全量 10/10 ALL PASS；④ 版本号三处对齐 v3.20 + CHANGELOG v4.10 |
@@ -326,3 +338,4 @@ L3 daily-why-publish（手动触发）← 本 Skill
 ---
 
 *Version: v3.22 | 2026-09-16 | #57a 发布报告 checksum 口径统一（写入与校验共用 _script_zone_digest，尾部换行 rstrip 归一 + 写入后回读自校验；此前两侧差 1 个换行，致每次渲染恒报「脚本区被手工改动」并全量覆盖，与版本号是否变化无关）+ #57b 补充区保留（render_report 只重写 checksum 标记之前，标记之后的 AI 补充区无条件原样保留；依据 cddl-codegen / SilverModel「标记界定所有权」共识，EXP-004）+ #56 版本校验三口径全比（frontmatter/标题/末条 Version，任一不符即告警；修原实现误取首条 Version 的隐患）+ publish frontmatter 补 v3.22（此前滞留 v3.20 / last_updated 09-15，title_and_footer 口径照不到，即 #56 活体案例）；v3.21 | 2026-09-16 | #54 学习总结检索改前缀 glob（学习总结*.md，固定名零命中会让 Phase 1 整段绕过）+ #55 code_review_check.py / docs/code-review-standard.md 补入 extra_sync G 组（消「无复制源」告警）；v3.20 | 2026-09-15 | 话题提取跳空行对齐 check_topic（P3 审查 P1-3 双源漂移：首行空行 → 旧实现 None → 去重 fail-open 静默绕过；Master 确认当轮修复）+ dedup_selftest R4 回归（10/10）；v3.19（2026-09-15）dedup 卡点默认反转 enforce（Silent Fail-Open 根治：默认硬拦 exit 1，DAILY_WHY_DEDUP_RELAX=1 显式豁免，检测器故障 fail-open 保留；v3.13 的 ENFORCE bash 前缀注入 Windows 不生效之 EXP-014 实证，Step 1/3 已移除失效前缀）+ check_topic 排除 _废弃 后缀 + prepare_topics full/compact 同源派生断言 + 新增 dedup_selftest.py 双向自检；v3.18（2026-09-11）灰区告警豁免清单落地（config.git_gray_exemptions 8 项达尔文实验产物，外部经验一致：实验产物不入同步；文件未删，仅消噪音）；v3.17（2026-09-10）沙箱网络隔离 push 失败处置固化（commit 已生成 → 沙箱外 push + api.github.com 核验 remote sha，补推结论写 AI 补充区）；v3.16（2026-09-09）引用机械门禁（正文含引用且 quote_checks 空 → 硬阻断，CITATION_HINT 收窄防误杀）；（补 09-07/08/09 三波欠账 + L3 SKILL 加「重大改造必更新 CHANGELOG」步骤 + git_add_files 纳入 CHANGELOG.md 真进 GitHub）；去重卡点自匹配修复（check_topic --exclude-date 排除当日自身，修 v3.13 首跑 100% 误杀）；v3.13（2026-09-08）记忆治理 v3 全量落地（闸门 0 至 5：阶段5 门禁前置 L1 + P0-1 强制输出物接线 + 动态配额 + NON_BLOCKING + 衰减 + 零损失校验 + 写入准入，详见变更日志）；v3.11（2026-09-07）记忆治理脚本纳入 git 同步（check_memory_size.py/restructure_memory.py 入 extra_sync + git_add_files，双向自检全对齐）+ 自动化记忆归档切割（07-01至08-31 段下沉 archive/）；v3.10（2026-09-07）记忆分片重构：IMA 历史读写迁移 topics/ima_history.md（切断 MEMORY.md 自动写入）+ Phase 0 记忆体积门禁（warn 不阻断）+ 新增 check_memory_size.py/restructure_memory.py；v3.9（2026-09-03）改进点提取多模式+零命中告警、Step 2.5 加 0 条处理硬约束、IMA 版本号降级路径删除、Phase 1 落日志、frontmatter 补 version；v3.8（2026-09-02）P1-3 方案A：恢复 Phase 1 脚本验证（默认开启+checksum 保护区渲染），--skip-match 降级手动逃生阀；v3.7（2026-09-01）网络容错（错误分类+探活+退避重试）+ 发布报告 checksum 防篡改 + --retry 模式禁止裸 push + 版本号三处统一（达尔文 Round 1）；v3.6（2026-08-31）恢复 l3_run.log + 发布报告脚本渲染；v3.5（2026-08-31）Phase 5 前移至 git 之前 + IMA 历史表正则修复 + commit 消息反推 + 一致性自检；v3.4（2026-08-28）Phase 3 内置远端核验（铁律固化：不信本地 ahead 数，push 后 ls-remote 比对 + 自动写 loose ref 修复 origin/main）*
+*Version: v3.23 | 2026-09-17 | #58 改进点提取器双断裂根治（闸门①标题锚点由「须以关键词开头」放宽为「任意位置含关键词」并纳入「改写要点」；闸门②抽 _extract_improvements 用 re.finditer 遍历全部命中章节取首个非空列表，修掉「首个命中是表格章节即空手而归」；闸门③新增最高优先契约锚点 `## 改进点`，L2 SKILL v3.4 强制，在生产侧终结 L2/L3 格式漂移）+ `--verify-report` 子模式（判 FAIL 的报告须有「人工补验」声明 + ≥3 行判定表格，否则 exit 1；Step 2.5 硬约束补验后必跑）+ #59 修复（scripts/config.json 被 .gitignore 有意忽略却留在 git_add_files/复制清单 → git add 静默失败 + 双向自检假绿；现从两份清单移除 + git add 逐项回读校验）+ 70 份全量双向回归（零命中 5→0，条数零下降）+ CHANGELOG v4.13*
