@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-"""review.json schema 机械校验器 —— 补上「强制输出物」缺失的执行校验（v1.0, 2026-09-07）
+"""review.json schema 机械校验器 —— 补上「强制输出物」缺失的执行校验（v1.1, 2026-09-18）
 
 背景（常驻缺陷 40 / SOP Step 8.5「09-04 头号结论」）：
     reviewer_prompt v2.6 把 Step 5/5.5/5.6/5.7 的「自查法」软指令改成了强制输出物
@@ -11,6 +11,14 @@
 
     橙皮书 EXP-004「约束优于指令」：prompt 写得再准，Reviewer 不执行也无人知晓。
     本脚本把「是否执行」变成可机械判定的事实。
+
+v1.1 2026-09-18  新增第 8 项校验「二轮 issue 闭环回应」（缺陷 P2-a，09-18 L2 后检查实证）：
+    校验对象为 *_v2_review.json 且同日 *_review.json 存在时，必须含 issue_responses 数组，
+    逐条回应 v1 issues（条数覆盖全部下标 + 每条含 issue_index/status/evidence，
+    status 枚举 resolved/partial/unresolved）。根因：L2 spawn 审校子 agent 的任务清单
+    从未传入 v1 review.json（输入链断裂，与缺陷 #59「工具有效但流程不调用」同构），
+    二轮审校拿不到一轮 issues 自然无从回应。生效日 2026-09-18（历史 v2 review 仅警告）；
+    同日 v1 review 不存在时 fail-open 跳过（仅警告，不阻断）。
 
 用法：
     python validate_review.py review/2026-09-07_review.json
@@ -31,13 +39,19 @@ import re
 import sys
 from pathlib import Path
 
-VERSION = "v1.0"
+VERSION = "v1.1"
 
 # v2.8（09-07 A 方案）新增：历史差距对照清单
 GAP_PATTERNS_FILE = Path(
     r"C:\Users\admin\.workbuddy\skills\daily-why-writer\references\GAP_PATTERNS.md")
 # 该清单自 2026-09-08 起强制；更早的 review.json 缺 gap_checks 属历史遗留，仅警告
 GAP_ENFORCE_SINCE = "2026-09-08"
+
+# v1.1（09-18）新增：二轮 issue 闭环回应（issue_responses）强制起始日
+ISSUE_RESPONSE_ENFORCE_SINCE = "2026-09-18"
+
+# issue_responses.status 合法枚举（wontfix 归 unresolved + evidence 说明）
+ISSUE_STATUS_ENUM = ("resolved", "partial", "unresolved")
 
 # v2.6 起要求的强制留痕数组
 REQUIRED_ARRAYS = {
@@ -219,6 +233,69 @@ def validate(path: Path, article_path: Path | None = None) -> dict:
             if item.get("checked") is not True:
                 msg = f"`gap_checks[{i}]`（{pid}）的 `checked` 不为 true —— 未逐条核对"
                 (errors if enforce else warnings).append(msg)
+
+    # 8. 二轮 issue 闭环回应（v1.1，缺陷 P2-a：二轮审校未回应一轮 issues）
+    #    触发条件：文件名为 {date}_v2_review.json 且同日 {date}_review.json 存在
+    m_v2 = re.search(r"(\d{4}-\d{2}-\d{2})_v2_review\.json$", path.name)
+    if m_v2:
+        date_str = m_v2.group(1)
+        enforce_ir = date_str >= ISSUE_RESPONSE_ENFORCE_SINCE
+        v1_path = path.with_name(f"{date_str}_review.json")
+        if not v1_path.exists():
+            # fail-open：一轮审校缺失（如熔断降级），二轮无回应对象，不阻断
+            warnings.append(
+                f"同日一轮审校 `{v1_path.name}` 不存在，跳过 issue_responses 校验（fail-open）")
+        else:
+            try:
+                v1_data = json.loads(v1_path.read_text(encoding="utf-8"))
+            except (OSError, json.JSONDecodeError) as e:
+                v1_data = None
+                warnings.append(
+                    f"一轮审校 `{v1_path.name}` 解析失败（{e}），跳过 issue_responses 校验")
+            v1_issues = v1_data.get("issues") if isinstance(v1_data, dict) else None
+            if not isinstance(v1_issues, list) or not v1_issues:
+                warnings.append(
+                    "一轮审校无 issues 数组（可能 P0/P1 全无），跳过 issue_responses 覆盖校验")
+            else:
+                ir = data.get("issue_responses")
+                if ir is None:
+                    msg = (f"缺少 `issue_responses`（二轮审校必须逐条回应一轮 issues 共 "
+                           f"{len(v1_issues)} 条，见 reviewer_prompt Step 5.10）")
+                    (errors if enforce_ir else warnings).append(msg)
+                elif not isinstance(ir, list):
+                    errors.append("`issue_responses` 应为数组")
+                else:
+                    stats["issue_responses"] = len(ir)
+                    covered = set()
+                    for i, item in enumerate(ir):
+                        if not isinstance(item, dict):
+                            errors.append(f"`issue_responses[{i}]` 应为对象")
+                            continue
+                        idx = item.get("issue_index")
+                        st = item.get("status")
+                        ev = item.get("evidence")
+                        if not isinstance(idx, int) or isinstance(idx, bool):
+                            errors.append(
+                                f"`issue_responses[{i}]` 缺少合法 `issue_index`（整数下标）")
+                        elif idx < 0 or idx >= len(v1_issues):
+                            errors.append(
+                                f"`issue_responses[{i}]` 的 `issue_index={idx}` 越界"
+                                f"（一轮 issues 共 {len(v1_issues)} 条，下标 0 至 {len(v1_issues) - 1}）")
+                        else:
+                            covered.add(idx)
+                        if st not in ISSUE_STATUS_ENUM:
+                            errors.append(
+                                f"`issue_responses[{i}]` 的 `status` 非法（{st!r}），"
+                                f"须为 {'/'.join(ISSUE_STATUS_ENUM)}")
+                        if not (isinstance(ev, str) and ev.strip()):
+                            errors.append(
+                                f"`issue_responses[{i}]` 缺少 `evidence`"
+                                "（闭环证据：v2 文章位置或未处理理由）")
+                    missed = sorted(set(range(len(v1_issues))) - covered)
+                    if missed:
+                        msg = (f"`issue_responses` 未覆盖一轮 issues 下标 {missed}"
+                               f"（共 {len(v1_issues)} 条，必须逐条回应，一条不能少）")
+                        (errors if enforce_ir else warnings).append(msg)
 
     ok = not errors and not warnings
     return {"ok": ok, "errors": errors, "warnings": warnings, "stats": stats, "blocking": blocking}

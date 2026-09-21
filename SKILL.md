@@ -8,8 +8,8 @@ description: >
   路由排除：输入含「学习/投喂/总结/发布/推送/审计/备份」等动作词时，
   即使包含 dailywhy 前缀，也不属于本技能（分别属于 L2 学习 / L3 发布），勿触发。
 agent_created: true
-version: v3.6
-last_updated: 2026-09-16
+version: v3.7
+last_updated: 2026-09-21
 ---
 
 # daily-why-writer
@@ -25,7 +25,7 @@ last_updated: 2026-09-16
 ## 元规则
 
 1. **教训没有不可泛化的** — 每次出错分析根因，提炼为可复用规则，记录到 FEEDBACK_LOG
-2. **三层分离，按需加载**：本文件 = 核心法典（Always Load）；`references/CHECKLIST.md` = 科学准确性自检（写后加载）；`references/FORBIDDEN.md` = 黑名单 FP-01~75（含 FP-58 空缺，实际 74 条，写后加载）；`references/FEEDBACK_LOG.md` = 活跃教训（30天内，审校时按需检索）；`references/FEEDBACK_ARCHIVE.md` = 休眠教训（30天未再犯，手动查阅）；`references/EXAMPLES.md` = 好/坏案例（写作时按需查阅）
+2. **三层分离，按需加载**：本文件 = 核心法典（Always Load）；`references/CHECKLIST.md` = 科学准确性自检（写后加载）；`references/FORBIDDEN.md` = 黑名单 FP-01~77（含 FP-58 空缺，实际 76 条，写后加载）；`references/FEEDBACK_LOG.md` = 活跃教训（30天内，审校时按需检索）；`references/FEEDBACK_ARCHIVE.md` = 休眠教训（30天未再犯，手动查阅）；`references/EXAMPLES.md` = 好/坏案例（写作时按需查阅）
 3. **数值规则内联**：本文已内联所有关键阈值，`writing_rules.json` 仅供 `validate_article.py` 程序化验证
 
 ---

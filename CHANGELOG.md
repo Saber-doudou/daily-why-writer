@@ -4,6 +4,23 @@
 
 ---
 
+## v4.15 — 2026-09-18 二轮审校 issue 闭环回应机制落地（缺陷 P2-a，validate_review v1.1 + reviewer_prompt v2.10 + feed-learning v3.6）+ L2后检查提示词样例过期修复（P2-b）
+
+**来源**：同日 L2 后检查报告 P2 项遗留（P1 已随 v4.14 修复）；Master 令「3，就修了吧」。
+
+**P2-a 根因（先查清再动手）**：09-18 实证 v1 审校提出「补选购建议 + 明适用边界（14 岁以下）」，v2 改进点已补，但 v2 审校对 v1 issues 只字未提闭环状态。**根因不在审校 AI，在输入链**：L2 SKILL spawn 审校子 agent 的任务清单（①至⑧）从未传入 `review/{date}_review.json`——子 agent 拿不到一轮 issues，自然无从回应（与缺陷 #59「工具有效但流程不调用」同构）。
+
+**修复三处联动（EXP-004：光加提示词无校验 = 无效）**：
+1. `validate_review.py` v1.0 → **v1.1**：新增第 8 项校验——对象为 `{date}_v2_review.json` 且同日 `{date}_review.json` 存在时，`issue_responses` 必须存在且覆盖一轮 issues 全部下标（0 至 N-1），每条含 `issue_index`（整数）/`status`（枚举 resolved、partial、unresolved）/`evidence`（非空）；任一命中即 FAIL。生效日 2026-09-18（历史 v2 review 仅警告）；同日 v1 review 不存在时 fail-open 跳过（仅警告，不阻断——熔断降级场景二轮无回应对象）。
+2. `reviewer_prompt.md` v2.9 → **v2.10**：新增 **Step 5.10 二轮 issue 闭环回应**（Read 一轮报告 → 逐条核对 v2 文章处理结果 → status + evidence）；输出模板增 `issue_responses` 字段示例；落盘自检清单增第 8 项（无条件强制）。
+3. `daily-why-feed-learning` SKILL v3.5 → **v3.6**：Phase 2 任务内容 ⑤ 补传一轮审校报告（若存在）并明确要求按 Step 5.10 输出 `issue_responses`。
+
+**P2-b 修复**：`deliverables/L2后检查-提示词.md` 步骤 2「通过样例」的 `char_count=632`（09-17 历史值，09-18 实测 597）改为 `<实测>` 占位——样例值永不腐，不影响 Master「贴一句话开头 + 换日期」的用法。同文件顺带同步两处已过期内容：版本表补 reviewer-prompt 行（v2.10，其 v2.8 盲点已于 v4.14 消除）、feed-learning 权威值 v3.4 → v3.6，并加「权威版本列会过期、判定以 version.json 实时值为准」提醒。
+
+**验证**：validate_review.py ast.parse 通过 + 双向用例（详见本轮工作日志）——正例（issue_responses 完整覆盖）rc=0；反例三连（缺字段 / 覆盖不全 / status 非法）均 rc=1 且错误信息精确；历史文件（09-17 v2 review）走警告路径不阻断；今日真实 `2026-09-18_v2_review.json` 新增 1 条 issue_responses 缺失错误（预期行为，该文件确未做闭环回应，已随 v4.14 缺陷 #60 一并记台账）。版本一致性 5 项全绿（version.json 为权威）。
+
+---
+
 ## v4.14 — 2026-09-18 v2 审校 schema 门禁落地 + 审校定位断言回读校验 + reviewer_prompt 版本盲点消除（L2 线 v3.4→v3.5，reviewer_prompt v2.8→v2.9）
 
 **来源**：Master 令「L2 后检查」提示词首次实战（09-18），产出 `deliverables/2026-09-18-L2后检查报告.md` 报出 2 项 P1；Master 裁定「A + C，你这边不做 L3」。
