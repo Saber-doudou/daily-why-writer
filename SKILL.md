@@ -25,7 +25,7 @@ last_updated: 2026-09-21
 ## 元规则
 
 1. **教训没有不可泛化的** — 每次出错分析根因，提炼为可复用规则，记录到 FEEDBACK_LOG
-2. **三层分离，按需加载**：本文件 = 核心法典（Always Load）；`references/CHECKLIST.md` = 科学准确性自检（写后加载）；`references/FORBIDDEN.md` = 黑名单 FP-01~77（含 FP-58 空缺，实际 76 条，写后加载）；`references/FEEDBACK_LOG.md` = 活跃教训（30天内，审校时按需检索）；`references/FEEDBACK_ARCHIVE.md` = 休眠教训（30天未再犯，手动查阅）；`references/EXAMPLES.md` = 好/坏案例（写作时按需查阅）
+2. **三层分离，按需加载**：本文件 = 核心法典（Always Load）；`references/CHECKLIST.md` = 科学准确性自检（写后加载）；`references/FORBIDDEN.md` = 黑名单 FP-01~78（含 FP-58 空缺，实际 77 条，写后加载）；`references/FEEDBACK_LOG.md` = 活跃教训（30天内，审校时按需检索）；`references/FEEDBACK_ARCHIVE.md` = 休眠教训（30天未再犯，手动查阅）；`references/EXAMPLES.md` = 好/坏案例（写作时按需查阅）
 3. **数值规则内联**：本文已内联所有关键阈值，`writing_rules.json` 仅供 `validate_article.py` 程序化验证
 
 ---
@@ -126,7 +126,7 @@ C:/Users/admin/.workbuddy/binaries/python/versions/3.13.12/python.exe F:/WorkBud
    - **🔥 活跃区（必查）**：近30天被教训引用，当前高发问题，逐条核对
    - 🛡️ 预防区（按需）：有教训但近期零触发，规则有效，抽查即可
    - 🔬 待验证区（手动）：从未被引用，新规则，写作时主动对照
-2. 加载 `references/FORBIDDEN.md` 扫描 FP-01~75
+2. 加载 `references/FORBIDDEN.md` 扫描 FP-01~78（以文件实际为准，含 FP-58 空缺，实际 77 条）
 3. **标点自查**（5 项高频陷阱，GB/T 15834-2011）：
 
 | # | 陷阱 | 错误 → 正确 |
@@ -267,7 +267,7 @@ Phase 5: 【Orchestrator】输出全文 + update_history.py + 记忆更新
 | 文件 | 用途 | 加载时机 |
 |------|------|---------|
 | `references/CHECKLIST.md` | 100 项自检（活跃区46必查 + 预防区35 + 待验证区19） | Phase 3 |
-| `references/FORBIDDEN.md` | 74 条禁止模式 FP-01~75（含 FP-58 空缺） | Phase 3 |
+| `references/FORBIDDEN.md` | 77 条禁止模式 FP-01~78（含 FP-58 空缺） | Phase 3 |
 | `references/FEEDBACK_LOG.md` | 教训→规则转化记录（30天内活跃） | 按需检索 |
 | `references/FEEDBACK_ARCHIVE.md` | 休眠教训库（30天未再犯） | 手动查阅 |
 | `references/EXAMPLES.md` | A段/F段/Q格式好/坏案例 | 写作时查阅 |
@@ -342,3 +342,4 @@ Phase 5: 【Orchestrator】输出全文 + update_history.py + 记忆更新
 *Version: v3.5 | 2026-09-15 | + FORBIDDEN FP-73（比例倍数省略维度指代：直径比与重量/体积比混用，"云有多重"投喂学习，四家AI一致抓出）+ CHECKLIST §109/§110（力学表述禁"不起作用"式省略、水汽与云滴物态术语不得混用）+ FEEDBACK_LOG 4 条（含 ima 两条指控被权威源推翻的信源甄别复训）*
 *Version: v3.5 | 2026-09-16 | 版本漂移修复：本轮核对发现 frontmatter v3.4 / 变更日志尾部 v3.3(09-11) / 权威源 version.json v3.4 三处互不一致，且 v3.4、v3.5 两条日志被误插在列表中部（08-05 与 08-07 之间）——真实最新版为 v3.5。已统一 frontmatter + version.json + 日志尾部至 v3.5，v3.4/v3.5 两条按时间正序补入列表末尾（无内容变更）*
 *Version: v3.6 | 2026-09-16 | + FORBIDDEN FP-75（开头数据口径与结论口径不自洽：太阳日数据推出恒星日惊叹 + "快四个月"等待时长错配，金星日比年长投喂学习，四家AI一致抓出；与 FP-03/44/55 分界）+ CHECKLIST §111（开头数据与惊叹句同口径自洽）+ §78 案例补充（"八大行星中唯一"限定）+ FEEDBACK_LOG 3 条 + FP 总数 73→74*
+*Version: v3.7 | 2026-09-21 | + FORBIDDEN FP-76（静态科普文添加交互/体验引导属格式外功能，09-17 投喂学习，当时漏升版本号）+ FP-77（表面张力变化主因误归香精/调味剂：须归 SLS 类表面活性剂，薄荷醇水中溶解度极低且非表面活性剂；薄荷牙膏投喂学习，同源教训 09-02 刷牙橙汁 FP-33/§101 已点出但未沉淀）+ CHECKLIST §95（术语家族首次出现须锚定上下位关系）+ FP 总数 74→76；本条为 09-21 版本漂移修复补录（frontmatter 当日已升 v3.7 但漏写日志条目与 version.json）*
