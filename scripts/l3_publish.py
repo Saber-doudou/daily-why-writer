@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-L3 Publish v3.23 — daily-why 自包含发布脚本
+L3 Publish v3.24 — daily-why 自包含发布脚本
 零 AI 依赖，一条命令跑完：匹配检查、IMA 备份、GitHub 推送、执行日志归档
 
 Usage:
@@ -193,6 +193,17 @@ def git_pull_rebase_push(repo, timeout, retries=3, backoff=(10, 30, 60)):
     )
     if r_push.returncode != 0:
         kind, err_msg = classify_git_error(r_push.stderr)
+        # 09-24 增强：直连失败时尝试代理 fallback（部分环境直连阻断但代理可用）
+        if kind == "network":
+            r_proxy = subprocess.run(
+                ["git", "-c", "http.proxy=http://127.0.0.1:2704",
+                 "-c", "credential.helper=wincred", "push", "origin", "main"],
+                cwd=str(repo), capture_output=True, text=True,
+                timeout=timeout
+            )
+            if r_proxy.returncode == 0:
+                return True, "", "ok"
+            kind, err_msg = classify_git_error(r_proxy.stderr)
         return False, f"push 失败: {err_msg}", kind
     return True, "", "ok"
 

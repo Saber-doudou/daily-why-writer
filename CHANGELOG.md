@@ -4,6 +4,16 @@
 
 ---
 
+## v4.16 — 2026-09-24 GitHub 推送代理 fallback（l3_publish v3.24）
+
+**背景**：沙箱网络隔离常态——直连 github.com:443 经常超时/重置，但走本地代理 `127.0.0.1:2704` 即通。此前脚本仅在直连失败时报错，未自动 fallback，导致每次发布都需手动补推。
+
+**修复**：`git_pull_rebase_push()` 在直连 push 失败时自动尝试 `git -c http.proxy=http://127.0.0.1:2704 push origin main`，两处均失败才报人工介入。
+
+**版本对齐**：version.json + l3_publish.py + CHANGELOG + SKILL.md 四处统一至 v3.24。
+
+---
+
 ## v4.15 — 2026-09-18 二轮审校 issue 闭环回应机制落地（缺陷 P2-a，validate_review v1.1 + reviewer_prompt v2.10 + feed-learning v3.6）+ L2后检查提示词样例过期修复（P2-b）
 
 **来源**：同日 L2 后检查报告 P2 项遗留（P1 已随 v4.14 修复）；Master 令「3，就修了吧」。

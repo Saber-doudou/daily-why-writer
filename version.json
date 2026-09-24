@@ -17,7 +17,7 @@
       "_note": "09-18 v2.10：新增 Step 5.10 二轮 issue 闭环回应（缺陷 P2-a）——审优化版且提供一轮审校报告时必须逐条回应 issues（issue_index/status 枚举 resolved、partial、unresolved/evidence），写入 issue_responses 一条不能少；输出模板增字段示例、落盘自检清单增第 8 项（无条件强制）、validate_review.py v1.1 机械校验（缺失/越界/覆盖不全/非法枚举即 FAIL，生效日 09-18）。根因：L2 spawn 任务清单从未传入 v1 review.json，输入链断裂致二轮无从回应（与 #59 同构）。同日 feed-learning SKILL v3.6 在任务内容 ⑤ 补传。09-18 v2.9：Step 4 新增「定位断言必须回读原文校验」硬约束——凡写出具体位置/计数的断言（『第N行有X』『共N处X』）落盘前必须回读原文核对，禁止凭印象给位置或计数，且计数只统计原文现状、不得把自己建议的替换文本算进去。背景（09-18 实证）：v1 审校称『A段第3行与F段第15行使用双破折号共2处』，实测全文仅 1 处（第3行），第15行用的是逗号——该断言把自己建议的替换示例误当原文现状，属位置与计数双错，会让后续按位置修文时改错行。依据 EXP-014。09-17 之前的盲点已消除：此前本文件不在 version.json skills 表内 → check_version_consistency 完全不覆盖它，版本位无任何机械防线；09-18 起纳入，version_field=title。09-07 v2.8：新增 Step 5.9 历史差距对照核验 gap_checks；09-05 达尔文 Round1+2+3 升级至 v2.7"
     },
     "daily-why-publish": {
-      "version": "v3.23",
+      "version": "v3.24",
       "version_field": "title_and_footer",
       "file": "C:/Users/admin/.workbuddy/skills/daily-why-publish/SKILL.md",
       "repo_file": "daily-why-publish/SKILL.md",
