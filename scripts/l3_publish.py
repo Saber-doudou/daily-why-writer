@@ -21,7 +21,7 @@ from pathlib import Path
 
 # ── 常量 ──────────────────────────────────────────────
 
-VERSION = "v3.23"              # 09-17 v3.23：① 修复 #58——改进点提取器两处断裂，且是同一防线第 2 次复发（v3.9 记「已根治」、v3.21 记「已修好」均失准，根因是回归样本全为同一格式=采样偏差）。闸门①「标题锚点」原要求关键词紧跟「## +可选序号」，09-17 标题 `## 一、四 AI 核心差距与采纳/拒绝决策`（关键词在中部）零命中，现改为「标题任意位置含关键词即可」并把「改写要点」纳入关键词；闸门②「章节选取」原用 re.search 只取首个命中章节，撞上「核心差距」表格章节（8 行表格 0 列表项）即空手而归、错过后面真正的改写要点列表，现改 re.finditer 遍历全部命中章节取首个非空列表；闸门③新增最高优先「契约锚点」模式（纯 `## 改进点`，L2 SKILL v3.4 强制），在生产侧立契约，终结「L2 自由命名 vs L3 硬正则」的格式漂移（历史第 5 次分叉：→/到/三、采纳清单/v2 → v3 改进点/一、四 AI 核心差距），依据 EXP-003 指令文件法则 + EXP-004 约束优于指令。② 新增 #58 兜底——`--verify-report` 子模式机械校验发布报告 AI 补充区（判 FAIL 的报告必须声明人工补验且 ≥3 行判定表格，否则 exit 1），把「记得人工补验」从人肉防线变成可校验事实（EXP-014）。③ 修复 #59——`scripts/config.json` 因含 IMA KB ID 被 repo .gitignore 有意忽略却仍留在 git_add_files + 复制清单，git add 被拒且 capture_output=True 吞掉返回码 → 静默失败；双向自检只查「有无复制源」、反向灰区算 tracked-whitelist（未跟踪=隐身），两头都不报 → 报「白名单全覆盖」假绿。现从两份清单移除，并对 git add 逐项回读校验（被拒/未跟踪即 warn 点名）。09-16 v3.22：① 修复 #57a——报告 checksum 校验口径与写入口径差 1 个换行（写入侧 script_zone = join(lines) 不含 checksum 行前分隔换行，校验侧 text[:cut] 却含），导致每次渲染 md5 必不等、恒报「脚本区已被手工改动」并全量覆盖（09-15 报告实测 recorded 与 head[:-1] 精确相等、与 head 不等；与版本号是否变化无关，AI 补充区丢失是必然而非偶发）；现抽公共指纹函数 _script_zone_digest 供两侧共用（rstrip 归一化）+ 写入后回读自校验；② 修复 #57b——render_report 改为只重写 checksum 标记之前的脚本区，标记之后的 AI 补充区无条件原样保留（业界经验：SilverModel User Code Blocks / cddl-codegen keep-marker 一致指出「工具无法反推自己上次的输出」，故弃用「检测篡改」改用「标记界定所有权」；EXP-004 约束优于指令）；③ 修复 #56——check_version_consistency 由单口径升级为 frontmatter/标题/末条 *Version: 三口径全比（此前 writer 日志区 v3.5、audit 脚注区 v1.6、publish frontmatter v3.20 三处漂移全部漏判，均为人工核对才发现；且原实现取首条 *Version: 而非末条）。09-16 v3.21：① 修复 #54——学习总结检索由固定名 学习总结.md 改为前缀 glob（学习总结*.md），多份命中取字典序首个并告警；L2 实际命名带话题后缀（学习总结-熊猫第六指.md），固定名零命中会让 Phase 1 匹配度检查整段被绕过（09-15 实测，靠 AI 人工补验兜住，EXP-004/EXP-014）；② 修复 #55——git_add_files 中 scripts/code_review_check.py 与 docs/code-review-standard.md（09-15 代码审查体系新增）补入 extra_sync G 组，消「无复制源」告警，源改动恢复同步进 repo。09-15 v3.20：话题提取跳空行对齐 check_topic（P3 审查 P1-3 双源漂移：首行为空行时旧实现返回 None → 去重 fail-open 放行，存在静默绕过窗口；Master 确认当轮修复）+ dedup_selftest R4 回归用例；09-15 v3.19：dedup 卡点默认反转 enforce（Silent Fail-Open 根治：判定明确=重复时默认硬拦 exit 1，DAILY_WHY_DEDUP_RELAX=1 显式豁免降软 warn，检测器自身故障 fail-open 保留；依据 v3.13 SKILL bash 前缀注入在 Windows 不生效的 EXP-014 实证，外部经验 Praesidia/readysolutions fail-closed 共识）+ check_topic 排除 _废弃 后缀并修复无#标题提取盲区（#51）+ prepare_topics full/compact 同源派生断言 + 新增 dedup_selftest.py 双向自检（入 extra_sync/git_add_files）；v3.18：灰区告警豁免清单落地（config.git_gray_exemptions 8 项=达尔文 09-04 实验一次性产物，Master 授权查证后决策；外部经验一致：实验产物不入同步通道；豁免走配置+留理由，EXP-004）；v3.17：沙箱网络隔离 push 失败处置固化（SKILL 边界条件表新增：commit 已生成 → 沙箱外 push + api.github.com 核验 remote sha → 补推结论写报告 AI 补充区）；v3.16：引用机械门禁（正文含引用且 quote_checks 空 → 硬阻断）；CHANGELOG 补记 v3.15；去重自匹配修复 v3.14；去重硬卡点 v3.13 补记机制落地（补 09-07/08/09 三波欠账 + L3 SKILL 加「重大改造必更新 CHANGELOG」步骤 + git_add_files 纳入 CHANGELOG.md 真进 GitHub）；顺带修 S1(topics_context 当日写入时序约定) / S2(date_str 缺失静默退化改 warn)；v3.14 去重卡点自匹配修复（check_topic --exclude-date）；v3.13 去重硬卡点接入 L3 + 09-08 记忆治理 v3 落地
+VERSION = "v3.24"              # 09-24 v3.24：① 修复 #58——改进点提取器两处断裂，且是同一防线第 2 次复发（v3.9 记「已根治」、v3.21 记「已修好」均失准，根因是回归样本全为同一格式=采样偏差）。闸门①「标题锚点」原要求关键词紧跟「## +可选序号」，09-17 标题 `## 一、四 AI 核心差距与采纳/拒绝决策`（关键词在中部）零命中，现改为「标题任意位置含关键词即可」并把「改写要点」纳入关键词；闸门②「章节选取」原用 re.search 只取首个命中章节，撞上「核心差距」表格章节（8 行表格 0 列表项）即空手而归、错过后面真正的改写要点列表，现改 re.finditer 遍历全部命中章节取首个非空列表；闸门③新增最高优先「契约锚点」模式（纯 `## 改进点`，L2 SKILL v3.4 强制），在生产侧立契约，终结「L2 自由命名 vs L3 硬正则」的格式漂移（历史第 5 次分叉：→/到/三、采纳清单/v2 → v3 改进点/一、四 AI 核心差距），依据 EXP-003 指令文件法则 + EXP-004 约束优于指令。② 新增 #58 兜底——`--verify-report` 子模式机械校验发布报告 AI 补充区（判 FAIL 的报告必须声明人工补验且 ≥3 行判定表格，否则 exit 1），把「记得人工补验」从人肉防线变成可校验事实（EXP-014）。③ 修复 #59——`scripts/config.json` 因含 IMA KB ID 被 repo .gitignore 有意忽略却仍留在 git_add_files + 复制清单，git add 被拒且 capture_output=True 吞掉返回码 → 静默失败；双向自检只查「有无复制源」、反向灰区算 tracked-whitelist（未跟踪=隐身），两头都不报 → 报「白名单全覆盖」假绿。现从两份清单移除，并对 git add 逐项回读校验（被拒/未跟踪即 warn 点名）。09-16 v3.22：① 修复 #57a——报告 checksum 校验口径与写入口径差 1 个换行（写入侧 script_zone = join(lines) 不含 checksum 行前分隔换行，校验侧 text[:cut] 却含），导致每次渲染 md5 必不等、恒报「脚本区已被手工改动」并全量覆盖（09-15 报告实测 recorded 与 head[:-1] 精确相等、与 head 不等；与版本号是否变化无关，AI 补充区丢失是必然而非偶发）；现抽公共指纹函数 _script_zone_digest 供两侧共用（rstrip 归一化）+ 写入后回读自校验；② 修复 #57b——render_report 改为只重写 checksum 标记之前的脚本区，标记之后的 AI 补充区无条件原样保留（业界经验：SilverModel User Code Blocks / cddl-codegen keep-marker 一致指出「工具无法反推自己上次的输出」，故弃用「检测篡改」改用「标记界定所有权」；EXP-004 约束优于指令）；③ 修复 #56——check_version_consistency 由单口径升级为 frontmatter/标题/末条 *Version: 三口径全比（此前 writer 日志区 v3.5、audit 脚注区 v1.6、publish frontmatter v3.20 三处漂移全部漏判，均为人工核对才发现；且原实现取首条 *Version: 而非末条）。09-16 v3.21：① 修复 #54——学习总结检索由固定名 学习总结.md 改为前缀 glob（学习总结*.md），多份命中取字典序首个并告警；L2 实际命名带话题后缀（学习总结-熊猫第六指.md），固定名零命中会让 Phase 1 匹配度检查整段被绕过（09-15 实测，靠 AI 人工补验兜住，EXP-004/EXP-014）；② 修复 #55——git_add_files 中 scripts/code_review_check.py 与 docs/code-review-standard.md（09-15 代码审查体系新增）补入 extra_sync G 组，消「无复制源」告警，源改动恢复同步进 repo。09-15 v3.20：话题提取跳空行对齐 check_topic（P3 审查 P1-3 双源漂移：首行为空行时旧实现返回 None → 去重 fail-open 放行，存在静默绕过窗口；Master 确认当轮修复）+ dedup_selftest R4 回归用例；09-15 v3.19：dedup 卡点默认反转 enforce（Silent Fail-Open 根治：判定明确=重复时默认硬拦 exit 1，DAILY_WHY_DEDUP_RELAX=1 显式豁免降软 warn，检测器自身故障 fail-open 保留；依据 v3.13 SKILL bash 前缀注入在 Windows 不生效的 EXP-014 实证，外部经验 Praesidia/readysolutions fail-closed 共识）+ check_topic 排除 _废弃 后缀并修复无#标题提取盲区（#51）+ prepare_topics full/compact 同源派生断言 + 新增 dedup_selftest.py 双向自检（入 extra_sync/git_add_files）；v3.18：灰区告警豁免清单落地（config.git_gray_exemptions 8 项=达尔文 09-04 实验一次性产物，Master 授权查证后决策；外部经验一致：实验产物不入同步通道；豁免走配置+留理由，EXP-004）；v3.17：沙箱网络隔离 push 失败处置固化（SKILL 边界条件表新增：commit 已生成 → 沙箱外 push + api.github.com 核验 remote sha → 补推结论写报告 AI 补充区）；v3.16：引用机械门禁（正文含引用且 quote_checks 空 → 硬阻断）；CHANGELOG 补记 v3.15；去重自匹配修复 v3.14；去重硬卡点 v3.13 补记机制落地（补 09-07/08/09 三波欠账 + L3 SKILL 加「重大改造必更新 CHANGELOG」步骤 + git_add_files 纳入 CHANGELOG.md 真进 GitHub）；顺带修 S1(topics_context 当日写入时序约定) / S2(date_str 缺失静默退化改 warn)；v3.14 去重卡点自匹配修复（check_topic --exclude-date）；v3.13 去重硬卡点接入 L3 + 09-08 记忆治理 v3 落地
 MIN_A_CONTENT_CHARS = 50   # A 段最少有效字符数
 MAX_IMPROVEMENTS_CHECK = 10  # 最多检查的改进点数量
 # 09-17 v3.23（#58 兜底）：--verify-report 要求判 FAIL 的报告至少落盘这么多行人工补验判定
@@ -1587,7 +1587,7 @@ def check_version_consistency(res):
     列表，首条永远是历史上最早那条（writer 有 43 条，套上去会取到 v3.1）。
 
     【现口径】不再依赖 version_field 的单一口径：凡文件里能取到版本的位置
-    （frontmatter / 标题 / 末条变更日志）**全部**必须等于权威源，任一不符即 warn
+    （frontmatter / 标题 / 末条变更日志）**全部**必须等于权威源，任一不符即 fail（硬阻断，exit 1）
     并指出具体是哪个口径。title_and_footer 原有的脚本常量校验保留（L3 线额外
     比对 l3_publish.py 的 VERSION）。依据 EXP-004：能机械校验的约束别停留在文档。
     """
@@ -1638,8 +1638,8 @@ def check_version_consistency(res):
         shown = " / ".join(f"{k}:{v}" for k, v in probes)
         bad = [f"{k}={v}" for k, v in probes if v != expected]
         if bad:
-            res.warn(0, f"[版本] {name}: 权威源={expected} 实际({shown})"
-                        f"（不一致口径：{', '.join(bad)}！改版本号前必须先改 config/version.json）")
+            res.fail(0, f"[版本] {name}: 权威源={expected} 实际({shown})"
+                        f"（不一致口径：{', '.join(bad)}！改版本号前必须先改 config/version.json；版本门禁已 FAIL-closed 硬阻断）")
         else:
             res.ok(0, f"[版本] {name}: {shown} 与权威源 {expected} 全部一致")
 
@@ -1764,7 +1764,12 @@ def main():
         sys.exit(0)
 
     # Phase 0: 版本号一致性校验（09-01 S-2：权威源 config/version.json）
+    # 2026-09-27 升级为 FAIL-closed 硬阻断：版本漂移即 res.fail → res.errors>0，
+    # 此处立即 exit(1)，早于 Phase 2/3/4 任何写入，禁止带着不一致版本号发布（EXP-004 约束优于指令）。
     check_version_consistency(res)
+    if res.errors:
+        res.summary()
+        sys.exit(1)
 
     # Phase 0: 记忆体积门禁（09-07 新增：warn 不阻断，观察一周后评估升阻断）
     check_memory_health(res)
