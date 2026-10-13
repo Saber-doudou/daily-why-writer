@@ -132,7 +132,10 @@ check("generate_prompt.py --check 0 警告", r.returncode == 0 and "警告" not 
 def run_ct(topic, *args):
     r = subprocess.run([PY, str(WS/"scripts/check_topic.py"), *args, topic], capture_output=True, text=True, encoding="utf-8", errors="replace")
     return r.returncode, r.stdout.strip().splitlines()[-1] if r.stdout.strip() else ""
-rc1, _ = run_ct("为什么蛇没有脚还能爬行？")
+# 2026-10-13 修复（T5 配套）：rc1 原用「为什么蛇没有脚还能爬行？」，随话题库增长
+# 与「蛇没有脚还能爬得飞快」字符包含率达 75% ≥70% 阈值，基线即误判重复（实测 FAIL）。
+# 根因是测试话题未随库内容更新，非检测器缺陷；换用零候选话题「煮粥溢锅」。
+rc1, _ = run_ct("为什么煮粥时火太大会溢锅？")
 rc2, _ = run_ct("为什么猫头鹰飞起来没有声音")
 rc3, _ = run_ct("为什么香蕉是弯的？", "--angle")
 check("check_topic 三态正确", rc1 == 0 and rc2 == 1 and rc3 == 0, f"全新={rc1} 重复={rc2} 角度+--angle={rc3}")

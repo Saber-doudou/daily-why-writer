@@ -261,19 +261,25 @@ def generate_multi_agent_prompt(rules: dict, recent_topics: list = None) -> str:
 
 1. 运行 `{PYTHON} F:/WorkBuddy/daily-why/scripts/prepare_topics.py --compact` 刷新话题库
 2. **外部源拉取（选题主源，优先执行）**：用 WebSearch 检索 1 到 2 个关键词（如"冷知识 有趣""你知道吗 科学现象"，或指定源：维基百科/百度百科你知道吗、果壳、知乎科普），从搜索结果中筛选 3 个候选话题（要求：现象具体、有科学反转点、与已有话题不重复）
-3. **去重校验**：按顺序对每个候选运行 `{PYTHON} F:/WorkBuddy/daily-why/scripts/check_topic.py --angle "候选话题"`：
+3. **去重校验**：按顺序对每个候选运行 `{PYTHON} F:/WorkBuddy/daily-why/scripts/check_topic.py --angle '候选话题'`：
    - 退出码 0 且输出无"⚠️ 角度相关"提示 → 选中该候选，进入步骤 4
-   - 退出码 0 但输出含"⚠️ 角度相关（相似度 X%）"提示 → 角度放宽：确认写作角度与已有话题确实不同后允许采用
-   - 退出码 1 → 换下一个候选（最多试 3 个候选）
+   - 退出码 0 但输出含"⚠️ 角度相关"提示 → **角度放宽须逐个确认全部候选**：输出会列出全部候选（共 N 个，按分数降序，含来源），必须逐个确认写作角度与每一个候选都不同后才允许采用。10-13 实证教训：50.0% 的牛排命中曾被 66.7% 的「雪」掩盖，只确认 top-1 等于没确认
+   - 退出码 1 → 换下一个候选（最多试 3 个候选）。输出含「概念重叠」时为同主题换术语重复（硬重复，--angle 不可覆盖），必须换候选
    - 退出码 2 → 参数错误，修正话题文本后重试
+   - **shell 传参纪律（10-13 审查补充）**：候选话题一律用单引号包裹，防止 $、反引号、反斜杠被 shell 解释；候选自身含单引号时改用双引号，并确认其中不含 $、反引号、反斜杠
 4. **选中后查证**：用 WebSearch 查证 1 到 2 个关键词：关键数字、研究者引用完整性（机构+年份+期刊）、引用准确性
 5. **落选话题回写素材池**：本轮拉取/筛选过程中未采用的候选（含查证后放弃的），用 Bash 追加/更新到 `F:/WorkBuddy/daily-why/config/topic_candidates.json` 的 candidates 数组（source 字段标记 `external` 或 `rejected`；已有则跳过），保持 JSON 合法
 6. **降级链**（外部源拉取失败或无可用候选时按序降级）：
-   - 降级① 脑洞选题：读 `F:/WorkBuddy/daily-why/config/topics_context_compact.json` 的 topic_summaries，自己想一个新话题，运行 `{PYTHON} F:/WorkBuddy/daily-why/scripts/check_topic.py --angle "话题"` 校验（退出码 0 → 继续；1 → 重选，最多 3 轮；2 → 参数错误）
-   - 降级② 素材池兜底：从 `F:/WorkBuddy/daily-why/config/topic_candidates.json` 的 candidates 数组取候选，同样运行 `{PYTHON} F:/WorkBuddy/daily-why/scripts/check_topic.py --angle "话题"` 校验
+   - 降级① 脑洞选题：读 `F:/WorkBuddy/daily-why/config/topics_context_compact.json` 的 topic_summaries，自己想一个新话题，运行 `{PYTHON} F:/WorkBuddy/daily-why/scripts/check_topic.py --angle '话题'` 校验（退出码 0 → 继续；1 → 重选，最多 3 轮；2 → 参数错误）
+   - 降级② 素材池兜底：从 `F:/WorkBuddy/daily-why/config/topic_candidates.json` 的 candidates 数组取候选，同样运行 `{PYTHON} F:/WorkBuddy/daily-why/scripts/check_topic.py --angle '候选'` 校验
    - 降级③ 仍失败 → 触发下方选题失败上报，不得静默终止
 7. 按阶段0加载的 SOP（SKILL.md）写文章，字数{wc_min}-{wc_max}
 8. 保存到 `F:/WorkBuddy/daily-why/articles/{{年月}}/{{今天日期}}-每日冷知识-{{关键词}}.md`（关键词2-6字，{{年月}}为YYYY-MM格式）
+9. **成稿标题复查（2026-10-13 新增，硬步骤）**：文章落盘后、进入阶段2 之前，必须运行 `{PYTHON} F:/WorkBuddy/daily-why/scripts/check_topic.py --angle --exclude-date {{今天日期}} --file "articles/{{年月}}/{{今天日期}}-每日冷知识-{{关键词}}.md"`（--file 由脚本自行提取首行标题并去 emoji，无需人工抄写；彻底避免标题含引号、$、反引号等字符时的 shell 转义问题，10-13 审查实证）：
+   - 退出码 1 → **不得进入阶段2 审校**：换角度或换话题重写。输出会给出命中的已有话题；含「概念重叠」表示同主题换术语重复，属硬重复，--angle 不可覆盖
+   - 退出码 0 且含「⚠️ 角度相关」→ 输出会列出全部候选，逐个确认角度不同后才放行
+   - 退出码 0 且无提示 → 进入阶段2
+   背景：10-13 牛排稿成稿标题与 09-07 文章字符包含率 66.7%，原流程只在选题时查候选话题串、写文后无人复查成稿标题，该缺口由本步闭环（L3 严格模式本可拦，但不应把希望寄托在最后一环）。
 
 【硬约束】选题失败上报：若外部源拉取、脑洞选题、素材池兜底全部失败（候选均被 check_topic.py 判重复），必须输出"⚠️ 今日选题失败：失败候选列表 + 3 个建议新方向"，不得静默终止。
 
