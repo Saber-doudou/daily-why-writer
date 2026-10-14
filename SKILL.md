@@ -8,8 +8,8 @@ description: >
   路由排除：输入含「学习/投喂/总结/发布/推送/审计/备份」等动作词时，
   即使包含 dailywhy 前缀，也不属于本技能（分别属于 L2 学习 / L3 发布），勿触发。
 agent_created: true
-version: v3.8
-last_updated: 2026-10-13
+version: v3.9
+last_updated: 2026-10-14
 ---
 
 # daily-why-writer
@@ -25,7 +25,7 @@ last_updated: 2026-10-13
 ## 元规则
 
 1. **教训没有不可泛化的** — 每次出错分析根因，提炼为可复用规则，记录到 FEEDBACK_LOG
-2. **三层分离，按需加载**：本文件 = 核心法典（Always Load）；`references/CHECKLIST.md` = 科学准确性自检（写后加载）；`references/FORBIDDEN.md` = 黑名单 FP-01~80（含 FP-58 空缺，实际 79 条，写后加载）；`references/FEEDBACK_LOG.md` = 活跃教训（30天内，审校时按需检索）；`references/FEEDBACK_ARCHIVE.md` = 休眠教训（30天未再犯，手动查阅）；`references/EXAMPLES.md` = 好/坏案例（写作时按需查阅）
+2. **三层分离，按需加载**：本文件 = 核心法典（Always Load）；`references/CHECKLIST.md` = 科学准确性自检（写后加载）；`references/FORBIDDEN.md` = 黑名单 FP-01~81（含 FP-58 空缺，实际 80 条，写后加载）；`references/FEEDBACK_LOG.md` = 活跃教训（30天内，审校时按需检索）；`references/FEEDBACK_ARCHIVE.md` = 休眠教训（30天未再犯，手动查阅）；`references/EXAMPLES.md` = 好/坏案例（写作时按需查阅）
 3. **数值规则内联**：本文已内联所有关键阈值，`writing_rules.json` 仅供 `validate_article.py` 程序化验证
 
 ---
@@ -344,3 +344,4 @@ Phase 5: 【Orchestrator】输出全文 + update_history.py + 记忆更新
 *Version: v3.6 | 2026-09-16 | + FORBIDDEN FP-75（开头数据口径与结论口径不自洽：太阳日数据推出恒星日惊叹 + "快四个月"等待时长错配，金星日比年长投喂学习，四家AI一致抓出；与 FP-03/44/55 分界）+ CHECKLIST §111（开头数据与惊叹句同口径自洽）+ §78 案例补充（"八大行星中唯一"限定）+ FEEDBACK_LOG 3 条 + FP 总数 73→74*
 *Version: v3.7 | 2026-09-21 | + FORBIDDEN FP-76（静态科普文添加交互/体验引导属格式外功能，09-17 投喂学习，当时漏升版本号）+ FP-77（表面张力变化主因误归香精/调味剂：须归 SLS 类表面活性剂，薄荷醇水中溶解度极低且非表面活性剂；薄荷牙膏投喂学习，同源教训 09-02 刷牙橙汁 FP-33/§101 已点出但未沉淀）+ CHECKLIST §95（术语家族首次出现须锚定上下位关系）+ FP 总数 74→76；本条为 09-21 版本漂移修复补录（frontmatter 当日已升 v3.7 但漏写日志条目与 version.json）*
 *Version: v3.8 | 2026-09-28 | + FORBIDDEN FP-79（相变放热误用为位置成因：凝华/凝固放热被当物体长在某侧的原因，实为假，真实成因=水汽来自暖侧+冷界面<冰点；玻璃窗冰花投喂学习，4/4 AI 命中且科普中国也写错，印证权威源也会错、多数 AI 一致≠正确）+ CHECKLIST §116（相变放热是伴随现象不得误作位置成因）+ FEEDBACK_LOG.md 首次创建（含本教训）+ FP 总数 76→78（含 FP-58 空缺，实际 78 条）*
+*Version: v3.9 | 2026-10-14 | + FORBIDDEN FP-81（演绎场景写成纪实目击：A段虚构捕食/事件高潮不加虚化措辞、不核查文献记录，把假说写成"现场直播"；僵尸蜗牛投喂学习——初版"画眉俯冲叼眼柄"野外零文献记录+画眉物种地域错配，千问/IMA 指出）+ CHECKLIST §120（统计指数/改变量引用须核对定义，禁止口语化为"倍数"：Ia=中位数差÷对照组四分位距≠"活动量三倍"，FP-51 细化子规则）+ 补录 10-13 场漂移（FP-80 多因素因果串味+§119 当日已写入规则库但漏升版本号与表头计数，本版一并修正）+ FEEDBACK_LOG 2 条 + FP 总数 78→80（含 FP-58 空缺，实际 80 条）*
