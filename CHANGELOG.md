@@ -4,6 +4,25 @@
 
 ---
 
+## v5.2 — 2026-10-20 IMA 备份落位改造 + #60 知识库上传长期静默失败根治（L3 v3.25）
+
+**来源**：Master 指定——「dailywhy 的备份到 IMA 上要放进《workbuddy自动化备份》这个知识库首页，并且还要放到《history-today》这个笔记本里」。勘察中顺带挖出隐藏缺陷 #60。
+
+**根因（#60，EXP-014 可观测性缺陷）**：共享工具 `ima_archive.py`（C:/Users/admin/WorkBuddy/tools/）的 `_upload_to_knowledge_base` 使用两个**不存在**的 API 路径（`openapi/knowledge/v1/import`、`import_doc`，真实前缀为 `openapi/wiki/v1`），且把知识库**根目录 folder_id**（7457707061698771）当作 `kb_id` 传入；`backup-memory` 对知识库上传失败只 print 不返回错误，l3_publish 只解析 `note_id` 不看知识库结果 → **知识库上传自始从未成功**，09-30 起所有备份实际未进知识库而发布报告全绿。实证：知识库「20-daily-why/现行版」最新备份滞留 v6.4（09-30），v7.0 及之后全部缺失。
+
+**改造（四处）**：
+
+1. **ima_archive.py（共享工具，参数化不破坏其他调用方）**：`_upload_to_knowledge_base` 重写为官方 `openapi/wiki/v1/add_knowledge`（media_type=11 + note_info.content_id + knowledge_base_id + 可选 folder_id，省略=根目录=首页）；`backup_memory` 新增 `note_folder_id`/`kb_folder_id` 可选参数与 `--note-folder-id=`/`--kb-folder-id=` CLI；输出 `RESULT_NOTE_ID=`/`RESULT_KB=ok|fail` 结构化行；文件头 docstring 同步。
+2. **config.json（敏感文件，gitignore 内不进版本同步）**：`ima_kb_id` 由 7457707061698771 修正为真实 kb_id `vVMri-Fu1XYI1Lj0HvhJoJNUryQr_47L7CW8ep9sInU=`（search_knowledge_base 权威返回）；新增 `ima_kb_root_folder_id`（7457707061698771，根目录=首页）与 `ima_note_folder_id`（folder8966fab4b0c096b3，IMA 笔记本《history-today》，list_notebook 实测 105 篇），均附实测注释。
+3. **l3_publish.py v3.25**：Phase 2 传 `--note-folder-id`（笔记归《history-today》笔记本）、不传 kb-folder-id（知识库关联落首页）；解析 `RESULT_KB` 三态落 res 记录（ok / fail / 行缺失均可见，fail 与缺失出 ⚠️）；VERSION + docstring 同步升级。
+4. **版本三处对齐**：config/version.json（publish v3.24→v3.25 + _note 补记）+ l3_publish.py + publish SKILL.md（frontmatter/标题/变更日志表/页脚，**顺带补录 09-24 遗漏的 v3.24 行**）。
+
+**验证（实跑 + 只读回验）**：① dry-run 命令构造核验（--kb-id/--note-folder-id 均在）；② 实跑 backup-memory：笔记创建成功并归入《history-today》笔记本（list_note 回验 folder_id）、知识库首页出现新条目（get_knowledge_list 根目录回验 parent_folder_id=7457707061698771）；③ ima_history.md 追加 v7.1 行（版本序列连续，下次自动检测进位 v7.2 无撞车）；④ 版本门禁 FAIL-closed 校验通过（三处口径一致）。
+
+**已知边界**：① 笔记本/文件夹 ID 为 IMA 侧资源标识，若在 IMA 客户端被删重建需重新勘察更新 config.json（已注释留档）；② 历史遗留问题——09-30 至 10-19 期间的知识库备份缺口（v6.5 至 v7.0 共 6 个版本只建了笔记未进库）不自动补偿，笔记本身在 IMA 笔记本侧完好，如需补关联可按新 API 逐条 add_knowledge；③ history-today 项目的备份链路若同样传错 kb_id 需另行勘察（本次未动其配置）。
+
+---
+
 ## v5.1 — 2026-10-13 check_topic 整改补充任务清算（F1 单字 specific 误杀修复 + F2 决策日志瘦身与截断修 + F3 prompt 改 --file 模式 + F4/F5 记录沉淀）
 
 **来源**：`deliverables/2026-10-13-check_topic整改审查报告.md`（Saber 审查结论：通过，余 3 🟡 + 2 💭）→ `deliverables/2026-10-13-check_topic整改补充任务清单.md`（F1-F6）。Master 裁定：**F1 选方案 B**（同 concept 须双方 generic 均命中才硬拦）；**F6 不打包**（范围外既有项另立任务排期）。
