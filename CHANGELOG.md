@@ -19,6 +19,8 @@
 
 **验证（实跑 + 只读回验）**：① dry-run 命令构造核验（--kb-id/--note-folder-id 均在）；② 实跑 backup-memory：笔记创建成功并归入《history-today》笔记本（list_note 回验 folder_id）、知识库首页出现新条目（get_knowledge_list 根目录回验 parent_folder_id=7457707061698771）；③ ima_history.md 追加 v7.1 行（版本序列连续，下次自动检测进位 v7.2 无撞车）；④ 版本门禁 FAIL-closed 校验通过（三处口径一致）。
 
+**同日修正（10-20 v3.26，笔记本 ID 误配）**：上述验证②中笔记归入的《history-today》笔记本系 **Master 指出路径给错**——daily-why 备份应放《**daily-why**》笔记本（foldercf745788b7fb2800，list_notebook 实测 112 篇存量，v6.4 及更早历史备份本就住此，v3.25 误配属回归性错误）。已更正 config.json `ima_note_folder_id` 并升版本 v3.26（三处对齐）。**遗留**：IMA API 无笔记移动/删除能力，v7.0（10-19 L3 正式备份）与 v7.1（10-20 实测备份）两条已误入 history-today 笔记本无法自动迁移，从 v7.2 起新备份进《daily-why》。**教训（EXP-014）**：配置类落位参数改动前应先勘察「存量数据在哪」——112 篇存量就是最硬的证据，先查再改可避免此类回归。
+
 **已知边界**：① 笔记本/文件夹 ID 为 IMA 侧资源标识，若在 IMA 客户端被删重建需重新勘察更新 config.json（已注释留档）；② 09-30 至 10-19 知识库备份缺口（v6.5 至 v7.0 共 6 个版本只建了笔记未进库）已于 10-20 当日经 add_knowledge 逐条补关联至首页并回验（首页现存 v6.5-v7.1 共 7 条）；v6.4 老条目在「20-daily-why/现行版」子文件夹未动（API 不支持移动/删除，且未要求）；③ history-today 项目的备份链路是否同样传错 kb_id 未勘察（Master 明示自行单独处理）；④ 2026-10-20（周二）工作日 L1 未执行（articles/投喂素材/review 三目录 + automation memory + check_topic 决策日志均无当日记录，09:40 应触发），Master 裁定先不管，待平台侧排查；⑤ config.json 含 IMA KB ID 仍受 .gitignore 保护不进 repo（安全决策优先）。
 
 ---
