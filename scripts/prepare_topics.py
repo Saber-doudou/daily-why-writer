@@ -7,6 +7,13 @@ prepare_topics.py — 扫描所有历史文章和 memory.md，提取已用话题
     python prepare_topics.py
     python prepare_topics.py --workspace F:/WorkBuddy/daily-why
     python prepare_topics.py --output topics_context.json --limit 50
+    python prepare_topics.py --compact
+
+2026-10-23 R1（P1-5 双文件 SSOT）：--compact 不再"只写 compact 后提前 return"。
+L1 每日只调用 --compact，旧实现下 full 永久停在最后一次全量运行（09-15，40 条），
+而 check_topic.py 读的正是 full，形成双文件漂移（本日实测 full=40/compact=50，
+compact 独有 26 条、full 独有 16 条）。现两种模式都由同一次 scan_all() 结果写入
+full 与 compact，并在写后回读断言 generated_at / total_count / topic_summaries 三项一致。
 """
 
 import re
@@ -25,6 +32,9 @@ from topic_utils import (
     extract_topics_from_memory,
     extract_keywords,
 )
+
+FULL_NAME = "config/topics_context.json"
+COMPACT_NAME = "config/topics_context_compact.json"
 
 
 def scan_all(workspace: Path, limit: int = 50) -> dict:
@@ -106,90 +116,93 @@ def scan_all(workspace: Path, limit: int = 50) -> dict:
     }
 
 
+def build_compact(result: dict) -> dict:
+    """compact 是 full 的子集视图，必须由同一个 result 派生，不允许独立扫描。"""
+    return {
+        "generated_at": result["generated_at"],
+        "total_count": result["total_count"],
+        "topic_summaries": result["topic_summaries"],
+    }
+
+
+def verify_pair(full_path: Path, compact_path: Path) -> None:
+    """写后回读断言：两文件的三项去重关键字段必须逐项相等（EXP-014 可观测性）。"""
+    full = json.loads(full_path.read_text(encoding="utf-8"))
+    comp = json.loads(compact_path.read_text(encoding="utf-8"))
+    bad = [k for k in ("generated_at", "total_count", "topic_summaries")
+           if full.get(k) != comp.get(k)]
+    if bad:
+        print(f"[prepare_topics] ❌ 同源一致性断言失败: full 与 compact 的 "
+              f"{', '.join(bad)} 不一致", file=sys.stderr)
+        sys.exit(1)
+    print(f"[prepare_topics] ✅ 同源派生校验通过: generated_at / total_count / "
+          f"topic_summaries 三项全一致 (total_count={full.get('total_count')}, "
+          f"summaries={len(full.get('topic_summaries', []))})")
+
+
 def main():
     parser = argparse.ArgumentParser(description="扫描历史文章提取已用话题")
     parser.add_argument("--workspace", default=r"F:\WorkBuddy\daily-why",
                         help="工作目录路径")
-    parser.add_argument("--output", default="config/topics_context.json",
+    parser.add_argument("--output", default=FULL_NAME,
                         help="输出文件名（相对于工作目录）")
     parser.add_argument("--limit", type=int, default=50,
                         help="最多扫描的文章数")
     parser.add_argument("--pretty", action="store_true", default=True,
                         help="美化 JSON 输出")
     parser.add_argument("--compact", action="store_true",
-                        help="输出精简版，只保留去重所需信息（topic_summaries、total_count、generated_at）")
+                        help="输出精简版，只保留去重所需信息（topic_summaries、total_count、generated_at）；"
+                             "默认路径下同时刷新 full，保证 check_topic 读到最新事实")
     args = parser.parse_args()
 
     workspace = Path(args.workspace)
+    full_path = workspace / FULL_NAME
+    compact_path = workspace / COMPACT_NAME
 
-    # 精简版模式：自动切换输出路径（除非用户显式指定了 --output）
-    if args.compact and args.output == "config/topics_context.json":
-        output_filename = "config/topics_context_compact.json"
+    # 输出目标解析（R1：默认精简模式必须同时刷新 full）
+    if args.compact and args.output == FULL_NAME:
+        full_out, compact_out = full_path, compact_path
+        print("[prepare_topics] 精简版模式：full 与 compact 由本次扫描同源写入")
+    elif args.compact:
+        # 显式指定 --output 时保持旧行为：只写指定文件，不触碰默认话题库
+        full_out, compact_out = None, workspace / args.output
     else:
-        output_filename = args.output
-    output_path = workspace / output_filename
+        full_out, compact_out = workspace / args.output, compact_path
 
     print(f"[prepare_topics] 扫描工作目录: {workspace}")
 
     result = scan_all(workspace, limit=args.limit)  # 唯一一次扫描（09-15 同源原则）
-
-    # --compact 轻量模式：只更新 compact（仍从本次扫描结果派生，不独立扫描）
-    if args.compact:
-        compact_result = {
-            "generated_at": result["generated_at"],
-            "total_count": result["total_count"],
-            "topic_summaries": result["topic_summaries"],
-        }
-        result = compact_result
-        print(f"[prepare_topics] 精简版模式：只保留 {len(result['topic_summaries'])} 个话题标题用于去重")
-
-        indent = 2 if args.pretty else None
-        output_path.write_text(json.dumps(result, ensure_ascii=False, indent=indent),
-                               encoding="utf-8")
-        print(f"[prepare_topics] 完成! 共 {result['total_count']} 个话题")
-        print(f"[prepare_topics] 输出: {output_path}")
-        print(f"\n--- 最近 5 个话题（精简版） ---")
-        for t in result["topic_summaries"][:5]:
-            print(f"  {t}")
-        return result
-
-    # 默认模式（09-15 v1.1 同源派生，根治漂移）：写 full 后，compact 由本次 result 派生写入。
-    # 依据：旧实现 full/compact 各自独立跑 scan_all()，两次运行之间文章目录变化即漂移
-    # （09-15 实测 full=40 / compact=47）。派生数据必须是构建产物，不能是独立副本（SSOT）。
     indent = 2 if args.pretty else None
-    output_path.write_text(json.dumps(result, ensure_ascii=False, indent=indent),
-                           encoding="utf-8")
 
-    compact_path = workspace / "config" / "topics_context_compact.json"
-    compact_result = {
-        "generated_at": result["generated_at"],
-        "total_count": result["total_count"],
-        "topic_summaries": result["topic_summaries"],
-    }
-    compact_path.write_text(json.dumps(compact_result, ensure_ascii=False, indent=indent),
+    if full_out:
+        full_out.write_text(json.dumps(result, ensure_ascii=False, indent=indent),
                             encoding="utf-8")
+        print(f"[prepare_topics] 输出 full: {full_out} "
+              f"({len(result['topic_summaries'])} 个话题标题)")
+    if compact_out:
+        compact = build_compact(result)
+        compact_out.write_text(json.dumps(compact, ensure_ascii=False, indent=indent),
+                               encoding="utf-8")
+        print(f"[prepare_topics] 输出 compact: {compact_out} "
+              f"({len(compact['topic_summaries'])} 个话题标题)")
 
-    # 一致性断言（防未来手改单侧；用显式检查而非 assert，避免 -O 跳过）
-    if compact_result["topic_summaries"] != result["topic_summaries"]:
-        print("[prepare_topics] ❌ 同源一致性断言失败: full 与 compact 的 topic_summaries 不一致",
-              file=sys.stderr)
-        sys.exit(1)
-    print(f"[prepare_topics] ✅ 同源派生: compact 从本次 full 派生，"
-          f"topic_summaries 一致 (n={len(result['topic_summaries'])})")
+    # 只有两文件都写默认路径时才断言，显式 --output 场景不参与
+    if full_out == full_path and compact_out == compact_path:
+        verify_pair(full_path, compact_path)
 
     print(f"[prepare_topics] 完成! 共 {result['total_count']} 个话题")
-    print(f"[prepare_topics] 输出: {output_path}")
-    print(f"[prepare_topics] 输出: {compact_path}")
 
-    # 打印摘要（--compact 分支已在上方提前 return，此处仅 full 模式）
-    if not args.compact:
-        print(f"\n--- 分类统计 ---")
+    if full_out:
+        print("\n--- 分类统计 ---")
         for cat, count in sorted(result["category_stats"].items(), key=lambda x: -x[1]):
             print(f"  {cat}: {count} 篇")
-
-        print(f"\n--- 最近 5 个话题 ---")
+        print("\n--- 最近 5 个话题 ---")
         for t in result["topics"][:5]:
             print(f"  {t['date']}: {t['topic']}")
+    else:
+        print("\n--- 最近 5 个话题（精简版） ---")
+        for t in result["topic_summaries"][:5]:
+            print(f"  {t}")
 
     return result
 
