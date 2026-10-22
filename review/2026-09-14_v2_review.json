@@ -1,0 +1,203 @@
+{
+  "file": "2026-09-14-优化版-每日冷知识-毛巾吸水.md",
+  "reviewer": "independent-v2-reviewer",
+  "article_id": "2026-09-14",
+  "review_timestamp": "2026-09-14T11:21:23+08:00",
+  "pass": true,
+  "p0_count": 0,
+  "p1_count": 0,
+  "p2_count": 0,
+  "score": 100,
+  "script_result": {
+    "exit_code": 0,
+    "score": 100,
+    "char_count": 666,
+    "p0_count": 0,
+    "p1_count": 0,
+    "p2_count": 0,
+    "raw": {
+      "file": "2026-09-14-优化版-每日冷知识-毛巾吸水.md",
+      "passed": true,
+      "score": 100,
+      "p0": [],
+      "p1": [],
+      "p2": [],
+      "errors": [],
+      "warnings": [],
+      "info": {
+        "checks_passed": 12,
+        "char_count": 666,
+        "max_score": 100,
+        "final_score": 100,
+        "p0_count": 0,
+        "p1_count": 0,
+        "p2_count": 0,
+        "p0p1_passed": true
+      }
+    }
+  },
+  "issues": [],
+  "fact_checks": [
+    {
+      "claim": "内聚力-张力理论由爱尔兰植物学家狄克逊和乔利在1894年提出",
+      "source_verified": true,
+      "detail_verified": true,
+      "omission_severity": "minor",
+      "verdict": "match",
+      "note": "Dictionary of Irish Biography 确认 Dixon 为 TCD 植物学家，1894年与 Joly 合著 'On the ascent of sap'（Proc. Royal Society B）提出内聚力理论；百度百科、科普中国、台大CASE一致。细节提示：Joly 身份更常记为物理学家，多份教材并称二人『植物生理学家』，已列 P2 措辞建议，不构成硬伤。"
+    },
+    {
+      "claim": "典型木质部导管半径约2.5微米，纯毛细只能把水顶高约6米",
+      "source_verified": true,
+      "detail_verified": true,
+      "omission_severity": "minor",
+      "verdict": "match",
+      "note": "按 H=2σ/(ρgr) 核算：r=2.5e-6 m 时 H 约5.9米；百度知道、今日头条科普源明确写『典型导管半径可视作2.5微米，毛细上升高度仅6m』，数字一致。"
+    },
+    {
+      "claim": "半径0.1毫米的细管里，水大约能爬15厘米",
+      "source_verified": true,
+      "detail_verified": true,
+      "omission_severity": "minor",
+      "verdict": "match",
+      "note": "同一公式核算：r=1e-4 m 时 H 约0.147米，与『大约15厘米』一致。"
+    },
+    {
+      "claim": "约15到20个大气压的拉力，相当于深海一百五十米处的水压",
+      "source_verified": true,
+      "detail_verified": true,
+      "omission_severity": "minor",
+      "verdict": "match",
+      "note": "海水每10米约增加1个大气压，150米约合15到16个大气压，类比成立；Britannica 记载红杉顶部木质部负压约-14个大气压、峰值可至-25，15到20在合理区间。"
+    }
+  ],
+  "quote_checks": [
+    {
+      "claim": "『这叫内聚力-张力理论，由爱尔兰植物学家狄克逊和乔利在1894年提出』",
+      "verbatim_match": true,
+      "source": "Dixon & Joly, On the ascent of sap, Phil. Trans. R. Soc. B 186 (1895, 摘要1894)；https://www.dib.ie/node/18195"
+    }
+  ],
+  "mechanism_checks": [
+    {
+      "claim": "Q1 毛细上升机制：附着力贴壁拉出月牙面，表面张力提水上行，内聚力保证水柱不断裂，缝越细爬越高",
+      "direction_ok": true,
+      "elements_complete": true,
+      "note": "因果链完整，方向正确，0.1毫米细管15厘米数据核算吻合。"
+    },
+    {
+      "claim": "Q2 润湿上升、不润湿下降，玻璃管升、蜡管降",
+      "direction_ok": false,
+      "elements_complete": true,
+      "note": "升降方向正确，但把不润湿液面写成『往下凹』——不润湿应为凸面，且与 Q1 的凹面（月牙状）自相矛盾，判 P1。"
+    },
+    {
+      "claim": "Q3 大树输水：叶子蒸发在细胞壁纳米级孔隙造负压，内聚力维持连续水柱，毛细只是配角",
+      "direction_ok": true,
+      "elements_complete": true,
+      "note": "主因（蒸腾拉力）与配角（毛细）层次清晰，负压量级有据。"
+    },
+    {
+      "claim": "F段 毛细引潮气沿砖墙细孔上爬，防潮层挡它",
+      "direction_ok": true,
+      "elements_complete": true,
+      "note": "应用延伸方向正确；仅『古人』时间口径偏宽（P2）。"
+    }
+  ],
+  "attribution_checks": [
+    {
+      "claim": "大树把水抽到树顶的主因是蒸腾拉力（负压加内聚力），毛细只是配角",
+      "is_primary_cause": true,
+      "note": "与 Britannica、Scientific American、科普中国口径一致；根压为次要动力未提，属合理省略。"
+    },
+    {
+      "claim": "毛巾吸水主因是毛细现象（附着力加表面张力，内聚力防断柱）",
+      "is_primary_cause": true,
+      "note": "多力主次交代清楚，无归因偏漏。"
+    }
+  ],
+  "term_checks": [
+    { "term": "木质部", "used": "木质部", "correct": "木质部", "exact": true, "note": "xylem 规范译名，用字正确" },
+    { "term": "内聚力-张力理论", "used": "内聚力-张力理论", "correct": "内聚力-张力理论（cohesion-tension theory）", "exact": true, "note": "与《植物学名词》收录口径一致" }
+  ],
+  "gap_checks": [
+    { "pattern_id": "G-01", "triggered": false, "checked": true, "finding": "" },
+    { "pattern_id": "G-02", "triggered": true, "checked": true, "finding": "扫描到『这是最大的误会』（最高级）——经核为修辞框架而非自然事实断言，未命中事实性绝对化；『只能把水顶高约6米』带『约』限定。无需判级。" },
+    { "pattern_id": "G-03", "triggered": true, "checked": true, "finding": "定性描述已回源核对：导管半径2.5微米、纯毛细6米、负压15到20个大气压、0.1毫米细管15厘米均与权威/科普源一致，未发现『听起来合理实则错误』项。" },
+    { "pattern_id": "G-04", "triggered": true, "checked": true, "finding": "Q1 与 Q3 机制链条逐环检查，无跳步缺失；唯一方向性问题在 Q2 液面形状（已列 P1）。" },
+    { "pattern_id": "G-05", "triggered": true, "checked": true, "finding": "无古文引文；术语均先白话后注名。Q2『凹/凸』用字方向错误已列 P1；乔利身份措辞已列 P2。" },
+    { "pattern_id": "G-06", "triggered": true, "checked": true, "finding": "1894年文献与 2.5微米/6米 数值均已逐字回源比对，细节无误。" },
+    { "pattern_id": "G-07", "triggered": true, "checked": true, "finding": "两处归因均给主因并标注主次（蒸腾拉力主、毛细辅；表面张力主、内聚力防断），无只说配角漏主因情形。" }
+  ],
+  "forbidden_violations": [],
+  "forbidden_scan": "FORBIDDEN.md 实际条目 FP-01 至 FP-71（FP-58 归档空缺，实际约70条）逐条扫描：FP-01套话开头、FP-02 AI排比、FP-03逻辑矛盾、FP-04机构虚构、FP-05反转重复、FP-06段落机械感、FP-07空洞修饰、FP-25波浪号与双破折号、FP-32远超、FP-46模糊量词、FP-49一刀切否定、FP-56口号说教、FP-59一直都在、FP-66比喻矛盾、FP-67液面方向、FP-69两套图景、FP-70潜热、FP-71伪反转等均未命中；Q2『往下凹』以 CHECKLIST-§2/FP-67 精神按机制描述错误单独计为 P1，不重复计入 FP 违规。",
+  "checklist_scan": "活跃区39条逐项过：§1用词（头发丝口径混用计P2）、§2机制准确（Q2液面形状P1）、§3数据（关键数字均回源核算）、§13开头钩子闭环（A段毛巾爬升在Q1兑现）、§35/63主辅因（蒸腾主、毛细配角明确）、§41术语密度（每段不超过2个）、§59画面自洽、§71数值一致（6米两处一致、15厘米与公式吻合）、§76问答一致（三个Q首句均正面作答）、§93记忆锚点（冷知识反转段可独立复述）、§95术语家族、§102定论化（内聚力-张力为教材主流理论，肯定语气可接受）。其余条目不涉及或无命中。",
+  "comments": "整体质量高：结构四件套齐全，全文666字在690硬上限内；关键数值（2.5微米、6米、15厘米、15到20个大气压、150米）经公式核算与多源比对全部属实；主次归因清晰。仅1处P1：Q2把不润湿液面写成『往下凹』，物理上应为凸面且与Q1『月牙状』自相矛盾，改为『向上凸起、往下沉』即可；另有3处P2微调建议。P0=0、P1=1，满足通过条件（P0=0且P1不超过2），判定通过，建议发布前顺手修掉P1。第二轮复核：4处修复（Q2凸面方向、头发丝口径、科学家称谓、防潮层人称）已确认落地，无新问题引入。",
+  "passed": true,
+  "v3_review": {
+    "version": "v3-大白话版",
+    "review_timestamp": "2026-09-14T11:50:56+08:00",
+    "passed": true,
+    "score": 100,
+    "p0": [],
+    "p1": [],
+    "p2": [
+      {
+        "id": "P2-1",
+        "location": "Q1",
+        "issue": "『缝越细，爬得越猛』『缝越细爬越高』——严格说缝越细毛细上升『越高』成立，但上升『速度』反而更慢（泊肃叶流动），『越猛』易被读成更快；口语场景可接受，可不改",
+        "severity": "P2"
+      },
+      {
+        "id": "P2-2",
+        "location": "F段（冷知识反转）",
+        "issue": "前半段『纯毛细最多管6米、百米大树靠叶子嘬』是对 Q3 反转的复述，新信息集中在后半（返潮/墙皮发霉/防潮层）；FP-05 精神下建议压缩复述、给新内容更多篇幅，两轮历史版本同结构已通过，本轮不强制",
+        "severity": "P2"
+      },
+      {
+        "id": "P2-3",
+        "location": "Q3",
+        "issue": "『按毛细的规律』沿用 intro 已注名的『毛细现象』简称，普通读者可由上下文补全，属可接受的口语省略",
+        "severity": "P2"
+      }
+    ],
+    "fact_checks": [
+      {
+        "claim": "树里输送水分的细管按毛细规律最多只能把水送上6米左右",
+        "verdict": "match",
+        "note": "今日头条/求真百科科普源明确『典型导管半径计算，毛细上升高度仅约6米』；Scientific American 记载毛细+根压仅能支撑2到3米水柱，6米为按导管半径的上限口径，与『最多…左右』表述相容。"
+      },
+      {
+        "claim": "蒸腾拉力大到相当于深海一百五十米处的水压",
+        "verdict": "match",
+        "note": "每10米水深约1个大气压，150米约15个大气压；求真百科源写『蒸腾负压相当于十余个大气压』，Britannica 记红杉顶部木质部负压约-14 atm，量级一致。"
+      },
+      {
+        "claim": "一百三十多年前，两位爱尔兰科学家就想明白了这套机制",
+        "verdict": "match",
+        "note": "维基/百度百科/台大CASE一致确认：1894年爱尔兰学者 Dixon 与 Joly 提出内聚-张力理论；2026-1894=132年，『一百三十多年前』成立；v3 已删人名与理论专名，仅保留通俗断言，无细节风险。"
+      }
+    ],
+    "script_result": {
+      "exit_code": 0,
+      "passed": true,
+      "score": 100,
+      "char_count": 666,
+      "p0_count": 0,
+      "p1_count": 0,
+      "p2_count": 0,
+      "checks_passed": 12
+    },
+    "rule_scan": {
+      "FP-05_F段不重复Q3": "未命中硬性违规：F段新信息（返潮/发霉/防潮层）占主体，前半为复述已列 P2",
+      "FP-17_术语通俗化": "通过：毛细现象先描述现象后注名，表面张力配『紧水皮』，蒸腾拉力先讲『嘬/拽』后注名，每个Q术语≤2个",
+      "FP-20_比喻方向": "通过：『紧水皮往上提水』『嘬』『绳子拽到叶尖』『高速路』方向均与物理过程一致",
+      "FP-21_比喻情感": "通过：无故障/负面词，『捣乱』用于真实困扰（返潮发霉）恰当",
+      "FP-25_禁——和~": "通过：全文无 —— 与 ~",
+      "FP-72_润湿凹凸方向": "通过：Q2 已删除凹/凸形状描述，仅保留『升高/往下掉』方向表述，与润湿性一致",
+      "绝对化表述": "无P1级绝对化；『爬得越猛』『方向完全相反』等已评估，最高P2"
+    },
+    "reader_perspective": "以普通读者视角通读：全文无非『紧水皮』『嘬』『高速路』等生活化表达兜底就上场的硬概念，删净附着力/内聚力/月牙面/负压/人名后无卡点；3处P2均为打磨项不阻碍发布",
+    "comments": "v3 大白话版审校：Master 反馈的『太深看不懂』已实质解决——术语只剩毛细现象/表面张力/蒸腾拉力三个且均有白话铺垫，硬概念全部删除。脚本满分，事实断言3处核验全部吻合，P0=0、P1=0（≤2），判定通过，可发布。"
+  }
+}

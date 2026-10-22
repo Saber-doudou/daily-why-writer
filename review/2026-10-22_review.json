@@ -1,0 +1,146 @@
+{
+  "article_id": "2026-10-22",
+  "review_timestamp": "2026-10-22T10:17:18+0800",
+  "pass": true,
+  "p0_count": 0,
+  "p1_count": 0,
+  "p2_count": 0,
+  "score": 100,
+  "script_result": {
+    "exit_code": 0,
+    "passed": true,
+    "score": 100,
+    "char_count": 481,
+    "p0_count": 0,
+    "p1_count": 0,
+    "p2_count": 0,
+    "checks_passed": 12,
+    "p0p1_passed": true,
+    "errors": [],
+    "warnings": [],
+    "fix_suggestions": [],
+    "related_cases": []
+  },
+  "fact_checks": [
+    {
+      "claim": "瑞利散射强度与波长的四次方成反比（I ∝ 1/λ^4）",
+      "source_verified": true,
+      "detail_verified": true,
+      "verdict": "correct",
+      "note": "ScienceDirect、科普中国、唐山市科技局、临界乳光条目均确认瑞利散射强度与入射光波长的四次方成反比，是天空呈蓝的核心机制。文中表述精确无误。"
+    },
+    {
+      "claim": "紫光被散射最狠，但人眼视锥细胞对紫光响应弱、晶状体吸收部分紫光，故天空呈蓝而非紫",
+      "source_verified": true,
+      "detail_verified": true,
+      "verdict": "correct",
+      "note": "科普中国、biologyinsights、腾讯新闻均确认：①紫光（最短可见光）散射最强；②人眼 S 视锥对紫光灵敏度低、整体视觉灵敏度峰值在 555nm 黄绿，离紫光远；③角膜与晶状体吸收约 400-430nm 紫光及部分近紫外。三因素叠加使天空呈蓝。文中三点均覆盖且准确。"
+    },
+    {
+      "claim": "日落时阳光穿过更厚大气层，蓝光在长光程中被散射殆尽，只剩红橙长波到达眼睛",
+      "source_verified": true,
+      "detail_verified": true,
+      "verdict": "correct",
+      "note": "科普中国、唐山科技局均确认：日出/日落时太阳光程显著加长，短波蓝光在途中几乎被散射殆尽，剩余长波红橙光直达人眼，与白天蓝天同为瑞利散射在不同几何条件下的表现。机制正确。"
+    }
+  ],
+  "quote_checks": [],
+  "mechanism_checks": [
+    {
+      "claim": "Q1 瑞利散射：短波光被空气分子弹向四面八方，长波红橙光基本直穿",
+      "direction_ok": true,
+      "elements_complete": true,
+      "note": "分子尺度远小于波长→瑞利散射→短波优先散射，方向正确、环节完整。"
+    },
+    {
+      "claim": "Q2 紫光散射最强，但人眼视锥对紫不敏感+晶状体吸收紫光→大脑报蓝",
+      "direction_ok": true,
+      "elements_complete": true,
+      "note": "散射强度、视觉灵敏度、晶状体吸收三层因果方向一致，完整解释『为何不是紫』。"
+    },
+    {
+      "claim": "Q3 日落光程长→蓝光散射殆尽→红橙长波直达",
+      "direction_ok": true,
+      "elements_complete": true,
+      "note": "光程加长导致短波耗尽，与 Q1 同框架自洽，无方向矛盾或环节缺失。"
+    }
+  ],
+  "attribution_checks": [
+    {
+      "claim": "天空呈蓝的主因 = 大气分子（氮、氧）对短波可见光（蓝光）的瑞利散射",
+      "is_primary_cause": true,
+      "note": "瑞利散射是天空呈蓝的公认主因，无被略去的主导性替代成因；日落红霞为同一机制在长光程下的表现，归因完整。"
+    }
+  ],
+  "term_checks": [
+    {
+      "term": "瑞利散射",
+      "used": "瑞利散射",
+      "correct": "瑞利散射",
+      "exact": true,
+      "note": "标准物理学/光学名词，命名与机制（分子尺度远小于波长时的弹性散射）均准确。"
+    },
+    {
+      "term": "视锥细胞",
+      "used": "视锥细胞",
+      "correct": "视锥细胞",
+      "exact": true,
+      "note": "标准解剖/生理学名词（视网膜感光细胞），文中『对紫光响应很弱』与所述 S/M/L 三类视锥灵敏度分布一致，用字精确。"
+    },
+    {
+      "term": "晶状体",
+      "used": "晶状体",
+      "correct": "晶状体",
+      "exact": true,
+      "note": "标准解剖学名词，文中『吞掉一部分紫光』对应晶状体对约 400-430nm 紫光及近紫外有部分吸收，表述准确。"
+    }
+  ],
+  "gap_checks": [
+    {
+      "pattern_id": "G-01",
+      "triggered": false,
+      "checked": true,
+      "finding": "话题为物理现象科普，非饮食/健康/用药/电器/儿童/宠物等不可逆后果领域；A段为草地望天的场景描写，未立『不敢/怕/有毒/能不能吃』类顾虑，无需安全/行为闭环。逐项核对触发信号，均不命中。"
+    },
+    {
+      "pattern_id": "G-02",
+      "triggered": false,
+      "checked": true,
+      "finding": "全文扫描绝对词（不可能/全看/全都/一定/绝对/必然/永远/无非）及说满承诺（彻底/完全不会/再也/保证）均无命中；『基本直穿而过』『一部分紫光』『只剩红橙长波』均为机制性准确或已软化表述，无绝对化。G-02 最高发漏判类型，已收紧逐句核对，确认未触发。"
+    },
+    {
+      "pattern_id": "G-03",
+      "triggered": false,
+      "checked": true,
+      "finding": "文中『瑞利散射 1/λ^4』『紫光散射最强但人眼不敏感』『晶状体吸收紫光』『日落光程长蓝光耗尽』四处定性/量化断言，均已 WebSearch 回权威源（ScienceDirect、科普中国、唐山科技局、biologyinsights、腾讯新闻）逐字核实，全部属实，非『看似合理的事实性错误』。"
+    },
+    {
+      "pattern_id": "G-04",
+      "triggered": false,
+      "checked": true,
+      "finding": "Q1→Q2→Q3 机制链条（散射→为何不紫→日落为何红）方向自洽、关键中间环节齐备，无跳步，不命中。"
+    },
+    {
+      "pattern_id": "G-05",
+      "triggered": false,
+      "checked": true,
+      "finding": "文中无古文/论文/报道引文转述；术语『瑞利散射/视锥细胞/晶状体』用字精确（见 term_checks），无语义漂移或概念张冠李戴，不命中。"
+    },
+    {
+      "pattern_id": "G-06",
+      "triggered": false,
+      "checked": true,
+      "finding": "全文未出现『研究表明/XX大学/发表于XX年/实验显示』等引用标记，无来源-细节核对盲区，不命中。"
+    },
+    {
+      "pattern_id": "G-07",
+      "triggered": false,
+      "checked": true,
+      "finding": "天空呈蓝归因单一且充分（瑞利散射为主因），无多因被简化为单一因素、无主因被略去，不命中。"
+    }
+  ],
+  "issues": [],
+  "forbidden_violations": [],
+  "issue_responses": [],
+  "overall_comment": "文章质量优秀：结构齐备（A段引用块、C段Q1/Q2/Q3格式、F段『冷知识反转』引用块、结尾2行×4列风格表格且分类属『物理化学』枚举）；字数481（<690）；无AI排比/连接词≥3；无绝对化与禁止模式（已 grep 确认无『——』『~』）；三处核心事实断言（瑞利散射1/λ^4、紫光散射最强但人眼不敏感+晶状体吸收、日落光程长蓝光耗尽）经 WebSearch 独立核实全部属实。7 条 GAP 类型逐条对照均 checked=true 且未触发。P0=0、P1=0、P2=0，脚本满分通过，建议直接放行。"
+}

@@ -1,0 +1,118 @@
+{
+  "article": "F:/WorkBuddy/daily-why/articles/2026-09/2026-09-28-优化版-每日冷知识-玻璃窗冰花.md",
+  "article_id": "2026-09-28",
+  "review_timestamp": "2026-09-28T14:47:17+0800",
+  "pass": true,
+  "p0_count": 0,
+  "p1_count": 0,
+  "p2_count": 0,
+  "score": 100,
+  "script_result": {
+    "exit_code": 0,
+    "score": 100,
+    "char_count": 688,
+    "p0_count": 0,
+    "p1_count": 0,
+    "p2_count": 0
+  },
+  "issues": [],
+  "fact_checks": [
+    {
+      "claim": "玻璃内表面温度须降到 0℃ 以下，室内水蒸气才直接凝华成冰花（跳过液态）",
+      "source_verified": true,
+      "detail_verified": true,
+      "verdict": "verified",
+      "note": "whyverse.app：当室内湿空气接触冷却到 0℃（32°F）以下的玻璃面，水蒸气发生 desublimation（凝华）跳过液态成冰晶；bluewin（埃尔朗根-纽伦堡大学物理学家 Max Gmelch）：现代窗内片不再降到零度以下故冰花少见，冷凝核+亚零表面+室内高湿三条件缺一不可；Caltech 雪晶指南：玻璃外侧零下、内侧湿空气，霜在窗内侧表面形成。与正文 Q2『玻璃被严寒冻透、内表面温度降到 0℃ 以下时，室内湿空气一贴上这层冰板，水蒸气就迅速凝华成冰』一致。"
+    },
+    {
+      "claim": "冰花是室内冷玻璃内侧水蒸气凝华生成的窗霜/霜的一种形态，不属于屋外冻入",
+      "source_verified": true,
+      "detail_verified": true,
+      "verdict": "verified",
+      "note": "百度百科『凝华』条明列『室内水蒸气在寒冷窗玻璃内侧凝华生成冰花』；凤凰网/中国大百科全书：室内水汽接触冰冷玻璃在窗户内侧尘埃周围结成冰晶，『是室内的水汽的凝华，不属于自然降水』；Caltech：window frost forms on the inside surface of the window。与正文 Q1『冰花其实是窗霜的一种形态』及 F 段『冰花不是屋外冻进来的，它长在你屋里这面玻璃上』一致。另注：科普中国（郑州大学物理学院）曾写『凝华放热，所以冰花总是出现在热的一侧』属因果错位，本文 v2 已规避（见 mechanism_checks）。"
+    },
+    {
+      "claim": "凝华（气态直接变固态）是放热过程，且冰晶六角对称源于水分子氢键本性",
+      "source_verified": true,
+      "detail_verified": true,
+      "verdict": "verified",
+      "note": "百度百科『凝华』：该过程伴随放热现象，与升华吸热对应；江西省气象局/人民日报/甘肃省科协均说明水分子经氢键以最稳定六方晶格排列，决定冰晶天生六角对称。与正文 Q1『跳过了液态这一步，物理上叫凝华』、Q3『冰晶天生爱按六角对称生长，这是水分子氢键的本性』一致。"
+    }
+  ],
+  "mechanism_checks": [
+    {
+      "claim": "Q2：冰花长在有水可凝、又够冷的那一侧——原料来自室内湿空气 + 冷界面（玻璃内表面低于 0℃）",
+      "direction_ok": true,
+      "elements_complete": true,
+      "note": "原料（室内暖气/呼吸/烧水带来的水蒸气）与冷源（被严寒冻透、内表面低于 0℃ 的玻璃）齐备，位置因果方向自洽，无跳步；与 FP-79/CHECKLIST §116『原料来源 + 冷界面』框架一致。"
+    },
+    {
+      "claim": "F段：凝华放热，那点热很快被冷玻璃带走，表面依旧冰冷，冰花才能继续长",
+      "direction_ok": true,
+      "elements_complete": true,
+      "note": "正确将『放热』定位为相变伴随现象（放热被冷玻璃及时导走），而非冰花落在室内侧的位置成因，符合 FP-79/§116 要求；物理方向自洽——放热回温被冷玻璃导走，表面仍维持亚零度使凝华持续，与前一条『冷界面』归因不冲突。"
+    }
+  ],
+  "attribution_checks": [
+    {
+      "claim": "冰花位置（室内侧）成因 = 原料来自室内（暖侧）+ 冷界面（玻璃内表面低于 0℃），都在室内这一侧相遇",
+      "is_primary_cause": true,
+      "note": "FP-79/§116 明确真实主因即『水汽来自暖侧（室内）+ 冷界面（玻璃内表面低于 0℃）』；正文 F 段『原料在暖侧、结晶在冷面，都在室内这一侧相遇』与主因完全吻合，无更显著主因被遗漏（屋外既缺原料又非结冰面，非主因）。"
+    }
+  ],
+  "quote_checks": [],
+  "term_checks": [],
+  "gap_checks": [
+    {
+      "pattern_id": "G-01",
+      "triggered": false,
+      "checked": true,
+      "finding": ""
+    },
+    {
+      "pattern_id": "G-02",
+      "triggered": false,
+      "checked": true,
+      "finding": ""
+    },
+    {
+      "pattern_id": "G-03",
+      "triggered": true,
+      "checked": true,
+      "finding": "文中含大量物理定性描述（凝华跳过液态/六角对称源于氢键/玻璃内表面低于0℃/凝华放热/冷界面），按核验要求经 WebSearch 独立核对权威源（whyverse、Caltech、百度百科、凤凰网、bluewin），均正确，未命中事实错误 → 不标级"
+    },
+    {
+      "pattern_id": "G-04",
+      "triggered": false,
+      "checked": true,
+      "finding": ""
+    },
+    {
+      "pattern_id": "G-05",
+      "triggered": false,
+      "checked": true,
+      "finding": ""
+    },
+    {
+      "pattern_id": "G-06",
+      "triggered": false,
+      "checked": true,
+      "finding": ""
+    },
+    {
+      "pattern_id": "G-07",
+      "triggered": false,
+      "checked": true,
+      "finding": ""
+    }
+  ],
+  "issue_responses": [
+    {
+      "issue_index": 0,
+      "status": "resolved",
+      "evidence": "v1 issue（FP-25 双破折号 2 处）已修复：v2 文章 Q1 段改为『物理上叫凝华：气体不绕道液体，直接凝成固体』（冒号替代『——』）；F 段整体改写为『凝华放热，那点热很快被冷玻璃带走，表面依旧冰冷，冰花才能继续长』，全文已无『——』双破折号，改用逗号/句号/箭头（→）。Grep 复核 v2 文章 0 处『——』与 0 处『~』。"
+    }
+  ],
+  "forbidden_violations": [],
+  "overall_comment": "v2 优化版结构完整（A段引用块、Q1至Q3问答格式、F段『冷知识反转』标签、结尾四行风格表格齐全），脚本审核满分（688字，低于690全文口径硬上限，600仅为正文软目标）。三项关键事实断言（玻璃内表面须低于0℃才凝华、冰花为室内冷玻璃内侧水蒸气凝华生成的窗霜形态、凝华放热且六角对称源于氢键）均经 WebSearch 独立核验属实。F段方位词歧义修订核验：原文『冰花长在冷的一边，不是热的一边』曾令读者误读『冷=屋外』，v2 改为『冰花不是屋外冻进来的，它长在你屋里这面玻璃上……原料在暖侧、结晶在冷面，都在室内这一侧相遇』——明确冰花长在室内这面玻璃、且原料（室内暖湿空气）与冷界面（玻璃内表面，位于室内侧）都在室内一侧相遇，已彻底消除『冷=屋外』误读；物理方向自洽（原料来自室内 + 冷界面为玻璃内表面且位于室内侧），『凝华放热』仅作伴随现象（被冷玻璃带走），未误作位置成因，符合 FP-79/CHECKLIST §116，无新逻辑矛盾或绝对化表述。v1 遗留的 FP-25 双破折号 2 处经 Grep 复核已完全消除。全文无绝对化措辞、无 AI 味连接词堆砌、无逻辑矛盾、无 FORBIDDEN 违规。综合判定：通过（P0=0，P1=0）。"
+}

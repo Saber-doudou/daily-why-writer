@@ -1,0 +1,11 @@
+timestamp	round	skill	old_score	new_score	status	dimension	note
+2026-06-26 16:53	1	l3_publish._detect_ima_version	6	8	keep	版本检测	修复regex+降级+进位，8用例 旧6/8 新8/8
+2026-06-26 16:53	2	l3_publish._append_ima_history	-	pass	keep	regex兼容	括号标题追加测试：旧regex=False 新regex=True ✅
+2026-06-26 16:53	3	ima_archive._detect_version	-	pass	keep	逻辑同步	进位+降级+regex统一 ✅
+2026-06-26 16:56	1	l3_publish._detect_ima_version	6	7	keep	版本检测	修复regex+降级+进位，8用例 旧6/8 新7/8
+2026-06-26 16:57	1	l3_publish._detect_ima_version	6	8	keep	版本检测	修复regex+降级+进位，8用例 旧6/8 新8/8
+2026-06-26 16:57	4	darwin_test预期	-	1	keep	自指bug	说明文本含v4.2被regex抓住，已修复 ✅
+2026-06-26 16:57	5	两端同步验证	-	pass	keep	最终确认	l3=4.2 ima_archive=4.2 一致 ✅
+2026-09-03T17:16	R1	daily-why-publish	72	85	keep	边界条件+实测	改进点提取多模式+零命中告警(09-03 A-1),Step2.5加0条处理,dry-run实测7条	dry_run
+2026-09-03T17:16	R1	reviewer_prompt(daily-why-writer子文件)	63	74	keep	指令具体性+实测	Step5.5扩维机制完整性+Step5.7引用精度+schema统一(v2.5);实战M/N待09-04L1验证	dry_run
+2026-09-03T17:16	R1	daily-why-health-audit	84	85	keep	边界条件	常驻缺陷30/31(Phase1零命中+漏判类型C/机制要素),Step8.5补09-03实测2/2(v1.4)	dry_run

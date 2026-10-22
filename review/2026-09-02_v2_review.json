@@ -1,0 +1,34 @@
+{
+  "article_id": "2026-09-02",
+  "review_timestamp": "2026-09-02T11:47:39+0800",
+  "pass": true,
+  "p0_count": 0,
+  "p1_count": 1,
+  "p2_count": 1,
+  "score": 95,
+  "script_result": {
+    "exit_code": 0,
+    "score": 100,
+    "p0": 0,
+    "p1": 0,
+    "p2": 0
+  },
+  "issues": [
+    {
+      "level": "P1",
+      "category": "字数超限",
+      "description": "全文口径（含结尾表格）字数约676字，超过600字上限。按审校分级标准，字数大于600至少计P1。",
+      "location": "全文",
+      "suggestion": "可适度精简Q2机制描写或合并F段表述，将总字数压到600字以内（至少不超过690字硬性上限）。"
+    },
+    {
+      "level": "P2",
+      "category": "CHECKLIST-§9 / FP-12 引用完整性",
+      "description": "F段引用『1980年耶鲁大学的实验』给出了机构与年份，但未补全研究者姓名（Linda Bartoshuk）与发表期刊（Chemical Senses, 1980, DeSimone/Heck/Bartoshuk），引用可更完整。事实本身经WebSearch独立核验准确、可核实。",
+      "location": "F段（冷知识反转）",
+      "suggestion": "可补为『1980年耶鲁大学Linda Bartoshuk团队在《Chemical Senses》发表的实验』，使引用符合『机构+年份+期刊』规范。"
+    }
+  ],
+  "forbidden_violations": [],
+  "overall_comment": "文章事实性经独立WebSearch核验全部准确：1980年耶鲁大学Bartoshuk等的SLS含漱实验（蔗糖、盐、奎宁味略降，唯柠檬酸酸味中多出苦味）、橙汁苦味来自柠檬苦素（limonoid三萜类，非黄酮）与橙皮苷（黄酮类）、磷脂位于苦味受体细胞膜上（非舌头表面，SLS破坏后苦味被放大）、酸性饮品软化牙釉质不宜立即刷牙等断言均有可靠来源支撑。机制自洽：SLS抑制甜味受体并破坏磷脂放大苦味，与『薄荷仅掩盖风味、SLS才是主因』的相对化表述一致，无绝对化否定（符合CHECKLIST §79）。FORBIDDEN扫描未发现任何FP条目违规：无~与——符号、无AI味排比（连接词不超过2）、薄荷表述已做权重区分、结尾表格分类『生活常识』属6选1枚举。脚本客观检查通过（score 100，无P0/P1/P2）。独立审校发现一处P1（字数676大于600）与一处P2（引用可更完整），均在通过阈值内（P0=0且P1≤2），故判定通过。结尾风格表格为2行4列，已覆盖话题、分类、核心机制、冷知识反转四字段并满足脚本结构校验，未单列P0。"
+}

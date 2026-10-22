@@ -1,0 +1,103 @@
+{
+  "article_id": "2026-09-07",
+  "review_timestamp": "2026-09-07T09:52:19+0800",
+  "pass": true,
+  "p0_count": 0,
+  "p1_count": 0,
+  "p2_count": 2,
+  "revised_after_review": true,
+  "score": 96,
+  "script_result": {
+    "exit_code": 0,
+    "passed": true,
+    "score": 100,
+    "char_count": 556,
+    "p0_count": 0,
+    "p1_count": 0,
+    "p2_count": 0
+  },
+  "issues": [
+    {
+      "level": "P2",
+      "category": "CHECKLIST-§1/§2（用词精准度/机制描述准确性）",
+      "description": "Q3 末尾写「全熟牛排中心温度超过71度，肌红蛋白基本变完」——「变完」为口语化表达且机制不精确。肌红蛋白在高温下发生变性并氧化为变性肌红蛋白/高铁肌红蛋白（metmyoglobin），并非笼统地「变完」。",
+      "location": "Q3 段",
+      "suggestion": "建议改为「肌红蛋白基本完全变性（转化为变性肌红蛋白），红色自然消失」，既保留口语节奏又更准确。"
+    },
+    {
+      "level": "P2",
+      "category": "CHECKLIST-§2（机制描述准确性）",
+      "description": "F段写「下次煎完牛排静置几分钟，肌肉放松会把汁水吸回去」——机制略简化。静置后肌纤维放松、汁水是在肌肉内重新分布（redistribute）而非真正被「吸回」盘外；但「盘子就清爽多了」的实践结果正确。",
+      "location": "F段（冷知识反转）",
+      "suggestion": "建议改为「肌肉放松、汁水重新分布均匀，切开时不易哗地流到盘里」，更贴合真实机制且结果不变。"
+    }
+  ],
+  "fact_checks": [
+    {
+      "claim": "牛在屠宰时已放血，盘里粉红汁液不是血，而是肌肉细胞里的储氧蛋白肌红蛋白混水渗出的 purge（渗出液）",
+      "source_verified": true,
+      "detail_verified": true,
+      "omission_severity": "minor",
+      "verdict": "verified",
+      "note": "多家权威源一致确认：屠宰时血液被排干（The Manual、Food Republic 均称 all blood is drained），红汁为肌红蛋白加水混合物，行业称 purge/weep。文中断言属实。"
+    },
+    {
+      "claim": "全熟牛排中心温度超过71度",
+      "source_verified": true,
+      "detail_verified": true,
+      "omission_severity": "minor",
+      "verdict": "verified",
+      "note": "Well-done 牛排中心温度=160°F=71°C（Certified Angus Beef、加拿大卫生部、多个牛排温度指南一致）。「超过71度」表述准确。"
+    },
+    {
+      "claim": "煎完牛排静置几分钟，汁水会被吸回/重新分布，盘子更清爽",
+      "source_verified": true,
+      "detail_verified": true,
+      "omission_severity": "minor",
+      "verdict": "verified",
+      "note": "权威烹饪源确认静置让汁水重新分布（redistribute/reabsorb），减少切开时流失（Food Republic、KnewKitchen、Hines Meat）。「吸回去」措辞略简化（见 P2 第2条），但事实成立。"
+    }
+  ],
+  "quote_checks": [],
+  "mechanism_checks": [
+    {
+      "claim": "Q1：屠宰放血 + 血液离体凝固 → 流出的不可能是血；红汁是肌红蛋白随水渗出",
+      "direction_ok": true,
+      "elements_complete": true,
+      "note": "因果方向自洽，环节齐备（放血→凝固→非血；肌红蛋白存于肌肉→随水渗出）。"
+    },
+    {
+      "claim": "Q2：加热使肌肉纤维收缩 → 把仓库里的水和蛋白挤出来",
+      "direction_ok": true,
+      "elements_complete": true,
+      "note": "方向正确（热收缩挤出汁液），与 F段「静置放松重新分布」形成完整闭环，无矛盾。"
+    },
+    {
+      "claim": "Q3：热度使肌红蛋白变性 → 失去抓氧能力 → 颜色由红转粉再至灰褐",
+      "direction_ok": true,
+      "elements_complete": true,
+      "note": "方向正确；颜色随加热褪去是肌红蛋白变性/氧化（metmyoglobin）的结果，属合理科普简化，仅「变完」一词不精确（见 P2 第1条）。"
+    },
+    {
+      "claim": "F段：常发力的肌肉储氧肌红蛋白多 → 红肉；少运动的鸡胸肌红蛋白少 → 白肉",
+      "direction_ok": true,
+      "elements_complete": true,
+      "note": "红白肉区分标准确为肌红蛋白含量（The Manual、hinesmeatco 确认），归因主因正确。"
+    }
+  ],
+  "attribution_checks": [
+    {
+      "claim": "粉红色液体来自肌红蛋白而非血",
+      "is_primary_cause": true,
+      "note": "这是该现象的唯一主因，屠宰放血 + 肌红蛋白渗出是完整解释，无被隐瞒的显著成因。"
+    },
+    {
+      "claim": "牛排越熟红色越少，因为肌红蛋白受热变性",
+      "is_primary_cause": true,
+      "note": "熟度升高→肌红蛋白变性/氧化→褪色，是核心主因，归因完整。"
+    }
+  ],
+  "term_checks": [],
+  "forbidden_violations": [],
+  "overall_comment": "文章事实准确、结构完整（A段引用块、Q1/Q2/Q3、F段含「冷知识反转」标签、4列风格表格均达标），经 WebSearch 独立核验 3 处关键断言全部属实，无 P0 事实/逻辑/结构问题，无 P1（无 AI 味堆叠、字数553未超690、比喻准确、无虚假绝对化）。仅 2 处 P2 措辞/机制精度微调。整体质量优秀，通过审核。"
+}

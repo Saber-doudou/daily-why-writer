@@ -1,0 +1,83 @@
+{
+  "file": "2026-09-07-优化版-每日冷知识-牛排血水.md",
+  "review_timestamp": "2026-09-07T11:02:00+0800",
+  "p0_count": 0,
+  "p1_count": 1,
+  "p2_count": 0,
+  "p0": [],
+  "p1": [
+    {
+      "claim": "全文（含结尾风格表格）字数 668，超过 600 字",
+      "detail": "validate_article.py 统计 info.char_count=668。用户审校指令第⑤条明确规定「字数超过 600 至少判 P1，禁止擅自降为 P2」。尽管 reviewer_prompt.md Step 8 以 690 为判定阈值（称 600 是正文软目标），但本任务步骤⑤已显式覆盖该口径，故按要求判 P1。建议在不牺牲信息量的前提下将正文压到 600 字以内（例如精简 Q2/Q3 的比喻铺陈与 F 段收尾）。"
+    }
+  ],
+  "p2": [],
+  "script_result": {
+    "char_count": 668,
+    "score": 100,
+    "passed": true
+  },
+  "fact_checks": [
+    {
+      "claim": "正规渠道的原切牛排内部可视为无菌，三五分熟就能放心吃；绞肉压成的肉饼必须煎到全熟，因为绞肉把表面细菌搅进了内部",
+      "source_verified": true,
+      "detail_verified": true,
+      "url": "https://scienceinsights.org/why-can-beef-be-eaten-rare-but-not-ground-beef ; https://123foodscience.com/food-safety/ground-meat-vs-whole-cut"
+    },
+    {
+      "claim": "热度会让肌红蛋白变性、失去抓氧能力、颜色随之褪色（生肉鲜红→受热转粉→灰褐）；全熟牛排中心温度超过71度肌红蛋白基本变完",
+      "source_verified": true,
+      "detail_verified": true,
+      "url": "https://sciencepedia.blog/what-makes-meat-red-myoglobin-explained ; https://apscience.blog/steak-red-liquid-blood-or-myoglobin"
+    }
+  ],
+  "mechanism_checks": [
+    {
+      "claim": "Q1：红汁是肌红蛋白混水渗出（purge），而非血",
+      "direction_ok": true,
+      "elements_complete": true,
+      "note": "屠宰放血、残余血凝固、肌红蛋白随水渗出，因果链完整且方向正确"
+    },
+    {
+      "claim": "Q2：加热→肌肉纤维收缩→把储氧仓库里的水和蛋白挤出",
+      "direction_ok": true,
+      "elements_complete": true,
+      "note": "热致蛋白变性、肌纤维收缩挤水，方向自洽"
+    },
+    {
+      "claim": "Q3：热度使肌红蛋白变性、失去抓氧能力→颜色褪去（红→粉→灰褐）",
+      "direction_ok": true,
+      "elements_complete": true,
+      "note": "与权威源「heat denatures myoglobin, loses oxygen binding, color transitions red→tan/grey」一致；底层 Fe²⁺→Fe³⁺ 氧化机制虽未明写，但描述方向正确，不构成事实错误"
+    },
+    {
+      "claim": "F段冷知识反转：红白肉之分在肌红蛋白含量而非血多血少",
+      "direction_ok": true,
+      "elements_complete": true,
+      "note": "牛（慢肌/高肌红蛋白）=红肉，鸡胸（快肌/低肌红蛋白）=白肉，与权威源一致"
+    }
+  ],
+  "attribution_checks": [
+    {
+      "claim": "全熟牛排中心超71度肌红蛋白基本变完（把颜色消失归因于肌红蛋白热变性）",
+      "is_primary_cause": true,
+      "note": "颜色消失主因即肌红蛋白热变性+Fe³⁺氧化，归因准确"
+    },
+    {
+      "claim": "绞肉必须全熟，因绞肉把表面细菌搅进内部（把风险归因于内部污染）",
+      "is_primary_cause": true,
+      "note": "整块肉细菌只在表面，绞碎后均匀分布内部，归因准确，为主因"
+    }
+  ],
+  "quote_checks": [
+    {
+      "claim": "行内叫 purge，说白了就是肉汁",
+      "verbatim_match": true,
+      "source": "肉类工业术语 purge=包装肉渗出的肌红蛋白+水混合液，与文中表述一致"
+    }
+  ],
+  "term_checks": [],
+  "forbidden_violations": [],
+  "verdict": "pass",
+  "reviewer_notes": "脚本评分 100、P0/P1/P2 全空，但本审校按任务步骤⑤的硬口径独立判定：char_count=668>600，故记 1 条 P1（字数超限）。两项关键事实断言（原切牛排内部无菌可半生食 vs 绞肉须全熟；肌红蛋白受热变性褪色）经 WebSearch 核验均与权威源一致，无 P0。结构要素齐全：A段引用块钩子、Q1/Q2/Q3 问答格式、F段含「冷知识反转」标签、结尾四字段风格表格（分类=生活常识，属 6 选 1 枚举合法值）均合规。无 FORBIDDEN 禁止模式命中（已 Grep 确认无 —— / ~）。结论：P0=0、P1=1≤2，满足通过条件，verdict=pass；建议优化版在维持信息量的前提下将正文压至 600 字以内以彻底消弭该 P1。"
+}

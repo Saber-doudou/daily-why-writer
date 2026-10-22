@@ -1,0 +1,140 @@
+{
+  "article_id": "2026-09-21",
+  "review_timestamp": "2026-09-21T11:37:43+0800",
+  "pass": true,
+  "p0_count": 0,
+  "p1_count": 0,
+  "p2_count": 0,
+  "score": 100,
+  "final_score": 100,
+  "script_result": {
+    "exit_code": 0,
+    "score": 100,
+    "char_count": 684,
+    "p0_count": 0,
+    "p1_count": 0,
+    "p2_count": 0,
+    "passed": true,
+    "p0p1_passed": true,
+    "final_score": 100,
+    "note": "validate_article.py 输出：passed=true, final_score=100, char_count=684, P0/P1/P2 均为0"
+  },
+  "issues": [],
+  "fact_checks": [
+    {
+      "claim": "牙膏降表面张力主角是表面活性剂（如月桂醇硫酸酯钠 SLS），薄荷醇只是清凉香味配角",
+      "source_verified": true,
+      "detail_verified": true,
+      "verdict": "verified",
+      "source": "台大科教中心《牙膏的成分》；人民网健康；cavitiesgetaround；biologyinsights",
+      "note": "多源确认 SLS/阴离子表面活性剂是牙膏中起泡与降低水表面张力的主成分（含量约2%）；薄荷醇仅提供清凉香味，不参与降张力主过程。文章归因正确。"
+    },
+    {
+      "claim": "1855年开尔文的哥哥詹姆斯·汤姆森（James Thomson）首次系统解释「酒泪/tears of wine」现象",
+      "source_verified": true,
+      "detail_verified": true,
+      "verdict": "verified",
+      "source": "Wikipedia: Marangoni effect / James Thomson (engineer)；科普中国《从“葡萄酒的眼泪”到表面张力》",
+      "note": "Wikipedia 明确 'first identified in the so-called \"tears of wine\" by physicist James Thomson (Lord Kelvin's brother) in 1855'。亲缘『哥哥』亦属实：James Thomson (1822–1892) 年长 Lord Kelvin/William Thomson (1824–1907) 2岁，为兄长，与一轮修复一致。"
+    },
+    {
+      "claim": "1865年意大利人卡洛·马兰戈尼（Carlo Marangoni）于帕维亚大学博士论文正式命名该效应（Marangoni effect）",
+      "source_verified": true,
+      "detail_verified": true,
+      "verdict": "verified",
+      "source": "Wikipedia；百度百科 马兰戈尼对流；科普中国",
+      "note": "Wikipedia: 'named after Italian physicist Carlo Marangoni, who studied it for his doctoral dissertation at the University of Pavia and published his results in 1865.' 年份、机构、命名事实均属实。中文译名『马兰戈尼』与『马伦哥尼』为同一人名 Marangoni 的不同音译，非事实错误。"
+    },
+    {
+      "claim": "常温下纯水表面张力约72毫牛每米（mN/m），沾表面活性剂后降至约30 mN/m",
+      "source_verified": true,
+      "detail_verified": true,
+      "verdict": "verified_approx",
+      "source": "Wikipedia（水表面张力约0.07 N/m ≈ 70 mN/m）；Mech Codex（表面活性剂可降至30–40 mN/m）；NPTEL",
+      "note": "纯水20°C表面张力约72.8 mN/m，量级与『约72』一致；表面活性剂（含牙膏清洁剂）可降至约30–40 mN/m，『约30』在区间内，属合理近似，非事实错误。"
+    }
+  ],
+  "quote_checks": [
+    {
+      "claim": "F段历史归因：「1855年，开尔文的哥哥詹姆斯·汤姆森就看穿了这个现象，却到1865年才由意大利人卡洛·马兰戈尼正式命名」",
+      "verbatim_match": true,
+      "source": "Wikipedia: Marangoni effect；James Thomson (engineer)；科普中国；百度百科 马兰戈尼对流",
+      "note": "年份1855/1865、人物亲缘（哥哥）、命名事实均与权威源逐字一致；非逐字引文，按历史归因核对，细节全部相符。"
+    },
+    {
+      "claim": "Q2数值断言：「常温下纯水表面张力约72毫牛每米，沾了表面活性剂的水可以掉到约30」",
+      "verbatim_match": true,
+      "source": "Wikipedia；Mech Codex",
+      "note": "数值与权威源量级一致（纯水≈70–73 mN/m，表面活性剂降至30–40 mN/m），属合理近似，表述与权威量级匹配。"
+    }
+  ],
+  "mechanism_checks": [
+    {
+      "claim": "薄荷醇/表面活性剂降低局部表面张力，高张力清水把低张力水团拽走（马兰戈尼流）",
+      "direction_ok": true,
+      "elements_complete": true,
+      "note": "表面张力梯度驱动液体由低张力区流向高张力区，方向正确（Wikipedia: 'liquid to flow away from regions of low surface tension'）；Q2橡皮膜比喻与Q1因果链完整，无跳步。"
+    },
+    {
+      "claim": "酒泪：酒精挥发→杯壁表面张力升高→把下方酒液往上拽",
+      "direction_ok": true,
+      "elements_complete": true,
+      "note": "酒精挥发快→顶部含水多→表面张力高→向上马兰戈尼流，与躲牙膏同源，机制自洽、因果链闭合。"
+    }
+  ],
+  "attribution_checks": [
+    {
+      "claim": "水躲开牙膏归因于牙膏里的表面活性剂（月桂醇硫酸酯钠）降低局部表面张力→马兰戈尼流",
+      "is_primary_cause": true,
+      "note": "机制归因正确，表面活性剂降张力是主因；文章点名『薄荷醇只是负责清凉香味的配角』，未将次要因素伪装成主因，不构成归因偏漏。"
+    }
+  ],
+  "term_checks": [],
+  "gap_checks": [
+    {
+      "pattern_id": "G-01",
+      "triggered": false,
+      "checked": true,
+      "finding": "开头为好奇心钩子（水珠『挑三拣四』『怕烫似的』），无『不敢/怕/有毒吗/能不能吃』类真实顾虑或恐惧表述；话题为日常物理现象，非饮食/健康/用药/电器等不可逆后果领域，安全性闭环不适用。"
+    },
+    {
+      "pattern_id": "G-02",
+      "triggered": false,
+      "checked": true,
+      "finding": "绝对词扫描（不可能/全看/全都/一定/绝对/必然/永远/无非/彻底/保证/完全）：全文无命中。Q1『这跟温度无关』为澄清『温度并非成因』的合理简化（同杯水温度本就相同），非事实性绝对断言；Q3『不会』为对设问『只有牙膏会耍这花招吗』的正面否定回答，非绝对化全称判断。"
+    },
+    {
+      "pattern_id": "G-03",
+      "triggered": false,
+      "checked": true,
+      "finding": "已独立 WebSearch 核验全部事实断言：SLS/表面活性剂为降张力主角、1855 James Thomson（开尔文之兄）首解酒泪、1865 Carlo Marangoni 帕维亚大学命名、纯水≈72 mN/m 降至≈30 mN/m，均与权威源一致；亲缘『哥哥』经核实属实。无看似合理的事实性错误。"
+    },
+    {
+      "pattern_id": "G-04",
+      "triggered": false,
+      "checked": true,
+      "finding": "Q1→Q2→Q3 因果链完整：表面活性剂降张力→张力梯度→马兰戈尼流（Q2橡皮膜比喻含张力差→流动核心环节）；酒泪段『酒精挥发→顶部张力升高→向上流动→重力回落』环节闭合，无跳步缺失。"
+    },
+    {
+      "pattern_id": "G-05",
+      "triggered": false,
+      "checked": true,
+      "finding": "全文无古籍/论文逐字引文；『马兰戈尼效应』『表面张力』等术语用字准确；无医学/解剖学术语。中文译名『马兰戈尼』与『马伦哥尼』为 Marangoni 不同音译，非术语错误。"
+    },
+    {
+      "pattern_id": "G-06",
+      "triggered": false,
+      "checked": true,
+      "finding": "文中历史断言（Thomson 1855 解释酒泪、Marangoni 1865 帕维亚大学命名、『哥哥』亲缘）已回权威源逐字核对年份/机构/命名事实及亲缘关系，均属实，无『来源存在但细节未核』漏判。无期刊/DOI 类引用标记。"
+    },
+    {
+      "pattern_id": "G-07",
+      "triggered": false,
+      "checked": true,
+      "finding": "归因『表面活性剂降张力→马兰戈尼流』为正确主因；文章明示薄荷醇仅负责清凉香味（配角），未将次要原因伪装成主因，不构成归因偏漏。"
+    }
+  ],
+  "issue_responses": [],
+  "forbidden_violations": [],
+  "overall_comment": "独立二审复核通过。已用 managed python 运行 validate_article.py（passed=true, final_score=100, char_count=684, P0/P1/P2 均为0）；已 Read 加载 CHECKLIST/FORBIDDEN/GAP_PATTERNS 并逐项扫描；已用 WebSearch 独立核验 4 处事实断言（表面活性剂主角、1855 Thomson 首解酒泪、1865 Marangoni 命名、纯水72→30 mN/m），全部与权威源一致；亲缘关系『哥哥』经核实属实（James Thomson 1822–1892 为 Lord Kelvin 之兄）。最小结构四要素齐全（A段引用块、C段Q1/Q2/Q3、F段『冷知识反转』标签、结尾风格表格且分类『物理化学』在6选1枚举内）；无绝对化（含『这跟温度无关』为合理简化）、无 AI 味、字数684≤690、无 FP 违规、机制方向与完整度自洽、马兰戈尼流比喻方向正确。P0=0、P1=0、P2=0，达到通过条件。一轮审校报告 issues 为空数组，issue_responses 置空（依 Step 5.10 覆盖 0 至 N-1 全部下标，无越界/遗漏）。"
+}

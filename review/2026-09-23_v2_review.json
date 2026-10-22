@@ -1,0 +1,116 @@
+{
+  "article_id": "2026-09-23",
+  "review_timestamp": "2026-09-23T15:32:55+0800",
+  "pass": true,
+  "p0_count": 0,
+  "p1_count": 0,
+  "p2_count": 1,
+  "score": 98,
+  "script_result": {
+    "exit_code": 0,
+    "score": 100,
+    "char_count": 688,
+    "p0_count": 0,
+    "p1_count": 0,
+    "p2_count": 0
+  },
+  "issues": [
+    {
+      "level": "P2",
+      "category": "CHECKLIST-§结构/结尾表格分类(可选优化)",
+      "description": "结尾四行风格表格「分类」字段填「生活常识」。本篇核心机制是光学/界面物理现象（折射率差、全反射+散射致银亮），按现象本质更贴合枚举内的「物理化学」；但「生活常识」属于 6 选 1 枚举且与每日冷知识「生活切入」的语境契合，并非硬伤，仅作可选优化建议，不影响通过条件（P0=0 且 P1≤2）。",
+      "location": "结尾风格表格·分类行（第21行）",
+      "suggestion": "若追求分类精确，可改为枚举内「物理化学」；保留「生活常识」亦合规，二选一皆可，非必须修改。"
+    }
+  ],
+  "fact_checks": [
+    {
+      "claim": "李子表皮蜡质（角质层蜡/果粉）具超疏水性，水接触角大于150度（超疏水定义）",
+      "source_verified": true,
+      "detail_verified": true,
+      "verdict": "verified",
+      "note": "WebSearch 独立核验：ScienceDirect、Nature(srep36735)、PMC 综述一致定义 superhydrophobic = static contact angle > 150°（常附加 sliding angle < 10°），并以荷叶为典型自然例证。文章「水接触角大于150度……叫超疏水」表述准确。",
+      "source": "https://www.nature.com/articles/srep36735.pdf ; https://pmc.ncbi.nlm.nih.gov/articles/PMC11840608/"
+    },
+    {
+      "claim": "水-空气界面的全反射临界角约49度（sin θc = n_air/n_water = 1.0/1.33 ≈ 0.752，θc ≈ 48.8° ≈ 49°）",
+      "source_verified": true,
+      "detail_verified": true,
+      "verdict": "verified",
+      "note": "物理常量核验：空气折射率约1.0003、水约1.33（refractiveindex.info / Wikipedia 折射率表）。全反射仅当光从光密介质（水）射向光疏介质（空气）且入射角 > 临界角时发生，θc = arcsin(n2/n1) = arcsin(1.0/1.33) ≈ 48.8°，文章「约49度临界角」准确，且全反射方向（水→空气）与文中「光出不去、被界面整面弹回」一致。",
+      "source": "https://refractiveindex.info"
+    },
+    {
+      "claim": "果粉/蜡质（角质层蜡、bloom）护果：帮果子少失水、少招菌；蓝莓、葡萄、李子、银杏等同具蜡质层",
+      "source_verified": true,
+      "detail_verified": true,
+      "verdict": "verified",
+      "note": "WebSearch 独立核验：多种权威科普/园艺源确认 epicuticular wax(bloom) 的功能是抑制蒸腾失水、形成物理屏障限制病原（真菌/细菌）附着，且明确指认葡萄、蓝莓、李子、苹果等同具此层。文章「白霜帮果子少失水、少招菌」「蓝莓、葡萄、银杏同理」事实准确。",
+      "source": "https://www.vedjyotish.org/what-is-wax-bloom-fruit-chocolate-candles ; http://ngoisao.vnexpress.net/bai-viet-4916092.html"
+    }
+  ],
+  "quote_checks": [],
+  "mechanism_checks": [
+    {
+      "claim": "Q1 蜡质+微观凸起→超疏水（接触角>150°，水珠滚落）；Q2 超疏水结构困住薄空气膜（水不触果皮）；Q3 折射率差（水1.33/空气1.0）→散射打底+全反射提亮→银亮",
+      "direction_ok": true,
+      "elements_complete": true,
+      "note": "因果方向自洽：超疏水性来自低表面能蜡质+微观粗糙（Cassie-Baxter 复合界面、空气垫），方向无误；空气膜成因（水被托在蜡尖与空气上）要素齐备；光学部分临界角方向（水→空气 TIR）正确，散射/漫反射与全反射联合致银亮的链条完整，无跳步、无矛盾。"
+    }
+  ],
+  "attribution_checks": [
+    {
+      "claim": "银亮外观主因＝蜡质超疏水困住空气层 + 水-空气折射率差的光学效应（散射+全反射）",
+      "is_primary_cause": true,
+      "note": "主因判断与权威机制一致：银亮来自水滴坐在空气垫上、水-空气界面发生反射/全反射把环境光返回眼睛，属主因而非配角；F段延伸「白霜别搓、磨平微结构银光就塌」是对同一主因的反向佐证，非归因错位。"
+    }
+  ],
+  "term_checks": [],
+  "gap_checks": [
+    {
+      "pattern_id": "G-01",
+      "triggered": false,
+      "checked": true,
+      "finding": ""
+    },
+    {
+      "pattern_id": "G-02",
+      "triggered": false,
+      "checked": true,
+      "finding": ""
+    },
+    {
+      "pattern_id": "G-03",
+      "triggered": false,
+      "checked": true,
+      "finding": ""
+    },
+    {
+      "pattern_id": "G-04",
+      "triggered": false,
+      "checked": true,
+      "finding": ""
+    },
+    {
+      "pattern_id": "G-05",
+      "triggered": false,
+      "checked": true,
+      "finding": ""
+    },
+    {
+      "pattern_id": "G-06",
+      "triggered": false,
+      "checked": true,
+      "finding": ""
+    },
+    {
+      "pattern_id": "G-07",
+      "triggered": false,
+      "checked": true,
+      "finding": ""
+    }
+  ],
+  "issue_responses": [],
+  "forbidden_violations": [],
+  "overall_comment": "全文事实准确、机制自洽、结构齐备（A段引用块、C段**Q1/Q2/Q3：**加粗非h3、F段含「冷知识反转」标签、四行风格表格）。字数688<690硬上限（脚本char_count=688，通过）。分隔线恰好2处（第5、16行）。FP全库扫描无触发：无 —— / ~ 违规字符（Grep 实测0处），无绝对化/类比失准/AI味连接词堆砌。三处关键事实均经 WebSearch 独立核验通过（超疏水>150°、水-空气临界角≈49°、果粉护果机制）。一轮审校issues为空数组，故 issue_responses 写空数组（字段不省略）。仅1条可选优化（结尾分类「生活常识」可改枚举内「物理化学」，非硬伤）。通过条件满足（P0=0 且 P1≤2），建议放行。"
+}

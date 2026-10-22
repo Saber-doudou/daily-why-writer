@@ -1,0 +1,290 @@
+{
+  "article_id": "2026-10-14",
+  "review_timestamp": "2026-10-14T16:17:24+0800",
+  "pass": true,
+  "p0_count": 0,
+  "p1_count": 0,
+  "p2_count": 2,
+  "score": 95,
+  "script_result": {
+    "exit_code": 0,
+    "score": 100,
+    "char_count": 686,
+    "p0_count": 0,
+    "p1_count": 0,
+    "p2_count": 0
+  },
+  "issues": [
+    {
+      "level": "P2",
+      "category": "CHECKLIST-§19 / FP-17",
+      "description": "Q1 一段集中出现双盘吸虫、泄殖腔、消化腺、孢囊共4个生物学术语，超出活跃区规则“每段专业术语不超过2个”；其中“泄殖腔”“消化腺”两个术语未附任何通俗解释即直接抛出（“用两个吸盘钉在鸟的泄殖腔里”“孵出的幼虫钻进消化腺”）。双盘吸虫有类属解释（“一种叫双盘吸虫的寄生虫”）、孢囊有特征描述（“没有嘴、只靠皮肤吸食营养”），故命中的是未解释的两个。不影响事实准确性（用词本身精确，见 term_checks），属认知门槛问题。",
+      "location": "C段Q1（第7行）",
+      "suggestion": "最小改动方案：“泄殖腔”改“肠道末端”（净增1字，全文683字仍在690内）；或保留“泄殖腔”但在下版从其他表述压缩出约10字后加短注（如“鸟类排泄共用的腔室”）。“消化腺”可改“消化器官”或保留（结合“消化”二字读者可大致自解，且该位置信息非主线关键）。"
+    },
+    {
+      "level": "P2",
+      "category": "CHECKLIST-§102 / FP-24",
+      "description": "Q2“孢囊自己感光，光越足扭得越欢”把学界未明的 proximate 机制写成既定能力。“搏动随光增强、黑暗中停止”本身是可靠观测（维基百科：40 to 75 times a minute depending on temperature, but they cease in the dark），但孢囊“如何”感光的机制并无定论——Wesołowski 本人对 PAP 明言“The parasite does not have a single nerve cell, no sensory organs, but the tentacles pulsate only when exposed to light. We have no idea how this happens”。“自己感光”四字读作“孢囊具备感光能力”的机制断言，未留“还没弄清”的余地。",
+      "location": "C段Q2（第9行）",
+      "suggestion": "两个可行方向（当前全文682字，距690上限仅余8字，任何增补需同步压缩）：a) 弱化为观测表述，如“孢囊的搏动跟着光线走，越亮扭得越欢”，不触碰感光机制；b) 下版若有字数空间，补限定“具体怎么感的光，科学家还没完全弄清”。注意不得为增补而超690硬上限。"
+    }
+  ],
+  "fact_checks": [
+    {
+      "claim": "双盘吸虫成虫约1.5毫米长，用两个吸盘钉在鸟的泄殖腔里",
+      "source_verified": true,
+      "detail_verified": true,
+      "omission_severity": "minor",
+      "verdict": "supported",
+      "note": "维基百科（Leucochloridium paradoxum 条，多镜像源一致）：“they develop into adult distomes, c. 1.5 mm long. This form has two suckers on the ventral side, which anchor it to the cloacal wall”——1.5毫米、两个腹吸盘、固着于泄殖腔壁三要素与文中逐字吻合。注意与科普中国“2到4毫米”口径的差异属来源间出入，一轮已判非孤证不构成错误；v2 改用1.5毫米有维基直接支撑。"
+    },
+    {
+      "claim": "孢囊搏动每分钟40到75次，随温度变奏，黑暗里停跳",
+      "source_verified": true,
+      "detail_verified": true,
+      "omission_severity": "minor",
+      "verdict": "supported",
+      "note": "维基百科原文：“The pulsations of the broodsacs typically vary from 40 to 75 times a minute depending on temperature, but they cease in the dark.”与文中“每分钟40到75次，随温度变奏，黑暗里停跳”逐字对应，数值区间、温度依赖、黑暗中停止三要素全中。"
+    },
+    {
+      "claim": "2014年《动物学杂志》上，波兰比亚沃维耶扎国家公园的野外研究；45分钟观察中53%的感染蜗牛全程暴露在亮处，对照组只有28%",
+      "source_verified": true,
+      "detail_verified": true,
+      "omission_severity": "minor",
+      "verdict": "supported",
+      "note": "论文 Wesołowska & Wesołowski, Do Leucochloridium sporocysts manipulate the behaviour of their snail hosts?, Journal of Zoology, DOI 10.1111/jzo.12094：zendy 元数据明确 Publication year=2014（2013年11月29日在线、2014年正式卷期，文章取正式发表年无误）；Wiley 论文摘要确认野外观察地点为 Białowieża National Park, Poland；53%/28%/45分钟数据与维基百科转述逐字一致（“Whereas 53% of infected snails remained fully exposed for the 45 minutes of the observation period, the figure was only 28% for the controls”）；PAP（Science in Poland）亦确认“Observations were carried out in the Bialowieża National Park”“They could move even throughout the 45 min observation”。年份、期刊、机构地点、样本口径、精确数值五要素全部核实。"
+    },
+    {
+      "claim": "眼柄被孢囊撑满后，物理上缩不回去，鸟影压顶也无处可躲",
+      "source_verified": true,
+      "detail_verified": true,
+      "omission_severity": "minor",
+      "verdict": "supported",
+      "note": "论文原始报道（PAP）：“only occasionally hid their tentacles inside the body”——感染蜗牛仅偶尔将触手缩回体内，与“物理上缩不回去”一致；一轮审校亦已核实该点。"
+    },
+    {
+      "claim": "被感染蜗牛不会马上死，伤口几周内愈合，眼柄会慢慢长回来，甚至能再活一年，眼柄顶端的小眼点还能继续用",
+      "source_verified": true,
+      "detail_verified": true,
+      "omission_severity": "minor",
+      "verdict": "supported",
+      "note": "维基百科：“Infected snails may survive for at least a year and continue to be able to use the eyes on the ends of their tentacles.”——存活一年以上、眼点仍可使用两项与文中逐字吻合；PAP：“Both the snail and the flatworm survive the attack.”；眼柄再生（数周）为一轮已核实项（科普中国“新的眼柄会在几周内重新长出来”）。"
+    },
+    {
+      "claim": "寄生虫抑制了蜗牛的生育，赔上的是整个繁殖季",
+      "source_verified": true,
+      "detail_verified": true,
+      "omission_severity": "minor",
+      "verdict": "supported",
+      "note": "维基百科：“snails infected by L. paradoxum often show a reduction of the sexual organs”；PAP 引 Wesołowski：“flatworm inserts itself into the liver and prevents the snail from reproducing (thereby preserving the energy needed to sustain the parasite)”。两源一致支持生殖抑制归因于寄生虫。"
+    },
+    {
+      "claim": "幼孢囊能自己钻出眼柄，体外继续搏动约一小时",
+      "source_verified": true,
+      "detail_verified": true,
+      "omission_severity": "minor",
+      "verdict": "supported",
+      "note": "维基百科：“Birds may also become infected by eating broodsacs that have spontaneously burst from the tentacle, surviving for an hour whilst they continue to pulsate.”——自行脱落（spontaneously burst）与体外搏动约一小时（an hour whilst they continue to pulsate）与文中一致。"
+    },
+    {
+      "claim": "攻击性拟态方向倒置：双盘吸虫扮成毛毛虫是为了被吃，而典型攻击性拟态是模仿者吃掉被骗者",
+      "source_verified": true,
+      "detail_verified": true,
+      "omission_severity": "minor",
+      "verdict": "supported",
+      "note": "维基百科：“The appearance and behaviour of the sporocysts is a case of aggressive mimicry, where the parasite vaguely resembles the food of the host... This is unlike most other cases of aggressive mimicry, in which the mimic eats the duped animal.”——方向倒置的对比与文中表述逐字对应。"
+    },
+    {
+      "claim": "这套把戏生物学上叫扩展表型（extended phenotype）",
+      "source_verified": true,
+      "detail_verified": true,
+      "omission_severity": "minor",
+      "verdict": "supported",
+      "note": "Dawkins 1982《The Extended Phenotype》原书即以 Leucochloridium 孢囊侵占蜗牛触角作为宿主操控的核心案例（“Sporocysts of flukes of the genus Leucochloridium invade the tentacles of snails...”）；Frontiers in Microbiology 2014 综述亦称 host manipulation 案例“commonly regarded as compelling examples of extended phenotypes (Dawkins, 1982)”。概念归属正确。"
+    },
+    {
+      "claim": "寄生虫连神经系统都没有（“最懂演化的，偏偏是个连神经系统都没有的扁虫”）",
+      "source_verified": true,
+      "detail_verified": true,
+      "omission_severity": "minor",
+      "verdict": "supported",
+      "note": "Wesołowski 对 PAP 原话：“The parasite does not have a single nerve cell, no sensory organs, but the tentacles pulsate only when exposed to light.”——无神经细胞有研究者原话直接支撑；“扁虫”对应扁形动物门吸虫纲，分类正确。"
+    }
+  ],
+  "quote_checks": [
+    {
+      "claim": "文中对2014年《动物学杂志》研究的转述（“45分钟观察中53%的感染蜗牛全程暴露在亮处，对照组只有28%”）",
+      "verbatim_match": true,
+      "source": "Wesołowska & Wesołowski 2014, Journal of Zoology, DOI 10.1111/jzo.12094（论文摘要及维基百科对论文数据的转述）",
+      "note": "论文摘要原文（infected snails）“positioned themselves in more exposed and better illuminated places, situated higher in the vegetation”；53%/28%/45分钟数值经维基百科逐字转述与 PAP 报道双重确认（“Whereas 53% of infected snails remained fully exposed for the 45 minutes of the observation period, the figure was only 28% for the controls”）。文中为意译转述而非直接引文，数值、观察时长、对照设置三要素均与原文一致，未夸大未删改。另注意：论文2013年11月29日在线发表、2014年正式卷期，文章取“2014年”指正式发表年，与 zendy 元数据（Publication year=2014）一致，非年份错误。"
+    }
+  ],
+  "mechanism_checks": [
+    {
+      "claim": "Q1生活史链：虫卵随鸟粪落地→被蜗牛吞下→孵出幼虫→钻进消化腺→长成孢囊→伸分支爬进眼柄→撑成装满幼虫的“荧光棒”",
+      "direction_ok": true,
+      "elements_complete": true,
+      "note": "与维基百科生活史逐环对应（卵随鸟粪排出→蜗牛吞食→孵化毛蚴→到达肝胰脏（消化腺）发育为孢囊→成熟孢囊分支伸入触角形成搏动孢囊）。方向正确，无跳步缺环。"
+    },
+    {
+      "claim": "Q2操控链：感染→蜗牛专挑高处亮处、全程暴露、眼柄无法缩回→提升对昼行食虫鸟的可见性与可及性→被啄食→寄生虫进入鸟体完成循环",
+      "direction_ok": true,
+      "elements_complete": true,
+      "note": "行为改变（2014论文 demonstrated）、搏动光依赖（维基）、鸟撕食孢囊而蜗牛可存活（PAP：birds tore the broodsac out of the snail before eating it）各环节齐备，方向自洽；Q1已交代鸟体内阶段，闭环完整。"
+    },
+    {
+      "claim": "Q2搏动链：孢囊搏动随光线增强（每分钟40到75次、随温度变奏、黑暗中停跳）",
+      "direction_ok": true,
+      "elements_complete": true,
+      "note": "观测三要素（数值区间、温度依赖、黑暗中停止）均经维基百科逐字核实；唯 proximate 感光机制学界未明（Wesołowski：“We have no idea how this happens”），文中“孢囊自己感光”未留余地，已按收紧一档原则标 P2（见 issues 第2条），此处仅记录机制归属为孢囊、方向正确。"
+    },
+    {
+      "claim": "Q3生存链：眼柄被啄→蜗牛不会马上死→伤口几周内愈合→眼柄再生→母孢囊占新眼柄→可再活一年且眼点仍可用",
+      "direction_ok": true,
+      "elements_complete": true,
+      "note": "存活与再生（维基、PAP、科普中国）、母孢囊再生新殖囊（PAP：the flatworm produces another outgrowth in its host and cheats more birds）均有源；未出现“再生=立刻复原”开关式表述（用词“慢慢长回来”）。"
+    },
+    {
+      "claim": "F段反转链：拟态方向倒置（为被吃而拟态）＋幼孢囊自行脱落后体外搏动约一小时→鸟可不啄蜗牛直接捡食脱落孢囊",
+      "direction_ok": true,
+      "elements_complete": true,
+      "note": "方向倒置与脱落孢囊体外搏动一小时均有维基百科逐字支撑；反转与前文攻击性拟态内容自然衔接（FP-55 未触发）。"
+    }
+  ],
+  "attribution_checks": [
+    {
+      "claim": "眼柄的搏动归因于孢囊（寄生虫）而非蜗牛自身肌肉/神经",
+      "is_primary_cause": true,
+      "note": "搏动主体是孢囊；研究者原话确认寄生虫无神经细胞而孢囊仍搏动，归因归属正确，未错配给蜗牛。proximate 感光机制未明（见 P2-2），但“搏动归孢囊且受光调控”的观测归因成立。"
+    },
+    {
+      "claim": "蜗牛“送死”行为（高处亮处、不缩头、活跃）归因于双盘吸虫操控",
+      "is_primary_cause": true,
+      "note": "Wesołowska & Wesołowski 2014 论文以 demonstrated 证实行为改变与感染相关（论文摘要原话：“we demonstrated that... L. paradoxum sporocysts also changed the behaviour of their intermediate S. putris hosts”），归因主因正确；文中说“自愿并不准确，蜗牛其实身不由己”与被动操控结论一致。"
+    },
+    {
+      "claim": "蜗牛繁殖受抑归因于寄生虫（而非衰老或其他因素）",
+      "is_primary_cause": true,
+      "note": "维基（reduction of the sexual organs）与 PAP（flatworm inserts itself into the liver and prevents the snail from reproducing）双源确认生殖抑制为感染效应，归因正确。"
+    },
+    {
+      "claim": "孢囊“感光”能力的 proximate 机制归因表述（“孢囊自己感光”）",
+      "is_primary_cause": true,
+      "note": "观测层面的归因成立（搏动确为孢囊行为且受光调控），但“如何感光”的 proximate 机制学界明言未明（We have no idea how this happens），文中表述未留余地，已标 P2-2；非归因错配给其他对象，故 is_primary_cause 记 true，限定缺失记于 P2。"
+    }
+  ],
+  "term_checks": [
+    {
+      "term": "眼柄",
+      "used": "眼柄（全文多处，如“两根眼柄粗得像灌满的香肠”）",
+      "correct": "眼柄（eyestalk，陆蜗牛着生眼睛的上触角）",
+      "exact": true,
+      "note": "用字规范，与“眼点”的层级关系（顶端生眼）准确。"
+    },
+    {
+      "term": "眼点",
+      "used": "小眼点",
+      "correct": "眼点（eyespot，眼柄顶端的简易感光结构）",
+      "exact": true,
+      "note": "蜗牛眼点为简易感光眼、仅辨明暗，与文中及一轮核实口径一致。"
+    },
+    {
+      "term": "泄殖腔",
+      "used": "鸟的泄殖腔",
+      "correct": "泄殖腔（cloaca）",
+      "exact": true,
+      "note": "成年双盘吸虫固着处确为鸟泄殖腔（维基：anchor it to the cloacal wall），用字精确；未附通俗解释的问题记于 P2-1（术语密度），非用字错误。"
+    },
+    {
+      "term": "消化腺",
+      "used": "幼虫钻进消化腺",
+      "correct": "消化腺（蜗牛肝胰脏/hepatopancreas）",
+      "exact": true,
+      "note": "维基明确毛蚴到达 hepatopancreas 后发育为孢囊，中文即消化腺，定位准确；未附通俗解释记于 P2-1。"
+    },
+    {
+      "term": "孢囊",
+      "used": "孢囊（“长成没有嘴、只靠皮肤吸食营养的孢囊”）",
+      "correct": "孢囊（sporocyst，吸虫幼虫阶段，无口、经体壁吸收营养）",
+      "exact": true,
+      "note": "无口、体壁吸收与生物学定义一致，且文中已附特征描述，符合 FP-17。"
+    },
+    {
+      "term": "双盘吸虫",
+      "used": "双盘吸虫（加粗）",
+      "correct": "双盘吸虫（Leucochloridium，彩蚴吸虫科，又称彩蚴吸虫）",
+      "exact": true,
+      "note": "规范中文名，加粗合理（标准学术名，非自造词，不违 FP-28）。"
+    },
+    {
+      "term": "攻击性拟态",
+      "used": "攻击性拟态（加粗）",
+      "correct": "攻击性拟态（aggressive mimicry）",
+      "exact": true,
+      "note": "标准学术术语，维基百科即以 aggressive mimicry 定性该现象；引入前已有“眼柄扮毛毛虫骗鸟下嘴的把戏”白话铺垫，符合 CHECKLIST §77。"
+    },
+    {
+      "term": "扩展表型",
+      "used": "扩展表型",
+      "correct": "扩展表型（extended phenotype，Dawkins 1982）",
+      "exact": true,
+      "note": "概念归属正确，Dawkins 原书以 Leucochloridium 为核心案例；前有“蜗牛是这串彩灯的房东，却不是自己身体的主人”作白话铺垫。"
+    }
+  ],
+  "gap_checks": [
+    {
+      "pattern_id": "G-01",
+      "triggered": false,
+      "checked": true,
+      "finding": "A段为场景叙事（蜗牛眼柄变彩灯、鸟俯冲啄食），无“不敢/怕/有毒吗/能不能吃/会不会伤/有害吗/安全吗/能不能用”类读者顾虑表述；话题属动物世界，不属饮食/健康/用药/电器/儿童/宠物领域，无需安全或行为闭环，未触发。"
+    },
+    {
+      "pattern_id": "G-02",
+      "triggered": false,
+      "checked": true,
+      "finding": "已用检索式对全文扫描“不可能/全看/全都/一定/绝对/必然/永远/无非/完全不会/再也/保证/彻底/一直/从不”，零命中；另扫“首先/其次/然后/最后/此外/另外/不仅如此/而且/值得一提/不可否认/毫无疑问/显而易见”，零命中。“物理上缩不回去”“不会马上死”“至今没人拍到过”均为经权威源验证的实证表述（论文/PAP/维基），非无例外全称判断，未触发。"
+    },
+    {
+      "pattern_id": "G-03",
+      "triggered": false,
+      "checked": true,
+      "finding": "全部生物定性描述与可核验量均已回权威源逐项核对（维基百科、Wiley 论文原文、PAP/Science in Poland、Dawkins 1982 原著、Frontiers 2014 综述）：成虫1.5毫米双吸盘固着泄殖腔、搏动40到75次每分钟随温度且黑暗中停止、2014 Journal of Zoology 比亚沃维耶扎研究、53% vs 28%、45分钟观察、存活一年以上且眼点可用、生殖抑制、幼孢囊脱落体外搏动约一小时、扩展表型归属、寄生虫无神经细胞，共10项断言全部属实，无“听起来合理但细节错误”的常识陷阱，未触发。"
+    },
+    {
+      "pattern_id": "G-04",
+      "triggered": false,
+      "checked": true,
+      "finding": "五条因果链（生活史链、操控链、搏动链、生存再生链、反转链，详见 mechanism_checks）方向均自洽且关键环节齐备，无一句话概括多步骤或中间跳步；Q1 已交代鸟体内阶段，与 Q2“被鸟啄食”形成闭环，未触发。"
+    },
+    {
+      "pattern_id": "G-05",
+      "triggered": false,
+      "checked": true,
+      "finding": "文中无古文或研究者原话逐字引用；解剖术语“眼柄/眼点/泄殖腔/消化腺/孢囊/双盘吸虫/攻击性拟态/扩展表型”用字精确（详见 term_checks，8项全部 exact=true），无“上颚/上腭”类形近误用；2014年研究转述与论文摘要及维基转述逐字吻合（详见 quote_checks），未触发。"
+    },
+    {
+      "pattern_id": "G-06",
+      "triggered": false,
+      "checked": true,
+      "finding": "引用源（2014年 Journal of Zoology，DOI 10.1111/jzo.12094）已回论文摘要、zendy 元数据、PAP 报道逐项核对：作者 Wesołowska & Wesołowski、正式发表年2014（2013年11月在线）、期刊、地点 Białowieża National Park、53%/28%/45分钟数值全部一致，不存在“来源存在但细节未核对”；各数值亦经多源交叉核对，未触发。"
+    },
+    {
+      "pattern_id": "G-07",
+      "triggered": false,
+      "checked": true,
+      "finding": "归因主次正确：搏动归孢囊（寄生虫）而非蜗牛、行为改变归双盘吸虫操控（2014论文 demonstrated）、生殖抑制归寄生虫感染、存活与再生归蜗牛自身再生能力；proximate 感光机制未明已按收紧一档标 P2-2（非归因错配，是限定缺失）；“野外的鸟会不会真俯冲下来，至今没人拍到过”如实标注观测空白（与论文原文“there is not a single study documenting attacks of definite passerine hosts on snails with broodsacs”一致），未把配角当主因或隐瞒主因，未触发。"
+    }
+  ],
+  "issue_responses": [
+    {
+      "issue_index": 0,
+      "status": "resolved",
+      "evidence": "一轮 P2（CHECKLIST-§9，Q2 引用 2013 年研究缺期刊名）已修复：v2 Q2 现文为“2014年《动物学杂志》上，波兰比亚沃维耶扎国家公园的野外研究里，45分钟观察中53%的感染蜗牛全程暴露在亮处，对照组只有28%”——期刊名《动物学杂志》（Journal of Zoology）已按一轮建议补入。同时 v2 做了两处超出最低要求的优化：① 年份由 2013 校准为 2014（论文正式发表年，zendy 元数据 Publication year=2014，DOI 10.1111/jzo.12094，非年份错误）；② 补充了 53% vs 28% 与 45 分钟观察的具体数据口径（CHECKLIST §118 比例数据须交代样本与观察口径）。改后重跑 validate_article.py：score=100，12项检查全过，char_count 597→682，仍≤690 全文硬上限。注：v2 仍未写入研究者姓名（Wesołowska 夫妇）及所属大学（弗罗茨瓦夫大学），但一轮 issue 的 suggestion 明确为“补期刊名即可”，且 v2 现有“2014年＋《动物学杂志》＋比亚沃维耶扎国家公园”三要素在形式上满足 §9 的机构/年份/期刊结构，故判 resolved；若下版愿进一步完善，可补“弗罗茨瓦夫大学的研究者”，非本轮必改项。"
+    }
+  ],
+  "forbidden_violations": [],
+  "overall_comment": "审校结论：P0=0、P1=0、P2=2，pass=true，score=95。脚本审核100分（682字，12项检查全过，P0/P1/P2 零命中）。最小结构验证齐备：A段引用块（第3行）、C段 Q1/Q2/Q3 格式（第7/9/11行）、F段引用块含“冷知识反转”标签（第15行）、结尾风格表格四字段（话题/分类/核心机制/冷知识反转，第17至18行）；分类=动物世界属合法6选1枚举；字数682≤690（全文口径含表格，600 仅正文软目标未用作阈值）。事实核验：10项核心断言全部经 WebSearch 独立核实属实（成虫1.5毫米双吸盘固着泄殖腔、搏动40到75次每分钟随温度且黑暗中停止、2014年 Journal of Zoology 比亚沃维耶扎研究及 53% vs 28% 与 45 分钟口径、眼柄无法缩回、存活一年以上且眼点可用、生殖抑制、幼孢囊脱落体外搏动约一小时、攻击性拟态方向倒置、扩展表型归属 Dawkins 1982、寄生虫无神经细胞），零 P0 级事实错误。FORBIDDEN.md 实际78条FP（FP-01至FP-80，FP-58 归档空缺）全量扫描无命中；连接词、绝对词、波浪线、双破折号、HTML 实体 grep 全部零命中。CHECKLIST 活跃区逐项人工对照通过：引用研究已核实（§101）、Q段边界不重叠（§58）、全文数据口径一致（§71）、Q问先答（§76）、F段提供新角度且有记忆锚点金句（§17/§93）、比例数据带观察口径（§118）、引用三要素齐备（§9）。GAP 七条对照均未触发，其中 G-02/G-03/G-06 已按重点逐项回权威源收紧核查。两个 P2 均为轻微瑕疵：① Q1 术语密度超限（泄殖腔/消化腺未附白话解释，CHECKLIST §19/FP-17）；② “孢囊自己感光”将学界未明的 proximate 机制写成既定能力（CHECKLIST §102/FP-24，Wesołowski 原话“We have no idea how this happens”）。二者均有可行最小改法且不破坏 690 字上限，不影响发布水准；一轮提出的唯一 P2（补期刊名）已确认修复。整体达到通过标准。",
+  "revised_after_review": true,
+  "revision_note": "主理人于 2026-10-14 按 P2 采纳闭环应用两个 P2 的最小改法：① P2-1（Q1 术语密度）：'泄殖腔'改'肠道末端'（净增1字）；② P2-2（'孢囊自己感光'机制断言未留余地）：改为观测表述'孢囊的搏动跟着光走'（净增3字）。改后重跑 validate_article.py --json：passed=true、score=100、char_count=686（≤690 硬上限）、P0/P1/P2 全 0，得分未回退、字数未超限；script_result.char_count 已由 682 同步更新为 686。"
+}

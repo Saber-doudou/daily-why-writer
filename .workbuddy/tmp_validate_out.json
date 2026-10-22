@@ -1,0 +1,29 @@
+{
+  "file": "2026-09-16-每日冷知识-金星日比年长.md",
+  "passed": true,
+  "score": 93,
+  "p0": [],
+  "p1": [
+    "标题缺少 emoji 装饰"
+  ],
+  "p2": [
+    "段落长度过于均匀（偏差 < 18 字），AI 排版的典型特征"
+  ],
+  "errors": [],
+  "warnings": [
+    "[P1] 标题缺少 emoji 装饰",
+    "[P2] 段落长度过于均匀（偏差 < 18 字），AI 排版的典型特征"
+  ],
+  "info": {
+    "checks_passed": 11,
+    "char_count": 561,
+    "max_score": 100,
+    "final_score": 93,
+    "p0_count": 0,
+    "p1_count": 1,
+    "p2_count": 1,
+    "p0p1_passed": true
+  },
+  "fix_suggestions": [],
+  "related_cases": []
+}

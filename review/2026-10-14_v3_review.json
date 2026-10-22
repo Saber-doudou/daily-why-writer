@@ -1,0 +1,329 @@
+{
+  "article_id": "2026-10-14",
+  "article_version": "v3",
+  "review_timestamp": "2026-10-14T18:28:00+0800",
+  "pass": true,
+  "p0_count": 0,
+  "p1_count": 1,
+  "p2_count": 5,
+  "score": 90,
+  "script_result": {
+    "exit_code": 0,
+    "passed": true,
+    "score": 100,
+    "char_count": 685,
+    "p0_count": 0,
+    "p1_count": 0,
+    "p2_count": 0,
+    "checks_passed": 12
+  },
+  "issues": [
+    {
+      "level": "P1",
+      "category": "FP-78 / CHECKLIST §5（比喻与机制边界）",
+      "description": "Q1'把眼柄撑成一根装满幼虫的荧光棒'——荧光棒（glow stick）是借化学反应自发光的物品，而双盘吸虫孢囊并不发光，其醒目性来自绿黄橙彩色环带与搏动（Wikipedia：pulsating, colourful, banded broodsac）。以自发光物作类比却未注边界，读者可能建立'僵尸蜗牛眼柄会发光'的错误科学印象。全文'彩灯'意象（标题'蹦迪彩灯'、Q2'晾在明处'、Q3'彩灯也会自己回来'）整体同有此风险，但开头'一明一暗地搏动'、Q2'黑暗里干脆停跳'与'晾在明处'提供了非自发光的对冲线索，唯'荧光棒'一词自发光语义最强且无对冲。",
+      "location": "C段Q1（第7行），兼及全文彩灯意象",
+      "suggestion": "最小改动：'荧光棒'改为'彩色搏动棒'（净增2字，全文684字仍在690内），零边界注释成本；或在 Q1/Q2 补边界注'（不是真发光，是彩色条纹跟着搏动忽隐忽现）'（净增约15字，需同步压缩别处约7字）。注意 Master 反馈要求写活，彩灯意象可保留，只需消除自发光误读。"
+    },
+    {
+      "level": "P2",
+      "category": "CHECKLIST §1（用词精准度）",
+      "description": "F 段'幼孢囊还能自己钻出眼柄，体外搏动约一小时'——自行 burst 出眼柄的是成熟孢囊（broodsac，即孢囊分支末端装满后囊蚴的肿胀部），并非'幼'孢囊；且与 Q3'母孢囊'对举时，'幼孢囊/母孢囊'并置易让读者误解为两个虫体阶段。事实本身（自行脱落＋体外搏动约一小时）经 Wikipedia 核实成立，问题仅在称谓。",
+      "location": "F段（第15行）",
+      "suggestion": "'幼孢囊'改'孢囊'或'装满幼虫的孢囊'（净增0到3字）。"
+    },
+    {
+      "level": "P2",
+      "category": "CHECKLIST §102 / FP-24（争议机制留余地）",
+      "description": "Q2'这套眼柄扮毛毛虫骗鸟下嘴的把戏，生物学上叫攻击性拟态'——攻击性拟态假说的核心环节（野生鸟是否真俯冲啄食带孢囊蜗牛）至今零野外记录，属未完全证实的假说。v3 紧随其后的'至今没人拍到过'已提供重要兜底，满足 FP-24 底线要求；但拟态命名本身未加'有研究者认为/一种解释是'类限定，收紧一档更稳。",
+      "location": "C段Q2（第9行）",
+      "suggestion": "可改'有研究者把这套把戏称为攻击性拟态'（净增5字，需同步压缩）；或维持现文（悬案句已兜底），非必改。"
+    },
+    {
+      "level": "P2",
+      "category": "CHECKLIST §9 / FP-12（研究者引用完整度）",
+      "description": "Q2'2014年《动物学杂志》的波兰研究'——期刊、年份、国家三要素齐备且真实，但未提研究者姓名（Wesołowska 夫妇）与机构（弗罗茨瓦夫大学）；较 v2 还删去了'比亚沃维耶扎国家公园'地点细节。FP-12 硬性要求（机构+年份+期刊）以'波兰研究+期刊+年份'形式满足，此处为完整度打磨而非违规。",
+      "location": "C段Q2（第9行）",
+      "suggestion": "可补'弗罗茨瓦夫大学的研究者'或改'波兰研究者的观察研究里'；字数空间仅剩8字（682/690），任何增补需同步压缩。"
+    },
+    {
+      "level": "P2",
+      "category": "CHECKLIST §66 / §118（比例数据口径锚点）",
+      "description": "53% vs 28% 意译为'过半/不到三成'后，'45分钟观察'的时长口径丢失（v2 曾保留）。'全程'传达了完整性但未给观察窗口，读者无法判断这组对比的时间尺度（是45分钟而非数小时）。比例意译本身无失真（见 fact_checks 第4条），缺的是口径锚点。",
+      "location": "C段Q2（第9行）",
+      "suggestion": "可改'在45分钟的观察里，过半的感染蜗牛把彩灯全程晾在明处'（净增约8字，全文690字刚好压线，需先压缩别处确保不超限）；或维持'全程'意译（信息损失轻微）。"
+    },
+    {
+      "level": "P2",
+      "category": "事实精度打磨（对应 fact_checks 第6条）",
+      "description": "Q3'被感染的甚至能再活一年'——权威口径为 survive for at least a year（至少存活一年），'再活一年'把'至少一年'写成'约一年'，属轻微弱化。v2 同款表述曾被独立审校判 supported（omission_severity: minor），v3 沿用；不构成失真，但有零成本收紧空间。",
+      "location": "C段Q3（第11行）",
+      "suggestion": "'再活一年'改'再活一年以上'（净增2字，全文684字）。"
+    }
+  ],
+  "fact_checks": [
+    {
+      "claim": "成虫体长约1.5毫米（Bakke 1980）——v3 表述为'成虫还不到一粒芝麻长'",
+      "source": "Wikipedia Leucochloridium paradoxum 条（they develop into adult distomes, c. 1.5 mm long）；芝麻尺寸多源：加拿大政府食品采购规范（约3到4毫米长、2毫米宽、1毫米厚）、印度 NAMS 药典综述（约3到4毫米长）、Biosystems Engineering 实测（平均2.80毫米、范围2.50到2.95毫米）、东莞政府科普（一颗芝麻约有3毫米）",
+      "verdict": "成立",
+      "detail_verified": true,
+      "detail": "1.5毫米小于芝麻长度下限（各源最小约2.5毫米），'还不到一粒芝麻长'有充分余量，比喻方向正确且偏保守；尺寸锚点具象可查证，符合 FP-31。"
+    },
+    {
+      "claim": "搏动每分钟40到75次、随温度变化、黑暗中停止（Wesenberg-Lund 1931）——v3 表述为'每分钟40到75次，越热扭得越欢，黑暗里干脆停跳'",
+      "source": "Wikipedia（The pulsations of the broodsacs typically vary from 40 to 75 times a minute depending on temperature, but they cease in the dark）",
+      "verdict": "成立",
+      "detail_verified": true,
+      "detail": "数值区间逐字保留；'越热扭得越欢'对应 depending on temperature（温度越高搏动越快的生活化转写，方向一致）；'黑暗里干脆停跳'对应 cease in the dark。三要素无失真。"
+    },
+    {
+      "claim": "2014年发表于《动物学杂志》（Journal of Zoology）的波兰研究——v3 表述为'2014年《动物学杂志》的波兰研究'",
+      "source": "Wesołowska & Wesołowski, Do Leucochloridium sporocysts manipulate the behaviour of their snail hosts?, Journal of Zoology 292(3): 151-155, DOI 10.1111/jzo.12094；zendy 元数据 Publication year=2014；Wiley 论文页；PAP/Science in Poland（University of Wrocław, Białowieża National Park, Poland）",
+      "verdict": "成立",
+      "detail_verified": true,
+      "detail": "年份（2014正式卷期年）、期刊（Journal of Zoology《动物学杂志》）、国家（波兰，弗罗茨瓦夫大学团队）三要素全部保留；较 v2 删去'比亚沃维耶扎国家公园'地点细节，属引用完整度轻微回退（记 P2-03），不影响事实准确性。"
+    },
+    {
+      "claim": "论文实测：45分钟观察中53%感染蜗牛全程暴露 vs 对照28%——v3 意译为'过半的感染蜗牛把彩灯全程晾在明处，健康的却只有不到三成敢这么晾'",
+      "source": "Wikipedia 逐字转述（Whereas 53% of infected snails remained fully exposed for the 45 minutes of the observation period, the figure was only 28% for the controls）；PAP 报道（They could move even throughout the 45 min observation）",
+      "verdict": "成立",
+      "detail_verified": true,
+      "detail": "'过半'对53%（>50%）方向正确；'不到三成'对28%（<30%）方向正确；'全程晾在明处'对 remained fully exposed 转述准确；感染组/对照组对比结构保留。意译未失真。唯'45分钟'观察时长未保留（记 P2-04）。"
+    },
+    {
+      "claim": "眼柄被孢囊撑满后无法缩回——v3 表述为'眼柄被孢囊撑得合不拢'",
+      "source": "PAP 引论文（only occasionally hid their tentacles inside the body）；Wesołowska & Wesołowski 2014 摘要（tentacles significantly enlarged）",
+      "verdict": "成立",
+      "detail_verified": true,
+      "detail": "'合不拢'为'无法缩回体内'的具象化转写，物理状态一致；'鸟影压顶也无处可躲'是对暴露后果的合理描写，未夸大。"
+    },
+    {
+      "claim": "被感染蜗牛可存活一年以上且眼点仍可使用——v3 表述为'被感染的甚至能再活一年，眼柄顶端的小眼点还能继续用'",
+      "source": "Wikipedia（Infected snails may survive for at least a year and continue to be able to use the eyes on the ends of their tentacles）；PAP（Both the snail and the flatworm survive the attack）",
+      "verdict": "成立",
+      "detail_verified": true,
+      "detail": "两要素（存活一年以上、眼点可用）全部保留。'再活一年'较 at least a year（至少一年）为轻微弱化，但量级与方向一致、不构成失真（优化建议记 P2-05）。"
+    },
+    {
+      "claim": "眼柄断后不需再感染，母孢囊仍在体内陆续成熟——v3 表述为'母孢囊还在体内，新眼柄长出来接着占'",
+      "source": "PAP 引 Wesołowski（After some time, the flatworm produces another outgrowth in its host and cheats more birds）；Wikipedia（sporocysts staggered in their states of development）",
+      "verdict": "成立",
+      "detail_verified": true,
+      "detail": "'母孢囊还在体内'对应母体孢囊留存；'新眼柄长出来接着占'对应再生眼柄被后续成熟孢囊占据、无需再次感染，事实内核保留。"
+    },
+    {
+      "claim": "寄生虫抑制宿主繁殖——v3 表述为'寄生虫抑制了蜗牛的生育'",
+      "source": "Wikipedia（snails infected by L. paradoxum often show a reduction of the sexual organs）；PAP 引 Wesołowski（flatworm inserts itself into the liver and prevents the snail from reproducing）",
+      "verdict": "成立",
+      "detail_verified": true,
+      "detail": "双源一致；'赔上的不只是眼睛，是整个繁殖季'为对繁殖输出受损的合理引申，未夸大。"
+    },
+    {
+      "claim": "另核对：开头'假如有鸟俯冲下来'是否保留虚化（FP-81：虚构场景不写成目击）",
+      "source": "FP-81 条目及 2026-10-14 僵尸蜗牛案例（v1 曾写'画眉俯冲叼眼柄'无虚化且物种地域错配；v2 起改'假如'虚化）",
+      "verdict": "成立",
+      "detail_verified": true,
+      "detail": "v3 第3行保留'假如有鸟俯冲下来'的假设措辞；且未写具体鸟种（规避画眉等东亚物种与欧洲研究区终宿主记录的地域错配）；场景置于'想象'框架下，未写成纪实目击。FP-81 合规。"
+    },
+    {
+      "claim": "另核对：Q2 是否保留'至今没人拍到过'的悬案表述",
+      "source": "v2 定稿口径；Wesołowska & Wesołowski 2014 论文讨论部分（无终宿主雀形目攻击带孢囊蜗牛的野外记录）",
+      "verdict": "成立",
+      "detail_verified": true,
+      "detail": "v3 Q2 结尾完整保留：'只是野外的鸟会不会真俯冲下来，至今没人拍到过。'悬案标注位于'攻击性拟态'命名之后，对假说关键环节（鸟是否真啄）留有余地，符合 FP-24 精神。"
+    }
+  ],
+  "mechanism_checks": [
+    {
+      "claim": "Q1 生活史链：虫卵随鸟粪落地→蜗牛吞下鸟粪→孵出的小虫钻进消化腺→长成孢囊→伸分支爬进眼柄→撑成装满幼虫的'荧光棒'",
+      "direction_ok": true,
+      "elements_complete": true,
+      "note": "与 Wikipedia 生活史逐环对应（卵随鸟粪排出→蜗牛吞食→毛蚴孵化→到达肝胰脏（消化腺）发育为孢囊→分支伸入触角形成搏动孢囊）。方向正确，无跳步；'肠道末端'替代 v2 的'泄殖腔'系 v2 P2-1 修复的保持，术语门槛降低。"
+    },
+    {
+      "claim": "Q2 操控链：感染→蜗牛专挑高处亮处、过半全程暴露、眼柄合不拢无处躲→提升对昼行食虫鸟的可见性与可及性→被啄食→寄生虫进入鸟体",
+      "direction_ok": true,
+      "elements_complete": true,
+      "note": "行为改变（2014 论文 demonstrated：moved farther, positioned themselves in more exposed and better illuminated places, situated higher in the vegetation）、53% vs 28% 暴露对比、眼柄无法缩回（PAP：only occasionally hid their tentacles inside the body）各环节齐备，方向自洽；Q1 已交代鸟体内阶段，闭环完整。"
+    },
+    {
+      "claim": "Q2 搏动链：孢囊搏动每分钟40到75次、越热越欢、黑暗中停跳",
+      "direction_ok": true,
+      "elements_complete": true,
+      "note": "观测三要素（数值区间、温度依赖、黑暗中停止）经 Wikipedia 逐字核实；'孢囊的搏动跟着光走'为观测层表述，未触碰 proximate 感光机制（学界未明，Wesołowski：We have no idea how this happens）——v2 P2-2 的修复在 v3 得到保持。"
+    },
+    {
+      "claim": "Q3 生存链：眼柄被啄→不会马上死→伤口几周内愈合→眼柄慢慢长回→再活一年且眼点可用→母孢囊占新眼柄→繁殖受抑",
+      "direction_ok": true,
+      "elements_complete": true,
+      "note": "存活与再生（Wikipedia、PAP、眼柄再生数周口径）、母孢囊再占新眼柄（PAP：produces another outgrowth in its host）、生殖抑制（Wikipedia、PAP 双源）均有源；'慢慢长回来'非开关式表述。"
+    },
+    {
+      "claim": "F 段反转链：拟态方向倒置（为被吃而拟态）＋孢囊自行钻出眼柄、体外搏动约一小时→鸟可不啄蜗牛直接捡食脱落孢囊",
+      "direction_ok": true,
+      "elements_complete": true,
+      "note": "方向倒置（Wikipedia：unlike most other cases of aggressive mimicry, in which the mimic eats the duped animal）与脱落孢囊体外搏动约一小时（Wikipedia：spontaneously burst from the tentacle, surviving for an hour whilst they continue to pulsate）均有逐字支撑；反转与前文拟态内容自然衔接（FP-55 未触发）。'幼孢囊'称谓不精确记 P2-01，不影响机制方向。"
+    }
+  ],
+  "attribution_checks": [
+    {
+      "claim": "眼柄的搏动归因于孢囊（寄生虫）而非蜗牛自身肌肉/神经",
+      "is_primary_cause": true,
+      "note": "搏动主体是孢囊；研究者原话确认寄生虫无神经细胞而孢囊仍搏动（PAP：does not have a single nerve cell），归因归属正确，未错配给蜗牛。v3'跟着光走'为观测层表述，未重蹈 v2'自己感光'的机制断言。"
+    },
+    {
+      "claim": "蜗牛'送死'行为（高处亮处、全程暴露、眼柄合不拢）归因于双盘吸虫操控",
+      "is_primary_cause": true,
+      "note": "Wesołowska & Wesołowski 2014 论文以 demonstrated 证实行为改变与感染相关（we demonstrated that L. paradoxum sporocysts also changed the behaviour of their intermediate S. putris hosts），归因主因正确；v3'说自愿并不准确，蜗牛其实身不由己'与被动操控结论一致。"
+    },
+    {
+      "claim": "蜗牛繁殖受抑归因于寄生虫（而非衰老或其他因素）",
+      "is_primary_cause": true,
+      "note": "Wikipedia（reduction of the sexual organs）与 PAP（prevents the snail from reproducing）双源确认生殖抑制为感染效应，归因正确。"
+    },
+    {
+      "claim": "孢囊搏动的光/温度依赖归因表述（'跟着光走''越热扭得越欢'）",
+      "is_primary_cause": true,
+      "note": "观测层面的归因成立（搏动确为孢囊行为且随温度变化、黑暗中停止）；v3 未声称 proximate 感光机制，较 v2 收紧一档，限定缺失问题已消除。"
+    }
+  ],
+  "quote_checks": [
+    {
+      "claim": "v3 对2014年《动物学杂志》研究的意译转述（'过半的感染蜗牛把彩灯全程晾在明处，健康的却只有不到三成敢这么晾'）",
+      "verbatim_match": false,
+      "source": "Wesołowska & Wesołowski 2014, Journal of Zoology, DOI 10.1111/jzo.12094（论文摘要及 Wikipedia/PAP 对论文数据的转述）",
+      "note": "v3 为意译而非逐字转述：53%→过半（>50%）、28%→不到三成（<30%）、remained fully exposed→全程晾在明处，数值方向与对比结构全部保真；remained fully exposed for the 45 minutes 中的'45分钟'时长丢失（记 P2-04）。无直接引语引用，无引语失真风险。"
+    }
+  ],
+  "term_checks": [
+    {
+      "term": "眼柄",
+      "used": "眼柄（全文多处，如'两根眼柄粗得像灌满的香肠'）",
+      "correct": "眼柄（eyestalk，陆蜗牛着生眼睛的上触角）",
+      "exact": true,
+      "note": "用字规范，与'眼点'的层级关系（顶端生眼）准确。"
+    },
+    {
+      "term": "眼点",
+      "used": "小眼点",
+      "correct": "眼点（eyespot，眼柄顶端的简易感光结构）",
+      "exact": true,
+      "note": "蜗牛眼点为简易感光眼、仅辨明暗，与 Wikipedia 口径（use the eyes on the ends of their tentacles）一致。"
+    },
+    {
+      "term": "肠道末端",
+      "used": "鸟的肠道末端",
+      "correct": "肠道末端（对应 cloaca 泄殖腔，v2 P2-1 的通俗化改法）",
+      "exact": true,
+      "note": "成虫双吸盘固着处为鸟泄殖腔壁（Wikipedia：anchor it to the cloacal wall），'肠道末端'为准确且低门槛的通俗转写；v2 P2-1 修复在 v3 得到保持。"
+    },
+    {
+      "term": "消化腺",
+      "used": "孵出的小虫钻进消化腺",
+      "correct": "消化腺（蜗牛肝胰脏/hepatopancreas）",
+      "exact": true,
+      "note": "Wikipedia 明确毛蚴到达 hepatopancreas 后发育为孢囊，中文即消化腺，定位准确；v2 审校已判定可保留（读者可结合'消化'二字自解），v3 沿用。"
+    },
+    {
+      "term": "孢囊",
+      "used": "孢囊（'长成没有嘴、靠皮肤吸食营养的孢囊'）",
+      "correct": "孢囊（sporocyst，吸虫幼虫阶段，无口、经体壁吸收营养）",
+      "exact": true,
+      "note": "无口、体壁吸收与生物学定义一致（Wikipedia：absorbs nutrients through its tegument），且文中已附特征描述，符合 FP-17；F 段'幼孢囊'称谓问题记 P2-01。"
+    },
+    {
+      "term": "双盘吸虫",
+      "used": "双盘吸虫（加粗）",
+      "correct": "双盘吸虫（Leucochloridium，规范中文名）",
+      "exact": true,
+      "note": "规范中文名，加粗合理（标准学术名，非自造词，不违 FP-28）。"
+    },
+    {
+      "term": "攻击性拟态",
+      "used": "攻击性拟态（加粗）",
+      "correct": "攻击性拟态（aggressive mimicry）",
+      "exact": true,
+      "note": "标准学术术语，Wikipedia 即以 aggressive mimicry 定性该现象；引入前已有'眼柄扮毛毛虫骗鸟下嘴的把戏'白话铺垫，符合 CHECKLIST §77；假说限定词缺失记 P2-02。"
+    },
+    {
+      "term": "荧光棒",
+      "used": "装满幼虫的'荧光棒'",
+      "correct": "比喻用法，非术语；但 glow stick 为自发光物，与孢囊不发光的事实存在机制边界问题",
+      "exact": false,
+      "note": "唯一 exact=false 项：孢囊可见性来自彩色环带＋搏动而非自发光，'荧光棒'未注边界，记 P1-01。"
+    }
+  ],
+  "gap_checks": [
+    {
+      "pattern_id": "G-01",
+      "triggered": false,
+      "checked": true,
+      "finding": "A 段为场景叙事（蜗牛眼柄变彩灯、鸟俯冲啄食），无'不敢/怕/有毒吗/能不能吃/会不会伤/有害吗/能不能用'类读者顾虑表述；话题属动物世界，不属饮食/健康/用药/电器/儿童/宠物领域，无需安全或行为闭环，未触发。"
+    },
+    {
+      "pattern_id": "G-02",
+      "triggered": false,
+      "checked": true,
+      "finding": "已用检索式对 v3 全文扫描'不可能/全看/全都/一定/绝对/必然/永远/无非/完全不会/再也/保证/彻底/一直/从不'，零命中；另扫'首先/其次/然后/最后/此外/另外/不仅如此/而且/值得一提/不可否认/毫无疑问/显而易见'，零命中。'还不到一粒芝麻长''合不拢''没人拍到过'均为经权威源验证的实证或虚化表述，非无例外全称判断，未触发。"
+    },
+    {
+      "pattern_id": "G-03",
+      "triggered": false,
+      "checked": true,
+      "finding": "本轮 8 项 P0 事实保全＋2 项另核对全部经 WebSearch 回权威源逐项核验（Wikipedia、Wiley 论文摘要、zendy 元数据、PAP/Science in Poland、加拿大政府食品规范、Biosystems Engineering 实测），10/10 成立，无'听起来合理但细节错误'的常识陷阱；具象化改写（芝麻/荧光棒/晾在明处/合不拢）无一牺牲事实，未触发。"
+    },
+    {
+      "pattern_id": "G-04",
+      "triggered": false,
+      "checked": true,
+      "finding": "五条因果链（生活史链、操控链、搏动链、生存再生链、反转链，详见 mechanism_checks）方向均自洽且关键环节齐备，无一句话概括多步骤或中间跳步；Q1 已交代鸟体内阶段，与 Q2'被鸟啄食'形成闭环，未触发。"
+    },
+    {
+      "pattern_id": "G-05",
+      "triggered": false,
+      "checked": true,
+      "finding": "v3 无古文或研究者原话逐字引用；解剖术语'眼柄/眼点/肠道末端/消化腺/孢囊/双盘吸虫/攻击性拟态'用字精确（详见 term_checks，7/7 exact=true，唯比喻'荧光棒'记 P1-01），无形近误用；53%/28% 意译与原文逐项对应（详见 quote_checks），未触发。"
+    },
+    {
+      "pattern_id": "G-06",
+      "triggered": false,
+      "checked": true,
+      "finding": "引用源（2014年 Journal of Zoology，DOI 10.1111/jzo.12094）已回论文摘要、zendy 元数据、Wiley 论文页、PAP 报道逐项核对：作者 Wesołowska & Wesołowski、正式发表年2014、期刊、Białowieża National Park 地点、53%/28%/45分钟数值全部一致，不存在'来源存在但细节未核对'；文章侧引用缺研究者姓名与地点细节属完整度打磨（P2-03），未触发。"
+    },
+    {
+      "pattern_id": "G-07",
+      "triggered": false,
+      "checked": true,
+      "finding": "归因主次正确：搏动归孢囊（寄生虫）而非蜗牛、行为改变归双盘吸虫操控（2014论文 demonstrated）、生殖抑制归寄生虫感染、存活与再生归蜗牛自身再生能力；'孢囊的搏动跟着光走'为观测层表述（v2 P2-2 修复保持）；'至今没人拍到过'如实标注观测空白（与论文讨论部分'无终宿主攻击带孢囊蜗牛的野外记录'一致），未把配角当主因或隐瞒主因，未触发。"
+    }
+  ],
+  "issue_responses": [
+    {
+      "issue_index": 0,
+      "status": "resolved",
+      "evidence": "v2 P2-1（CHECKLIST-§19/FP-17，Q1 术语密度超限：'泄殖腔''消化腺'未附白话解释）：v3 Q1 已改为'用两个吸盘钉在鸟的肠道末端'，'泄殖腔'消失，通俗化完成；'消化腺'按 v2 建议保留（读者可结合'消化'二字自解且该位置信息非主线关键）。v3 每段术语密度回落至 ≤2（Q1：双盘吸虫/孢囊；Q2：孢囊/攻击性拟态），符合活跃区规则。"
+    },
+    {
+      "issue_index": 1,
+      "status": "resolved",
+      "evidence": "v2 P2-2（CHECKLIST-§102/FP-24，'孢囊自己感光'把学界未明的 proximate 机制写成既定能力）：v3 Q2 已改为'孢囊的搏动跟着光走，每分钟40到75次，越热扭得越欢，黑暗里干脆停跳'——纯观测层表述（搏动存在、频率区间、温度依赖、黑暗中停止），不再声称孢囊'具备感光能力'，与 Wesołowski 原话（We have no idea how this happens）不再冲突。"
+    },
+    {
+      "issue_index": 2,
+      "status": "addressed_with_new_p1",
+      "evidence": "Master 反馈 v2'没看懂、不够具体、笼统不生动'：v3 的系统性回应已验证有效——①尺寸具象：1.5毫米→'还不到一粒芝麻长'（多源核实芝麻2.5到4毫米，比喻成立）；②画面具象：'两根眼柄粗得像灌满的香肠''像两条彩色蠕虫''装满幼虫的荧光棒'；③行为具象：'把彩灯全程晾在明处''越热扭得越欢''撑得合不拢'；④数据具象：53%/28%→'过半/不到三成'（意译保真）；⑤叙事具象：'房东'意象首尾呼应（开头'最无奈的房东'＋F段'不是自己身体的主人'）。8 项 P0 事实保全全部成立，生动化未牺牲事实。唯一新账：'荧光棒'自发光边界问题（P1-01），系'写活'过程中引入的比喻边界欠注，有净增2字的最小改法，不影响 pass 判定。"
+    }
+  ],
+  "forbidden_violations": [],
+  "notes": {
+    "review_independence": "本轮为 v3 独立复核。执行顺序：先读全文→跑脚本→加载 FORBIDDEN/CHECKLIST→做事实保全扫描→对存疑口径独立 WebSearch（未先读 v2 审校结论，事实扫描完成后才比对 v2 报告结构）。",
+    "external_verification": "共完成4组独立检索（超过'至少2处'要求）：①芝麻尺寸（加拿大政府规范/印度 NAMS/Biosystems Engineering 实测/东莞政府科普，四源交叉确认2.5到4毫米）；②Leucochloridium paradoxum 成虫与行为数据（Wikipedia 多镜像源：成虫约1.5毫米双吸盘、搏动40到75次每分钟随温度且黑暗中停止、53% vs 28%与45分钟、存活至少一年且眼点可用、生殖抑制、孢囊自行脱落体外搏动约一小时、攻击性拟态方向倒置）；③Wesołowska & Wesołowski 2014 Journal of Zoology 292(3):151-155 DOI 10.1111/jzo.12094 论文归属（zendy/Wiley/PAP 三源确认年份、期刊、波兰弗罗茨瓦夫团队、比亚沃维耶扎国家公园）；④PAP/Science in Poland 对 Wesołowski 的采访（鸟撕眼柄后蜗牛与寄生虫均存活、寄生虫之后再长出突起、寄生虫无神经细胞原话）。",
+    "v3_vs_v2_changes": "具象化改写清单：1.5毫米→芝麻（P0-1）；53%/28%→过半/不到三成（P0-4）；'物理上缩不回去'→'合不拢'（P0-5）；'随温度变奏'→'越热扭得越欢'（P0-2）；'母孢囊占新眼柄'→'母孢囊还在体内，新眼柄长出来接着占'（P0-7）；新增'灌满的香肠''像两条彩色蠕虫''荧光棒''晾在明处'等具象意象。删减：比亚沃维耶扎国家公园地点、45分钟观察时长、扩展表型概念（v2 F 段有、v3 未保留，属内容取舍非事实错误）。v2 两个 P2 的修复（肠道末端/跟着光走）在 v3 均得到保持。",
+    "char_budget": "v3 全文682字，距690硬上限仅余8字；所有增补类建议（P1-01 方案b、P2-02、P2-03、P2-04、P2-05）均需同步压缩别处，已在各 suggestion 中标注净增字量。",
+    "pass_criteria_verification": "通过条件核验：P0=0（成立）；P1=1≤2（成立）；事实保全8项全部成立（10/10 含2项另核对，任一失真即 P0 的规则未触发）。综合 pass=true。",
+    "timestamp_source": "review_timestamp 由 Bash 运行 date +%Y-%m-%dT%H:%M:%S%z 实测取得：2026-10-14T18:28:00+0800。"
+  },
+  "overall_comment": "审校结论：P0=0、P1=1、P2=5，pass=true，score=90。脚本审核100分（682字，12项检查全过，P0/P1/P2 零命中）。结构验证齐备：A段引用块（第3行）、C段 Q1/Q2/Q3 格式（第7/9/11行）、F段引用块含'冷知识反转'标签（第15行）、结尾风格表格四字段（第17至18行）；分类=动物世界属合法6选1枚举；字数682≤690。事实保全（本轮重点）：8项P0事实修正在生动化改写后全部成立——芝麻比喻（1.5mm<芝麻2.5到4mm下限，多源核实）、搏动三要素（40到75次/温度依赖/黑暗中停止，Wikipedia逐字）、2014《动物学杂志》波兰研究（Wesołowska & Wesołowski, DOI 10.1111/jzo.12094，年份/期刊/国家三要素保留）、53%→过半/28%→不到三成（意译保真）、合不拢=无法缩回、再活一年＋眼点可用（轻微弱化不构成失真）、母孢囊占新眼柄（PAP：produces another outgrowth）、繁殖抑制（双源）。另两项核对均合规：开头'假如'虚化在且未写具体鸟种（FP-81）；Q2'至今没人拍到过'悬案表述完整保留。FORBIDDEN.md 实际80条FP全量扫描无命中；CHECKLIST 活跃区重点项逐项对照：抽象数据全部有具象锚点（§80/FP-31：芝麻/过半/越热扭得越欢）、术语密度≤2每段（§19/FP-17）、搏动表述为观测层未触碰未明机制（§102，v2 P2-2 修复保持）、争议机制有悬案句兜底（FP-24 底线满足）。v2 两个 P2 均已解决。新问题集中于'写活'代价：P1-01'荧光棒'自发光边界欠注（FP-78，净增2字可修）；5个P2为精度打磨（幼孢囊称谓、拟态限定词、引用缺人名、45分钟口径、再活一年收紧）。整体：事实底盘零损伤，Master 反馈的三痛点（看不懂/不具体/笼统）获系统性回应，修掉 P1-01 即可臻完善。",
+  "revised_after_review": true,
+  "revision_note": "主理人于 2026-10-14 按本轮 P1/P2 建议对文章做了三处小改（其余 P2-02 拟态限定词、P2-03 引用缺人名、P2-04 45分钟口径本轮未采纳，仍开放）：① P1-01（荧光棒自发光边界，FP-78）：'荧光棒'改为'彩棒'，消除自发光暗示，P1 清除；② P2-01（幼孢囊称谓不精确）：F 段'幼孢囊'改为'熟透的孢囊'，与'母孢囊'对举的阶段混淆解除；③ P2-05（再活一年轻微弱化）：Q3'再活一年'改为'再活一年以上'，与权威口径 survive for at least a year 对齐。改后重跑 validate_article.py --json：passed=true、score=100、char_count=685（原682，净增3字，仍≤690硬上限）、P0/P1/P2 全0；script_result.char_count 已由682同步更新为685。三处改动均为本轮 issues 中已记录的最小改法（suggestion 标注净增0到3字），未新引入事实变更，8项P0事实保全口径不受影响；审校结论 pass=true、P0=0、P1=1、P2=5、score=90 及 issues 等字段保持原样（该结论针对改前文本，修订情况以本 revision_note 与 script_result 为准）。"
+}

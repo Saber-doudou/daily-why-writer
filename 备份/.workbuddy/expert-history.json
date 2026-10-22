@@ -1,0 +1,59 @@
+{
+  "version": 2,
+  "sessions": {
+    "eb6456732f02486fb44a4145dc744ce9": [
+      {
+        "expertId": "AutonomousOptimizationArchitect",
+        "name": "自进化",
+        "profession": "自主优化架构师",
+        "avatarUrl": "https://acc-1258344699.cos.accelerate.myqcloud.com/workbuddy/experts/avatars/02-Engineering/AutonomousOptimizationArchitect/AutonomousOptimizationArchitect.png",
+        "promptUrl": "https://acc-1258344699.cos.accelerate.myqcloud.com/workbuddy/experts/experts/02-Engineering/AutonomousOptimizationArchitect/AutonomousOptimizationArchitect_zh.md",
+        "usedAt": 1776840885550,
+        "industryId": "02-Engineering"
+      }
+    ],
+    "f6ce810662de4825a9c89fbff99c44e1": [
+      {
+        "expertId": "AutonomousOptimizationArchitect",
+        "name": "自进化",
+        "profession": "自主优化架构师",
+        "avatarUrl": "https://acc-1258344699.cos.accelerate.myqcloud.com/workbuddy/experts/avatars/02-Engineering/AutonomousOptimizationArchitect/AutonomousOptimizationArchitect.png",
+        "promptUrl": "https://acc-1258344699.cos.accelerate.myqcloud.com/workbuddy/experts/experts/02-Engineering/AutonomousOptimizationArchitect/AutonomousOptimizationArchitect_zh.md",
+        "usedAt": 1776925617369,
+        "industryId": "02-Engineering"
+      }
+    ],
+    "5f27b4df9a4741df83c7d69386b79f27": [
+      {
+        "expertId": "AutonomousOptimizationArchitect",
+        "name": "自进化",
+        "profession": "自主优化架构师",
+        "avatarUrl": "https://acc-1258344699.cos.accelerate.myqcloud.com/workbuddy/experts/avatars/02-Engineering/AutonomousOptimizationArchitect/AutonomousOptimizationArchitect.png",
+        "promptUrl": "https://acc-1258344699.cos.accelerate.myqcloud.com/workbuddy/experts/experts/02-Engineering/AutonomousOptimizationArchitect/AutonomousOptimizationArchitect_zh.md",
+        "usedAt": 1777342132952,
+        "industryId": "02-Engineering"
+      },
+      {
+        "expertId": "ContentCreator",
+        "name": "文爆爆",
+        "profession": "内容创作专家",
+        "avatarUrl": "https://acc-1258344699.cos.accelerate.myqcloud.com/workbuddy/experts/avatars/03-Marketing/ContentCreator/ContentCreator.png",
+        "promptUrl": "https://acc-1258344699.cos.accelerate.myqcloud.com/workbuddy/experts/experts/03-Marketing/ContentCreator/ContentCreator_zh.md",
+        "usedAt": 1777270676259,
+        "industryId": "03-Marketing"
+      }
+    ],
+    "548a871740d040f8a047754992ea31cc": [
+      {
+        "expertId": "AutonomousOptimizationArchitect",
+        "name": "自进化",
+        "profession": "自主优化架构师",
+        "avatarUrl": "https://acc-1258344699.cos.accelerate.myqcloud.com/workbuddy/experts/avatars/02-Engineering/AutonomousOptimizationArchitect/AutonomousOptimizationArchitect.png",
+        "promptUrl": "https://acc-1258344699.cos.accelerate.myqcloud.com/workbuddy/experts/experts/02-Engineering/AutonomousOptimizationArchitect/AutonomousOptimizationArchitect_zh.md",
+        "usedAt": 1777343491497,
+        "industryId": "02-Engineering"
+      }
+    ]
+  },
+  "lastUpdated": 1777347296890
+}

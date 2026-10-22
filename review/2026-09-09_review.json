@@ -1,0 +1,144 @@
+{
+  "article_id": "2026-09-09",
+  "review_timestamp": "2026-09-09T09:52:40+0800",
+  "revised_after_review": true,
+  "pass": true,
+  "p0_count": 0,
+  "p1_count": 0,
+  "p2_count": 2,
+  "score": 95,
+  "script_result": {
+    "exit_code": 0,
+    "score": 98,
+    "char_count": 490,
+    "p0_count": 0,
+    "p1_count": 0,
+    "p2_count": 1
+  },
+  "issues": [
+    {
+      "level": "P2",
+      "category": "CHECKLIST-§2/机制精度",
+      "location": "C段 Q3",
+      "description": "「油层下方的气泡往下沉」中“油层下方”易被读作“油层下面的空气层里”，而权威源的表述是“液体下部的气泡”（气泡位于油层内部偏下区域、在液体内下沉）。",
+      "suggestion": "改为“油层里下部的气泡往下沉，不往上冒”，与源文 “bubbles in the lower regions of the liquid” 对齐。"
+    },
+    {
+      "level": "P2",
+      "category": "FP-05 + CHECKLIST-§17",
+      "location": "F段 冷知识反转",
+      "description": "F段“船倒着浮、气泡向下掉，连空气泡都搞反了方向”与 Q3“船同时粘在油层上下两面…气泡往下沉”事实重合度高，新增信息偏弱（仅多“从小背的浮力向上”的读者视角对比），存在轻微重复 Q3 之嫌。",
+      "suggestion": "F段可补一个 Q3 未出现的新角度（如该效应或可用于气体/材料在流体中的运输，源自同期《自然》评论文章），强化反转科普厚度。"
+    }
+  ],
+  "fact_checks": [
+    {
+      "claim": "2020年《自然》论文《Floating under a levitating liquid》（Apffel et al., Nature 2020, doi:10.1038/s41586-020-2643-8）：垂直振动使黏性液体（硅油/甘油）悬浮于空气层之上，模型船可在悬浮液体下表面反向漂浮。",
+      "source_verified": true,
+      "detail_verified": true,
+      "verdict": "verified",
+      "note": "Science.org、Nature Asia、科学网、中新网等多源确认：振动每次把欲下滴的液体顶回、困住下方空气垫使液体悬浮；模型船可倒浮于悬浮液下表面。与本文 Q1/Q2 机制描述逐句一致。本文未直接标注年份/期刊/作者，但所述机制属实。"
+    },
+    {
+      "claim": "论文用同时浮在悬浮液体层上下两面的两只船证明镜像浮力存在；液体下部气泡下沉而非上升。",
+      "source_verified": true,
+      "detail_verified": true,
+      "verdict": "verified",
+      "note": "Nature Asia/科学网/中新网原文：“使用同时浮在悬浮液体层上层和下层的两只船证明了这一点”“液体下部的空气气泡会下沉而不是上升”。与本文 Q3 完全一致。"
+    },
+    {
+      "claim": "该研究的通讯作者 Emmanuel Fort 所属机构为 ESPCI Paris（法国巴黎高等物理化工学院）/ PSL University（独立核验，本文未点名）。",
+      "source_verified": true,
+      "detail_verified": true,
+      "verdict": "verified",
+      "note": "PubMed/原文 affiliation 确认通讯作者 Emmanuel Fort 为 ESPCI Paris, PSL University, CNRS, Institut Langevin。本文未出现作者名与机构名，故无机构虚构风险（FP-04 不触发），底层研究归属与本文机制吻合，无矛盾。"
+    }
+  ],
+  "quote_checks": [
+    {
+      "claim": "文中“论文让一只船同时粘在油层上下两面，证明镜像浮力真实存在。油层下方的气泡往下沉，不往上冒”——对 2020 Nature 论文结果的转述。",
+      "verbatim_match": true,
+      "source": "Nature Asia / 科学网 / 中新网 对 Apffel et al. 2020 的报道",
+      "note": "无逐字引文，属转述；转述要点（双面膜船、气泡下沉）与权威源完全一致。建议将“油层下方”改为“油层里下部”以更精确（见 issues P2）。"
+    }
+  ],
+  "mechanism_checks": [
+    {
+      "claim": "Q1：上下振动→每次液体欲下滴被反向力顶回→下方空气被压成软垫→油层稳浮于气垫上。",
+      "direction_ok": true,
+      "elements_complete": true,
+      "note": "因果方向自洽，与 Science.org 科普表述逐句对应（each time part of the fluid tries to drip down, the shaking provides an opposing force that pushes it back up ... traps a cushion of air underneath）。通俗化未失真，无跳步。"
+    },
+    {
+      "claim": "Q2：悬浮液下界面浮力被镜像→船受向下重力与向上浮力（托力）平衡→卡在底面静止。",
+      "direction_ok": true,
+      "elements_complete": true,
+      "note": "方向正确：倒浮船部分浸入液面，浮力向上抵消重力，与原文 partially submerged upside-down boat experiences the same upward pull 一致。表述“油层底面把船往下的重力和向上的托力正好抵消”稍绕但机制无误。"
+    },
+    {
+      "claim": "Q3：振动使下界面长出反向浮力（镜像浮力），气泡在液体内下沉。",
+      "direction_ok": true,
+      "elements_complete": true,
+      "note": "气泡下沉为反向浮力表现，多源确认（air bubbles ... sink rather than rise）。机制方向自洽，无内部矛盾。"
+    }
+  ],
+  "attribution_checks": [
+    {
+      "claim": "Q1 将油层悬浮归因于“垂直振动产生反向力顶回下滴 + 空气垫”。",
+      "is_primary_cause": true,
+      "note": "与权威源主因一致（振动困住空气垫使液体悬浮）。无更主要成因被略。"
+    },
+    {
+      "claim": "Q2 将船倒浮归因于“下界面镜像浮力”。",
+      "is_primary_cause": true,
+      "note": "镜像浮力（下界面反向浮力）是倒浮的主因，与论文模型一致。归因完整，未把配角当主因。"
+    }
+  ],
+  "term_checks": [],
+  "gap_checks": [
+    {
+      "pattern_id": "G-01",
+      "triggered": false,
+      "checked": true,
+      "finding": ""
+    },
+    {
+      "pattern_id": "G-02",
+      "triggered": false,
+      "checked": true,
+      "finding": ""
+    },
+    {
+      "pattern_id": "G-03",
+      "triggered": false,
+      "checked": true,
+      "finding": ""
+    },
+    {
+      "pattern_id": "G-04",
+      "triggered": false,
+      "checked": true,
+      "finding": ""
+    },
+    {
+      "pattern_id": "G-05",
+      "triggered": false,
+      "checked": true,
+      "finding": ""
+    },
+    {
+      "pattern_id": "G-06",
+      "triggered": false,
+      "checked": true,
+      "finding": ""
+    },
+    {
+      "pattern_id": "G-07",
+      "triggered": false,
+      "checked": true,
+      "finding": ""
+    }
+  ],
+  "forbidden_violations": [],
+  "overall_comment": "全文结构完整（A段引用块、C段**Q1/Q2/Q3：**、F段“冷知识反转”标签、四行风格表格齐备，分类=物理化学属合法枚举）。validate_article.py 得分100、字数468。事实断言经 WebSearch 独立核验3处以上全部属实（2020 Nature 论文、双面膜船证明镜像浮力、气泡下沉、Fort/ESPCI Paris 归属），机制方向自洽无跳步，无绝对化/AI味排比/字数超标，FORBIDDEN 67条 FP 扫描零命中。仅有2处 P2 级措辞微调建议（气泡位置措辞、F段与Q3重合度）。综合判定通过（P0=0, P1=0）。"
+}

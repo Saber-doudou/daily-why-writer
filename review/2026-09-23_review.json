@@ -1,0 +1,113 @@
+{
+  "article_id": "2026-09-23",
+  "review_timestamp": "2026-09-23T10:28:36+0800",
+  "pass": true,
+  "p0_count": 0,
+  "p1_count": 0,
+  "p2_count": 0,
+  "score": 100,
+  "script_result": {
+    "exit_code": 0,
+    "score": 100,
+    "char_count": 561,
+    "p0_count": 0,
+    "p1_count": 0,
+    "p2_count": 0
+  },
+  "issues": [],
+  "fact_checks": [
+    {
+      "claim": "超疏水表面的定义是水滴与固体表面接触角大于150度",
+      "source_verified": true,
+      "detail_verified": true,
+      "verdict": "verified",
+      "note": "ScienceDirect、Nature(srep36735)、PMC 综述一致定义 superhydrophobic 为 static contact angle > 150°（常附加滑动角 < 10°）。文章表述准确。"
+    },
+    {
+      "claim": "空气折射率接近1、水折射率约1.33",
+      "source_verified": true,
+      "detail_verified": true,
+      "verdict": "verified",
+      "note": "Wikipedia 折射率表：Air 1.000293、Water 1.333；refractiveindex.info：空气 n≈1.0003。文章数值准确。"
+    },
+    {
+      "claim": "李子表皮蜡质（角质层蜡）超疏水，泡水后银亮小球源于蜡质困住空气层、光在空气-水界面折射散射盖住原色；蓝莓、葡萄、银杏果同理",
+      "source_verified": true,
+      "detail_verified": true,
+      "verdict": "verified",
+      "note": "武汉市江汉区科协科普文、腾讯新闻均描述同一机制（蜡质结构/超疏水性→水架在小结构顶端→困住薄空气层→水-空气界面折射率差→反射散射呈银白），并确认蓝莓、葡萄、银杏果表面同具蜡质层。事实准确。"
+    }
+  ],
+  "quote_checks": [],
+  "mechanism_checks": [
+    {
+      "claim": "蜡质+微观结构→超疏水；水困住空气层；空气-水折射率差致光折射散射呈银亮",
+      "direction_ok": true,
+      "elements_complete": true,
+      "note": "因果方向自洽，与权威源机制一致，无缺失环节（Q1 蜡质+结构、Q2 空气层、Q3 折射率差+散射，链条完整）。"
+    }
+  ],
+  "attribution_checks": [
+    {
+      "claim": "银亮外观主因是蜡质超疏水困住空气层 + 折射率差的光学效应",
+      "is_primary_cause": true,
+      "note": "主因判断与权威源一致，无显著偏漏；F 段延伸其他水果属合理扩展，非归因错位。"
+    }
+  ],
+  "term_checks": [
+    {
+      "term": "角质层蜡",
+      "used": "角质层蜡（cuticular wax）",
+      "correct": "角质层蜡 / 上表皮蜡质（epicuticular wax）",
+      "exact": true,
+      "note": "植物学上果皮表面的蜡质层即 cuticular / epicuticular wax，中文常称角质层蜡或果蜡；文章用法准确，且已通俗化为“防水雨衣”。"
+    }
+  ],
+  "gap_checks": [
+    {
+      "pattern_id": "G-01",
+      "triggered": false,
+      "checked": true,
+      "finding": ""
+    },
+    {
+      "pattern_id": "G-02",
+      "triggered": false,
+      "checked": true,
+      "finding": ""
+    },
+    {
+      "pattern_id": "G-03",
+      "triggered": false,
+      "checked": true,
+      "finding": ""
+    },
+    {
+      "pattern_id": "G-04",
+      "triggered": false,
+      "checked": true,
+      "finding": ""
+    },
+    {
+      "pattern_id": "G-05",
+      "triggered": false,
+      "checked": true,
+      "finding": ""
+    },
+    {
+      "pattern_id": "G-06",
+      "triggered": false,
+      "checked": true,
+      "finding": ""
+    },
+    {
+      "pattern_id": "G-07",
+      "triggered": false,
+      "checked": true,
+      "finding": ""
+    }
+  ],
+  "issue_responses": [],
+  "forbidden_violations": [],
+  "overall_comment": "全文事实准确、机制自洽、结构齐备（A段引用块、C段Q格式、F段含“冷知识反转”标签、四行风格表格）。字数561<690，无AI味连接词堆砌（≥3），无绝对化/类比失准。FP 全库扫描无触发（含 FP-25 无 ~ 与 ——）。三处关键事实均经 WebSearch 独立核验通过。通过条件满足（P0=0 且 P1≤2），建议放行。"
+}

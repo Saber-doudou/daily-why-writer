@@ -1,0 +1,210 @@
+{
+  "article_id": "2026-10-12",
+  "review_timestamp": "2026-10-12T11:57:23+0800",
+  "pass": true,
+  "p0_count": 0,
+  "p1_count": 0,
+  "p2_count": 1,
+  "score": 96,
+  "script_result": {
+    "exit_code": 0,
+    "score": 100,
+    "char_count": 676,
+    "p0_count": 0,
+    "p1_count": 0,
+    "p2_count": 0
+  },
+  "issues": [
+    {
+      "level": "P2",
+      "category": "CHECKLIST-§2/§29 术语分类精度",
+      "location": "Q2",
+      "description": "Q2 将溶菌酶归入'消化酶'（'淀粉酶、溶菌酶等消化酶'），但溶菌酶是唾液的抗菌/防御酶，并非消化酶；淀粉酶才是消化酶。酶的存在以及'残留刺激黏膜、破坏屏障'的机制均属实（博禾、复禾等多源确认），仅类别措辞微瑕。",
+      "suggestion": "可改为'唾液里的淀粉酶等消化酶，以及溶菌酶等抗菌成分'，或将'等消化酶'改为'等酶类'，避免把溶菌酶误归为消化酶。"
+    }
+  ],
+  "fact_checks": [
+    {
+      "claim": "唾液含淀粉酶、溶菌酶（v2 将 v1 的麦芽糖酶更正为溶菌酶）",
+      "source_verified": true,
+      "detail_verified": true,
+      "omission_severity": "minor",
+      "verdict": "verified",
+      "note": "Wikipedia、PMC（PMC8669010/PMC7824170）、腾讯医典均确认人唾液含 α-淀粉酶（ptyalin，消化酶）与溶菌酶（抗菌酶）；麦芽糖酶并非主要唾液酶，v2 的修正准确。"
+    },
+    {
+      "claim": "接受斑贴试验的唇炎患者中 18.5% 到 45% 与牙膏过敏有关，常见过敏原含肉桂醛、薄荷油",
+      "source_verified": true,
+      "detail_verified": true,
+      "omission_severity": "minor",
+      "verdict": "verified",
+      "note": "好大夫《唇炎长期不愈 或是牙膏过敏》转述 Goossens A 等 Contact Dermatitis 病例报告，明确载'据报告 18.5%~45% 的唇炎由牙膏过敏所致，最常见过敏原为肉桂醛、薄荷油等'，与文中区间及成分逐字一致；DermNet 亦列 cinnamal/menthol/peppermint 为牙膏常见过敏原。"
+    },
+    {
+      "claim": "舔唇后唾液蒸发带走唇部水分，残留酶与盐分刺激黏膜、破坏屏障，形成越舔越干恶性循环",
+      "source_verified": true,
+      "detail_verified": true,
+      "omission_severity": "minor",
+      "verdict": "verified",
+      "note": "人民网（杨淑霞）、复禾健康、博禾多源确认：唾液水分蒸发带走唇部本就稀少的水分；淀粉酶/溶菌酶破坏角质层完整性、盐分（钠钾氯等电解质）残留刺激娇嫩黏膜，形成越舔越干循环；机制方向正确、环节完整。"
+    }
+  ],
+  "quote_checks": [
+    {
+      "claim": "据文献报告，接受斑贴试验的唇炎患者中 18.5% 到 45% 与牙膏过敏有关（数据转述）",
+      "verbatim_match": true,
+      "source": "好大夫《唇炎长期不愈 或是牙膏过敏》转述 Goossens A, Contact Dermatitis；DermNet 'Contact reactions to toothpaste'",
+      "note": "区间与成分（肉桂醛/薄荷油）与来源一致，未虚构期刊年份样本；属合规的模糊归属。v2 已由 v1 的'有资料显示'升级为'据文献报告'并补过敏原成分。"
+    }
+  ],
+  "mechanism_checks": [
+    {
+      "claim": "舔唇后唾液几十秒蒸发，带走嘴唇自身水分（快闪型水分）",
+      "direction_ok": true,
+      "elements_complete": true,
+      "note": "蒸发加速经皮水分流失方向正确，与舔唇性皮炎机制文献一致。"
+    },
+    {
+      "claim": "唾液淀粉酶、溶菌酶等残留唇上，连同盐分刺激黏膜、破坏屏障、诱发炎症",
+      "direction_ok": true,
+      "elements_complete": true,
+      "note": "酶破坏角质层屏障、电解质（盐分）残留刺激方向正确；酶存在性已逐条核验。"
+    },
+    {
+      "claim": "越舔越干恶性循环（蒸发失水 + 酶/盐损伤叠加）",
+      "direction_ok": true,
+      "elements_complete": true,
+      "note": "闭合循环链条完整：舔涂→蒸发→失水→酶/盐损伤→炎症→更干→更舔，读者可自推。"
+    },
+    {
+      "claim": "嘴唇比脸其他皮肤易干主因：无汗腺、皮脂腺发育不全、角质层仅 1/3 厚、锁水弱",
+      "direction_ok": true,
+      "elements_complete": true,
+      "note": "唇红部缺乏汗腺皮脂腺、上皮薄约为他处 1/3 为易干主因，与人民网/StatPearls 一致；v2 已删除 v1'毛细血管主因'不精确表述。"
+    }
+  ],
+  "attribution_checks": [
+    {
+      "claim": "嘴唇比脸部其他皮肤易干主因：无汗腺 + 皮脂腺发育不全 + 角质层薄",
+      "is_primary_cause": true,
+      "note": "权威源确认唇红部缺乏汗腺与皮脂腺、上皮仅约 1/3 厚，为唇部易干主因，归因正确。"
+    },
+    {
+      "claim": "越舔越干主因：唾液快速蒸发 + 消化酶/盐分残留损伤",
+      "is_primary_cause": true,
+      "note": "舔唇性皮炎主流机制即蒸发失水加酶损伤屏障，主因归因正确；环境干燥为背景因素，A 段北风起皮已交代。"
+    },
+    {
+      "claim": "牙膏残留过敏为冬季唇干补充诱因（18.5% 到 45%，唇炎患者口径）",
+      "is_primary_cause": false,
+      "note": "比例为唇炎患者中牙膏过敏占比，作补充诱因且'据文献报告'限定，未冒充冬季唇干人群主因，权重处理恰当。"
+    }
+  ],
+  "term_checks": [
+    {
+      "term": "汗腺",
+      "used": "汗腺",
+      "correct": "汗腺（eccrine sweat gland）",
+      "exact": true,
+      "note": "用字规范；唇红部无汗腺经人民网/StatPearls 确认。"
+    },
+    {
+      "term": "皮脂腺",
+      "used": "皮脂腺",
+      "correct": "皮脂腺（sebaceous gland）",
+      "exact": true,
+      "note": "用字规范；文中'发育不全'较权威源'无皮脂腺'更软化，表述稳健。"
+    },
+    {
+      "term": "淀粉酶",
+      "used": "淀粉酶",
+      "correct": "淀粉酶（唾液淀粉酶/ptyalin）",
+      "exact": true,
+      "note": "唾液确含淀粉酶，术语归属正确。"
+    },
+    {
+      "term": "溶菌酶",
+      "used": "溶菌酶",
+      "correct": "溶菌酶（lysozyme，抗菌酶）",
+      "exact": true,
+      "note": "用字规范；但文中将其归入'消化酶'类别不够严谨（溶菌酶实为抗菌/防御酶），已列 P2。"
+    },
+    {
+      "term": "黏膜",
+      "used": "黏膜",
+      "correct": "黏膜（非'粘膜'旧规范）",
+      "exact": true,
+      "note": "用字规范，无'粘膜'类形近误用。"
+    },
+    {
+      "term": "角质层",
+      "used": "角质层",
+      "correct": "角质层（stratum corneum）",
+      "exact": true,
+      "note": "用字规范，与'唇部角质层仅 1/3 厚'表述一致。"
+    }
+  ],
+  "gap_checks": [
+    {
+      "pattern_id": "G-01",
+      "triggered": false,
+      "checked": true,
+      "finding": "A 段无恐惧/禁忌类表述（无不敢/怕/有毒/能不能吃等信号）；话题为轻度可逆生活常识。Q3 已给可执行行动建议（补油非补水、勿手撕死皮、小剪刀修剪）与就医边界（干裂超两周/红肿渗液起疱去皮肤科），F 段补'刷完牙冲净嘴角'建议，行为闭环完整，未命中触发信号。"
+    },
+    {
+      "pattern_id": "G-02",
+      "triggered": false,
+      "checked": true,
+      "finding": "已扫绝对词（不可能/全看/全都/一定/绝对/必然/永远/彻底/完全）零命中；'几乎'带限定；'补油，不是补水' 随后以'喝水是基础，但补的是全身'软化，属相对框架而非绝对否定；'把水分和寒风都挡在外面'为封闭膜功能描述非绝对承诺。无命中。"
+    },
+    {
+      "pattern_id": "G-03",
+      "triggered": false,
+      "checked": true,
+      "finding": "三项关键断言（18.5%–45% 唇炎由牙膏过敏、唇无汗腺皮脂腺、唾液淀粉酶+溶菌酶）已 WebSearch 多源核实属实（好大夫/Goossens、人民网/StatPearls、Wikipedia/PMC）。唯一细微处：溶菌酶被归入'消化酶'分类不严谨（实为抗菌酶），属措辞微瑕列 P2，非事实硬伤。"
+    },
+    {
+      "pattern_id": "G-04",
+      "triggered": false,
+      "checked": true,
+      "finding": "机制链完整：舔唇→唾液涂布→几十秒蒸发→带走自身水分加酶/盐残留损伤表皮屏障→炎症→更干→更舔，闭合循环无跳步，读者可自推。"
+    },
+    {
+      "pattern_id": "G-05",
+      "triggered": false,
+      "checked": true,
+      "finding": "无古籍/论文逐字引文；医学术语（汗腺/皮脂腺/淀粉酶/溶菌酶/黏膜/角质层）用字规范，无'上颚/粘膜'类形近错误；'据文献报告'为模糊归属非具体引文，无引用失真。仅'溶菌酶归为消化酶'分类微瑕，字符无误。"
+    },
+    {
+      "pattern_id": "G-06",
+      "triggered": false,
+      "checked": true,
+      "finding": "唯一数据断言 18.5%–45% 已回多源逐字核实（好大夫转述 Goossens Contact Dermatitis，区间两端文献可依；肉桂醛/薄荷油与最常见过敏原列表一致），非仅确认来源存在；细节已逐字核对。"
+    },
+    {
+      "pattern_id": "G-07",
+      "triggered": false,
+      "checked": true,
+      "finding": "越舔越干主因归因正确（快速蒸发加酶/盐损伤，均为舔唇性皮炎主流机制解释），主因/配角无倒置；牙膏过敏为补充诱因且'据文献报告'限定，未冒充冬季唇干主因，权重处理恰当。"
+    }
+  ],
+  "issue_responses": [
+    {
+      "issue_index": 0,
+      "status": "resolved",
+      "evidence": "v2 Q1 已删除 v1 的'嘴唇的湿润主要靠底下的毛细血管和一层薄薄的皮脂膜'表述，改为'几乎没有汗腺，皮脂腺也发育不全，自己锁不住水分。更吃亏的是，唇部角质层只有身体其他部位皮肤的三分之一厚，锁水能力天生就弱'——机制图像更准确。"
+    },
+    {
+      "issue_index": 1,
+      "status": "resolved",
+      "evidence": "v2 Q3 末已补就医边界一句话：'如果干裂持续超过两周，或红肿、渗液、起疱，别硬扛，去皮肤科看看。'满足§96/§8 异常就医边界要求。"
+    },
+    {
+      "issue_index": 2,
+      "status": "partial",
+      "evidence": "v2 将 v1 的'有资料显示'升级为'据文献报告'，并补列具体过敏原成分'肉桂醛、薄荷油'，归属具体化；但文献仍为模糊归属，未给出具体期刊/年份/研究（如 Goossens 等 Contact Dermatitis）。数据区间经独立核验属实，建议下版补具体出处。属部分修复。"
+    }
+  ],
+  "forbidden_violations": [],
+  "overall_comment": "v2 优化版全文 676 字（<690 硬上限），结构四要素齐备（A 段引用块/C 段 Q1–Q3/F 段冷知识反转标签/结尾四字段表格），分类'生活常识'在 6 选 1 枚举内，无波浪号与双破折号，无 AI 味堆砌与绝对化。三项关键事实断言经 WebSearch 独立多源核实全部属实：唾液淀粉酶+溶菌酶（v2 将 v1 错误的'麦芽糖酶'更正为'溶菌酶'，准确）、18.5%–45% 斑贴试验唇炎患者与牙膏过敏相关（好大夫转述 Goossens Contact Dermatitis，区间与肉桂醛/薄荷油成分吻合）、舔唇恶性循环机制（蒸发失水+酶/盐损伤屏障）。v1 三轮 P2 中两项（毛细血管主因、缺就医边界）已 resolved，F 段模糊归属已 partial 改进。唯一新增微瑕：Q2 将溶菌酶归入'消化酶'分类不严谨（溶菌酶实为抗菌酶），机制本身属实，列 P2 措辞微调。P0=0、P1=0、P2=1，通过条件满足。"
+}

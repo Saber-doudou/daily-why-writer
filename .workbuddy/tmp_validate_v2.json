@@ -1,0 +1,26 @@
+{
+  "file": "2026-09-16-优化版-每日冷知识-金星日比年长.md",
+  "passed": true,
+  "score": 95,
+  "p0": [],
+  "p1": [
+    "标题缺少 emoji 装饰"
+  ],
+  "p2": [],
+  "errors": [],
+  "warnings": [
+    "[P1] 标题缺少 emoji 装饰"
+  ],
+  "info": {
+    "checks_passed": 11,
+    "char_count": 690,
+    "max_score": 100,
+    "final_score": 95,
+    "p0_count": 0,
+    "p1_count": 1,
+    "p2_count": 0,
+    "p0p1_passed": true
+  },
+  "fix_suggestions": [],
+  "related_cases": []
+}

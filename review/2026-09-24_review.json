@@ -1,0 +1,138 @@
+{
+  "article_id": "2026-09-24",
+  "review_timestamp": "2026-09-24T10:16:13+0800",
+  "pass": true,
+  "p0_count": 0,
+  "p1_count": 0,
+  "p2_count": 2,
+  "score": 95,
+  "revised_after_review": true,
+  "script_result": {
+    "exit_code": 0,
+    "passed": true,
+    "score": 95,
+    "char_count": 605,
+    "p0_count": 0,
+    "p1_count": 1,
+    "p2_count": 0,
+    "p0": [],
+    "p1": [
+      "标题缺少 emoji 装饰"
+    ],
+    "p2": [],
+    "warnings": [
+      "[P1] 标题缺少 emoji 装饰"
+    ]
+  },
+  "issues": [
+    {
+      "level": "P2",
+      "category": "CHECKLIST-§2 / 机制精度",
+      "description": "Q3 称'最费劲的点偏移几度，大多落在7点到10点之间'，但'几度'的偏移不足以解释横跨 7 到 10（约 90 度）的宽区间；真实停摆区间主要由电池余量高低决定（余量越低越早卡在 7 到 8 点，余量稍高可越过 9 停到 10 点），原文仅用'偏移几度'归因偏窄，因果表述略松。",
+      "location": "Q3",
+      "suggestion": "改为'电池越空，越早卡在 7 到 8 点；电量稍多才撑到 9 甚至 10 点，所以大多落在 7 点到 10 点之间'，或将'几度'改为'几十度区间'以与后文自洽。"
+    },
+    {
+      "level": "P2",
+      "category": "标题与正文一致性",
+      "description": "标题以'总停在9点'（含'总'的近似绝对表述）设问，但正文 Q3 明确'9点只是概率最高的位置'，且给出 7 到 10 点的区间，二者口径不完全一致。",
+      "location": "标题 vs Q3",
+      "suggestion": "标题保留设问钩子即可，或把'总停'改为'多半停/常停在9点'以与正文'概率最高'对齐。"
+    }
+  ],
+  "fact_checks": [
+    {
+      "claim": "秒针在 9 点位置重力阻力矩最大，故电池将尽时最易停在此处（9点阻力臂最长→阻力矩最大）",
+      "source_verified": true,
+      "detail_verified": true,
+      "verdict": "verified",
+      "note": "多源证实：青夏教育/湖北科普网/今日头条科普均指出 9 点处重力力臂（支点到重力作用线垂距）最大→重力矩最大，且为反向（阻力）力矩最大，与文中'阻力臂最长→阻力矩最大'一致；3点顺向、12与6点力矩≈0 亦吻合。"
+    },
+    {
+      "claim": "钟平放时重力不再干扰转动、秒针可停在任何位置（此现象只在挂墙、指针竖直转动的钟出现）",
+      "source_verified": true,
+      "detail_verified": true,
+      "verdict": "verified",
+      "note": "平放时转轴竖直、重力方向平行转轴，在转动平面内不产生力矩，故无 9 点偏好；与文中'钟平放着，重力不再给转动添乱，秒针随便停在哪'一致。"
+    }
+  ],
+  "quote_checks": [],
+  "mechanism_checks": [
+    {
+      "claim": "Q2 机制：9点秒针水平伸出→重力作用线到转轴垂距（阻力臂）最长→阻力矩最大→最易停摆",
+      "direction_ok": true,
+      "elements_complete": true,
+      "note": "方向自洽：9点为水平位，重力竖直，杠杆臂=全长（最大），且重力矩方向逆时钟，与时钟顺时钟转动相反，确为阻力；3点顺向助力、12与6点力矩≈0，均符合物理。"
+    }
+  ],
+  "attribution_checks": [
+    {
+      "claim": "秒针停 9 点主因为重力阻力矩在 9 点最大（叠加驱动力随电量衰减）",
+      "is_primary_cause": true,
+      "note": "重力阻力矩最大是主因；电池驱动力衰减是必要前提；二者共同决定停摆位置，归因完整，无遗漏显著成因。"
+    }
+  ],
+  "term_checks": [
+    {
+      "term": "阻力臂",
+      "used": "阻力臂",
+      "correct": "阻力臂",
+      "exact": true,
+      "note": "文中'从转轴到重力作用线的垂直距离最长，这个垂直距离叫阻力臂'定义准确（支点到重力作用线的垂距），9点处最大→阻力矩最大，用法无误。"
+    },
+    {
+      "term": "重力矩",
+      "used": "重力矩",
+      "correct": "重力矩",
+      "exact": true,
+      "note": "F段'那座小山坡的名字叫重力矩'指代重力产生的力矩，与物理概念一致，用语正确。"
+    }
+  ],
+  "gap_checks": [
+    {
+      "pattern_id": "G-01",
+      "triggered": false,
+      "checked": true,
+      "finding": ""
+    },
+    {
+      "pattern_id": "G-02",
+      "triggered": false,
+      "checked": true,
+      "finding": ""
+    },
+    {
+      "pattern_id": "G-03",
+      "triggered": false,
+      "checked": true,
+      "finding": ""
+    },
+    {
+      "pattern_id": "G-04",
+      "triggered": false,
+      "checked": true,
+      "finding": ""
+    },
+    {
+      "pattern_id": "G-05",
+      "triggered": false,
+      "checked": true,
+      "finding": ""
+    },
+    {
+      "pattern_id": "G-06",
+      "triggered": false,
+      "checked": true,
+      "finding": ""
+    },
+    {
+      "pattern_id": "G-07",
+      "triggered": false,
+      "checked": true,
+      "finding": ""
+    }
+  ],
+  "issue_responses": [],
+  "forbidden_violations": [],
+  "overall_comment": "文章物理机制准确、结构完整（A段引用块、Q1-Q3加粗格式、F段'冷知识反转'标签、结尾四要素风格表格均齐全），字数 583 未超 690，连接词远少于 3。两处核心科学断言（9点阻力矩最大、平放钟无此现象）均经 WebSearch 多源独立核实为真。脚本报告的'标题缺少 emoji 装饰'为误报——标题'# ⏰ 为什么石英钟没电时秒针总停在9点？'已含 ⏰，不计入真实 P1。仅余 2 处 P2 级措辞微调（7-10点区间归因偏窄、标题'总停'与正文'概率最高'口径略松），不影响通过。结论：P0=0、P1=0，达到通过条件。"
+}

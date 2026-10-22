@@ -1,0 +1,33 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+
+# 垃圾文件
+NUL
+0
+2
+
+# 临时文件
+*.bak*
+*.tmp
+*.log
+
+# 编排器状态（自动生成）
+orchestrator-state.json
+
+# 备份目录（已归档）
+archive/
+
+# 旧配置（保留但不提交）
+.codebuddy/
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db

@@ -1,0 +1,606 @@
+{
+  "generated_at": "2026-09-15T16:40:08.560517",
+  "total_count": 47,
+  "topic_summaries": [
+    "为什么看似轻飘飘的云，其实重得像一百头大象？",
+    "为什么干毛巾能自己吸满水？",
+    "为什么端着咖啡走路容易溢出来？",
+    "为什么水低于零度还不结冰？",
+    "为什么模型船能倒着浮在液体下面？",
+    "为什么牛排里的血水其实不是血？",
+    "为什么大口吃冰淇淋会头痛？",
+    "为什么贝壳放在耳边能听到海浪声？",
+    "为什么刷完牙喝橙汁会发苦？",
+    "为什么泡牛奶的谷物圈会自己聚到一起？",
+    "为什么水滴在滚烫的锅上反而跳舞不蒸发？",
+    "为什么冬天摸铁比摸木头冷？",
+    "为什么蛇没有脚还能爬得飞快？",
+    "为什么保鲜膜能牢牢贴住碗口？",
+    "为什么左右鼻孔会轮流值班？",
+    "为什么关灯后眼前还留着亮光？",
+    "为什么衣服湿了颜色会变深？",
+    "为什么红酒会在杯壁上流泪？",
+    "为什么打喷嚏时眼睛会自动闭上？",
+    "为什么鞋带总是莫名其妙松开？",
+    "为什么飞蛾要扑灯？",
+    "为什么飞蛾总在灯下打转？",
+    "为什么辣椒会让人觉得辣？",
+    "为什么猫头鹰飞起来没有声音？",
+    "为什么每个人的指纹都不一样？",
+    "为什么人打哈欠会传染？",
+    "为什么北极熊的皮肤是黑色的？",
+    "为什么猫从高处掉下来，总能四脚着地？",
+    "为什么香蕉放久了会有黑点？",
+    "为什么猫从高处落下总能四脚着地？",
+    "为什么章鱼要长三颗心脏",
+    "为什么镜子左右翻转却不上下翻转？",
+    "为什么手指在冷水里会起皱？",
+    "为什么打嗝停不下来？",
+    "为什么人类是唯一会尴尬的动物",
+    "为什么宇宙中最大的结构肉眼看不见",
+    "为什么水烧开前声音先变大再变小",
+    "为什么我们会脸红？",
+    "为什么海水是咸的？",
+    "为什么切洋葱会让人流泪？"
+  ],
+  "category_stats": {
+    "自然科学": 1,
+    "物理化学": 7,
+    "生活常识": 9,
+    "人体奥秘": 6,
+    "动物世界": 4,
+    "未分类": 1,
+    "动物/自然科学": 2,
+    "生物力学/物理学": 1,
+    "生活常识/植物学": 1,
+    "动物行为/物理学": 1,
+    "三颗心脏分工/血蓝蛋白/热管理系统": 1,
+    "物理/生活常识": 1,
+    "生活常识+人体奥秘": 1,
+    "人体奥秘/生理学": 1,
+    "前额叶皮层/社会评价/进化修复机制": 1,
+    "宇宙纤维状结构/Cosmic Web/暗物质/武仙-北冕座长城": 1,
+    "宇宙探索/天文学": 1,
+    "自然科学/气象": 1,
+    "气泡崩溃/塌缩原理": 1,
+    "脸红原理/镜像神经元/社交信号": 1,
+    "镜像神经元、共情能力": 1,
+    "左右腿差异、前庭系统": 1,
+    "海洋/地球科学": 1,
+    "食物/生活科学": 1
+  },
+  "topics": [
+    {
+      "date": "2026-09-15",
+      "topic": "为什么看似轻飘飘的云，其实重得像一百头大象？",
+      "category": "自然科学",
+      "source": "memory.md",
+      "keywords": [
+        "看似轻飘飘",
+        "云，其实重得像一百头大象"
+      ],
+      "is_standard": true
+    },
+    {
+      "date": "2026-09-14",
+      "topic": "为什么干毛巾能自己吸满水？",
+      "category": "物理化学",
+      "file": "2026-09-14-每日冷知识-毛巾吸水.md",
+      "source": "article",
+      "keywords": [
+        "干毛巾能自己吸满水"
+      ],
+      "is_standard": true
+    },
+    {
+      "date": "2026-09-11",
+      "topic": "为什么端着咖啡走路容易溢出来？",
+      "category": "生活常识",
+      "file": "2026-09-11-每日冷知识-咖啡走路洒.md",
+      "source": "article",
+      "keywords": [
+        "端着咖啡走路容易溢出来"
+      ],
+      "is_standard": true
+    },
+    {
+      "date": "2026-09-10",
+      "topic": "为什么水低于零度还不结冰？",
+      "category": "物理化学",
+      "file": "2026-09-10-每日冷知识-过冷水.md",
+      "source": "article",
+      "keywords": [
+        "水低于零度还不结冰"
+      ],
+      "is_standard": true
+    },
+    {
+      "date": "2026-09-09",
+      "topic": "为什么模型船能倒着浮在液体下面？",
+      "category": "物理化学",
+      "file": "2026-09-09-每日冷知识-反转浮力.md",
+      "source": "article",
+      "keywords": [
+        "模型船能倒着浮",
+        "液体下面"
+      ],
+      "is_standard": true
+    },
+    {
+      "date": "2026-09-08",
+      "topic": "2026-09-08-每日冷知识-蜂蜜不坏",
+      "category": "生活常识",
+      "file": "2026-09-08-每日冷知识-蜂蜜不坏.md",
+      "source": "article",
+      "keywords": [
+        "2026-09-08-每日冷知识-蜂蜜不坏"
+      ],
+      "is_standard": false
+    },
+    {
+      "date": "2026-09-08",
+      "topic": "2026-09-08-优化版-每日冷知识-蜂蜜不坏",
+      "category": "生活常识",
+      "file": "2026-09-08-优化版-每日冷知识-蜂蜜不坏.md",
+      "source": "article",
+      "keywords": [
+        "2026-09-08-优化版-每日冷知识-蜂蜜不坏"
+      ],
+      "is_standard": false
+    },
+    {
+      "date": "2026-09-07",
+      "topic": "为什么牛排里的血水其实不是血？",
+      "category": "生活常识",
+      "file": "2026-09-07-每日冷知识-牛排血水.md",
+      "source": "article",
+      "keywords": [
+        "牛排里",
+        "血水其实不"
+      ],
+      "is_standard": true
+    },
+    {
+      "date": "2026-09-04",
+      "topic": "为什么大口吃冰淇淋会头痛？",
+      "category": "人体奥秘",
+      "file": "2026-09-04-每日冷知识-冰淇淋头痛.md",
+      "source": "article",
+      "keywords": [
+        "大口吃冰淇淋",
+        "头痛"
+      ],
+      "is_standard": true
+    },
+    {
+      "date": "2026-09-03",
+      "topic": "为什么贝壳放在耳边能听到海浪声？",
+      "category": "物理化学",
+      "file": "2026-09-03-每日冷知识-贝壳听海.md",
+      "source": "article",
+      "keywords": [
+        "贝壳放",
+        "耳边能听到海浪声"
+      ],
+      "is_standard": true
+    },
+    {
+      "date": "2026-09-02",
+      "topic": "为什么刷完牙喝橙汁会发苦？",
+      "category": "生活常识",
+      "file": "2026-09-02-每日冷知识-刷牙橙汁发苦.md",
+      "source": "article",
+      "keywords": [
+        "刷完牙喝橙汁",
+        "发苦"
+      ],
+      "is_standard": true
+    },
+    {
+      "date": "2026-09-01",
+      "topic": "为什么泡牛奶的谷物圈会自己聚到一起？",
+      "category": "物理化学",
+      "file": "2026-09-01-每日冷知识-谷物圈聚拢.md",
+      "source": "article",
+      "keywords": [
+        "泡牛奶",
+        "谷物圈",
+        "自己聚到一起"
+      ],
+      "is_standard": true
+    },
+    {
+      "date": "2026-08-31",
+      "topic": "为什么水滴在滚烫的锅上反而跳舞不蒸发？",
+      "category": "物理化学",
+      "file": "2026-08-31-通俗版-每日冷知识-水滴悬浮.md",
+      "source": "article",
+      "keywords": [
+        "水滴",
+        "滚烫",
+        "锅上反而跳舞不蒸发"
+      ],
+      "is_standard": true
+    },
+    {
+      "date": "2026-08-27",
+      "topic": "为什么冬天摸铁比摸木头冷？",
+      "category": "生活常识",
+      "file": "2026-08-27-每日冷知识-铁比木头冷.md",
+      "source": "article",
+      "keywords": [
+        "冬天摸铁比摸木头冷"
+      ],
+      "is_standard": true
+    },
+    {
+      "date": "2026-08-26",
+      "topic": "为什么蛇没有脚还能爬得飞快？",
+      "category": "动物世界",
+      "file": "2026-08-26-每日冷知识-蛇没脚爬行.md",
+      "source": "article",
+      "keywords": [
+        "蛇没",
+        "脚还能爬得飞快"
+      ],
+      "is_standard": true
+    },
+    {
+      "date": "2026-08-25",
+      "topic": "为什么保鲜膜能牢牢贴住碗口？",
+      "category": "生活常识",
+      "file": "2026-08-25-每日冷知识-保鲜膜贴碗口.md",
+      "source": "article",
+      "keywords": [
+        "保鲜膜能牢牢贴住碗口"
+      ],
+      "is_standard": true
+    },
+    {
+      "date": "2026-08-24",
+      "topic": "为什么左右鼻孔会轮流值班？",
+      "category": "人体奥秘",
+      "file": "2026-08-24-每日冷知识-左右鼻孔轮班.md",
+      "source": "article",
+      "keywords": [
+        "左右鼻孔",
+        "轮流值班"
+      ],
+      "is_standard": true
+    },
+    {
+      "date": "2026-08-21",
+      "topic": "为什么关灯后眼前还留着亮光？",
+      "category": "人体奥秘",
+      "file": "2026-08-21-每日冷知识-关灯留亮光.md",
+      "source": "article",
+      "keywords": [
+        "关灯后眼前还留着亮光"
+      ],
+      "is_standard": true
+    },
+    {
+      "date": "2026-08-20",
+      "topic": "为什么衣服湿了颜色会变深？",
+      "category": "物理化学",
+      "file": "2026-08-20-每日冷知识-湿了变深.md",
+      "source": "article",
+      "keywords": [
+        "衣服湿",
+        "颜色",
+        "变深"
+      ],
+      "is_standard": true
+    },
+    {
+      "date": "2026-08-19",
+      "topic": "为什么红酒会在杯壁上流泪？",
+      "category": "生活常识",
+      "file": "2026-08-19-每日冷知识-红酒挂杯.md",
+      "source": "article",
+      "keywords": [
+        "红酒",
+        "杯壁上流泪"
+      ],
+      "is_standard": true
+    },
+    {
+      "date": "2026-08-18",
+      "topic": "为什么打喷嚏时眼睛会自动闭上？",
+      "category": "人体奥秘",
+      "file": "2026-08-18-每日冷知识-喷嚏闭眼.md",
+      "source": "article",
+      "keywords": [
+        "打喷嚏时眼睛",
+        "自动闭上"
+      ],
+      "is_standard": true
+    },
+    {
+      "date": "2026-08-17",
+      "topic": "为什么鞋带总是莫名其妙松开？",
+      "category": "生活常识",
+      "file": "2026-08-17-每日冷知识-鞋带松开.md",
+      "source": "article",
+      "keywords": [
+        "鞋带总",
+        "莫名其妙松开"
+      ],
+      "is_standard": true
+    },
+    {
+      "date": "2026-08-14",
+      "topic": "为什么飞蛾要扑灯？",
+      "category": "动物世界",
+      "file": "2026-08-14-每日冷知识-飞蛾扑灯.md",
+      "source": "article",
+      "keywords": [
+        "飞蛾要扑灯"
+      ],
+      "is_standard": true
+    },
+    {
+      "date": "2026-08-14",
+      "topic": "为什么飞蛾总在灯下打转？",
+      "category": "动物世界",
+      "file": "2026-08-14-优化版-每日冷知识-飞蛾扑灯.md",
+      "source": "article",
+      "keywords": [
+        "飞蛾总",
+        "灯下打转"
+      ],
+      "is_standard": true
+    },
+    {
+      "date": "2026-08-13",
+      "topic": "为什么辣椒会让人觉得辣？",
+      "category": "人体奥秘",
+      "file": "2026-08-13-每日冷知识-辣椒为什么辣.md",
+      "source": "article",
+      "keywords": [
+        "辣椒",
+        "让人觉得辣"
+      ],
+      "is_standard": true
+    },
+    {
+      "date": "2026-08-13",
+      "topic": "为什么猫头鹰飞起来没有声音？",
+      "category": "动物世界",
+      "file": "2026-08-13-每日冷知识-猫头鹰静音.md",
+      "source": "article",
+      "keywords": [
+        "猫头鹰飞起来没",
+        "声音"
+      ],
+      "is_standard": true
+    },
+    {
+      "date": "2026-08-12",
+      "topic": "为什么每个人的指纹都不一样？",
+      "category": "人体奥秘",
+      "file": "2026-08-12-每日冷知识-指纹独一无二.md",
+      "source": "article",
+      "keywords": [
+        "每个人",
+        "指纹都不一样"
+      ],
+      "is_standard": true
+    },
+    {
+      "date": "2026-05-11",
+      "topic": "为什么人打哈欠会传染？",
+      "category": "未分类",
+      "source": "memory.md",
+      "keywords": [
+        "人打哈欠",
+        "传染"
+      ],
+      "is_standard": true
+    },
+    {
+      "date": "2026-05-09",
+      "topic": "为什么北极熊的皮肤是黑色的？",
+      "category": "动物/自然科学",
+      "source": "memory.md",
+      "keywords": [
+        "北极熊",
+        "皮肤",
+        "黑色"
+      ],
+      "is_standard": true
+    },
+    {
+      "date": "2026-05-08",
+      "topic": "为什么猫从高处掉下来，总能四脚着地？",
+      "category": "生物力学/物理学",
+      "source": "memory.md",
+      "keywords": [
+        "猫从高处掉下来，总能四脚着地"
+      ],
+      "is_standard": true
+    },
+    {
+      "date": "2026-04-29",
+      "topic": "为什么香蕉放久了会有黑点？",
+      "category": "生活常识/植物学",
+      "source": "memory.md",
+      "keywords": [
+        "香蕉放久",
+        "黑点"
+      ],
+      "is_standard": true
+    },
+    {
+      "date": "2026-04-28",
+      "topic": "为什么猫从高处落下总能四脚着地？",
+      "category": "动物行为/物理学",
+      "source": "memory.md",
+      "keywords": [
+        "猫从高处落下总能四脚着地"
+      ],
+      "is_standard": true
+    },
+    {
+      "date": "2026-04-27",
+      "topic": "为什么章鱼要长三颗心脏",
+      "category": "三颗心脏分工/血蓝蛋白/热管理系统",
+      "source": "memory.md",
+      "keywords": [
+        "章鱼要长三颗心脏"
+      ],
+      "is_standard": true
+    },
+    {
+      "date": "2026-04-24",
+      "topic": "为什么镜子左右翻转却不上下翻转？",
+      "category": "物理/生活常识",
+      "source": "memory.md",
+      "keywords": [
+        "镜子左右翻转却不上下翻转"
+      ],
+      "is_standard": true
+    },
+    {
+      "date": "2026-04-23",
+      "topic": "为什么手指在冷水里会起皱？",
+      "category": "生活常识+人体奥秘",
+      "source": "memory.md",
+      "keywords": [
+        "手指",
+        "冷水里",
+        "起皱"
+      ],
+      "is_standard": true
+    },
+    {
+      "date": "2026-04-22",
+      "topic": "为什么打嗝停不下来？",
+      "category": "人体奥秘/生理学",
+      "source": "memory.md",
+      "keywords": [
+        "打嗝停不下来"
+      ],
+      "is_standard": true
+    },
+    {
+      "date": "2026-04-20",
+      "topic": "为什么人类是唯一会尴尬的动物",
+      "category": "前额叶皮层/社会评价/进化修复机制",
+      "source": "memory.md",
+      "keywords": [
+        "人类",
+        "唯一",
+        "\"尴尬\"",
+        "动物"
+      ],
+      "is_standard": true
+    },
+    {
+      "date": "2026-04-17",
+      "topic": "为什么宇宙中最大的结构肉眼看不见",
+      "category": "宇宙纤维状结构/Cosmic Web/暗物质/武仙-北冕座长城",
+      "source": "memory.md",
+      "keywords": [
+        "宇宙中最大",
+        "结构肉眼看不见"
+      ],
+      "is_standard": true
+    },
+    {
+      "date": "2026-04-15",
+      "topic": "一茶匙中子星物质有多重",
+      "category": "宇宙探索/天文学",
+      "source": "memory.md",
+      "keywords": [
+        "一茶匙中子星物质",
+        "多重"
+      ],
+      "is_standard": false
+    },
+    {
+      "date": "2026-04-14",
+      "topic": "闪电的温度比太阳表面还高",
+      "category": "自然科学/气象",
+      "source": "memory.md",
+      "keywords": [
+        "闪电",
+        "温度比太阳表面还高"
+      ],
+      "is_standard": false
+    },
+    {
+      "date": "2026-04-13",
+      "topic": "为什么水烧开前声音先变大再变小",
+      "category": "气泡崩溃/塌缩原理",
+      "source": "memory.md",
+      "keywords": [
+        "水烧开前声音先变大再变小"
+      ],
+      "is_standard": true
+    },
+    {
+      "date": "2026-04-10",
+      "topic": "为什么我们会脸红？",
+      "category": "脸红原理/镜像神经元/社交信号",
+      "source": "memory.md",
+      "keywords": [
+        "我们",
+        "脸红"
+      ],
+      "is_standard": true
+    },
+    {
+      "date": "2026-04-09",
+      "topic": "打哈欠传染",
+      "category": "镜像神经元、共情能力",
+      "source": "memory.md",
+      "keywords": [
+        "打哈欠传染"
+      ],
+      "is_standard": false
+    },
+    {
+      "date": "2026-04-08",
+      "topic": "闭眼走路绕圈",
+      "category": "左右腿差异、前庭系统",
+      "source": "memory.md",
+      "keywords": [
+        "闭眼走路绕圈"
+      ],
+      "is_standard": false
+    },
+    {
+      "date": "2026-04-07",
+      "topic": "蜜蜂酿蜜的冷知识",
+      "category": "动物/自然科学",
+      "source": "memory.md",
+      "keywords": [
+        "蜜蜂酿蜜",
+        "冷知识"
+      ],
+      "is_standard": false
+    },
+    {
+      "date": "2026-04-03",
+      "topic": "为什么海水是咸的？",
+      "category": "海洋/地球科学",
+      "source": "memory.md",
+      "keywords": [
+        "海水"
+      ],
+      "is_standard": true
+    },
+    {
+      "date": "2026-03-31",
+      "topic": "为什么切洋葱会让人流泪？",
+      "category": "食物/生活科学",
+      "source": "memory.md",
+      "keywords": [
+        "切洋葱",
+        "让人流泪"
+      ],
+      "is_standard": true
+    }
+  ]
+}

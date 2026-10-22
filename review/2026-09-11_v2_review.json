@@ -1,0 +1,184 @@
+{
+  "article_id": "2026-09-11",
+  "file": "2026-09-11-优化版-每日冷知识-咖啡走路洒.md",
+  "review_timestamp": "2026-09-11T12:05:23+0800",
+  "reviewer": "independent-reviewer-v2",
+  "score": 100,
+  "char_count": 674,
+  "p0_count": 0,
+  "p1_count": 0,
+  "p2_count": 1,
+  "pass": true,
+  "verdict": "通过",
+  "script_result": {
+    "exit_code": 0,
+    "score": 100,
+    "char_count": 674,
+    "p0_count": 0,
+    "p1_count": 0,
+    "p2_count": 0
+  },
+  "p0": [],
+  "p1": [],
+  "p2": [
+    {
+      "level": "P2",
+      "category": "FORMAT-表格渲染",
+      "description": "结尾风格表格缺 Markdown 分隔线行（| --- | --- | --- | --- |）。当前两行纯数据表在无分隔线时不会被渲染为表格，只会显示为带竖线的原始文本；同系列规范参考文（如过冷水优化版）含分隔线行。",
+      "location": "结尾风格表格（第21-22行）",
+      "suggestion": "在第21行后补一行分隔线：| --- | --- | --- | --- |，确保四字段表格正常渲染。注意：表格四字段（话题/分类/核心机制/冷知识反转）内容齐全，此仅为渲染完整性微调，不影响结构与判定。"
+    }
+  ],
+  "fact_checks": [
+    {
+      "claim": "研究作者为加州大学圣巴巴拉分校的 Krechetnikov 与研究生 Mayer（Hans Mayer）",
+      "source_verified": true,
+      "detail_verified": true,
+      "omission_severity": "none",
+      "verdict": "verified",
+      "note": "APS Physics、Science(2012)、ABC News 均确认作者为 Rouslan Krechetnikov（UCSB 机械工程）与其研究生 Hans C. Mayer；论文署名为 Mayer, H. C.; Krechetnikov, R.（Mayer 为第一作者）。文中“研究生 Mayer”属实。"
+    },
+    {
+      "claim": "研究发表于《物理评论 E》（Physical Review E），2012 年",
+      "source_verified": true,
+      "detail_verified": true,
+      "omission_severity": "none",
+      "verdict": "verified",
+      "note": "Phys. Rev. E 85, 046117 (2012)，发表日期 2012 年 4 月；DOI 10.1103/PhysRevE.85.046117。与文中一致。"
+    },
+    {
+      "claim": "拿下 2012 年搞笑诺贝尔流体力学奖",
+      "source_verified": true,
+      "detail_verified": true,
+      "omission_severity": "none",
+      "verdict": "verified",
+      "note": "ABC News(2012-09-21)、中国青年参考等确认 2012 年搞笑诺贝尔“流体力学奖”授予 Krechetnikov 与 Mayer，获奖词即“端咖啡走路如何不洒”。文中表述准确。"
+    },
+    {
+      "claim": "普通马克杯里咖啡的晃动（固有）频率约 2.6 到 4.3 赫兹",
+      "source_verified": true,
+      "detail_verified": true,
+      "omission_severity": "none",
+      "verdict": "verified",
+      "note": "论文原文：“coffee cups vary ... (R,H)=(2.5,5.7) to (6.7,8.9) cm ... gives natural frequencies in the range 2.6 - 4.3 Hz”。中文科普源（泛科学/成华科协）亦作“一般常见马克杯约 2.6 至 4.3 赫兹”。文中表述与论文一致。"
+    },
+    {
+      "claim": "人正常走路的步频约 1 到 2.5 赫兹",
+      "source_verified": true,
+      "detail_verified": true,
+      "omission_severity": "none",
+      "verdict": "verified",
+      "note": "论文原文将激励频率范围记为 fcup = 1 - 2.5 Hz（与步行对应），与咖啡固有频率 2.6-4.3 Hz 同数量级。中文科普源同作“走路频率约 1 至 2.5 赫兹”。核实一致。"
+    },
+    {
+      "claim": "洒得最凶的往往是第 7 至第 10 步",
+      "source_verified": true,
+      "detail_verified": true,
+      "omission_severity": "none",
+      "verdict": "verified",
+      "note": "多篇来源确认：泛科学/成华科协“跨出的第七步到第十步之间，最容易溅出”；Gizmodo“spillage always occurring between the seventh and tenth steps”；Live Science“between their seventh and tenth step”。文中加“往往”限定，措辞稳妥，与来源一致。"
+    },
+    {
+      "claim": "油罐车（tanker）装挡板（baffles）把大浪拆成小浪以防侧翻",
+      "source_verified": true,
+      "detail_verified": true,
+      "omission_severity": "none",
+      "verdict": "verified",
+      "note": "Science(2012) 原文引研究者：“Tanker trucks contain inner ridges, or baffles, to damp the gasoline's motion ... because too much sloshing could make a truck overturn.” 多个工程源（Saferack / Aoman / Arnold & Itkin / Yalong / Truckman）确认挡板通过分割液舱、打散大波以降低侧翻风险。v2 以“油罐车挡板”替换 v1 伪机制，属真实、有文献支撑的反转，核验无误。"
+    }
+  ],
+  "quote_checks": [
+    {
+      "claim": "文中对论文的转述（UCSB / Krechetnikov / Mayer / 2012 / Phys Rev E / 2012 搞笑诺贝尔流体力学奖）",
+      "verbatim_match": true,
+      "source": "APS Physics Synopsis v5/s64；Science(2012) 'The Physics of Spilled Coffee'；ABC News(2012-09-21) IgNobel 报道；论文 Phys. Rev. E 85, 046117",
+      "note": "机构、作者、年份、期刊、奖项五要素均逐字核对一致，未见细节偏差（区别于冰淇淋头痛案的“来源属实细节错”）。"
+    }
+  ],
+  "mechanism_checks": [
+    {
+      "claim": "Q1：液面前后摆动=钟摆/秋千，固有频率由杯径与液面高度决定，走路推着它晃",
+      "direction_ok": true,
+      "elements_complete": true,
+      "note": "固有频率由容器尺寸与液面高度决定，与论文一致；方向自洽。"
+    },
+    {
+      "claim": "Q2：晃动频率与步频同数量级→每步补能→共振累积；起步加速使液面倾斜攒下初始势能，被后续步伐放大，第7-10步溢出",
+      "direction_ok": true,
+      "elements_complete": true,
+      "note": "共振（频率匹配）+ 起步初始势能两条因果链方向均正确；论文中“噪声放大”为次要细化因素，科普合理省略，核心机制完整。"
+    },
+    {
+      "claim": "F段：油罐车汽油同样会晃，猛晃能掀翻整车；照模型装挡板把大浪拆成小浪",
+      "direction_ok": true,
+      "elements_complete": true,
+      "note": "挡板将整舱大波分割为小波以降低侧翻风险，与工程源一致；方向自洽、要素完整。"
+    }
+  ],
+  "attribution_checks": [
+    {
+      "claim": "咖啡溢出归因于“共振（频率匹配）”+“起步加速攒下初始势能”两因素",
+      "is_primary_cause": true,
+      "note": "论文两大核心机制即“频率共振（主因）”与“起步加速度提供初始振幅”；文中已覆盖主因，未偏漏。论文提及的“步行噪声放大”属次要细化因素，科普合理省略，未构成归因偏漏。"
+    }
+  ],
+  "term_checks": [],
+  "gap_checks": [
+    {
+      "pattern_id": "G-01",
+      "triggered": false,
+      "checked": true,
+      "finding": "话题为“走路端咖啡为何溢出”的物理机制，非饮食/健康/用药/电器/儿童/宠物等后果不可逆领域；A段“烫得直缩手”为场景描写而非安全顾虑。Q3 已直接回答“怎么端才不洒”并给三条可执行建议，行为闭环完整 → 未命中。"
+    },
+    {
+      "pattern_id": "G-02",
+      "triggered": false,
+      "checked": true,
+      "finding": "扫描绝对词（不可能/全都/一定/永远/彻底/保证等）：无。疑似处“你每走一步都像在秋千最高点补一把”为比喻性描述共振连续泵能，且带“像”字，非事实性绝对化断言；“往往”已作限定 → 未命中。"
+    },
+    {
+      "pattern_id": "G-03",
+      "triggered": false,
+      "checked": true,
+      "finding": "文中所有“听起来合理”的物理/数值断言（2.6-4.3Hz、1-2.5Hz、第7-10步、共振、挡板防侧翻）均已 WebSearch 回权威源逐条核对，全部属实，无常识陷阱式错误 → 未命中。"
+    },
+    {
+      "pattern_id": "G-04",
+      "triggered": false,
+      "checked": true,
+      "finding": "因果链方向自洽且关键要素齐备：Q1 固有频率来源、Q2 共振+起步初始势能→累积溢出、F段 挡板分割大波。无跳步导致解释力缺失 → 未命中。"
+    },
+    {
+      "pattern_id": "G-05",
+      "triggered": false,
+      "checked": true,
+      "finding": "引用转述（机构/作者/年份/期刊/奖项）已逐字核对精确；术语“固有频率/共振/势能/挡板”用字无误；无古书引文、无医学解剖术语 → 未命中。"
+    },
+    {
+      "pattern_id": "G-06",
+      "triggered": true,
+      "checked": true,
+      "finding": "文中含研究引用标记（UCSB/Krechetnikov/Mayer/2012/Phys Rev E/2012 搞笑诺贝尔流体力学奖）。已逐字核对四要素：机构=UCSB✓、作者=Mayer(研究生)与Krechetnikov✓、年份=2012✓、期刊=Phys Rev E✓、奖项=2012 流体力学奖✓；细节与权威源一致，无“来源属实但细节错”类偏差 → 无 P 级。"
+    },
+    {
+      "pattern_id": "G-07",
+      "triggered": true,
+      "checked": true,
+      "finding": "咖啡溢出为多因现象。文中已覆盖主因（共振）与起步初始势能两核心机制；论文提及的“噪声/不规则放大”属次要细化因素，科普合理省略，未偏漏主因 → 无 P 级。"
+    }
+  ],
+  "forbidden_violations": [],
+  "structure_checks": {
+    "A段引用块_hook": true,
+    "C段Q格式_Q1_Q2_Q3": true,
+    "F段引用块_含冷知识反转标签": true,
+    "结尾风格表格_四字段齐全": true,
+    "分类枚举合法": true,
+    "分类值": "生活常识",
+    "分类枚举说明": "生活常识属于 6 选 1 枚举（人体奥秘/自然科学/生活常识/宇宙探索/动物世界/物理化学），合法；物理化学或自然科学亦能成立，但生活常识贴合本文“生活窍门”角度，不判错。",
+    "字数_fulltext_674_<=690": true,
+    "表格分隔线缺失_P2": true,
+    "备注": "结构四要素（A段钩子/C段疑问/F段反转/风格表格）齐全；表格四字段（话题/分类/核心机制/冷知识反转）内容完整；仅缺 Markdown 分隔线行，记为 P2 渲染微调。"
+  },
+  "overall_comment": "v2 已彻底删除 v1 的伪机制（带孔盖像迷你火山喷出），替换为真实且有文献支撑的“油罐车挡板防侧翻”反转，关键事实断言（作者/期刊/年份/奖项/两组频率/第7-10步/挡板）经 WebSearch 独立核验全部属实，与论文及多家权威报道一致。结构完整、字数 674 未超 690、无绝对化、无类比失准、无逻辑矛盾。仅一处 P2：结尾风格表格缺 Markdown 分隔线行，建议补一行以保证渲染为表格。通过条件（P0=0 且 P1≤2）满足，判定通过。"
+}

@@ -1,0 +1,9 @@
+> 本文件由 restructure_memory.py 于 2026-09-07 从 MEMORY.md「## 11. 待 Master 决策 / 待观察」区**原文整段搬家**而来，正文逐字未改动（搬家前全量快照：archive/MEMORY-full-precompress-restructure-2026-09-07.md）。修改历史内容请直接编辑本文件，MEMORY.md 只保留一行索引。
+
+- 09-08 起首战：查 `gap_checks` 是否 7 条且 `checked` 全 true；Step 8.5 查 M/N 是否下降（✅ 09-11 核对：09-08 至 09-11 连续 4 天 7 条全 checked=true，观察关闭）
+- 8 个灰区文件处置（建议加进 git_add_files，需确认达尔文实验记录是否还要引用）（✅ 09-11 Master 授权 AI 查证后决策关闭：豁免不同步——config.json git_gray_exemptions 8 项 + l3_publish v3.18 灰区检测减豁免集；依据=外部经验一致「实验产物不入同步通道」+文件已归档双备份无后续改动；文件仍在 git 历史未删，告警 8→0；回退口与全文见计划书 v2 文末存档）
+- `validate_review.py` 观察一周后是否从 warn 升为阻断（✅ 09-14 收口：维持现状——v3.16 门禁窗口 0 误杀 0 漏阻；G-06 与 CITATION_HINT 口径差已入 review_defense.md，含升级为缺陷的条件「G-06 true 且 fact_checks 也空」；term_checks 非死字段维持现状，09-14 首次真实触发）
+- `omission_severity` 今日 3 轻微/0 重大，疑似过度纠偏，观察 3 至 5 天（✅ 09-14 收口：窗口累计 minor 15 / major 1 / none 7 / 旧格式 2；major 为真问题已修、minor 均附具体建议，非过度纠偏，观察关闭）
+- FORBIDDEN 条数在自动化输出中被写成 67（实 66）；CHECKLIST「更新时间」显示 2026-08-26 与今日不符（09-14 复核：FORBIDDEN 口径已演进至 **FP-01~72 实 71 条**〔09-14 L2 新增 FP-72 润湿凹凸方向，writer v3.4〕，条数类指控作废；**CHECKLIST「更新时间」仍停在 2026-08-26 确认为真问题**——09-09 至 09-14 均有内容更新但时间戳未刷新，rule_lifecycle.py --update 未维护该行，待修）
+- review.json 审校后修复缺 `revised_after_review` 标注（09-14 首例：毛巾吸水 mechanism note「判 P1」但正文已修复、顶层 p1_count 归零，无 09-10 式 revised/post_revision 标注 → 顶层计数与 note 字面矛盾，易误导后续审计；建议 L2 修复流程补标注）
+- 09-07 16:50 Master 四项决策落定：① 用户级 MEMORY.md（5163/4000）**不作处理，后续单独处理**；② 门禁维持 warn 观察一周（至 09-14 评估是否升阻断）（09-11 中期读数：窗口内 warn 全部被跟进〔工作空间 09-08 治理后 1933 至 2163 合规、用户级 09-09 v6.0 治理 2190/4000 合规〕，09-09 11:46 起零 warn，NON_BLOCKING 已随 v3.13 落地 → 倾向维持 warn 不升阻断）；③ check_memory_size.py / restructure_memory.py 已入 git_add_files + extra_sync E 组（l3_publish v3.11 五处同步）；④ 自动化记忆已按日期切割归档（2026-08-31 及更早 → archive/自动化执行记忆归档-2026-07-01至2026-08-31.md，899→102 行，sha256 零损失）

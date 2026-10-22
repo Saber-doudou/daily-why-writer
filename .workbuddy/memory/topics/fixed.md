@@ -1,0 +1,8 @@
+> 本文件由 restructure_memory.py 于 2026-09-07 从 MEMORY.md「## 7. 已修复（勿重复发现）」区**原文整段搬家**而来，正文逐字未改动（搬家前全量快照：archive/MEMORY-full-precompress-restructure-2026-09-07.md）。修改历史内容请直接编辑本文件，MEMORY.md 只保留一行索引。
+
+- **缺陷38 git 推送静默失效（P0，09-07 已修）**：`origin/main` 变 `[gone]` 后 `git rev-list --count origin/main..HEAD` 报错→stdout 空→`ahead_n=0`→「无新变更，跳过」，stderr 不查 returncode 被吞。修法：`phase3_git()` L847-881 判定改调已写对的 `verify_remote_sync()`（ls-remote 权威 + 自愈写 ref），新增 unverified 告警分支。**思路：不写新逻辑，把正确函数挪到判定位置**。次生：memory.md 会把「无变更跳过」当事实记录（与缺陷33 同类）
+- L3 网络失败误标 rebase 冲突：已修（v3.7 区分 network/conflict + 探活 + 退避重试）
+- P1-3 改进点提取零命中：v3.9 记为「已根治」（多模式回退 + 零命中 content.ok=False + 结果落 l3_run.log + publish SKILL Step2.5「0条处理」硬约束）；4 天回归 6/6/5/7 全命中。**⚠️ 09-17 复查推翻「根治」判定（见 defects #58）**：4 天回归样本全为同一格式（`## v1 → v2 改进点`），只验证了「格式不变时不退步」；同一失效类 08-11 学习总结-二轮（`## v2 → v3 改进点`）其实已失效被掩盖，09-17（`## 一、四 AI 核心差距与采纳/拒绝决策`）再次暴雷。**结论：「格式不变」不是「根治」的充分条件，样本必须覆盖生产方格式漂移**（EXP-014）。**09-17 已修（L3 v3.23 + L2 v3.4）**：标题锚点放宽位置 + 遍历全部命中章节 + 新增契约锚点 `## 改进点`（L2 强制 + 写入前自检）+ `--verify-report` 机械校验人工补验。**回归方式升级为「前后对照」**：以 repo v3.22 副本作基线、两版正则 AST 原样提取对跑 70 份全量（零命中 5→0、条数零下降），杜绝单样本偏差复发。**复用教训：凡「已根治」结论，回归必须同时给出①修复后命中 ②历史样本零回归 ③对照基线，缺一不得写「根治」。**
+- **缺陷59 git add 静默失败（P2，09-17 已修 v3.23）**：`scripts/config.json` 被 repo `.gitignore:2` 有意忽略（含 IMA KB ID，commit ea6465e）却仍在 `git_add_files` + `extra_sync` → `git add` 被拒且 `capture_output=True` 吞掉返回码 → 静默失败；双向自检只查「有无复制源」、反向灰区算 `tracked - whitelist`（未跟踪 = 隐身），两头都不报 → 输出「白名单全覆盖」假绿。修法：两份清单移除 + `git add` 逐项回读校验（rc≠0 或 add 后未被跟踪即 warn 点名）。详情见 defects #59。
+- IMA 版本号乱扫：已删降级路径（章节缺失即返 1.0 + 告警 + major≥1000 护栏）。**Master 裁定不重置、勿再上报为缺陷**；审计只查「是否乱扫」
+- 9 月 6 日为周日，**当日零 git commit**（验证范围须相应调整）

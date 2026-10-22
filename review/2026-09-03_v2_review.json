@@ -1,0 +1,30 @@
+{
+  "article": "2026-09-03-优化版-每日冷知识-贝壳听海.md",
+  "review_timestamp": "2026-09-03T11:42:35+0800",
+  "p0": [],
+  "p1": [],
+  "p2": [
+    "【结尾表格与 Q3 口径轻微不一致 / CHECKLIST §71】Q3 已改为「主要放大腔体固有频率附近的频段」（带「主要」+「附近」的非绝对化限定），但结尾表格「核心机制」仍写「把环境背景噪声里特定频率共振放大、其余压低」。表格的「特定频率」未同步带上「附近的频段」这一柔性限定，与 Q3 修订后的口径存在轻微错层。虽表格用「其余压低」已承认滤波性质、未退回「只放行」旧错，不构成 P1，但为全文完全一致，建议表格同步改为「把腔体固有频率附近的频段放大、其余压低」。属可选优化，不阻断通过。"
+  ],
+  "score": 99,
+  "passed": true,
+  "char_count": 687,
+  "fact_checks": [
+    {
+      "claim": "有实验测过：杯子扣耳边、麦克风贴鼓膜，648 赫兹上比不扣响约 15 分贝，翻一倍到 1296 赫兹反而安静约 16 分贝",
+      "result": "pass",
+      "source": "https://www.abc.net.au/science/articles/2012/05/15/3500938.htm （ABC Science, Dr Karl Kruszelnicki, 2012-05-15。原文：In one study, in a typical noisy room, a cup was held to the ear and a tiny microphone held right next to the eardrum … The microphone registered 15 decibels louder at the cup's resonant frequency of 648 hertz … But at double the frequency 1296 hertz, the sound heard was 16 decibels quieter。频率、分贝方向、装置（用杯子而非海螺、麦克风贴鼓膜）四项与文中完全一致。旁证：https://scienceinfo.net/why-is-there-a-wave-in-the-sea-shell.amp 复述同一组数据）"
+    },
+    {
+      "claim": "《墨子·备穴》记守城「瓮听」，把蒙薄皮革的大陶罂放进井里，让耳灵者伏在罂口，靠共鸣听出敌军挖地道的方位",
+      "result": "pass",
+      "source": "https://baike.baidu.com/item/备穴/4837599 （百度百科《备穴》：令陶者为罂，容四十斗以上，固幎之以薄革，置井中，使聪耳者伏罂而听之，审知穴之所在）。旁证：https://baike.sogou.com/v74522382.htm （搜狗百科「伏罂而听」）。核验结论：篇目（备穴）、器物（陶罂）、蒙口材料（薄皮革）、置井中、聪耳者伏罂而听、用途（判定地道方位）六项全部相符；墨子约公元前 5 世纪，「两千多年前上过战场」成立。仅称法上通行作「罂听」而非「瓮听」（已列入 P2 历史称法，不影响事实判定）"
+    },
+    {
+      "claim": "带进完全隔音的消音室，环境噪声一断，「海」就跟着退潮、几乎听不见了",
+      "result": "pass",
+      "source": "https://www.abc.net.au/science/articles/2012/05/15/3500938.htm （原文：But to give you the ocean sound, the shell definitely needs the ambient or background sound. No ambient sound, no ocean-in-the-shell sound. If you go into a soundproof room … you'll hear nothing）；旁证 https://biologyinsights.com/can-you-hear-the-ocean-in-a-shell/ （Placing a shell against the ear in a perfectly soundproof chamber results in silence）。结论方向正确，且文中用「几乎听不见」而非「完全听不见」，比信源更严谨，处理得当"
+    }
+  ],
+  "reviewer_notes": "本轮为第 2 轮复验，重点复核上一轮指出的 3 个 P1 是否真实落地。结论：3 处修订全部到位，本轮 P0=0、P1=0、P2=1，自动化校验脚本（validate_article.py）返回 score=100、passed=true、char_count=687、12 项检查全过；结合独立人工扫描，最终判定 score=99（仅余 1 项可选 P2 一致性优化），passed=true。\n\n三处修订逐一核验：\n① Q1「驻波共振」→「共振」：第 7 行现为「与腔体固有频率合拍便发生共振、声压被放大」，紧接「19 世纪亥姆霍兹发明的共振器」，已不再把亥姆霍兹共振误标为驻波共振，机制命名准确（Grep 确认全文无「驻波」二字）。\n② Q3「只放行腔体固有频率」→「主要放大腔体固有频率附近的频段」：第 11 行已落地，且「主要」「附近」「频段」三处柔性限定与本文 648Hz +15dB / 1296Hz -16dB 双向数据及表格「其余压低」口径一致，自证矛盾已消除。\n③ 全文「白噪音」误归属→「背景噪声」：Grep 确认全文无「白噪音／白噪声」，A段「环境噪声」、Q3「均匀的背景噪声里」、F段「环境噪声一断」、结尾表格「环境背景噪声」均使用正确术语，误归属已清除。\n\n事实独立核验：按要求对 648Hz 实验与《墨子·备穴》瓮听原文做了 WebSearch 二次核实，两项均获权威源确认（另顺带核验消音室结论，三处 fact_checks 全部 pass）。其中 648Hz 组数据的频率、分贝方向、装置（用杯子非海螺、麦克风贴鼓膜）与 ABC Science 原文逐字吻合；《备穴》引文的篇目、器物、蒙皮、置井、伏听、判方位六要素与百度百科／搜狗百科原文全部相符。\n\n唯一残留 P2：结尾表格「核心机制」仍写「特定频率共振放大」，未与 Q3 修订后的「附近的频段」完全对齐（缺「主要／附近」柔性限定），属不影响通过的口径一致性优化，建议表格同步柔性化。其余上一轮 P2 建议（数据出处未标、消音室称法、罂听机制补全、术语密度等）为可选打磨项，作者本轮聚焦修复 3 个 P1，未改动属合理范围。\n\n整体评估：结构维度（A段引用块、Q1/Q2/Q3 加粗问答、F段反转标签、四字段结尾表格、分隔线、无 FP-25 禁用字符、无 FP-01/02）全部合格；机制方向自洽无 FP-67 式矛盾；Q2 主辅权重（血流「当不了主角」但「确实会被空腔略放大」）避开 FP-49 一刀切，仍是全文最稳的一段。满足「P0=0 且 P1<=2」，通过。"
+}

@@ -1,0 +1,88 @@
+{
+  "article_id": "2026-09-17",
+  "review_timestamp": "2026-09-17T10:00:12+0800",
+  "pass": true,
+  "p0_count": 0,
+  "p1_count": 0,
+  "p2_count": 0,
+  "score": 95,
+  "script_result": {
+    "exit_code": 0,
+    "score": 95,
+    "char_count": 550,
+    "p0_count": 0,
+    "p1_count": 1,
+    "p2_count": 0
+  },
+  "issues": [],
+  "fact_checks": [
+    {
+      "claim": "Diaconis、Holmes、Montgomery（斯坦福）2007 年物理模型预测同侧偏向约 51%",
+      "source_verified": true,
+      "detail_verified": true,
+      "verdict": "match",
+      "note": "SIAM Review 2007（原 2004 公布）；AMS 与 Harvey Mudd 均确认 Diaconis 为斯坦福统计学家，合著 Holmes、Montgomery，理论同侧概率约 51%，偏倚来自进动而非硬币形状/配重。"
+    },
+    {
+      "claim": "Bartoš（阿姆斯特丹大学）2023 年 350,757 次抛掷、46 种货币、49 人，同侧概率 50.8%（95% 区间 50.6% 到 50.9%），个体极端 60.1% 与 48.7%",
+      "source_verified": true,
+      "detail_verified": true,
+      "verdict": "match",
+      "note": "arXiv:2310.04153（及 phys.org / New Scientist 报道）逐项吻合：Pr(same side)=0.508，CI [0.506, 0.509]；个体最高 60.1%、最低 48.7%；46 种货币、48 名协作者加 Bartoš 共约 49 人。"
+    },
+    {
+      "claim": "连猜 1000 次、每次押 1 块，知道起抛面平均多赚约 19 块，且略大于二十一点最优策略赌场优势",
+      "source_verified": true,
+      "detail_verified": true,
+      "verdict": "match",
+      "note": "研究原文下注场景：1000 次每次 1 美元、已知起抛面平均赚 19 美元；并称大于 6 副牌二十一点对最优玩家的赌场优势（约 5 美元）。'略大一点'与原文'超过'一致，非事实错误。"
+    },
+    {
+      "claim": "起抛面随机时正反面严格各 50%（50.0%，区间 49.8% 到 50.2%），偏倚只在同侧不在正反",
+      "source_verified": true,
+      "detail_verified": true,
+      "verdict": "match",
+      "note": "研究 Pr(heads)=0.500，95% CI [0.498, 0.502]，确认无正反面偏倚；同侧偏倚与正反面偏倚是两个独立维度，文中区分准确。"
+    }
+  ],
+  "quote_checks": [
+    {
+      "claim": "Bartoš 2023 研究关键数字（350,757 次、50.8%、CI 50.6% 到 50.9%、60.1%/48.7%、1000 次赚 19 块）的转述",
+      "verbatim_match": true,
+      "source": "arXiv:2310.04153 摘要 / phys.org 2023-10 报道 / New Scientist 2397248"
+    }
+  ],
+  "mechanism_checks": [
+    {
+      "claim": "人抛硬币拇指带进动（摆动），硬币歪着晃、空中大部分时间起抛面朝上，故同侧落地概率约 51%",
+      "direction_ok": true,
+      "elements_complete": true,
+      "note": "进动→初始面朝上时间占比更高→同侧偏向，因果方向自洽；DHM 模型与高速摄影证据一致，机制环节完整。"
+    },
+    {
+      "claim": "起抛面随机时正反面仍各 50%，偏倚只在同侧",
+      "direction_ok": true,
+      "elements_complete": true,
+      "note": "同侧偏倚与正反面偏倚为两个独立统计维度，逻辑自洽，无方向矛盾。"
+    }
+  ],
+  "attribution_checks": [
+    {
+      "claim": "偏心源于人手的进动摆动（precession），非硬币重量或图案不对称",
+      "is_primary_cause": true,
+      "note": "DHM 2007 将偏倚归于抛掷动力学（进动），且假设硬币完全对称；属该现象已确立的主因，归因完整无偏漏。"
+    }
+  ],
+  "term_checks": [],
+  "gap_checks": [
+    {"pattern_id": "G-01", "triggered": false, "checked": true, "finding": "A段为趣味场景，无'怕/有毒/能吃/伤/安全'等顾虑词；主题非饮食/健康/用药/电器/儿童/宠物，未触发安全性闭环核查。"},
+    {"pattern_id": "G-02", "triggered": false, "checked": true, "finding": "逐绝对词扫描：'谁也不亏'为A段转述大众默认假设非作者论断；'想绝对公平也简单'为条件式建议（条件'双方看不见起抛面'已给出）；'严格各50%'紧跟 49.8%到50.2% 区间自软。无事实性绝对化/夸大，不触发。"},
+    {"pattern_id": "G-03", "triggered": false, "checked": true, "finding": "全部定性断言（进动机制、约1%偏倚、同侧偏向）均经 WebSearch 回权威源（arXiv/AMS/New Scientist）核实属实，无'看似合理实则错误'的常识陷阱。"},
+    {"pattern_id": "G-04", "triggered": false, "checked": true, "finding": "Q1 因果链'拇指进动→歪晃→空中初始面朝上时间多→同侧约51%'环节齐备，方向与 DHM 模型一致，无跳步缺失。"},
+    {"pattern_id": "G-05", "triggered": false, "checked": true, "finding": "无古文/原话逐字引用；术语'进动(precession)''同侧偏向'用字准确；无医学/解剖术语，不触发。"},
+    {"pattern_id": "G-06", "triggered": true, "checked": true, "finding": "文中含 Diaconis 2007 与 Bartoš 2023 两处研究引用，已逐字核对受试者(49人/48协作者+Bartoš)、样本(350,757次)、币种(46种)、数值(50.8%、CI 50.6%到50.9%、60.1%/48.7%、1000次赚19块)与原文/报道完全一致，细节无偏差。"},
+    {"pattern_id": "G-07", "triggered": false, "checked": true, "finding": "同侧偏倚主因为人手抛掷进动（DHM 已确立），文中未遗漏更主要成因；'偏倚只在同侧不在正反'准确区分两维度，无归因偏漏。"}
+  ],
+  "forbidden_violations": [],
+  "overall_comment": "全文事实经独立 WebSearch 核实全部属实（Diaconis 2007 同侧约51%、Bartoš 2023 的 350,757 次/50.8%/CI 50.6%到50.9%/个体 60.1%与48.7%/1000次赚19块、正反面 50.0% 区间49.8%到50.2% 均与 arXiv:2310.04153 及权威报道吻合）。结构四要素齐备（A段引用块、C段 Q1/Q2/Q3 格式、F段'冷知识反转'标签、结尾四字段风格表格且分类'生活常识'属6选1枚举）。FORBIDDEN 73 条全扫描无命中，~ 与 —— 字符均无。脚本报 1 条 P1'标题缺少 emoji 装饰'系误报——标题首行实际含 🪙 emoji，人工复核不计入。综合判定：P0=0、P1=0、P2=0，通过。"
+}

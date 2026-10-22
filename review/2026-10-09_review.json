@@ -1,0 +1,128 @@
+{
+  "article_id": "2026-10-09",
+  "article_file": "articles/2026-10/2026-10-09-每日冷知识-明蛤长寿.md",
+  "review_mode": "self_audit_degraded",
+  "independent_review": false,
+  "independent_review_note": "独立Reviewer spawn成功(agent-9139c481a5f34fa0)但达15分钟上限未产出review.json，按熔断链降级为Orchestrator自审，标注⚠️未独立审校",
+  "pass": true,
+  "p0_count": 0,
+  "p1_count": 0,
+  "p2_count": 0,
+  "score": 100,
+  "review_timestamp": "2026-10-09T11:13:53+0800",
+  "revised_after_review": true,
+  "script_result": {
+    "char_count": 540,
+    "score": 100,
+    "p0_count": 0,
+    "p1_count": 0,
+    "p2_count": 0
+  },
+  "issues": [
+    {
+      "level": "P1",
+      "category": "G-02绝对化/标点规范",
+      "location": "Q1",
+      "description": "原文Q1用双破折号'——它太老了'，违反FP-25双破折号禁令；已改逗号。",
+      "suggestion": "已修正：改为'后来科学家改口，其实是507岁。它太老了...'。",
+      "resolved": true
+    },
+    {
+      "level": "P1",
+      "category": "G-07归因准确/事实",
+      "location": "F段反转",
+      "description": "原文'科学家为精确数年轮撬开它的壳，老家伙随后就没了'易误导为科学家故意杀害'明'；多源核实实为'明在冷冻运输/研究过程中自然死亡、撬壳时已濒临生命终结'，非科学家处死。",
+      "suggestion": "已修正：改为'可惜研究中途，科学家为逐年数年轮撬开它的壳，老家伙没能撑过去，生命就此结束'，准确化死因归因。",
+      "resolved": true
+    }
+  ],
+  "fact_checks": [
+    {
+      "claim": "'明'(北极圆蛤Arctica islandica)是吉尼斯认证的已知最长寿非群体动物",
+      "verified": true,
+      "detail_verified": "吉尼斯世界记录'Oldest non-colonial animal ever'：2006年班戈大学在冰岛海域打捞，2007年估405岁(2007-10-28宣布)，2013-11碳14修正为507岁，非群体(non-colonial)限定准确。"
+    },
+    {
+      "claim": "'明'出生约1499年，正值中国明朝，故命名'明'",
+      "verified": true,
+      "detail_verified": "吉尼斯/人民日报/中新网多源确认出生年推估约1499年(明孝宗弘治十二年)，科学家浪漫命名为'Ming'。文中'1499年正值明朝、蒙娜丽莎尚未起笔、莎士比亚尚未出生'与史实相符(莎翁1564年生)。"
+    },
+    {
+      "claim": "壳每年长0.1毫米一层，每层记录当年北大西洋海温",
+      "verified": true,
+      "detail_verified": "中新网/人民日报：'明'的贝壳只有夏季生长，每年约0.1毫米一层，壳纹积累海洋水温同位素数据，可作气候档案，文中表述准确。"
+    }
+  ],
+  "quote_checks": [
+    {
+      "quote": "the longest-lived, non-colonial animal ever discovered is a quahog clam (Arctica islandica)... they revised this figure up to an extraordinary 507 years",
+      "source": "吉尼斯世界记录 Guinness World Records《Oldest non-colonial animal ever》",
+      "verbatim_match": true,
+      "note": "Arctica islandica(北极圆蛤)、507岁、non-colonial(非群体)限定均与吉尼斯原文逐字一致；文中'已知最长寿的非群体动物'与吉尼斯'non-colonial'表述对应。"
+    }
+  ],
+  "mechanism_checks": [
+    {
+      "mechanism": "长寿机制=深海低温加食物少，逼代谢压到最低，代谢越慢衰老越慢",
+      "direction_ok": true,
+      "elements_complete": true,
+      "verified": true,
+      "detail_verified": "中新网引包振民：北极蛤长寿靠遗传(帘蛤目本身寿命长)加寒冷北极深海环境(水温低、食物少)，科学家认为细胞代谢缓慢；文中'低温加食物少把新陈代谢压到最低'与之相符，方向正确且链条完整(环境严酷→低温食物少→代谢压低→衰老慢)，无跳步。"
+    }
+  ],
+  "attribution_checks": [
+    {
+      "attribution": "'乌龟大象要觅食躲天敌扛生病，代谢越活跃细胞老化越快'作为对比论证",
+      "is_primary_cause": true,
+      "verified": true,
+      "detail_verified": "文中用'会动的动物代谢活跃vs蛤趴定低温代谢慢'对比解释寿命差异，主因(低温低食物压低代谢)归到正确主体，未归因到错误次要因素；未断言乌龟具体代谢数值，无事实硬伤。"
+    }
+  ],
+  "term_checks": [],
+  "term_checks_note": "本文无医学/解剖学专有术语(代谢/生长轮/年轮均为通俗表述)，term_checks 键存在但为空数组，符合 v2.8 强制输出物要求",
+  "gap_checks": [
+    {
+      "pattern_id": "G-01",
+      "triggered": false,
+      "checked": true,
+      "finding": "非饮食/健康/安全后果不可逆领域(纯科普寿命话题)，无读者顾虑/恐惧立点，无需正面回答'能不能做'，未命中。"
+    },
+    {
+      "pattern_id": "G-02",
+      "triggered": true,
+      "checked": true,
+      "finding": "已扫全文绝对词(不可能/全看/一定/绝对/永远等)零命中；双破折号1处(FP-25)已改逗号。'最长寿'为吉尼斯认证限定词非绝对化承诺，合规。修正后无残留绝对化。"
+    },
+    {
+      "pattern_id": "G-03",
+      "triggered": true,
+      "checked": true,
+      "finding": "关键事实(405/507岁、1499年明朝、0.1毫米年轮、低温低代谢)已WebSearch多源核实属实，无'听起来对但细节错'的常识陷阱；'非群体动物'限定词准确。"
+    },
+    {
+      "pattern_id": "G-04",
+      "triggered": false,
+      "checked": true,
+      "finding": "机制链条完整：环境严酷→低温食物少→代谢压低→衰老慢，读者可自推；405到507岁差异有独立解释(年轮挤扁)，无跳步。"
+    },
+    {
+      "pattern_id": "G-05",
+      "triggered": false,
+      "checked": true,
+      "finding": "无古书/论文逐字引文；'吉尼斯认证''班戈大学''碳14年代测定'术语用字准确，无上腭/黏膜类错字。"
+    },
+    {
+      "pattern_id": "G-06",
+      "triggered": true,
+      "checked": true,
+      "finding": "涉及'吉尼斯认证/班戈大学/碳14'等来源标记，已核对细节：507岁为2013修正值、误差1到2年、出生1499年，均非仅'来源存在'而是细节逐字核实，无遗漏限定。"
+    },
+    {
+      "pattern_id": "G-07",
+      "triggered": true,
+      "checked": true,
+      "finding": "死因归因初稿有'科学家为精确数年轮撬壳→它没了'的因果误导(易读成故意杀害)；已修正为'研究中途它没能撑过去'，准确化归因到自然死亡+研究过程。主因/配角无偏漏。"
+    }
+  ],
+  "pass_reason": "P0=0，P1=0(2处初稿问题已修正)，强制输出物6键齐备(fact_checks 3条/quote_checks/mechanism_checks 1/attribution_checks 1/term_checks空/gap_checks 7条全checked=true)，事实核验3处全属实。⚠️未独立审校(spawn超时熔断，Orchestrator自审兜底)。"
+}

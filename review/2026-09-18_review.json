@@ -1,0 +1,130 @@
+{
+  "article_id": "2026-09-18",
+  "review_timestamp": "2026-09-18T09:54:12+0800",
+  "pass": true,
+  "p0_count": 0,
+  "p1_count": 0,
+  "p2_count": 0,
+  "score": 100,
+  "revised_after_review": true,
+  "script_result": {
+    "exit_code": 0,
+    "score": 100,
+    "char_count": 419,
+    "p0_count": 0,
+    "p1_count": 0,
+    "p2_count": 0
+  },
+  "issues": [
+    {
+      "level": "P2",
+      "category": "FORBIDDEN-FP-25",
+      "description": "A段第3行与F段第15行使用双破折号「——」做转折（共2处），部分 Markdown 渲染器会把「——」解析为删除线，违反 FP-25 渲染安全约束。",
+      "location": "A段第3行、F段第15行",
+      "suggestion": "将「——」改为逗号或句号（如「后来才听说，这孔其实是救命用的」「其实它照着误吞后还能呼吸的硬指标抠出来，通气量不达标，这款笔盖根本不许上市」）。"
+    },
+    {
+      "level": "P2",
+      "category": "GAP-G-01",
+      "description": "话题属儿童安全领域，安全闭环基本满足（Q1/Q3/F段解释小孔维持气道通气、ISO 11540 强制达标、送医前能喘气），但缺少显式适用边界：未点明「家长应为儿童选购带通气孔的笔帽」以及「该标准仅适用14岁以下儿童正常使用的笔具（成人钢笔等多豁免）」。",
+      "location": "Q2/F段",
+      "suggestion": "在Q2或F段补一句选购与适用边界说明，例如「给孩子选笔时认准带通气孔的笔帽更稳妥；该强制通气要求针对14岁以下儿童用笔，成人钢笔不在其列」。"
+    }
+  ],
+  "fact_checks": [
+    {
+      "claim": "国际标准 ISO 11540 规定，通风笔盖在 1.33 千帕压差下，通气量至少 8 升每分钟",
+      "source_verified": true,
+      "detail_verified": true,
+      "omission_severity": "minor",
+      "verdict": "verified",
+      "note": "ISO 11540 为真实国际标准（现行 ISO 11540:2021，初版 1993），适用14岁以下儿童书写工具；其4.3条款规定通风笔帽在最大 1.33 kPa 压差下最小通气量 8 L/min，与文中数值、单位、口径完全一致。"
+    },
+    {
+      "claim": "换算下来，一个直径约 2 毫米的小孔就够达标",
+      "source_verified": true,
+      "detail_verified": true,
+      "omission_severity": "minor",
+      "verdict": "verified",
+      "note": "ISO 11540 注脚说明：单圆孔截面积约 3.4 mm² 即可满足通气要求，对应直径约 2.08 mm（半径≈1.04 mm）；文中「约 2 毫米」口径准确，非夸大。"
+    },
+    {
+      "claim": "笔盖易卡进儿童气管致窒息，是文具高发安全事故之一；ISO 11540 针对14岁以下儿童用笔",
+      "source_verified": true,
+      "detail_verified": true,
+      "omission_severity": "minor",
+      "verdict": "verified",
+      "note": "美国儿科学会（AAP）将笔帽列入儿童窒息风险日常物品；ISO 11540 明确适用对象为14岁及以下儿童正常或可预见使用之书写/记号工具，与文中一致。"
+    }
+  ],
+  "quote_checks": [],
+  "mechanism_checks": [
+    {
+      "claim": "小孔在误吞时维持气道通气：在 1.33 千帕压差下提供 ≥8 升/分钟气流，使卡在气道的笔盖周围始终留着缝隙，送医前仍能喘气",
+      "direction_ok": true,
+      "elements_complete": true,
+      "note": "因果方向自洽（孔提供通气路径→气流穿过→气道留缝隙→维持呼吸），环节完整，无跳步；与 ISO 11540 测试原理（笔帽插入弹性管、双向测气流）一致。"
+    }
+  ],
+  "attribution_checks": [
+    {
+      "claim": "小孔真正使命是安全（误吞后维持气道通气），平衡气压方便开盖只是附带好处",
+      "is_primary_cause": true,
+      "note": "ISO 11540 将通气作为强制安全要求，安全是主因；气压平衡便于开盖为附加好处，归因主次正确，无偏漏。"
+    }
+  ],
+  "term_checks": [],
+  "gap_checks": [
+    {
+      "pattern_id": "G-01",
+      "triggered": true,
+      "checked": true,
+      "finding": "话题属儿童安全领域；安全闭环基本满足（Q1/Q3/F段解释小孔维持气道通气、ISO 11540 强制达标、送医前能喘气），缺显式选购/适用边界（家长选带孔笔帽、标准仅适用14岁以下儿童用笔），属补充级，不标 P1。"
+    },
+    {
+      "pattern_id": "G-02",
+      "triggered": false,
+      "checked": true,
+      "finding": ""
+    },
+    {
+      "pattern_id": "G-03",
+      "triggered": false,
+      "checked": true,
+      "finding": ""
+    },
+    {
+      "pattern_id": "G-04",
+      "triggered": false,
+      "checked": true,
+      "finding": ""
+    },
+    {
+      "pattern_id": "G-05",
+      "triggered": false,
+      "checked": true,
+      "finding": ""
+    },
+    {
+      "pattern_id": "G-06",
+      "triggered": false,
+      "checked": true,
+      "finding": ""
+    },
+    {
+      "pattern_id": "G-07",
+      "triggered": false,
+      "checked": true,
+      "finding": ""
+    }
+  ],
+  "forbidden_violations": [
+    {
+      "rule": "FP-25",
+      "location": "A段第3行、F段第15行",
+      "detail": "使用双破折号「——」做转折（共2处），部分渲染器解析为删除线；应改为逗号或句号",
+      "level": "P2"
+    }
+  ],
+  "overall_comment": "事实断言全部经 WebSearch 独立核验属实（ISO 11540 真实存在、8 升/分钟@1.33 千帕与标准逐字一致、直径约 2 毫米与 3.4 mm² 截面积换算吻合）；结构四要素齐备、字数 419 远低于 690 上限、无绝对化与逻辑矛盾。仅 2 处 P2 级微调：双破折号渲染安全（FP-25）与儿童安全适用边界补充。整体质量良好，建议采纳后放行。"
+}

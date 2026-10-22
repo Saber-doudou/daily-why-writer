@@ -1,0 +1,48 @@
+{
+  "article_id": "2026-09-02",
+  "review_timestamp": "2026-09-02T09:50:26+0800",
+  "pass": true,
+  "p0_count": 0,
+  "p1_count": 0,
+  "p2_count": 0,
+  "score": 100,
+  "script_result": {
+    "exit_code": 0,
+    "passed": true,
+    "score": 100,
+    "p0": [],
+    "p1": [],
+    "p2": [],
+    "char_count": 466
+  },
+  "issues": [],
+  "forbidden_violations": [],
+  "fact_check": {
+    "verified": [
+      {
+        "assertion": "SLS（十二烷基硫酸钠）抑制甜味受体，并洗掉舌面抑制苦味的磷脂，使甜被压、苦被放大（双机制）",
+        "result": "属实（最广泛接受的解释）",
+        "source": "Britannica 视频稿：'SLS suppresses our sweet receptors and destroys compounds in our mouths, our phospholipids, which inhibit our bitterness receptors.'；Live Science / HowStuffWorks / 央广网 / 科普中国 均一致确认该双机制。"
+      },
+      {
+        "assertion": "恢复时间约半小时到一小时",
+        "result": "属实",
+        "source": "澎湃新闻《刷牙后千万别马上喝橙汁》：'大约30分钟到一小时后，味觉就会恢复正常'；科普中国、多家牙科科普均表述'约半小时到一小时'或'半小时左右'。"
+      },
+      {
+        "assertion": "橙汁中含黄酮类苦味物质",
+        "result": "属实",
+        "source": "澎湃新闻：'橙汁中本来就含有苦味的黄酮类物质，于是刷完牙后喝橙汁/吃橙子时，本该清甜微酸的滋味就会被苦味覆盖。'"
+      }
+    ]
+  },
+  "structure_check": {
+    "A_block_quote": true,
+    "C_q_bold_format": true,
+    "F_block_quote_with_label": true,
+    "ending_style_table_four_rows": true,
+    "category_enum_valid": true,
+    "all_pass": true
+  },
+  "overall_comment": "程序化审核满分（score 100，字数 466，P0/P1/P2 均为 0）。六维度人工复核 + WebSearch 事实核验均无 P0/P1：核心双机制与权威源一致，恢复时间、黄酮类苦味物质均获独立核实；结构四要素齐全（A段引用块、C段 **Q1/Q2/Q3：**、F段'冷知识反转'标签、结尾四列风格表格且分类='生活常识'属 6 选 1 合法枚举）；无 FP 违规（无套话开头、无空洞修饰、无 `~`/`——`、无拟人化病理、无绝对化静态表述）；无 AI 味连接词（全文未出现 首先/其次/然后/最后/此外/另外/而且/同时/但是/因此/所以 等正式连接词，仅 2 处'也'与 1 处'或者'，不触发 P1）；字数 466 远低于 690 上限；类比（洗洁精去油污、保险丝、关闸）方向与机制一致，无类比失准；机制自洽（Q1 抑甜→Q2 放苦→Q3 恢复→F 段呼应，无方向矛盾）。通过条件（P0=0 且 P1≤2）满足，可直接发布。"
+}

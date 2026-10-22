@@ -1,0 +1,46 @@
+{
+  "article_id": "2026-08-24",
+  "review_timestamp": "2026-08-24T01:39:11Z",
+  "pass": true,
+  "p0_count": 0,
+  "p1_count": 0,
+  "p2_count": 5,
+  "score": 96,
+  "issues": [
+    {
+      "level": "P2",
+      "category": "引用规范/CHECKLIST§9、§3",
+      "location": "F段（第15行）",
+      "description": "“1895年德国医生 Richard Kayser 就记录过……”历史事实正确，但缺少文献出处（期刊/论文名）。现行写作规范建议首次引用研究者标注机构+年份+期刊。",
+      "suggestion": "补充原始出处，如“德国医生 Richard Kayser 在1895年《Archiv für Laryngologie und Rhinologie》的论文《Die exakte Messung der Luftdurchgängigkeit der Nase》中首次记载”，或改用更模糊表述“1895年就有医生记载过”。"
+    },
+    {
+      "level": "P2",
+      "category": "术语通俗化/CHECKLIST§17、FP-17",
+      "location": "Q2（第9行）",
+      "description": "“大脑下丘脑”首次出现未附加通俗解释，读者可能不知道下丘脑是什么。",
+      "suggestion": "补一句白话解释，如“下丘脑是大脑里管生物钟和节律的总调度”。"
+    },
+    {
+      "level": "P2",
+      "category": "数据出处/CHECKLIST§41、§3",
+      "location": "F段（第15行）",
+      "description": "“约七成的人都有”比例属实（文献报道70%-80%，Heetderks 80%、Hasegawa & Kern 1977 年 72%），但正文未标注研究出处。",
+      "suggestion": "标注来源或加限定量词，如“研究显示约七到八成健康人存在鼻腔循环”，避免裸写精确百分比。"
+    },
+    {
+      "level": "P2",
+      "category": "结尾记忆锚点/CHECKLIST§93",
+      "location": "结尾（第17-21行）",
+      "description": "结尾仅有风格表格，缺少一句可独立复述给朋友的金句/记忆锚点。F段“翻个身，过两三个小时它自己就换班了”已具雏形但未作为收束单独点题。",
+      "suggestion": "在表格之后补一句可复述金句，如“鼻子其实有两个，一个干活时另一个就在偷偷保养——翻个身，几小时后它们自动换班”。"
+    },
+    {
+      "level": "P2",
+      "category": "周期区间/CHECKLIST§16、FP-16（信息提示，非事实错误）",
+      "location": "表格“轮换周期”行（第20行）",
+      "description": "“通常2到7小时一轮”有中文医学源（博禾医生）支持，但英文权威文献（Wikipedia、biologyinsights）常给更宽区间“30分钟到数小时/最长约6小时”，本文下界2小时偏保守。",
+      "suggestion": "可改为“平均约两个半小时，短则几十分钟、长则数小时一轮”以覆盖文献差异；或保留2到7小时并注明“不同研究区间略有差异”。"
+    }
+  ]
+}

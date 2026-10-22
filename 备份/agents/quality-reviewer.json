@@ -1,0 +1,128 @@
+{
+  "name": "quality-reviewer",
+  "description": "审核发布Agent - 负责质量审核、判例匹配、修正建议、历史更新",
+  "version": "1.0.0",
+  "created_at": "2026-06-05",
+  
+  "system_prompt": "你是《每日一个为什么》的审核发布Agent。你的职责是质量审核、判例匹配、修正建议和历史更新。\n\n## 工作流程\n1. 接收内容生成Agent的文章草稿\n2. 运行 validate_article.py 进行质量审核\n3. 如果审核不通过，使用 case_matcher.py 匹配相关判例\n4. 根据判例提供修正建议\n5. 运行 update_history.py 更新记忆\n6. 输出最终结果\n\n## 输入格式\n接收一个JSON对象，包含：\n- type: \"article_draft\"\n- content: 文章内容（Markdown格式）\n- metadata: 元数据（话题、分类、字数等）\n\n## 输出格式\n输出一个JSON对象，包含：\n- type: \"final_result\"\n- status: \"success\" 或 \"revision_required\"\n- article: 最终文章内容\n- validation: 审核结果\n- file_path: 保存路径",
+  
+  "tools": [
+    "Bash",
+    "Read",
+    "Edit"
+  ],
+  
+  "context_files": [
+    "F:/WorkBuddy/daily-why/validate_article.py",
+    "F:/WorkBuddy/daily-why/case_matcher.py",
+    "F:/WorkBuddy/daily-why/update_history.py"
+  ],
+  
+  "max_tokens": 3000,
+  "temperature": 0.3,
+  
+  "workflow": {
+    "steps": [
+      {
+        "name": "validate_article",
+        "description": "运行质量审核",
+        "tool": "Bash",
+        "command": "python validate_article.py --json {article_file}",
+        "output": "validation_result"
+      },
+      {
+        "name": "match_cases",
+        "description": "匹配相关判例（如果审核不通过）",
+        "tool": "Bash",
+        "command": "python case_matcher.py \"{problem_keyword}\" --json",
+        "condition": "validation_result.p0_count > 0 || validation_result.p1_count > 2",
+        "output": "matched_cases"
+      },
+      {
+        "name": "suggest_revision",
+        "description": "提供修正建议",
+        "tool": "Read",
+        "input": "matched_cases",
+        "output": "revision_suggestions"
+      },
+      {
+        "name": "update_history",
+        "description": "更新历史记录",
+        "tool": "Bash",
+        "command": "python update_history.py {article_file} --validation-json '{validation_result}'",
+        "output": "update_result"
+      }
+    ]
+  },
+  
+  "input_schema": {
+    "type": "object",
+    "properties": {
+      "type": {
+        "type": "string",
+        "enum": ["article_draft"]
+      },
+      "content": {
+        "type": "string",
+        "description": "文章内容（Markdown格式）"
+      },
+      "metadata": {
+        "type": "object",
+        "properties": {
+          "topic": {
+            "type": "string"
+          },
+          "category": {
+            "type": "string"
+          },
+          "word_count": {
+            "type": "integer"
+          },
+          "generation_time": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      }
+    }
+  },
+  
+  "output_schema": {
+    "type": "object",
+    "properties": {
+      "type": {
+        "type": "string",
+        "enum": ["final_result"]
+      },
+      "status": {
+        "type": "string",
+        "enum": ["success", "revision_required"]
+      },
+      "article": {
+        "type": "string",
+        "description": "最终文章内容"
+      },
+      "validation": {
+        "type": "object",
+        "properties": {
+          "p0_count": {
+            "type": "integer"
+          },
+          "p1_count": {
+            "type": "integer"
+          },
+          "p2_count": {
+            "type": "integer"
+          },
+          "score": {
+            "type": "integer"
+          }
+        }
+      },
+      "file_path": {
+        "type": "string",
+        "description": "保存路径"
+      }
+    }
+  }
+}

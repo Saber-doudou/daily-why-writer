@@ -1,0 +1,172 @@
+{
+  "article_id": "2026-09-15",
+  "review_timestamp": "2026-09-15T19:57:49+0800",
+  "pass": true,
+  "p0_count": 0,
+  "p1_count": 0,
+  "p2_count": 2,
+  "score": 96,
+  "script_result": {
+    "exit_code": 0,
+    "score": 100,
+    "char_count": 567,
+    "p0_count": 0,
+    "p1_count": 0,
+    "p2_count": 0
+  },
+  "issues": [
+    {
+      "level": "P2",
+      "category": "FORBIDDEN-FP-06/表达润色",
+      "description": "段落长度过于均匀（偏差小于16字），呈现AI排版的典型特征，与人工写作的自然长短交错有差距。",
+      "location": "全文",
+      "suggestion": "适当拉开各段字数差距，制造长短句交错，削弱机械排版感。"
+    },
+    {
+      "level": "P2",
+      "category": "FORBIDDEN-FP-05/CHECKLIST-§17",
+      "description": "F段冷知识反转主要复述Q1/Q3已有内容（'600万年没再长大''不长不短刚刚好'），新角度'被吃饭和走路两头将就'仅为同义重述而非新增信息，反转段未提供真正的新视角。",
+      "location": "F段",
+      "suggestion": "F段补充一个Q段未出现的新事实或延伸，例如：始熊猫伪拇指其实比现生熊猫更长、现生伪拇指末端演化出弯钩以兼顾抓握与承重；或对比小熊猫/其他熊科无此结构，凸显其独特性。"
+    }
+  ],
+  "fact_checks": [
+    {
+      "claim": "大熊猫'第六指'为桡侧籽骨（radial sesamoid）特化拉长的伪拇指，可对握抓竹",
+      "source_verified": true,
+      "detail_verified": true,
+      "omission_severity": "minor",
+      "verdict": "verified",
+      "note": "多源确认（中国科学院古脊椎所IVPP报道、Scientific Reports 2022 Wang et al.）：除正常五指外，大熊猫有强烈增大的手腕部骨骼即桡侧籽骨，形成可对握的'拇指'抓竹。术语与机制均准确。"
+    },
+    {
+      "claim": "始熊猫（Ailurarctos）约600万年前、云南昭通水塘坝化石（距今约700万至600万年）、王晓鸣/邓涛/吉学平团队、《科学报告》(Scientific Reports) 2022年发表",
+      "source_verified": true,
+      "detail_verified": true,
+      "omission_severity": "minor",
+      "verdict": "verified",
+      "note": "论文《Earliest giant panda false thumb suggests conflicting demands for locomotion and feeding》，Xiaoming Wang, Denise F. Su, Xueping Ji, Tao Deng 等，2022-06-30 发表于 Scientific Reports（doi:10.1038/s41598-022-13402-y）；化石采自云南昭通水塘坝晚中新世遗址（距今约700万至600万年）。人物、机构、年份、地点、期刊全部属实。"
+    },
+    {
+      "claim": "伪拇指因兼顾抓握与跖行式走路的承重功能而未进一步变长（'不长不短刚刚好'的妥协）",
+      "source_verified": true,
+      "detail_verified": true,
+      "omission_severity": "minor",
+      "verdict": "verified",
+      "note": "原文：'桡侧籽骨没有进一步延伸，是伪拇指兼顾抓握竹竿和承担体重之间的功能调和''分担体重的限制可能是熊猫的伪拇指从未演化成完整手指的主要原因''强烈伸长的桡侧籽骨会突出于掌面，从而对行走产生干扰，通俗地说就是会硌脚'。与Q3机制完全一致。"
+    }
+  ],
+  "quote_checks": [
+    {
+      "claim": "文章核心事实（桡侧籽骨特化形成可对握的'拇指'抓竹；始熊猫约600万年前；自中新世晚期以来伪拇指未进一步增大，因兼顾抓握与承重会硌脚）均源自2022年《科学报告》Wang et al.论文，已回原文逐字核对关键表述",
+      "verbatim_match": true,
+      "source": "Scientific Reports 2022, doi:10.1038/s41598-022-13402-y；中国科学院古脊椎所报道 https://ivpp.cas.cn/xwdt/kyjz/202207/t20220701_6469207.html"
+    }
+  ],
+  "mechanism_checks": [
+    {
+      "claim": "Q1：籽骨特化拉长、弯成钩状，顶出可对握的伪拇指卡住竹竿",
+      "direction_ok": true,
+      "elements_complete": true,
+      "note": "方向自洽，环节完整（籽骨→特化拉长→钩状→对握抓竹）。"
+    },
+    {
+      "claim": "Q2：祖先食肉改吃竹子→一天啃大量→双掌捧食费劲→伪拇指实现单手抓握边掰边嚼",
+      "direction_ok": true,
+      "elements_complete": true,
+      "note": "因果方向正确，食竹专一化逻辑完整；与已核实研究'唯一取食目标就是竹子'一致。"
+    },
+    {
+      "claim": "Q3：伪拇指再长抓竹更牢，但跖行式走路时过长的籽骨凸出掌面硌脚甚至易折断→停在中间态600万年未变大",
+      "direction_ok": true,
+      "elements_complete": true,
+      "note": "方向自洽（抓握vs承重权衡），与核实机制'兼顾抓握与承重、会硌脚'完全对应，无矛盾。"
+    }
+  ],
+  "attribution_checks": [
+    {
+      "claim": "伪拇指不长不短的原因=抓握竹竿与承担体重的功能调和（承重限制）",
+      "is_primary_cause": true,
+      "note": "研究明确指出'分担体重的限制可能是熊猫的伪拇指从未演化成完整手指的主要原因'，承重是主因，归因准确。"
+    },
+    {
+      "claim": "熊猫祖先本是食肉的，改吃竹子后演化出伪拇指",
+      "is_primary_cause": true,
+      "note": "食肉目熊科高度特化为专一植食（竹子），伪拇指为食竹关键适应，主线归因正确。"
+    }
+  ],
+  "term_checks": [
+    {
+      "term": "桡侧籽骨",
+      "used": "桡侧籽骨",
+      "correct": "桡侧籽骨",
+      "exact": true,
+      "note": "标准解剖学术语（radial sesamoid），多源确认用字准确，无音近形近误用。"
+    },
+    {
+      "term": "跖行式",
+      "used": "跖行式",
+      "correct": "跖行式",
+      "exact": true,
+      "note": "plantigrade，指脚掌（掌骨+跖骨）着地行走，用字准确。"
+    }
+  ],
+  "gap_checks": [
+    {
+      "pattern_id": "G-01",
+      "triggered": false,
+      "checked": true,
+      "finding": ""
+    },
+    {
+      "pattern_id": "G-02",
+      "triggered": false,
+      "checked": true,
+      "finding": "全文扫描绝对词（不可能/全看/全都/一定/绝对/必然/永远/无非）均未命中；'几乎只对准竹子''哺乳动物大多都有''通常只是'均为软化表述；'600万年都没再变大'为经WebSearch核实的具体经验性结论（研究原文'自中新世晚期以来没有进一步增大'），非全称绝对判断，不属绝对化。"
+    },
+    {
+      "pattern_id": "G-03",
+      "triggered": true,
+      "checked": true,
+      "finding": "文章含多处生物定性描述（桡侧籽骨/始熊猫/承重妥协/食肉改竹食），已逐条WebSearch核验：伪拇指机制、始熊猫约600万年前、承重妥协未进一步变长均与2022《科学报告》Wang et al.一致，未发现事实性错误。"
+    },
+    {
+      "pattern_id": "G-04",
+      "triggered": false,
+      "checked": true,
+      "finding": "机制链完整（籽骨特化→对握抓竹；再长会硌脚→停在中间态），无跳步缺失。"
+    },
+    {
+      "pattern_id": "G-05",
+      "triggered": true,
+      "checked": true,
+      "finding": "含解剖学术语（桡侧籽骨/籽骨/跖行式），已逐项核字：桡侧籽骨=radial sesamoid、跖行式=plantigrade，用字均准确，无音近形近误用。"
+    },
+    {
+      "pattern_id": "G-06",
+      "triggered": false,
+      "checked": true,
+      "finding": "文章未出现任何具体研究引用标记（无'研究表明/XX大学/发表于XX年/实验显示'），故无需逐字核细节；核心事实已通过fact_checks独立核验。"
+    },
+    {
+      "pattern_id": "G-07",
+      "triggered": false,
+      "checked": true,
+      "finding": "伪拇指成因已同时给出主因（竹食抓握专一）与约束（跖行式承重），未遗漏主因，归因完整。"
+    }
+  ],
+  "forbidden_violations": [
+    {
+      "fp": "FP-06",
+      "level": "P2",
+      "note": "段落长度过于均匀（偏差小于16字），AI排版典型特征。"
+    },
+    {
+      "fp": "FP-05",
+      "level": "P2",
+      "note": "F段冷知识反转与Q3内容重叠，未提供真正新视角。"
+    }
+  ],
+  "overall_comment": "文章核心科学事实全部经WebSearch独立核验属实（桡侧籽骨伪拇指、始熊猫约600万年前、昭通水塘坝化石、2022《科学报告》王晓鸣/邓涛/吉学平团队、承重妥协未进一步变长），机制自洽、归因完整、术语用字准确，无P0/P1问题。仅余两处P2：段落排版偏机械、F段反转与Q3重叠缺乏新角度。整体质量良好，建议放行并通过微修进一步打磨。",
+  "revised_after_review": true
+}

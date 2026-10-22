@@ -1,0 +1,197 @@
+{
+  "article_id": "2026-09-22",
+  "review_timestamp": "2026-09-22T11:23:50+0800",
+  "pass": true,
+  "p0_count": 0,
+  "p1_count": 0,
+  "p2_count": 0,
+  "score": 100,
+  "script_result": {
+    "exit_code": 0,
+    "score": 100,
+    "char_count": 680,
+    "p0_count": 0,
+    "p1_count": 0,
+    "p2_count": 0
+  },
+  "issues": [],
+  "fact_checks": [
+    {
+      "claim": "早在1854年麦克斯韦就琢磨过纸片下落的古怪姿态（麦克斯韦 1854 年下落纸条/卡片研究）",
+      "source_verified": true,
+      "detail_verified": true,
+      "omission_severity": "minor",
+      "verdict": "verified",
+      "note": "属实。麦克斯韦 1854 年在《Cambridge Mathematical Journal》（New Series, Vol. IX, May 1854）发表论文《On a particular case of the descent of a heavy body in a resisting medium》，开篇即『Every one must have observed that when a slip of paper falls through the air…』，讨论纸条下落的旋转运动。文中『1854年』『纸片下落』均准确，人物身份（物理学家）无误。独立 WebSearch 核验通过。"
+    },
+    {
+      "claim": "2005年康奈尔大学团队测出，这种翻飞由旋转带来的力主导，平动速度反而是配角（Andersen 等，《流体力学杂志》，2005）",
+      "source_verified": true,
+      "detail_verified": true,
+      "omission_severity": "minor",
+      "verdict": "verified",
+      "note": "四要素全部属实且细节逐字吻合：作者 A. Andersen、U. Pesavento、Z. Jane Wang；机构 Cornell University（Department of Theoretical and Applied Mechanics / Department of Physics）；年份 2005；期刊 Journal of Fluid Mechanics, Vol. 541, pp. 65-90，DOI 10.1017/S002211200500594X。论文摘要原文『the fluid circulation is dominated by a rotational term proportional to the angular velocity of the plate, as opposed to the translational velocity for a glider with fixed angle of attack』——v2『由旋转带来的力主导，平动速度反而是配角』与论文实际对比轴（旋转项 vs 平动速度项）完全一致，对比轴已正确还原（一轮审校发现的『旋转 vs 重量』偏移已修复）。独立 WebSearch 核验通过。"
+    },
+    {
+      "claim": "叶片两面构造（叶面栅栏组织密实、叶背海绵组织疏松）与失水后叶面凹陷成凹形、叶背保持微凸；静风下落地朝向接近随机，有气流时凹面朝下最稳定、占多数",
+      "source_verified": true,
+      "detail_verified": true,
+      "omission_severity": "minor",
+      "verdict": "verified",
+      "note": "与人民网/《人民日报》生态频道 2024-11-19《树叶飘落，哪面朝上？》（把自然讲给你听）逐字相符：『栅栏组织细胞变得更加紧密，难以伸展，叶面卷曲成凹形……海绵组织易拉伸，叶背会保持微凸的状态』；『在静态条件下（如无风环境）……落地时哪面朝上通常呈随机分布状态』；『凹面朝下的叶片更稳定，因为它消减了更多的空气阻力，并且其形态使受力分布更均匀，不易被再次吹动或翻滚。最终，凹面朝下的状态占据主导地位』。该源文明确驳斥了『叶面重所以朝下』的旧说（『有观点认为……但事实真的如此吗？』），v2 采用气动力稳定性解释与权威源一致。独立 WebSearch 核验通过。"
+    }
+  ],
+  "quote_checks": [
+    {
+      "claim": "Q2「这种翻飞由旋转带来的力主导，平动速度反而是配角（Andersen 等，《流体力学杂志》，2005）」",
+      "verbatim_match": true,
+      "source": "https://dragonfly.tam.cornell.edu/publications/2005_JFM_Andersen_Pesavento_Wang_a.pdf (DOI: 10.1017/S002211200500594X)",
+      "note": "转述与论文摘要一致：原文『dominated by a rotational term…as opposed to the translational velocity』对应『旋转主导、平动速度反而是配角』，对比轴、机构、年份、期刊四要素均无误，无删改导致的语义漂移。"
+    },
+    {
+      "claim": "Q3「等摆成凹面朝下，受力最均匀，也最不易被吹翻（人民网科普，2024）」与 Q2「在没风也没人打扰时，叶子落地哪面朝上其实接近随机」",
+      "verbatim_match": true,
+      "source": "https://env.people.com.cn/BIG5/n1/2024/1119/c1010-40364277.html （人民网 2024-11-19《树叶飘落，哪面朝上？》）",
+      "note": "两处转述与人民网源文一致：源文『凹面朝下的叶片更稳定……不易被再次吹动或翻滚』『最终，凹面朝下的状态占据主导地位』对应凹面朝下最稳；源文『在静态条件下（如无风环境）……落地时哪面朝上通常呈随机分布状态』对应静风接近随机。语义无漂移。"
+    }
+  ],
+  "mechanism_checks": [
+    {
+      "claim": "失水 → 栅栏组织紧缩、海绵组织易拉伸 → 叶面卷成凹形、叶背保持微凸（Q1）",
+      "direction_ok": true,
+      "elements_complete": true,
+      "note": "方向与因果链自洽：密实面收缩多→向内凹，疏松面拉伸→保持微凸；中间环节（失水→组织收缩差→凹凸形态）齐备，与人民网源文一致。"
+    },
+    {
+      "claim": "气流 → 凸起的叶背兜住空气生恢复力矩 → 摆回凹面朝下的稳定姿态 → 反复筛选后占多数（Q3）",
+      "direction_ok": true,
+      "elements_complete": true,
+      "note": "v2 已显式拆为两阶段（『叶片一翻飞……生出把叶子摆回稳定姿势的力』→『等摆成凹面朝下，受力最均匀，也最不易被吹翻』），翻飞期增阻生力矩与稳定期阻力最小的阶段区分清晰，无一轮审校所指的并置张力；方向不矛盾，机制要素完整。"
+    }
+  ],
+  "attribution_checks": [
+    {
+      "claim": "「这种翻飞由旋转带来的力主导」——主因判断",
+      "is_primary_cause": true,
+      "note": "主因判断正确：2005 JFM 论文摘要明确 circulation 由 rotational term 主导，旋转是控制姿态的主力；对比项已还原为『平动速度』，与论文一致。"
+    },
+    {
+      "claim": "「落叶大多背面朝上」归因于气流中的姿态稳定性（而非叶面更重）",
+      "is_primary_cause": true,
+      "note": "主因认定与权威源一致：人民网源文亦以『旋转动能和空气阻力才是决定叶片在下降过程中朝向的主要因素』+气流环境下稳定性筛选解释多数现象；重量差作为次要因素在 Q2 保留（『只说对了一半』），无更主要成因被略过。"
+    }
+  ],
+  "term_checks": [
+    {
+      "term": "栅栏组织",
+      "used": "栅栏组织",
+      "correct": "栅栏组织",
+      "exact": true,
+      "note": "植物解剖学标准术语（palisade mesophyll），与人民网科普源用字一致，无音近/形近误用。"
+    },
+    {
+      "term": "海绵组织",
+      "used": "海绵组织",
+      "correct": "海绵组织",
+      "exact": true,
+      "note": "植物解剖学标准术语（spongy mesophyll），与权威源用字一致。"
+    },
+    {
+      "term": "叶面 / 叶背",
+      "used": "叶面 / 叶背",
+      "correct": "叶正面 / 叶背面（上表面 / 下表面）",
+      "exact": true,
+      "note": "「叶面/叶背」为通行口语化说法，与所引人民网源文用法一致，科普通俗化可接受；『碗口/碗底』凹凸对应（叶面凹、叶背凸）与正反判断正确，未左右颠倒。"
+    }
+  ],
+  "gap_checks": [
+    {
+      "pattern_id": "G-01",
+      "triggered": false,
+      "checked": true,
+      "finding": "A段为纯画面感钩子（踩叶脆响、翻看叶子），无安全/健康/饮食类顾虑或恐惧表述；话题为自然现象科普，不属后果不可逆领域。安全性闭环不适用。"
+    },
+    {
+      "pattern_id": "G-02",
+      "triggered": false,
+      "checked": true,
+      "finding": "v2 已将一轮的两处『不是A而是B』绝对否定改为相对表述：Q2『由旋转带来的力主导，平动速度反而是配角』、F段『比起那一点重量差，\"稳\"才是真正的主角』，并保留重量差作为次要因素（Q2『只说对了一半』）。全文无绝对否定句式，G-02 不触发。"
+    },
+    {
+      "pattern_id": "G-03",
+      "triggered": false,
+      "checked": true,
+      "finding": "两处定性描述（栅栏/海绵组织构造差异；失水后面面凹、叶背凸）均回权威源（人民网 2024-11-19）逐项核对一致，未发现『听起来合理实则错误』的定性硬伤；重力/密度作用未被写成唯一成因。"
+    },
+    {
+      "pattern_id": "G-04",
+      "triggered": false,
+      "checked": true,
+      "finding": "机制链完整：失水→组织收缩差→凹凸成型（Q1）→下落翻滚旋转非直线（Q2）→气流中恢复力矩→凹面朝下稳定→反复筛选成多数（Q3）。v2 将『兜气生力矩』与『摆定后受力均匀』拆为两阶段，无关键环节缺失，读者可按文中步骤自推结论。"
+    },
+    {
+      "pattern_id": "G-05",
+      "triggered": true,
+      "checked": true,
+      "finding": "文中含麦克斯韦/Andersen 引用与植物解剖术语，已回源头逐字核对：Maxwell 1854（《Cambridge Mathematical Journal》下落纸条）、Andersen 等 JFM 2005 四要素、人民网 2024-11-19 源文、栅栏/海绵组织用字，均准确，无语义漂移或音近误用。"
+    },
+    {
+      "pattern_id": "G-06",
+      "triggered": true,
+      "checked": true,
+      "finding": "文中含 Andersen 等（JFM 2005）与麦克斯韦（1854）引用，已回原文逐项核对细节：Andersen 论文摘要『dominated by a rotational term…as opposed to the translational velocity』与 v2『旋转主导、平动速度反而是配角』完全对应（一轮发现的『重量』偏移已修复）；麦克斯韦 1854 年讨论下落纸条属实。细节均逐字吻合，无来源存在但细节偏移问题。"
+    },
+    {
+      "pattern_id": "G-07",
+      "triggered": true,
+      "checked": true,
+      "finding": "现象有多成因（重量差、气动力稳定性、初始条件等），已核查：主因（气流中姿态稳定性）明示，次要因素（重量差）在 Q2 保留（『只说对了一半』），未把配角伪装成主因、也未隐瞒更主要成因，无归因偏漏。"
+    }
+  ],
+  "issue_responses": [
+    {
+      "issue_index": 0,
+      "status": "resolved",
+      "evidence": "v2 Q2 已改回论文原始对比轴：『这种翻飞由旋转带来的力主导，平动速度反而是配角』，不再写『不是重量』；重量作为次要因素在『叶面确实密度大一些……只说对了一半』中保留。绝对否定句式与引用对比轴偏移均消除。"
+    },
+    {
+      "issue_index": 1,
+      "status": "resolved",
+      "evidence": "v2 F段金句改为『比起那一点重量差，\"稳\"才是真正的主角』，相对表述，与 Q2『只说对了一半』口径一致，『不是重而是稳』式绝对否定已消除。"
+    },
+    {
+      "issue_index": 2,
+      "status": "resolved",
+      "evidence": "v2 Q3 将喻体由方向有歧义的『小降落伞』改为『不倒翁』（并显式注明『机制不同』），并把『翻飞时兜住空气生恢复力矩』与『摆定后凹面朝下受力最均匀』拆为两阶段（『等摆成……』），『增阻』与『阻力最小』的并置张力消除。"
+    },
+    {
+      "issue_index": 3,
+      "status": "resolved",
+      "evidence": "v2 Q2 麦克斯韦引用补年份：『早在1854年麦克斯韦就琢磨过纸片下落的古怪姿态』，FP-12 首次引用未标出处已修复。"
+    }
+  ],
+  "forbidden_violations": [],
+  "overall_comment": "结构、字数与脚本项全部合格：A段引用块、C段 **Q1/Q2/Q3：** 格式、F段「冷知识反转」标签、结尾四列风格表格（分类「自然科学」在 6 选 1 枚举内）四要素齐全；全文 684 字（≤690 全文硬上限）；分隔线 2 条（≤2）；全文无波浪号与双破折号（Grep 实测零命中）；无 h3 滥用。独立 WebSearch 核验三轮关键断言均属实：麦克斯韦 1854 年下落纸条研究（Cambridge Mathematical Journal）、Andersen/Pesavento/Wang 2005 年 JFM 541:65-90（康奈尔大学，DOI 10.1017/S002211200500594X，摘要原文『rotational term…as opposed to translational velocity』与 v2『旋转主导、平动速度反而是配角』逐字对应）、人民网 2024-11-19 叶解剖与气动力稳定性解释。一轮审校提出的 2 项 P1（Q2/F段绝对否定 + 引用轴偏移）与 2 项 P2（降落伞张力、麦克斯韦缺年份）在 v2 中均已修复（issue_responses 逐条 resolved）。p0_count=0、p1_count=0、p2_count=0，达到通过条件（P0=0 且 P1≤2）。 ｜ 2026-09-22 复审精修：应 Master 反馈统一全篇称谓（迎光面/背光面）并补凹形汤勺比喻与 Q3 短比喻，复校 char_count=689、score=100、P0/P1/P2=0，未回退。 ｜ 二次精修：删 Q2/Q3 对面解释括号，复校 char_count=680、score=100、P0/P1/P2=0。",
+  "revised_after_review": {
+    "timestamp": "2026-09-22T11:11:00+0800",
+    "trigger": "Master 对 v2 优化版做术语一致性与画面感精修反馈（Q1 前后统一+凹形补比喻；Q2 统一叶面/叶背→迎光面/背光面；Q3 提面处加短比喻）",
+    "changes": [
+      "Q1 术语统一：『紧实的一面』→『迎光那面（紧实面）』，结尾『叶面凹、叶背凸』→『迎光面凹、背光面凸』，全篇统一为『迎光面（紧实面）/背光面（疏松面）』",
+      "Q1 凹形补画面比喻：『卷成凹形』后加『像只按扁的浅口汤勺，凹面朝上兜风』，降低读者看到凹凸时下意识捋一遍的认知成本",
+      "Q2 答案统一：『叶面确实密度大一些』→『迎光面确实密度大一些』（提问保留通俗『叶面更重』），与 Q1 称谓体系对齐",
+      "Q3 提面加短比喻：『凸起的叶背』→『凸起的那面（像小碗的外底）』；『凹面朝下/叶背朝天』→『迎光面（凹面）朝下/背光面（凸面）朝天』",
+      "控字数（≤690）：Q1『一排排→排排』『整片叶子→整片叶』『能兜风→兜风』『松如海绵、颜色浅→松如海绵色浅』；结尾删冗余『它像一只小碗在空中翻滚，』『这套本事』",
+      "二次精修：应 Master 反馈删除 Q2『（紧实面）』与 Q3『（凹面）』『（凸面）』解释括号（Q1 已完整交代迎光面/背光面定义，Q2/Q3 解释属冗余）；Q3 短比喻『像小碗的外底』保留"
+    ],
+    "revalidate": {
+      "tool": "scripts/validate_article.py --json",
+      "exit_code": 0,
+      "score": 100,
+      "char_count": 680,
+      "p0_count": 0,
+      "p1_count": 0,
+      "p2_count": 0,
+      "p0p1_passed": true
+    }
+  }
+}

@@ -1,0 +1,162 @@
+{
+  "article_id": "2026-10-15",
+  "review_timestamp": "2026-10-15T09:53:59+0800",
+  "pass": true,
+  "p0_count": 0,
+  "p1_count": 1,
+  "p2_count": 2,
+  "score": 90,
+  "script_result": {
+    "exit_code": 0,
+    "score": 100,
+    "char_count": 591,
+    "p0_count": 0,
+    "p1_count": 0,
+    "p2_count": 0
+  },
+  "revised_after_review": true,
+  "revision_note": "Orchestrator 已按 issues 修复：P1（Q2 全沉积/始终透亮 → 大部分沉积/得以长时间保持透亮）、P2×2（标题加「常见」限定；顺手→顺势）。修复后重跑 validate_article.py：score=100，char_count=591，P0/P1/P2 全 0。原始审校计数（p1_count/p2_count/issues）按审校当时判定保留。",
+  "issues": [
+    {
+      "level": "P1",
+      "category": "GAP-G-02/FORBIDDEN-绝对化",
+      "description": "C段Q2末句「黑色钨粒全沉积在脖子上，圆鼓鼓的发光区始终透亮」程度说满：权威源口径为「大部分」钨粒随热气体卷到上方、沉积在灯泡颈部（河南省科普资源库·电灯泡条目原文），充气灯泡泡壁各处仍会缓慢累积钨霜，只是颈部最重；且「全沉积在脖子上」与Q1「玻璃泡蒙了一层钨霜」的整体变黑图景存在张力——若全沉积于颈部，泡壳便不会整体蒙霜，A段「用了三年发黑」的场景也无法成立。「始终透亮」同理说满，充气灯泡发光区也会随时间轻微变暗。",
+      "location": "C段Q2末句（第9行）",
+      "suggestion": "按绝对化规则至少标P1（禁止降P2）。改为相对表述：「大部分黑色钨粒被送到颈部安家，圆鼓鼓的发光区得以长时间保持透亮」，与Q1整体变黑图景相容，也与权威源「大部分」口径一致。"
+    },
+    {
+      "level": "P2",
+      "category": "CHECKLIST-§53/标题泛指",
+      "description": "标题「为什么灯泡都是梨形的？」中「都是」为绝对化泛指，事实上有蜡烛形（B）、球形（G）、管形（T）等多种灯泡形状并存，并非全部为梨形。",
+      "location": "标题（第1行）",
+      "suggestion": "可斟酌加限定，如「为什么最常见的灯泡都是梨形的？」或「为什么家里的灯泡都是梨形的？」，与正文「主流家用灯泡」的口径对齐。"
+    },
+    {
+      "level": "P2",
+      "category": "CHECKLIST-§2/措辞",
+      "description": "Q2「气体受热后自下而上对流，顺手把钨蒸气卷着往上送」中「顺手」为拟人化口语，物理过程表述宜用中性动词。",
+      "location": "C段Q2（第9行）",
+      "suggestion": "改「顺势把钨蒸气带着往上送」，保留画面感的同时去掉主观色彩。"
+    }
+  ],
+  "fact_checks": [
+    {
+      "claim": "灯丝是钨丝，通电后温度飙到2500摄氏度以上",
+      "source_verified": true,
+      "detail_verified": true,
+      "omission_severity": "minor",
+      "verdict": "verified",
+      "note": "多源独立核实：河南省科普资源库「灯泡里的钨丝能达到2500℃左右的高温」；chemistry-dictionary「normal operating temperatures of well over 2,500 degrees Celsius / Operating Temperature 2,500 to 3,000 °C」；中钨在线「钨丝的高熔点确保其在约2500°C的工作温度下不会熔化」。科普中国补充口径为充气后灯丝温度可提高到2400到2700℃。2500摄氏度以上有权威源支持，非错误。"
+    },
+    {
+      "claim": "充入惰性气体（如氩气），气体受热自下而上对流，把钨蒸气卷到细长颈部沉积，使发光区保持透亮",
+      "source_verified": true,
+      "detail_verified": true,
+      "omission_severity": "minor",
+      "verdict": "verified",
+      "note": "河南省科普资源库·电灯泡条目原文：「灯泡做成梨形，灯泡内的惰性气体对流时，钨的微粒，大部分随热气体被卷到上方，沉积在灯泡的颈部，这就能减轻对灯泡周围和底部的影响，保持它的亮度。所以灯泡要做成梨形。」机制方向与归因主因均核实无误；注意该源用词为「大部分」，本文Q2写作「全沉积」，程度说满（已按绝对化标P1）。科普中国亦载大功率灯泡充氮氩惰性气体、可阻碍钨丝高温升华。"
+    },
+    {
+      "claim": "LED灯里没有钨丝、不会升华，却依然沿用梨形，活因是灯座标准和看惯（审美惯性），不再是物理学",
+      "source_verified": true,
+      "detail_verified": true,
+      "omission_severity": "minor",
+      "verdict": "verified",
+      "note": "Wikipedia A-series light bulb：「Although A-shape bulbs historically used incandescent lighting technology, A-shaped compact fluorescent (CFL) and LED lamps are also commonly available」；Norman Lamps 明答「LED lamps do not use a vacuum like their incandescent counterparts; so why make them in this arbitrary shape?」——「the ease in retrofitting to existing incandescent lamp fixtures and the general public's familiarity with the classic A-Type light bulb shape」，与文中「灯座标准+看惯」完全对应。A19/A60+E26/E27 标准多源确认。"
+    },
+    {
+      "claim": "钨丝一边升华一边变细，最后从最细的地方熔断；灯泡发黑是寿命倒计时信号",
+      "source_verified": true,
+      "detail_verified": true,
+      "omission_severity": "minor",
+      "verdict": "verified",
+      "note": "河南省科普资源库：「钨丝上细微的电阻差别造成温度不一，在电阻较大的地方，温度升得较高，钨丝亦升华得较快，于是造成钨丝变细，电阻进一步增大的循环；最终令钨丝烧断」——与文中「最细处熔断」机制一致。chemistry-dictionary 亦载 tiny amounts of tungsten atoms slowly evaporate、wire becomes thinner until it snaps。"
+    }
+  ],
+  "quote_checks": [],
+  "mechanism_checks": [
+    {
+      "claim": "Q1：固态钨不经过液态直接变气体（升华），钨蒸气撞上较冷玻璃泡直接变回固体（凝华），日积月累蒙上钨霜、灯光变暗",
+      "direction_ok": true,
+      "elements_complete": true,
+      "note": "因果链完整：通电升温→升华→蒸气输运→遇冷玻璃凝华→沉积变暗。升华/凝华物态方向与冷热界面归因均正确（FP-79 扫描通过：未把放热当作位置成因）。"
+    },
+    {
+      "claim": "Q2：充惰性气体→受热气体自下而上对流→携带钨蒸气上行→颈部定居沉积→发光区保持透亮",
+      "direction_ok": true,
+      "elements_complete": true,
+      "note": "方向与权威源一致（热气上行、上方颈部温度较低使钨粒沉积）。必要环节（对流输运+较冷颈部）齐备，无跳步。唯一问题在程度表述「全沉积/始终透亮」说满，已按绝对化单列P1，不影响方向与要素判定。"
+    },
+    {
+      "claim": "Q3：升华单向不可逆→钨丝持续变细→最细处过热熔断→梨形只延缓失明、不改写结局",
+      "direction_ok": true,
+      "elements_complete": true,
+      "note": "「变细→电阻增大→热点→烧断」的恶性循环链条完整，且与Q2「保亮度」有「既然…」显式桥接，无两套图景拼接（FP-69 扫描通过）。"
+    }
+  ],
+  "attribution_checks": [
+    {
+      "claim": "灯泡用久变黑归因于钨丝升华后凝华沉积",
+      "is_primary_cause": true,
+      "note": "白炽灯泡壳发黑的主因即钨蒸气的凝华沉积（权威源一致），归因主因正确，未发现被遗漏的更主要成因。"
+    },
+    {
+      "claim": "梨形+惰性气体保持亮度归因于对流把钨粒送到颈部沉积",
+      "is_primary_cause": true,
+      "note": "充气灯泡中抑制蒸发+对流输运至上颈部沉积是教科书级主因解释，主次归因正确；「甩锅区」表述忠实于该机制。程度说满问题另计P1。"
+    },
+    {
+      "claim": "灯泡烧坏归因于钨丝升华变细后熔断",
+      "is_primary_cause": true,
+      "note": "灯丝失效主因即升华减薄+热点烧断（权威源一致），归因正确。"
+    }
+  ],
+  "term_checks": [],
+  "gap_checks": [
+    {
+      "pattern_id": "G-01",
+      "triggered": false,
+      "checked": true,
+      "finding": "已逐条核对触发信号：A段与全文无「不敢/怕/有毒吗/能不能吃/会不会伤/有害吗/安全吗/能不能用」类读者顾虑或禁忌表述；话题为物理化学（灯泡为何是梨形），虽涉及电器但不触及安全后果领域。开头两问（「煤灰」从哪来、为何是梨形）均已在Q1/Q2正面回答，钩子闭环。不命中。"
+    },
+    {
+      "pattern_id": "G-02",
+      "triggered": true,
+      "checked": true,
+      "finding": "命中1处：C段Q2末句（第9行）「黑色钨粒全沉积在脖子上，圆鼓鼓的发光区始终透亮」——「全沉积」「始终透亮」均属无例外全称判断。逐词核验：权威源口径为「大部分」钨粒被卷到颈部沉积（河南省科普资源库），泡壁仍会缓慢变黑；且与Q1「玻璃泡蒙了一层钨霜」及A段三年发黑场景存在内部张力。事实上有例外→至少P1（禁止降P2），已录入issues第1条。标题「都是梨形的」为泛指性变体，按标题语境降为P2建议级（issues第2条），不重复计入G-02命中数。"
+    },
+    {
+      "pattern_id": "G-03",
+      "triggered": false,
+      "checked": true,
+      "finding": "已对全部可核验定性描述回权威源核对：①钨丝2500摄氏度以上（多源：2500℃左右/2500到3000℃/well over 2500℃，属实）；②惰性气体对流卷钨粒至颈部（河南省科普资源库原文一致）；③最细处熔断（变细-电阻增大循环，原文一致）；④樟脑丸升华类比（同类固→气相变，属实）；⑤LED无升华仍用梨形因灯座标准与惯性（Wikipedia/Norman Lamps一致）。未发现「听起来合理」的定性错误。"
+    },
+    {
+      "pattern_id": "G-04",
+      "triggered": false,
+      "checked": true,
+      "finding": "逐环节追问三处因果链：Q1升温→升华→输运→凝华→变暗、Q2充气→对流→上行→颈部沉积→保亮度、Q3升华→变细→最细处熔断，中间环节均可由文中步骤自行推出，无跳步、无一句话概括多步骤过程。"
+    },
+    {
+      "pattern_id": "G-05",
+      "triggered": false,
+      "checked": true,
+      "finding": "文中无古书/论文/报道引文，无研究者原话转述；无医学、解剖、生理类专有名词（「升华/凝华/惰性气体/钨丝」为物理化学规范术语，用字准确，且均遵循先现象后注名）。术语归属无张冠李戴。"
+    },
+    {
+      "pattern_id": "G-06",
+      "triggered": false,
+      "checked": true,
+      "finding": "全文无「研究表明/XX大学/发表于XX年/实验显示」等引用标记（纯机制科普，未引用具体研究），不存在「来源存在但细节未核对」风险。文中全部数据类断言已按Step 5独立WebSearch核验（见fact_checks 4条，均detail_verified=true）。"
+    },
+    {
+      "pattern_id": "G-07",
+      "triggered": false,
+      "checked": true,
+      "finding": "对三处成因归因追问主因：变黑（钨升华凝华，主因正确）、保亮度（对流输运+颈部沉积，教科书主因）、烧坏（升华变细熔断，主因正确）。均未发现只提次要原因、遗漏更主要成因的情况；F段反转（LED因灯座标准与惯性沿用梨形）本身经权威源核实为真，非编造反转（FP-71扫描通过）。"
+    }
+  ],
+  "issue_responses": [],
+  "forbidden_violations": [],
+  "overall_comment": "独立审校结论：脚本满分（100分，582字，P0/P1/P2全0），人工六维度+三项事实核验+G-01至G-07对照检查后：P0=0，P1=1（Q2「全沉积在脖子上/始终透亮」绝对化说满，权威源口径为「大部分」，且与Q1整体变黑图景张力；按规则至少P1禁止降级），P2=2（标题「都是」泛指可加「常见」限定；「顺手」拟人可改「顺势」）。四组事实断言（钨丝2500℃以上、惰性气体对流送钨粒至颈部、LED因灯座标准与惯性沿用梨形、最细处熔断）均经WebSearch独立核实无误。结构最小项齐备：A段引用块、C段Q1/Q2/Q3加粗格式、F段引用块含「冷知识反转」标签、结尾风格表格四要素（与项目现行2行4列标准一致）。连接词0处、无AI味排比、无~与——、无HTML实体残留。P0=0且P1=1≤2，判定通过（pass=true）；建议 Orchestrator 处理P1后将「全沉积」改为「大部分沉积」类相对表述。"
+}

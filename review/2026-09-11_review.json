@@ -1,0 +1,143 @@
+{
+  "article_id": "2026-09-11",
+  "revised_after_review": true,
+  "review_timestamp": "2026-09-11T09:58:09+0800",
+  "pass": true,
+  "p0_count": 0,
+  "p1_count": 0,
+  "p2_count": 2,
+  "score": 96,
+  "script_result": {
+    "exit_code": 0,
+    "score": 100,
+    "char_count": 512,
+    "p0_count": 0,
+    "p1_count": 0,
+    "p2_count": 0
+  },
+  "issues": [
+    {
+      "level": "P2",
+      "category": "CHECKLIST-§93",
+      "description": "结尾除风格表格外，缺少一句可独立复述给朋友的记忆锚点金句（§93 活跃区要求：结尾在表格之外补一句可复述核心句，强化传播性）。",
+      "location": "F段至结尾表格之间",
+      "suggestion": "在 F 段或表格前补一句可转发金句，例如：\"咖啡洒不洒，看的不是你手稳不稳，而是它的晃动频率和你的步频合不合拍。\""
+    },
+    {
+      "level": "P2",
+      "category": "事实精度-F段",
+      "description": "F 段反转\"两股水流在饮孔口撞上，直接从孔里噗地喷出来，像迷你火山\"为文学化放大。核心现象（带孔盖仍可能从饮孔喷出咖啡）有据（Convergent Science 的 CFD 模型报道：咖啡晃动撞盖、经孔喷出且速度增加），但\"两股水流撞上/像迷你火山\"细节未逐字溯源，存在过度形象化。",
+      "location": "F段（冷知识反转）",
+      "suggestion": "保留\"带孔盖不能完全防住、咖啡仍可能从饮孔喷出\"的反转结论，将\"两股水流撞上、像迷你火山\"改为更克制的表述，或注明为形象比喻，避免与科普中国等严谨信源口径偏离。"
+    }
+  ],
+  "fact_checks": [
+    {
+      "claim": "加州大学圣巴巴拉分校的 Krechetnikov 和研究生 Hans Mayer 在 2012 年把这项研究发在了《物理评论 E》",
+      "source_verified": true,
+      "detail_verified": true,
+      "omission_severity": "minor",
+      "verdict": "verified",
+      "note": "多源核验一致：Rouslan Krechetnikov 为 UCSB 机械工程师，Hans (H. C.) Mayer 为其研究生；论文 H. C. Mayer & R. Krechetnikov, Phys. Rev. E 85, 046117 (2012)，发表于 2012 年 4 月。机构/年份/期刊/师生关系/署名顺序全部吻合。"
+    },
+    {
+      "claim": "普通马克杯里咖啡的天然晃动频率，刚好和人大步走路的腿频对上（共振）",
+      "source_verified": true,
+      "detail_verified": true,
+      "omission_severity": "minor",
+      "verdict": "verified",
+      "note": "论文原文：everyday mug sizes produce natural frequencies that just happen to match those of a person's leg movements during walking。New Scientist 补充固有频率约 2.6 到 4.3 Hz，步态前向分量强制频率约 1 到 2.5 Hz，接近共振阈值。共振匹配说法属实。"
+    },
+    {
+      "claim": "起步时放慢加速度、让咖啡面和杯口留出约一厘米空隙、再盯着杯子走，溢出概率会大幅下降",
+      "source_verified": true,
+      "detail_verified": true,
+      "omission_severity": "minor",
+      "verdict": "verified",
+      "note": "论文作者建议三招：降低初始加速度、液面距杯口至少杯径 1/8（普通杯约 1 厘米）、集中注意力盯杯。\"约一厘米\"与 1/8 杯径一致，数值与建议均属实。"
+    },
+    {
+      "claim": "带小孔的盖子反而可能更糟，晃动的咖啡黏在盖内，从饮孔喷出（像迷你火山）",
+      "source_verified": true,
+      "detail_verified": false,
+      "omission_severity": "minor",
+      "verdict": "partial",
+      "note": "核心现象有据：咖啡网/Convergent Science 市场总监 Rob Kaczmarek 的 CFD 模型报道\"咖啡晃动撞击盖子，因盖上有孔，涌动咖啡经孔飞溅且速度增加\"。但\"两股水流在饮孔口撞上、像迷你火山\"为文章文学化补充，未逐字溯源，属细节 embellishment。"
+    }
+  ],
+  "quote_checks": [
+    {
+      "claim": "加州大学圣巴巴拉分校的 Krechetnikov 和研究生 Hans Mayer 在 2012 年把这项研究发在了《物理评论 E》",
+      "verbatim_match": true,
+      "source": "Phys. Rev. E 85, 046117 (2012); Science.org 'The Physics of Spilled Coffee' (Jon Cartwright); APS Physics 'Science of Slosh' (Jessica Thomas); 科学网/果壳中文报道"
+    }
+  ],
+  "mechanism_checks": [
+    {
+      "claim": "液体固有频率由杯子大小与液面高度决定，走路频率与之共振，微小不规则放大振荡直至溢出",
+      "direction_ok": true,
+      "elements_complete": true,
+      "note": "钟摆类比→固有频率（杯径与液面高）→与步频共振→微小不规则（地面不平、分神）作噪声放大→溢出，因果方向自洽、环节完整，与论文机制一致。"
+    },
+    {
+      "claim": "带孔盖反而更糟：咖啡黏在盖内从饮孔喷出",
+      "direction_ok": true,
+      "elements_complete": false,
+      "note": "整体方向自洽（晃动→撞盖→从孔出），但\"两股水流撞上、像迷你火山\"为文学化环节，未逐字溯源，机制要素存在 embellishment。"
+    }
+  ],
+  "attribution_checks": [
+    {
+      "claim": "咖啡溢出主因=杯中液体固有频率与走路腿频共振，微小不规则（地面不平/分神）放大振荡",
+      "is_primary_cause": true,
+      "note": "与 Mayer & Krechetnikov 2012 论文主因一致；噪声/不规则为次要增强因素，文中已并列提及，归因完整无偏漏。"
+    }
+  ],
+  "term_checks": [],
+  "gap_checks": [
+    {
+      "pattern_id": "G-01",
+      "triggered": true,
+      "checked": true,
+      "finding": "A段含\"烫得你直缩手\"烫伤场景，话题涉热饮。但 Q3 与 F 段已给出可执行闭环（放慢起步/留约 1 厘米空隙/盯着杯子/别迷信盖子），行为安全闭环已覆盖，故不单独标级（命中但已闭环）。"
+    },
+    {
+      "pattern_id": "G-02",
+      "triggered": false,
+      "checked": true,
+      "finding": "全文扫描无\"不可能/全看/全都/一定/绝对/必然/永远/无非\"等绝对词；F段\"反而可能更糟\"用\"可能\"软化，未说满。未命中绝对化。"
+    },
+    {
+      "pattern_id": "G-03",
+      "triggered": false,
+      "checked": true,
+      "finding": "全部定性描述（共振匹配、1 厘米空隙、慢起步、盯杯、噪声放大）经 WebSearch 回权威源逐条核对，均与 2012 Phys. Rev. E 论文一致，无看似合理却错误的事实。"
+    },
+    {
+      "pattern_id": "G-04",
+      "triggered": false,
+      "checked": true,
+      "finding": "Q1→Q2→Q3 机制链条（钟摆→固有频率→步频共振→噪声放大→溢出）环节完整，无跳步缺失。"
+    },
+    {
+      "pattern_id": "G-05",
+      "triggered": true,
+      "checked": true,
+      "finding": "文中含具体研究引用（UCSB/Krechetnikov/Mayer/2012/Phys. Rev. E），已回原文逐字核对署名、机构、年份、期刊，与论文题录完全一致；全文无医学/解剖术语，term_checks 置空。"
+    },
+    {
+      "pattern_id": "G-06",
+      "triggered": true,
+      "checked": true,
+      "finding": "已不仅确认来源存在，更逐一核对细节：受试者为人、圆柱形杯、初始加速度/液面高度变量、建议的 1/8 杯径约 1 厘米空隙、注视降低溢出等，与论文及 APS/科学网报道一致，无细节遗漏。"
+    },
+    {
+      "pattern_id": "G-07",
+      "triggered": true,
+      "checked": true,
+      "finding": "溢出为多因现象（共振主因+噪声放大），文中同时给出主因与放大因素并提示\"对了一半\"，归因无偏漏，未只提次要原因。"
+    }
+  ],
+  "forbidden_violations": [],
+  "overall_comment": "全文结构齐备（A段引用块、C段 Q1/Q2/Q3、F段冷知识反转标签、四字段风格表格且分类在 6 枚举内），关键人物/机构/年份/期刊/数据经 WebSearch 独立核验全部属实，机制链条自洽完整，无绝对化、无 AI 味排比、无 Markdown 不安全字符。仅 F 段\"迷你火山\"为文学化放大（核心现象有据但细节未逐字溯源），以及结尾缺独立记忆锚点金句，均属 P2 微调。综合判定：P0=0、P1=0，通过。"
+}

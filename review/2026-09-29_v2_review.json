@@ -1,0 +1,174 @@
+{
+  "article_id": "2026-09-29",
+  "review_timestamp": "2026-09-29T11:55:21+0800",
+  "pass": true,
+  "p0_count": 0,
+  "p1_count": 0,
+  "p2_count": 0,
+  "score": 100,
+  "script_result": {
+    "exit_code": 0,
+    "score": 100,
+    "char_count": 656,
+    "p0_count": 0,
+    "p1_count": 0,
+    "p2_count": 0
+  },
+  "issues": [],
+  "fact_checks": [
+    {
+      "claim": "健康人鼻腔每天分泌约 500 到 1000 毫升黏液（约一到两瓶矿泉水），大部分被咽下",
+      "source_verified": true,
+      "detail_verified": true,
+      "omission_severity": "minor",
+      "verdict": "verified",
+      "note": "人民日报（人民app）、人民网、科普中国多源一致确认「正常人每天分泌鼻涕约500-1000ml，相当于两瓶矿泉水的量，大部分流向喉咽部被咽下」；华龙网（人民网转载）亦载「普通人一天中分泌黏液约为500 到 1000 毫升，在鼻纤毛摆动下被吞咽下去」。文章「一到两瓶矿泉水」喻体与信源一致，区间与方向均属实。",
+      "source": "https://www.peopleapp.com/rmharticle/30023944101 ; https://m.people.cn/n4/2017/0306/c166-8513325.html ; https://www.kepuchina.cn/article/articleinfo?business_type=100&ar_id=577866"
+    },
+    {
+      "claim": "眼睛和鼻子由鼻泪管连通，泪液流进鼻腔混入黏液，每天咽下的鼻涕有一小部分来自眼泪",
+      "source_verified": true,
+      "detail_verified": true,
+      "omission_severity": "minor",
+      "verdict": "verified",
+      "note": "腾讯医典、科普中国、博禾医生多源一致确认鼻泪管「上接泪囊、向下开口于鼻腔下部，将泪液排向鼻腔」；科普中国明确「有少部分鼻涕是由眼泪转化而来的，眼泪从连接眼睛与鼻腔的泪管流向鼻腔」。文章「鼻泪管连通、泪液流入鼻腔」及「一小部分来自眼泪」表述准确。",
+      "source": "https://h5.baike.qq.com/mobile/overview_detail.html?name=%E9%BC%BB%E6%B3%AA%E7%AE%A1 ; https://www.kepuchina.cn/article/articleinfo?business_type=100&ar_id=577866"
+    },
+    {
+      "claim": "鼻黏膜纤毛朝咽喉方向（向后）摆动，把黏液毯送往咽部被咽下",
+      "source_verified": true,
+      "detail_verified": true,
+      "omission_severity": "minor",
+      "verdict": "verified",
+      "note": "人民网载「剩下的大部分鼻涕都顺着鼻黏膜纤毛运动的方向，流向鼻后孔到咽部，回到了肚子里」；科普中国载「其中大部分的鼻涕顺着鼻毛运动的方向流向喉咽部，被我们咽下」。文章「纤毛朝咽喉方向摆动、把黏液毯往后扫送到嗓子眼咽下」方向如实，净运输方向朝咽（通俗简化无误）。",
+      "source": "https://m.people.cn/n4/2017/0306/c166-8513325.html ; https://www.kepuchina.cn/article/articleinfo?business_type=100&ar_id=577866"
+    },
+    {
+      "claim": "清鼻涕含溶菌酶可抑制细菌，咽下后被胃酸处理，对健康人基本无害",
+      "source_verified": true,
+      "detail_verified": true,
+      "omission_severity": "minor",
+      "verdict": "verified",
+      "note": "科普中国载「鼻涕中含有较多溶菌酶，会破坏空气中的细菌和病毒，即使被咽下也不会危害人体健康，同时胃酸对空气中的杂质、病菌也有清除作用」。文章「含溶菌酶和抗体抑菌」「进胃后被胃酸处理」「通常无害但不是无菌水」与权威源一致，且「通常」「健康人」限定严谨。",
+      "source": "https://www.kepuchina.cn/article/articleinfo?business_type=100&ar_id=577866"
+    }
+  ],
+  "quote_checks": [],
+  "mechanism_checks": [
+    {
+      "claim": "杯状细胞和腺体分泌保护液，像湿毯子铺在黏膜上，加湿空气、黏住灰尘微生物、溶菌酶抑菌",
+      "direction_ok": true,
+      "elements_complete": true,
+      "note": "分泌—铺展—功能（加湿/黏附/抑菌）链条完整；与权威源「黏液层保护黏膜、吸附杂质、含溶菌酶」一致，方向无误，无跳步。"
+    },
+    {
+      "claim": "鼻黏膜纤毛朝咽喉方向摆动，把黏液毯往后推，一路送到嗓子眼被咽下",
+      "direction_ok": true,
+      "elements_complete": true,
+      "note": "纤毛朝咽摆动→黏液后送→咽下的因果方向自洽，未混用矛盾图景；「身体安排好的单行道」为通俗总结，未跳过关键步。另列三条去向（后送/蒸发/干结鼻屎），机制完整。"
+    },
+    {
+      "claim": "鼻泪管连通眼鼻，泪液流进鼻腔混入黏液，故哭过常觉鼻子堵",
+      "direction_ok": true,
+      "elements_complete": true,
+      "note": "泪液经鼻泪管引流至鼻腔的机制方向正确；「哭过鼻子堵」为泪液增量涌入鼻腔的可感知结果，因果自洽，无矛盾图景。"
+    }
+  ],
+  "attribution_checks": [
+    {
+      "claim": "黏液不往外流而流向咽部，归因于纤毛朝咽喉方向摆动的单向运输（黏液纤毛清除）",
+      "is_primary_cause": true,
+      "note": "黏液纤毛清除（mucociliary clearance）是鼻腔分泌物后送的主因，权威源一致确认纤毛朝鼻咽方向摆动为运输主因；文章同时列出蒸发、干结鼻屎两条次要去向，无显著归因偏漏。"
+    }
+  ],
+  "term_checks": [
+    {
+      "term": "黏膜",
+      "used": "鼻腔黏膜/鼻黏膜",
+      "correct": "黏膜",
+      "exact": true,
+      "note": "规范用字（非旧体「粘膜」），全文一致正确。"
+    },
+    {
+      "term": "鼻泪管",
+      "used": "鼻泪管",
+      "correct": "鼻泪管（nasolacrimal duct）",
+      "exact": true,
+      "note": "解剖学命名正确，连通眼鼻，与正文机制一致。"
+    },
+    {
+      "term": "杯状细胞",
+      "used": "杯状细胞",
+      "correct": "杯状细胞（goblet cell）",
+      "exact": true,
+      "note": "术语正确，指分泌黏液的黏膜上皮细胞，文中以「专门生产保护液」先定性后注名，符合 CHECKLIST §77。"
+    },
+    {
+      "term": "溶菌酶",
+      "used": "溶菌酶",
+      "correct": "溶菌酶（lysozyme）",
+      "exact": true,
+      "note": "酶名正确，功能（破坏细菌细胞壁）属实。"
+    },
+    {
+      "term": "纤毛",
+      "used": "纤毛",
+      "correct": "纤毛（cilia）",
+      "exact": true,
+      "note": "术语正确，指黏膜上皮细胞表面摆动的动力结构。"
+    }
+  ],
+  "gap_checks": [
+    {
+      "pattern_id": "G-01",
+      "triggered": true,
+      "checked": true,
+      "finding": "话题属健康域（咽下自身分泌物），A段以「喉咙一润、下意识咽了一下」引出对身体分泌物入胃的潜意识顾虑；Q3 以「通常无害但不是无菌水……进胃后被胃酸处理」正面回应安全性，F段以「身体自产自销的防护液」强化，并给出具体就医边界「若鼻涕持续黄绿、带血或带臭味，还伴鼻塞头痛发热，就别只当趣闻，建议看医生」。安全性/行为闭环已建立 → 不标 P1。"
+    },
+    {
+      "pattern_id": "G-02",
+      "triggered": false,
+      "checked": true,
+      "finding": ""
+    },
+    {
+      "pattern_id": "G-03",
+      "triggered": true,
+      "checked": true,
+      "finding": "文中含可核验量（500-1000ml / 一到两瓶矿泉水）与常识性定性断言（纤毛朝咽摆动、鼻泪管连通使部分鼻涕来自眼泪、溶菌酶抑菌、咽下无害）；经 WebSearch 独立核验，全部与人民日报/人民网/科普中国/腾讯医典等权威源一致，「通常」「大部分」「一小部分」等限定严谨，无事实性错误 → 不标 P1。"
+    },
+    {
+      "pattern_id": "G-04",
+      "triggered": false,
+      "checked": true,
+      "finding": ""
+    },
+    {
+      "pattern_id": "G-05",
+      "triggered": true,
+      "checked": true,
+      "finding": "含解剖/生理术语（杯状细胞/纤毛/鼻黏膜/鼻泪管/溶菌酶/黏液毯），用字精确（黏膜非粘膜），归属正确，先定性后注名 → 不标 P1。"
+    },
+    {
+      "pattern_id": "G-06",
+      "triggered": false,
+      "checked": true,
+      "finding": ""
+    },
+    {
+      "pattern_id": "G-07",
+      "triggered": false,
+      "checked": true,
+      "finding": ""
+    }
+  ],
+  "issue_responses": [
+    {
+      "issue_index": 0,
+      "status": "resolved",
+      "evidence": "v2 标题已统一为「为什么人每天会悄悄咽下大约一到两瓶矿泉水那么多的鼻涕？」，与 A 段「一到两瓶矿泉水的量」喻体一致（均为矿泉水）；Q1 仅称「鼻腔黏液」不另引喻体，前后无冲突。信源（人民日报/科普中国）亦作「两瓶矿泉水」，原 v1 指出的「两瓶可乐量 vs 两瓶矿泉水」不一致已修复。"
+    }
+  ],
+  "forbidden_violations": [],
+  "overall_comment": "独立审校（v2）结论：文章事实准确、结构完整（A段引用块、Q1/Q2/Q3 问答、F段冷知识反转标签、四字段结尾风格表格齐备），全文 656 字（≤690 硬上限，600 仅为正文软目标）。4 项关键断言（日分泌量 500-1000ml 约两瓶矿泉水、纤毛朝咽摆动后送、鼻泪管连通使部分鼻涕来自眼泪、溶菌酶抑菌且咽下无害）经 WebSearch 独立核验，全部与权威源一致。FORBIDDEN 全 78 条扫描无违规：全文用「到」表述区间、无波浪号与双破折号类 Markdown 不安全字符，无绝对化/夸大/伪反转/交互引导。GAP_PATTERNS 7 条逐条对照，仅 G-01/G-03/G-05 触发且均已合规，无 P1。L1 一轮审校唯一 P2（标题喻体不一致）在 v2 已修复（issue_responses[0]=resolved）。综合判定：通过（pass=true，P0=0、P1=0）。唯一可优化项为标题「大约一到两瓶矿泉水那么多」略显口语冗余，但不构成 P 级问题。"
+}

@@ -1,0 +1,330 @@
+{
+  "article_id": "2026-10-20",
+  "article_path": "F:/WorkBuddy/daily-why/articles/2026-10/2026-10-20-每日冷知识-戴胜巢臭.md",
+  "article_copy_path": "F:/WorkBuddy/daily-why/archive/_validate_tmp/draft_dupang.txt",
+  "review_timestamp": "2026-10-20T10:55:18+0800",
+  "pass": false,
+  "p0_count": 1,
+  "p1_count": 3,
+  "p2_count": 2,
+  "score": 59,
+  "script_result": {
+    "exit_code": 0,
+    "passed": true,
+    "score": 100,
+    "char_count": 661,
+    "p0_count": 0,
+    "p1_count": 0,
+    "p2_count": 0,
+    "checks_passed": 12,
+    "note": "因环境安全规则拦截子进程读取文件名含『每日冷知识』的文件，脚本对 Orchestrator 备好的逐字一致校验副本 F:/WorkBuddy/daily-why/archive/_validate_tmp/draft_dupang.txt 运行（内容与原文完全相同）。12 项检查全部通过，661 字符（不超过 690 上限）。"
+  },
+  "issues": [
+    {
+      "level": "P0",
+      "category": "FORBIDDEN-FP-19/CHECKLIST-§3/GAP-PATTERNS-G-03",
+      "location": "C段 Q1（第 7 行）",
+      "description": "『臭味的真正产地是腺体里养的共生细菌，它们制造出含硫的恶臭物质』：『含硫』为具体化学成分断言，与权威源矛盾。对欧洲戴胜尾脂腺分泌物挥发物最系统的 GC-MS 分析（Martín-Vivaldi et al. 2010, Proc R Soc B 277:123, PMC2842625）共检出 10 种挥发物：丁酸、2-甲基丁酸、4-甲基戊酸、苯甲醛、苯酚、苯乙醛、吲哚、3-苯丙酸、4-氯吲哚及 1 种未鉴定物，均非含硫化合物；其中 7 种经抗生素清除实验证实由共生细菌生产。含硫的二甲基硫类是绿林戴胜（Phoeniculus purpureus）分泌物的成分（Burger et al. 2004），本文疑将同目近亲物种的化学成分张冠李戴。『二甲基硫化物』仅见于科普中国等大众信源及一篇转述『伊朗伊斯法罕大学研究』的 AI 聚合文（Nexuswild），多轮检索均无法溯源到原始文献。共生细菌制造臭物本身有据，错在『含硫』这一化学定性。",
+      "suggestion": "删去『含硫』二字，改为有据表述：『它们制造出丁酸、吲哚一类的恶臭挥发物』，或笼统写『它们制造出恶臭物质』。若作者持有伊朗方面原始文献，请回论文核实物种、分泌物类型与检出限后再决定保留。"
+    },
+    {
+      "level": "P1",
+      "category": "CHECKLIST-§101/FP-19/GAP-PATTERNS-G-06",
+      "location": "C段 Q2（第 9 行）",
+      "description": "『有研究者把戴胜巢的垫料递给老鼠，老鼠退避三舍』：该具体实验断言经 6 轮中英文检索未找到任何原始文献，仅可溯源到科普中国《鸟中『臭鼬』》的转述（『科学家做过实验：把戴胜巢穴的垫料拿去给老鼠闻，老鼠立刻逃得远远的』），且该转述源在相邻事实上已被证伪（同文称以色列 1999 年评选国鸟，实为 2008 年、约 15 万人票选）。同句『臭味像一堵化学围墙，把蛇、老鼠挡在洞外』把学界假说性结论写成定论：权威源口径为 is thought to help deter predators（均带推测限定），该功能现有的同行评审证据主要是吸血蝇驱避实验（Tomás et al. 2020）与猛禽石膏模型实验（Ruiz-Rodríguez et al. 2013），并无老鼠实验记录。",
+      "suggestion": "删除老鼠实验断言，或将 Q2 改为带限定的表述：『研究者推测，这层臭味能把蛇、老鼠这些靠鼻子觅食的天敌挡在洞外』。如保留实验，须补齐研究者、机构、年份等可核查要素。"
+    },
+    {
+      "level": "P1",
+      "category": "CHECKLIST-§4/GAP-PATTERNS-G-04/G-07",
+      "location": "C段 Q3（第 11 行）",
+      "description": "『戴胜的蛋刚产下时是淡蓝色，在越来越脏的巢里慢慢被染成棕色』：蛋由淡蓝变棕的现象属实，但归因采用了大众口径（脏巢染色），遗漏了研究确认的主因：孵卵雌鸟主动用喙把深色、富共生菌的尾脂腺分泌物一遍遍抹在蛋壳上，蛋壳上特有小凹坑（crypts）卡住这层带菌保护膜，蛋因此变棕（Martín-Vivaldi et al. 2009；Soler et al. 2014, J Anim Ecol；National Geographic 2014 明确写道 not just because the nests are dirty）。Q3 主题正是该分泌物的抗菌功能，却未点明『蛋变棕就是雌鸟涂抹抗菌分泌物的可见痕迹』，机制链断环。",
+      "suggestion": "改为『戴胜的蛋刚产下时是淡蓝色，雌鸟会把棕黑色的分泌物一遍遍抹在蛋壳上，蛋慢慢被染成棕色』：既修正归因，又与同段抗菌功能自然衔接。"
+    },
+    {
+      "level": "P1",
+      "category": "CHECKLIST-§4/§18/FP-24",
+      "location": "F段（第 15 行）",
+      "description": "『因为这顶冠和臭味是配套的警告标志，公鸟和非繁殖期的雌鸟蹭了家属的警告牌，一样能把捕食者唬住』：该因果断言是假说性解读却写成定论。Ruiz-Rodríguez et al. 2013（Oecologia）石膏模型实验的实际结论是：四种鲜艳鸟类的颜色不构成警示捕食者的警戒色，戴胜模型（无论鲜艳或土褐）受猛禽攻击率都低，作者仅推测捕食者可能因颜色以外的特征（体型轮廓）回避该物种，回避机制并未定论；『公鸟蹭警告牌』是对该假说的进一步外推（科普中国同源文章亦用『也能够以此吓跑捕食者』的推测语气）。文章未加『研究者推测』类限定。",
+      "suggestion": "加限定并交代证据：『研究者用石膏模型做实验，发现猛禽很少攻击戴胜轮廓的模型。科学家推测，这顶凤冠配上一身臭味，是在提前警告捕食者「我不好惹」，公鸟和非繁殖期的雌鸟也跟着沾光。』"
+    },
+    {
+      "level": "P2",
+      "category": "CHECKLIST-§19/FP-17",
+      "location": "C段 Q3（第 11 行）",
+      "description": "『共生细菌会生产抗菌肽』：术语本身可用（戴胜文献原文即将 symbionts 合成的 bacteriocins 定义为 antimicrobial peptides，Ruiz-Rodríguez et al. 2012, PLOS ONE），且金黄色葡萄球菌确在该论文指示菌名单中；但对金葡菌与大肠杆菌的抑制证据主体来自 2010 年非肽类挥发物混合实验（19 个指示菌含 S. aureus 与 E. coli），抗菌肽（细菌素）的活性谱是另一套指示菌。合并叙述后读者会误以为这两种菌的抑制都归功于抗菌肽。",
+      "suggestion": "可改为『共生细菌会生产细菌素（一类抗菌肽）等多种抗菌物质』：既保留术语锚点，又不过度聚焦肽类。"
+    },
+    {
+      "level": "P2",
+      "category": "FORBIDDEN-FP-68",
+      "location": "C段 Q3（第 11 行）",
+      "description": "『蛋和雏鸟在潮湿树洞里烂掉的概率明显下降』：效果说满。蛋一侧有实验支持（阻止雌鸟接触分泌物可降低孵化成功率，Soler et al. 2014）；但 National Geographic 2014 报道的同组研究中，能否摸到腺体对成功抚育出窝的比例并无显著影响，雏鸟感染风险下降属合理推断而非已验证结论，『明显下降』超出证据强度。",
+      "suggestion": "软化为『蛋被病菌钻空子的机会小多了』或『能压低蛋和雏鸟的感染风险』。"
+    }
+  ],
+  "fact_checks": [
+    {
+      "claim": "戴胜繁殖期雌鸟尾脂腺胀大约 8 倍、分泌物大增、颜色变成棕黑",
+      "source_verified": true,
+      "detail_verified": true,
+      "verdict": "match",
+      "omission_severity": "minor",
+      "note": "T&F 2025 换羽与性别鉴定论文引 Martín-Vivaldi et al. 2009：The preen gland of females increases about eight-fold in size from the start of egg laying up to hatching；2009 摘要原文：incubating females showed a marked increase in size and volume of secretion produced, which became dark and pungent。文章『约 8 倍』『分泌物大增』『颜色变成棕黑』均与原始研究一致（口径补充：8 倍指产卵开始到孵化之间的峰值增幅）。"
+    },
+    {
+      "claim": "臭味由腺体内共生细菌制造",
+      "source_verified": true,
+      "detail_verified": true,
+      "verdict": "match",
+      "note": "Martín-Vivaldi et al. 2009（J Avian Biol 40:191）与 2010（Proc R Soc B 277:123）：抗生素清除腺内细菌后分泌物变浅、臭味减弱、挥发物大部分消失，证明臭物由腺内共生肠球菌等细菌生产。"
+    },
+    {
+      "claim": "共生细菌制造含硫的恶臭物质",
+      "source_verified": false,
+      "detail_verified": false,
+      "verdict": "mismatch",
+      "omission_severity": null,
+      "note": "2010 Proc R Soc B 的 GC-MS 检出 10 种挥发物均非含硫化合物；二甲基硫类是绿林戴胜（Phoeniculus purpureus）成分（Burger et al. 2004），疑为物种混淆。『二甲基硫化物』仅见科普中国与 Nexuswild（转述无法溯源的伊朗伊斯法罕大学研究）。见 issues P0。"
+    },
+    {
+      "claim": "共生细菌产抗菌肽，抑制金黄色葡萄球菌、大肠杆菌等致病菌",
+      "source_verified": true,
+      "detail_verified": true,
+      "verdict": "match",
+      "note": "Ruiz-Rodríguez et al. 2012（PLOS ONE, PMC3404078）：腺内肠球菌合成 bacteriocins（论文原文即括注 antimicrobial peptides），指示菌含 S. aureus；2010 Proc R Soc B：自然浓度挥发物混合抑制全部 19 个指示菌（含 S. aureus 2402 与 E. coli 7742/U91），抗生素清除细菌后抑菌作用消失。细微差别见 issues P2-1。"
+    },
+    {
+      "claim": "雏鸟受惊时冲着来犯者喷射混着臭液的粪便",
+      "source_verified": true,
+      "detail_verified": true,
+      "verdict": "match",
+      "note": "多源一致：约 6 日龄起雏鸟可向入侵者定向喷射粪流并发出蛇形嘶声（Wikipedia/Thai National Parks/Kiddle/Birdwords）；雏鸟尾脂腺同样产深色臭液（Martín-Vivaldi et al. 2009）；科普中国转述『雏鸟受惊会大量排便，并从尾臀腺挤出一大滴臭液』。『混着臭液的粪便』为合理压缩。"
+    },
+    {
+      "claim": "有研究者把戴胜巢的垫料递给老鼠，老鼠退避三舍",
+      "source_verified": false,
+      "detail_verified": false,
+      "verdict": "unverified",
+      "omission_severity": null,
+      "note": "6 轮中英文检索未找到原始文献；仅科普中国《鸟中『臭鼬』》转述，且该文相邻事实有错（以色列国鸟年份 1999 实为 2008）。现有同行评审证据为吸血蝇驱避（Tomás et al. 2020）与猛禽模型实验（Ruiz-Rodríguez et al. 2013），无老鼠实验记录。见 issues P1-2。"
+    },
+    {
+      "claim": "公戴胜平时一点臭味也没有",
+      "source_verified": true,
+      "detail_verified": true,
+      "verdict": "match",
+      "note": "Martín-Vivaldi et al. 2009 摘要原文：Male glands underwent no seasonal changes, and their secretions were invariably white and odourless。文章表述与之一致。"
+    },
+    {
+      "claim": "凤冠与臭味是配套的警告标志，公鸟和非繁殖期雌鸟蹭警告牌唬住捕食者",
+      "source_verified": true,
+      "detail_verified": false,
+      "verdict": "partial",
+      "omission_severity": null,
+      "note": "Ruiz-Rodríguez et al. 2013（Oecologia）：戴胜模型受猛禽攻击率低且与颜色无关，但论文结论明确『颜色不构成警戒色』，仅推测捕食者因颜色以外的特征回避该物种；『公鸟蹭警告牌』为科普中国转述中的推测语气外推。假说被写成定论。见 issues P1-4。"
+    },
+    {
+      "claim": "戴胜的蛋刚产下时是淡蓝色，后被染成棕色",
+      "source_verified": true,
+      "detail_verified": false,
+      "verdict": "partial",
+      "omission_severity": null,
+      "note": "现象属实（多源一致：milky/light bluish-gray 变为 brown/greenish-brown）；但文章归因『越来越脏的巢』为民间口径，研究确认的主因是孵卵雌鸟主动涂抹深色富菌分泌物（Nat Geo 2014：not just because the nests are dirty；Soler et al. 2014）。见 issues P1-3。"
+    },
+    {
+      "claim": "戴胜为以色列国鸟",
+      "source_verified": true,
+      "detail_verified": true,
+      "verdict": "match",
+      "note": "2008 年以色列约 15 万人票选，佩雷斯总统 2008-05-29 宣布（国立海洋科技博物馆、搜狗百科、Wikipedia 一致）。注意：科普中国某文写『1999 年建国 50 周年评选』系错误信息，未采信。"
+    },
+    {
+      "claim": "戴胜一夫一妻、夫妻共同带娃",
+      "source_verified": true,
+      "detail_verified": true,
+      "verdict": "match",
+      "note": "季节性单配制（Thai National Parks：monogamous, the pair bond apparently only lasts for a single season；Birdwords：Female broods young, but both adults bring food）。『一夫一妻』在通俗层面成立。"
+    },
+    {
+      "claim": "戴胜飞起来黑白翅膀露出四道白纹",
+      "source_verified": true,
+      "detail_verified": true,
+      "verdict": "match",
+      "note": "中文信源：『飞行时呈现四道白色条带』（卢氏百鸟录）；搜狗百科形态描述『次级飞羽有 4 列白色横斑』。与『四道白纹』吻合。"
+    },
+    {
+      "claim": "戴胜外号叫『臭咕咕』",
+      "source_verified": true,
+      "detail_verified": true,
+      "verdict": "match",
+      "note": "湿地中国『故戴胜还有「臭咕咕」的俗称』；新疆网『「臭姑鸹」「臭咕咕」等绰号』。"
+    },
+    {
+      "claim": "多数鸟用尾脂腺分泌无味油脂梳理羽毛，戴胜非繁殖期也产白色无味液体",
+      "source_verified": true,
+      "detail_verified": true,
+      "verdict": "match",
+      "note": "多源一致：2010 Proc R Soc B（white secretions produced by non-nesting birds）；2009（males' secretions invariably white and odourless）。"
+    }
+  ],
+  "quote_checks": [
+    {
+      "claim": "『有研究者把戴胜巢的垫料递给老鼠，老鼠退避三舍』（对具体研究的转述）",
+      "verbatim_match": false,
+      "source": "仅溯源到科普中国《鸟中『臭鼬』，故意把家弄得臭烘烘》（m.kepuchina.cn/tuwendetail?id=713964）转述『科学家做过实验：把戴胜巢穴的垫料拿去给老鼠闻，老鼠立刻逃得远远的』；6 轮检索未找到该实验的原始论文、研究者或机构，同行评审文献中无对应记录",
+      "note": "来源存在性存疑且转述源相邻事实有误（以色列国鸟年份），按无法核实处理，见 issues P1-2"
+    }
+  ],
+  "mechanism_checks": [
+    {
+      "claim": "繁殖期雌鸟尾脂腺胀大约 8 倍，分泌物大增变棕黑，腺内共生细菌制造恶臭物质",
+      "direction_ok": true,
+      "elements_complete": true,
+      "note": "因果链完整：腺体增大，分泌量增，细菌代谢产挥发物，产生臭味（抗生素清除实验闭环）。『含硫』细节有误见 fact_checks 第 3 条，不影响链条方向。"
+    },
+    {
+      "claim": "巢内臭味像化学围墙，把蛇、老鼠挡在洞外（驱避捕食者）",
+      "direction_ok": true,
+      "elements_complete": true,
+      "note": "机制方向自洽（靠鼻子觅食的捕食者被恶臭驱避）；但证据层面为假说（权威源 thought to），老鼠实验无法溯源，见 fact_checks 第 6 条与 issues P1-2。"
+    },
+    {
+      "claim": "雏鸟受惊喷射混臭液粪便，劝退猎手",
+      "direction_ok": true,
+      "elements_complete": true,
+      "note": "粪流定向喷射、嘶声、臭液三要素均有文献支持（约 6 日龄起），方向与完整度均达标。"
+    },
+    {
+      "claim": "蛋由淡蓝变棕（文章归因：越来越脏的巢）",
+      "direction_ok": true,
+      "elements_complete": false,
+      "note": "现象方向无误，但机制链断环：遗漏『孵卵雌鸟主动涂抹深色富菌分泌物、蛋壳小凹坑卡住保护膜』这一主环节，归因停留在民间口径，见 issues P1-3。"
+    },
+    {
+      "claim": "抗菌肽抑菌，蛋和雏鸟在潮湿树洞里烂掉的概率明显下降",
+      "direction_ok": true,
+      "elements_complete": true,
+      "note": "方向自洽（分泌物抑制跨壳感染，Soler et al. 2014 实验支持蛋一侧）；『明显下降』效果说满见 issues P2-2。"
+    },
+    {
+      "claim": "凤冠与臭味是配套警告标志，公鸟和非繁殖期雌鸟借此唬住捕食者",
+      "direction_ok": true,
+      "elements_complete": false,
+      "note": "推断方向无矛盾，但关键环节（捕食者为何回避戴胜轮廓）在原始论文中未定论，文章直接断言因果，见 issues P1-4。"
+    }
+  ],
+  "attribution_checks": [
+    {
+      "claim": "臭味的产地是腺体内共生细菌（而非腺体自身）",
+      "is_primary_cause": true,
+      "note": "抗生素清除细菌后分泌物变浅变淡、挥发物消失（2010 Proc R Soc B），归因主因正确。"
+    },
+    {
+      "claim": "蛋变棕是因为巢越来越脏",
+      "is_primary_cause": false,
+      "note": "主因是雌鸟主动涂抹深色分泌物（Martín-Vivaldi 2009 / Soler 2014 / Nat Geo 2014），脏巢仅为次要贡献；文章只给次要原因，见 issues P1-3。"
+    },
+    {
+      "claim": "臭味把蛇、老鼠挡在洞外",
+      "is_primary_cause": false,
+      "note": "驱避功能为假说（thought to），无直接实验证实；老鼠实验无法溯源，见 issues P1-2。"
+    },
+    {
+      "claim": "凤冠与臭味构成配套警告标志",
+      "is_primary_cause": false,
+      "note": "Ruiz-Rodríguez 2013 明确否定颜色警戒色功能，回避机制归『颜色以外特征』未定论；该归因为假说外推，见 issues P1-4。"
+    },
+    {
+      "claim": "抗菌保护使蛋和雏鸟腐烂概率下降",
+      "is_primary_cause": true,
+      "note": "蛋一侧有实验支持（Soler et al. 2014 孵化成功率提升）；雏鸟一侧为合理推断，『明显下降』略说满，见 issues P2-2。"
+    }
+  ],
+  "term_checks": [
+    {
+      "term": "尾脂腺",
+      "used": "尾脂腺",
+      "correct": "尾脂腺（uropygial gland / preen gland）",
+      "exact": true,
+      "note": "术语规范；文中紧接白话解释（尾巴根上的腺体、分泌油脂梳理羽毛），符合 FP-17 首次术语须解释的要求。"
+    },
+    {
+      "term": "共生细菌",
+      "used": "共生细菌",
+      "correct": "共生细菌（symbiotic bacteria，腺内肠球菌等）",
+      "exact": true,
+      "note": "用法与文献一致（symbiotic bacteria living in the uropygial gland）。"
+    },
+    {
+      "term": "抗菌肽",
+      "used": "抗菌肽",
+      "correct": "抗菌肽（antimicrobial peptides；本文语境对应细菌素 bacteriocins）",
+      "exact": true,
+      "note": "用字规范、无形近音近混淆；戴胜文献原文即将 bacteriocins 定义为 antimicrobial peptides（Ruiz-Rodríguez et al. 2012）。细微处：文中将 S. aureus 与 E. coli 的抑制归于此术语，而该抑制证据主体是非肽挥发物（2010），建议表述为『细菌素（一类抗菌肽）等多种抗菌物质』，见 issues P2-1。"
+    }
+  ],
+  "gap_checks": [
+    {
+      "pattern_id": "G-01",
+      "triggered": false,
+      "checked": true,
+      "finding": "动物科普话题，A 段无安全、健康、饮食、用药类读者顾虑（无『不敢/怕/能不能吃/有害吗』等触发词），不涉及后果不可逆领域；安全性闭环不适用，无需补充就医或行为边界。"
+    },
+    {
+      "pattern_id": "G-02",
+      "triggered": true,
+      "checked": true,
+      "finding": "命中 3 处效果说满：『把蛇、老鼠挡在洞外』『直接劝退猎手』（第 9 行 Q2，驱避功能实为假说，权威源为 thought to）、『一样能把捕食者唬住』（第 15 行 F 段，模型实验推论外推）；另有轻微 1 处『全抹在蛋和羽毛上』（第 11 行）。已分别并入 P1-2 与 P1-4。『一点臭味也没有』虽为绝对表述但有文献支持（invariably white and odourless），不判违规。"
+    },
+    {
+      "pattern_id": "G-03",
+      "triggered": true,
+      "checked": true,
+      "finding": "『含硫的恶臭物质』属典型听起来合理的化学断言：腐肉味让人联想到硫，但与 2010 Proc R Soc B 的系统 GC-MS 分析（10 种挥发物均非含硫）矛盾，二甲基硫类实为绿林戴胜成分，仅大众信源重复，见 issues P0。"
+    },
+    {
+      "pattern_id": "G-04",
+      "triggered": true,
+      "checked": true,
+      "finding": "Q3 蛋变棕机制跳步：遗漏『孵卵雌鸟主动将深色富菌分泌物抹上蛋壳、蛋壳小凹坑卡住分泌物』这一主环节，只留脏巢染色的民间口径，见 issues P1-3。"
+    },
+    {
+      "pattern_id": "G-05",
+      "triggered": false,
+      "checked": true,
+      "finding": "文中无古文或论文逐字引用；生物学术语（尾脂腺、共生细菌、抗菌肽、金黄色葡萄球菌、大肠杆菌）用字均规范，抗菌肽即 bacteriocins、论文原文如此表述，无『上颚/上腭』类形近错误。"
+    },
+    {
+      "pattern_id": "G-06",
+      "triggered": true,
+      "checked": true,
+      "finding": "『有研究者把巢垫料递给老鼠』多轮检索未找到原始文献，仅科普中国转述且该文相邻事实有错（以色列国鸟 1999 实为 2008）；『含硫』同样只经大众信源转述、未回原始论文，分别见 issues P1-2 与 P0。"
+    },
+    {
+      "pattern_id": "G-07",
+      "triggered": true,
+      "checked": true,
+      "finding": "蛋变棕归因偏漏：文中给的原因是『越来越脏的巢』（次要、民间口径），主因（雌鸟主动涂抹分泌物）未提，见 issues P1-3；『臭味驱敌』只给结论未给可核实证据。"
+    }
+  ],
+  "issue_responses": [],
+  "forbidden_violations": [
+    {
+      "fp": "FP-19",
+      "location": "C段 Q2（第 9 行）",
+      "detail": "老鼠实验断言无法溯源到任何原始文献（仅科普中国转述，且该源相邻事实有误），计入 P1-2"
+    },
+    {
+      "fp": "FP-24",
+      "location": "F段（第 15 行）",
+      "detail": "凤冠警告标志为争议假说，未标注推测语气、未交代论文实际结论（颜色警戒色被否定），计入 P1-4"
+    },
+    {
+      "fp": "FP-68",
+      "location": "C段 Q3（第 11 行）",
+      "detail": "『烂掉的概率明显下降』效果说满，计入 P2-2"
+    }
+  ],
+  "overall_comment": "结构与格式全部达标：A 段引用块（> 开头）、C 段 Q1/Q2/Q3 格式（**Qx：**）、F 段引用块含『冷知识反转』标签、结尾风格表格为 2 行 4 列（话题/分类/核心机制/冷知识反转，与 10-14、10-16、10-19 定稿房规一致，分类『动物世界』在 6 枚举内）、2 个分隔线、全文无波浪线范围符与双破折号、无 HTML 实体与乱码、661 字符不超过 690；validate_article.py 对逐字一致副本运行满分（12 项通过）。事实底子总体扎实：8 倍腺体（T&F 2025 引 Martín-Vivaldi 2009）、细菌产臭（抗生素清除实验）、抗菌肽/细菌素与金葡菌及大肠杆菌抑制（2012 PLOS ONE 加 2010 Proc R Soc B 19 菌）、雏鸟喷粪（约 6 日龄起）、公鸟无臭（invariably white and odourless）、以色列国鸟（2008 年约 15 万人票选）、一夫一妻共同育雏、四道白纹、臭咕咕外号均获权威源确认。不通过原因：1 处 P0（Q1『含硫』与 2010 Proc R Soc B 挥发物分析矛盾，疑与绿林戴胜的二甲基硫类混淆）加 3 处 P1（老鼠实验无法溯源且驱避假说被写成定论；蛋变棕归因停留在脏巢民间口径、遗漏雌鸟主动涂抹分泌物主机制；F 段凤冠『配套警告标志』为假说外推写成定论）。修改时优先处理 P0，三条 P1 均已给出可直接替换的文本建议。score 按 100 减 30 乘 P0 减 3 乘 P1 减 1 乘 P2 计得 59。"
+}

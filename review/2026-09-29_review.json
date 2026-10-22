@@ -1,0 +1,180 @@
+{
+  "article_id": "2026-09-29",
+  "revised_after_review": true,
+  "review_timestamp": "2026-09-29T10:00:26+0800",
+  "pass": true,
+  "p0_count": 0,
+  "p1_count": 0,
+  "p2_count": 1,
+  "score": 97,
+  "script_result": {
+    "exit_code": 0,
+    "score": 100,
+    "char_count": 593,
+    "p0_count": 0,
+    "p1_count": 0,
+    "p2_count": 0
+  },
+  "issues": [
+    {
+      "level": "P2",
+      "category": "一致性/CHECKLIST-§71",
+      "description": "标题与正文对「两瓶」的喻体不一致：标题写「两瓶可乐量的鼻涕」，而 A 段与 Q1 均写「两瓶矿泉水」。体积口径一致（均约 1 升），但饮品种名前后不统一，且权威源（人民日报/科普中国）均作「两瓶矿泉水」，标题偏离正文与信源。",
+      "location": "标题 vs A段/Q1",
+      "suggestion": "将标题「两瓶可乐量」统一改为「两瓶矿泉水量」（或全文统一为同一喻体），保持前后与信源一致。"
+    }
+  ],
+  "fact_checks": [
+    {
+      "claim": "正常人每天鼻腔分泌黏液约 500 到 1000 毫升（约两瓶矿泉水），大部分被咽下",
+      "source_verified": true,
+      "detail_verified": true,
+      "omission_severity": "minor",
+      "verdict": "verified",
+      "note": "人民日报/人民网、科普中国、华龙网等多源一致确认「正常人每天分泌鼻涕约500-1000ml，相当于两瓶矿泉水的量，大部分流向喉咽部被咽下」；ENT Education Swansea 亦载「We make about half a liter of mucus every day」，区间一致。",
+      "source": "https://www.peopleapp.com/rmharticle/30023944101 ; https://www.kepuchina.cn/article/articleinfo?business_type=100&ar_id=577866 ; https://www.enteducationswansea.org/copy-of-cambodia-tut"
+    },
+    {
+      "claim": "鼻黏膜纤毛朝咽喉方向（向后）摆动，把黏液毯送往咽部被咽下",
+      "source_verified": true,
+      "detail_verified": true,
+      "omission_severity": "minor",
+      "verdict": "verified",
+      "note": "科普中国/ENT Education Swansea：「鼻腔内的纤毛具有向后摆动的特性，将黏液推送至咽腔」；Guyton：「direction of their power stroke is always toward the pharynx」；百度百科鼻纤毛：「大部分纤毛的运动方向为自前向后」。方向属实。注：少数前下方纤毛向前，但净运输方向朝咽，通俗简化无误。",
+      "source": "https://www.enteducationswansea.org/copy-of-cambodia-tut ; https://baike.baidu.com/item/%E9%BC%BB%E7%BA%A4%E6%AF%9B/15419199"
+    },
+    {
+      "claim": "眼睛和鼻子由鼻泪管连通，每天咽下的鼻涕有一小部分来自眼泪",
+      "source_verified": true,
+      "detail_verified": true,
+      "omission_severity": "minor",
+      "verdict": "verified",
+      "note": "人民日报、科普中国一致确认「有少部分鼻涕是由眼泪转化而来的，眼泪从连接眼睛与鼻腔的泪管流向鼻腔」。鼻泪管连通眼鼻属实，部分来源为眼泪属实。",
+      "source": "https://www.peopleapp.com/rmharticle/30023944101 ; https://www.kepuchina.cn/article/articleinfo?business_type=100&ar_id=577866"
+    },
+    {
+      "claim": "清鼻涕含溶菌酶可抑制细菌，咽下后被胃酸处理，对健康人基本无害",
+      "source_verified": true,
+      "detail_verified": true,
+      "omission_severity": "minor",
+      "verdict": "verified",
+      "note": "科普中国：「鼻涕中含有溶菌酶，抑制细菌生长，溶解破坏细菌；即使被咽下也不会危害人体健康，胃酸对杂质、病菌有清除作用」。ENT Lecture 亦载鼻分泌物含 lysozyme。「对健康人」限定严谨。",
+      "source": "https://www.kepuchina.cn/article/articleinfo?business_type=100&ar_id=577866 ; https://www.entlecture.com/?p=5038/"
+    },
+    {
+      "claim": "黏液毯（黏液层）每 20 分钟左右更新一批",
+      "source_verified": true,
+      "detail_verified": true,
+      "omission_severity": "minor",
+      "verdict": "verified",
+      "note": "PubMed/PMC、ENT Lecture、Scite 多源：「鼻腔黏液层每 10 到 20 分钟更新一次（renewed every 10-20 min）」。「每20分钟左右」为区间上界，属实。",
+      "source": "https://webadmin@pmc.ncbi.nlm.nih.gov/articles/PMC8604065/ ; https://www.entlecture.com/?p=5038/"
+    }
+  ],
+  "quote_checks": [],
+  "mechanism_checks": [
+    {
+      "claim": "鼻黏膜纤毛朝咽喉方向摆动，把黏液毯往后推，一路送到嗓子眼被咽下",
+      "direction_ok": true,
+      "elements_complete": true,
+      "note": "机制方向自洽（纤毛朝咽方向摆动→黏液后送→咽下），未混用矛盾图景；环节齐备，「身体安排好的单行道」为通俗总结，未跳过关键步。"
+    },
+    {
+      "claim": "杯状细胞和腺体生产保护液，黏液层每 20 分钟更新，像湿毯子盖在黏膜上",
+      "direction_ok": true,
+      "elements_complete": true,
+      "note": "分泌—铺展—更新链条完整，与权威源「黏液层每 10-20 分钟更新」一致，方向无误。"
+    }
+  ],
+  "attribution_checks": [
+    {
+      "claim": "黏液不往前外流而流向咽部，归因于纤毛朝咽喉方向摆动的单向运输（黏液纤毛清除）",
+      "is_primary_cause": true,
+      "note": "黏液纤毛清除（mucociliary clearance）是鼻腔分泌物后送的主要机制，权威源（ENT Education Swansea、Guyton）一致确认纤毛朝鼻咽方向摆动为运输主因。归因主因正确，无显著偏漏。"
+    }
+  ],
+  "term_checks": [
+    {
+      "term": "黏膜",
+      "used": "鼻腔黏膜/鼻黏膜",
+      "correct": "黏膜",
+      "exact": true,
+      "note": "规范用字（黏液膜非「粘膜」旧体），全文一致正确。"
+    },
+    {
+      "term": "鼻泪管",
+      "used": "鼻泪管",
+      "correct": "鼻泪管（nasolacrimal duct）",
+      "exact": true,
+      "note": "解剖学命名正确，连通眼鼻，与正文机制一致。"
+    },
+    {
+      "term": "杯状细胞",
+      "used": "杯状细胞",
+      "correct": "杯状细胞（goblet cell）",
+      "exact": true,
+      "note": "术语正确，指分泌黏液的黏膜上皮细胞。"
+    },
+    {
+      "term": "溶菌酶",
+      "used": "溶菌酶",
+      "correct": "溶菌酶（lysozyme）",
+      "exact": true,
+      "note": "酶名正确，功能（破坏细菌细胞壁）属实。"
+    },
+    {
+      "term": "纤毛",
+      "used": "纤毛",
+      "correct": "纤毛（cilia）",
+      "exact": true,
+      "note": "术语正确，指黏膜上皮细胞表面摆动的动力结构。"
+    }
+  ],
+  "gap_checks": [
+    {
+      "pattern_id": "G-01",
+      "triggered": true,
+      "checked": true,
+      "finding": "A 段以「吃鼻涕」引发对身体分泌物入胃的潜意识顾虑（健康/禁忌域）；正文 Q3 以「对健康人基本没什么影响」正面回应并给出「健康人」边界，安全性闭环已建立 → 不标 P1（唯一 minor 补充项为未显式点明感冒/感染时的例外，但「健康人」限定已隐含边界）。"
+    },
+    {
+      "pattern_id": "G-02",
+      "triggered": false,
+      "checked": true,
+      "finding": ""
+    },
+    {
+      "pattern_id": "G-03",
+      "triggered": true,
+      "checked": true,
+      "finding": "文中含可核验量（500-1000ml / 每20分钟 / 两瓶矿泉水）与常识性定性断言；经 WebSearch 独立核验：日分泌量、纤毛朝咽喉方向摆动、鼻泪管连通、溶菌酶抑菌、咽下无害均与权威源一致，「每20分钟」为 10-20min 上界，全部属实 → 不标 P1。"
+    },
+    {
+      "pattern_id": "G-04",
+      "triggered": false,
+      "checked": true,
+      "finding": ""
+    },
+    {
+      "pattern_id": "G-05",
+      "triggered": true,
+      "checked": true,
+      "finding": "含解剖/生理术语（杯状细胞/纤毛/鼻黏膜/鼻泪管/溶菌酶/黏液毯），用字准确（黏膜非粘膜），归属正确 → 不标 P1。"
+    },
+    {
+      "pattern_id": "G-06",
+      "triggered": false,
+      "checked": true,
+      "finding": ""
+    },
+    {
+      "pattern_id": "G-07",
+      "triggered": false,
+      "checked": true,
+      "finding": ""
+    }
+  ],
+  "issue_responses": [],
+  "forbidden_violations": [],
+  "overall_comment": "文章事实准确、结构完整（A 段引用块、Q1/Q2/Q3 问答、F 段冷知识反转标签、四字段结尾风格表格齐备），无 P0/P1。5 项关键断言（日分泌量 500-1000ml、纤毛朝咽摆动、鼻泪管连通使部分鼻涕来自眼泪、溶菌酶抑菌、咽下无害）经 WebSearch 独立核验全部属实；「每20分钟」亦证实为 10-20min 上界。FORBIDDEN 全 78 条扫描无违规（未出现波浪号与双破折号类字符，无绝对化、无伪反转）。唯一 P2 为标题与正文喻体不一致（可乐 vs 矿泉水）。脚本校验 100 分、全文 590 字（≤690）。综合判定：通过（pass=true，P0=0、P1=0）。"
+}

@@ -1,0 +1,286 @@
+{
+  "article_id": "2026-10-20",
+  "article": "2026-10-20-优化版-每日冷知识-戴胜巢臭.md",
+  "article_path": "F:/WorkBuddy/daily-why/articles/2026-10/2026-10-20-优化版-每日冷知识-戴胜巢臭.md",
+  "review_timestamp": "2026-10-20T12:30:00+0800",
+  "review_round": 2,
+  "script_result": {
+    "exit_code": 0,
+    "passed": true,
+    "score": 100,
+    "char_count": 687,
+    "p0_count": 0,
+    "p1_count": 0,
+    "p2_count": 0,
+    "checks_passed": 12,
+    "note": "validate_article.py --json 直接对文章文件运行（本轮环境未触发文件名拦截）：12 项检查全部通过，687 字符不超过 690 全文口径硬上限。"
+  },
+  "score": 100,
+  "p0_count": 0,
+  "p1_count": 0,
+  "p2_count": 0,
+  "pass": true,
+  "passed": true,
+  "issues": [],
+  "fact_checks": [
+    {
+      "claim": "戴胜腺体内共生细菌代谢出丁酸、吲哚一类挥发物（Q1，本轮 P0 修复点）",
+      "source_verified": true,
+      "detail_verified": true,
+      "verdict": "match",
+      "note": "本轮经 WebFetch 独立核对 Martín-Vivaldi et al. 2010（Proc R Soc B 277:123-130, PMC2842625）全文 Table 1：欧洲戴胜（Upupa epops）雏鸟深色分泌物 GC-MS 共检出 10 种挥发物，含 butanoic acid（丁酸，Friedman ANOVA χ²=9.33, p=0.009）与 indole（吲哚，χ²=9.00, p=0.011），另有 2-甲基丁酸、4-甲基戊酸、苯甲醛、苯酚、苯乙醛、3-苯丙酸、4-氯吲哚及 1 种未鉴定物。『丁酸、吲哚一类挥发物』与原文检出物清单一致，且抗生素处理后二者浓度显著下降（细菌来源证据）。"
+    },
+    {
+      "claim": "欧亚戴胜尾脂腺分泌物不含二甲基硫醚；二甲基二硫属绿林戴胜（本轮 P0 修复点的反证核验）",
+      "source_verified": true,
+      "detail_verified": true,
+      "verdict": "match",
+      "note": "同一论文 Table 1 无任何含硫化合物；论文引言原文：『The chemical composition of woodhoopoe secretions, but not that of European hoopoes, has already been studied. Burger et al. (2004) found in woodhoopoes... some of these chemicals (indole, benzaldehyde, together with short-chain acids or dimethyl disulphide) are responsible for the particular pungently unpleasant smell of the secretion of this species』——二甲基二硫（dimethyl disulphide）系绿林戴胜（Phoeniculus purpureus）成分（Burger et al. 2004），与欧亚戴胜明确区分。上一轮 v2 审校报告中的错误写法『二甲基硫醚』已被现行版本的『丁酸、吲哚』正确替代，无含硫断言残留。"
+    },
+    {
+      "claim": "繁殖季雌鸟腺体胀到约 8 倍、分泌量猛增到 30 倍、从产卵旺到育雏第八天、颜色变棕黑（Q1）",
+      "source_verified": true,
+      "detail_verified": true,
+      "verdict": "match",
+      "note": "① 8 倍：T&F 2025（Ringers' Miscellany / 换羽年龄性别鉴定论文）引 Martín-Vivaldi et al. 2009 原文『The preen gland of females increases about eight-fold in size from the start of egg laying up to hatching』；② 时间线：2009 论文原文（经修复前 v2 审校报告引 EEZA 存档 PDF 核对）『The extraordinary growth of the gland in females was strictly associated with the period that they stay within the nest, which extends from laying to the eighth day of the nestling period』，与『从产卵旺到育雏第八天』逐字对应；本轮独立复核亦确认 2009 论文摘要口径（孵卵雌鸟腺体与分泌量 marked increase、分泌物 became dark and pungent，出雏前持续攀升、雏鸟期末回落）；③ 30 倍： academia.edu 该论文页摘要口径（secretion volume nearly thirty-fold around hatching）与中文青年报《戴胜的莫西干发型其实是炫耀『我臭！』》转述（『分泌物的量会增加30倍』）一致，均溯源至 Martín-Vivaldi et al. 2009，且与论文摘要 marked increase 方向自洽，无矛盾信源。"
+    },
+    {
+      "claim": "共生细菌主角是粪肠球菌（Q1）",
+      "source_verified": true,
+      "detail_verified": true,
+      "verdict": "match",
+      "note": "Ruiz-Rodríguez et al. 2012（PLOS ONE, PMC3404078）RAPD/16S rRNA 分析：60 个测序分离株全部属于 Enterococcus 属，其中 E. faecalis 占 45%（N=27），远超 E. faecium（18.33%）与 E. mundtii（18.33%）；模式菌株 E. faecalis MRR 10-3 分离自戴胜尾脂腺。『主角』表述有数据支撑。"
+    },
+    {
+      "claim": "共生细菌产出细菌素（一类抗菌肽），能压制金黄色葡萄球菌等致病菌（Q3）",
+      "source_verified": true,
+      "detail_verified": true,
+      "verdict": "match",
+      "note": "2012 PLOS ONE：E. faecalis MRR 10-3 产生至少两种 bacteriocins（论文原文括注 prokaryotic peptides ribosomally synthesized with antimicrobial activity），S. aureus 在 11 种指示菌名单内（论文结论句：bacteriocins from symbionts may protect hoopoes from some potentially pathogenic bacteria (e.g. some strains of the genera Staphylococcus, Listeria, and Bacillus)）；2010 Proc R Soc B：自然浓度挥发物混合抑制全部 19 个指示菌（含 S. aureus）。现行文本已按修复前 v2 审校建议改为『细菌素（一类抗菌肽）』，不再把肽类单独推上前台。"
+    },
+    {
+      "claim": "给戴胜打抗生素清掉细菌后臭味大减（Q1）",
+      "source_verified": true,
+      "detail_verified": true,
+      "verdict": "match",
+      "note": "2009 J Avian Biol：抗生素显著降低雏鸟腺体肠球菌载量（抗生素组中位 0 CFU/µl vs 对照 179，Wilcoxon z=2.76, p=0.0058），分泌量减少、颜色变浅；2010 Proc R Soc B：抗生素清除后分泌物中大部分挥发物消失。『臭味大减』有实验支持（『立刻』为口语化因果强调，非精确时长断言，不影响事实方向）。"
+    },
+    {
+      "claim": "对照实验里拦住雌鸟不许涂，蛋就迟迟不变色（Q3，本轮 P2 修复点）",
+      "source_verified": true,
+      "detail_verified": true,
+      "verdict": "match",
+      "note": "Soler et al. 2014（Naturwissenschaften 101:697-705, PMID 25011415）摘要原文：『We found that eggs stayed bluish-gray in nests where female access to the uropygial secretion was experimentally blocked. Furthermore, experimental eggs that were maintained in incubators and manually smeared with uropygial secretion experienced similar color changes that naturally incubated eggs did, while control eggs that were not in contact with the secretions did not experience such color changes.』与文中表述直接对应；同时 Nat Geo 2014 明确阻断组与对照组抚育出窝成功率无差异（just as likely to raise successfully hatching eggs），修复前误挂的『孵化率也降』已删除，现行文本未越出实验直接结论。"
+    },
+    {
+      "claim": "蛋产下时淡蓝色、雌鸟把带菌臭液涂上去、蛋壳小坑卡住膜、蛋慢慢变棕（Q3）",
+      "source_verified": true,
+      "detail_verified": true,
+      "verdict": "match",
+      "note": "Nat Geo 2014（Ed Yong）：蛋 milky blue 产下后变 mucky brown，『This is the stuff that discolours the eggs』；录像证实雌鸟主动涂抹；蛋壳特有小凹坑（crypts），出雏时约 90% 被满载 Enterococcus 的面团状物质填充。Martín-Vivaldi et al. 2014（J Anim Ecol 83:1289）：阻断实验证实 crypts 由腺体分泌物填充、蛋壳共生肠球菌至少部分来自雌鸟腺体。归因已从修复前的『脏巢染色』修正为雌鸟主动涂抹，与研究确认的主因一致。"
+    },
+    {
+      "claim": "它是已知唯一靠腺体细菌护蛋的鸟（Q3）",
+      "source_verified": true,
+      "detail_verified": true,
+      "verdict": "match",
+      "note": "BirdGuides/ScienceDaily/RedOrbit（引 UGR 官方新闻稿）一致表述『The species is the only bird known to exhibit this mechanism to protect its eggs from infection』『So far this sort of behaviour has only been detected in this species of birds』。文中『已知唯一』含认识论限定，与信源口径一致，不构成 FP-23 式绝对化。"
+    },
+    {
+      "claim": "石膏模型放进黑鸢多的保护区，两年 111 次猛禽攻击只有 4 次砸向戴胜（F 段）",
+      "source_verified": true,
+      "detail_verified": true,
+      "verdict": "match",
+      "note": "本轮经 WebFetch 核对 Ruiz-Rodríguez et al. 2013（Oecologia, DOI 10.1007/s00442-013-2599-6）全文：实验于 2008-2009 年（两个春夏季）在西班牙 Doñana 国家公园进行，共记录 111 次猛禽攻击（黑鸢占 56%、红鸢 35%），论文原文『Hoopoe models received a total of four attacks by the end of the study』。『两年 111 次攻击只有 4 次砸向戴胜』『黑鸢多的保护区』均与论文一致。"
+    },
+    {
+      "claim": "研究者推测捕食者认的是长冠长喙的轮廓，不是颜色（F 段，本轮 P1 修复点）",
+      "source_verified": true,
+      "detail_verified": true,
+      "verdict": "match",
+      "note": "2013 Oecologia 摘要原文：『Both conspicuous and cryptic models of one of the studied species (the hoopoe) received fewer attacks than cryptic models of the other three species, suggesting that predators may avoid this species for characteristics other than colour.』『不是颜色』有实验直接支持（鲜艳与土褐模型受攻击率均低、无差异）；『认长冠长喙的轮廓』是作者讨论部分提出的非互斥假说之一（另有低对比度隐蔽说与先天厌恶说），文中已加『研究者推测』限定，假说地位交代清楚，不再是把未定论机制写成定论。"
+    },
+    {
+      "claim": "戴胜一夫一妻（F 段）",
+      "source_verified": true,
+      "detail_verified": true,
+      "verdict": "match",
+      "note": "Wikipedia（Upua epops 词条，本轮 WebSearch 核对）：『Hoopoes are monogamous, although the pair bond apparently only lasts for a single season』。季节性单配制在通俗层面对应『一夫一妻』，无误导。"
+    },
+    {
+      "claim": "恶臭驱避蛇鼠为推测、坐实的是驱避吸血蝇（Q2）",
+      "source_verified": true,
+      "detail_verified": true,
+      "verdict": "match",
+      "note": "Wikipedia：分泌物『is thought to help deter predators』（推测口径）；Tomás et al. 2020（Front Ecol Evol, DOI 10.3389/fevo.2020.579667）陷阱实验：肠球菌与巢材诱饵陷阱捕获的蚊/蠓显著少于对照，为吸血蝇驱避提供实验证据。修复前无法溯源的『老鼠垫料实验』已整句删除，现行文本对证据等级的呈现（推测 vs 坐实 vs 缺直接证据）与文献一致。"
+    }
+  ],
+  "mechanism_checks": [
+    {
+      "claim": "机制描述①：繁殖季雌鸟尾脂腺增大（约 8 倍）、分泌量上升（约 30 倍）、腺内共生细菌代谢挥发物产生臭味；抗生素清除细菌后臭味大减（Q1）",
+      "direction_ok": true,
+      "elements_complete": true,
+      "note": "因果链完整：腺体增大→分泌量增→共生菌代谢产挥发物→臭味；抗生素实验提供闭环反证（细菌清除则挥发物大部消失）；巢内粪残发酵为次要加成（『添把火』权重正确）。各环节方向均与 2009/2010 论文一致。"
+    },
+    {
+      "claim": "机制描述②：恶臭可能像化学围墙让靠鼻子觅食的蛇鼠绕道（假说），雏鸟受惊喷射臭粪劝退入侵者（Q2）",
+      "direction_ok": true,
+      "elements_complete": true,
+      "note": "假说方向自洽（嗅觉型捕食者被刺激性挥发物驱避），且文中明示证据状态（推测、吸血蝇有实验、蛇鼠缺直接证据），未把假说妆扮为事实；雏鸟约 6 日龄起可定向喷射粪流并有蛇形嘶声（Wikipedia/多源一致），行为链三要素（粪流、臭液、定向喷射）齐备。"
+    },
+    {
+      "claim": "机制描述③：共生菌挥发物+细菌素抑制致病菌→分泌物成为巢里消毒水→保护蛋与雏鸟（Q3）",
+      "direction_ok": true,
+      "elements_complete": true,
+      "note": "链条：细菌→抑菌挥发物（2010 混合挥发物抑制 19 种指示菌）与细菌素（2012）→压制金葡菌等→降低感染风险；阻断实验（crypts 空、蛋壳共生菌减少、细菌通透性升高、细菌-孵化率相关消失）反向补全链条；蛋变色环节（涂抹→crypts 卡住→变棕）无跳步。"
+    },
+    {
+      "claim": "机制描述④：公鸟无臭但雌雄同貌，石膏模型实验显示猛禽很少攻击戴胜轮廓，研究者推测捕食者认轮廓不认颜色，公鸟蹭庇护（F 段）",
+      "direction_ok": true,
+      "elements_complete": true,
+      "note": "机制要素齐备：现象（公鸟无臭、雌雄同貌）→实验（111 次攻击仅 4 次砸向戴胜、颜色无差异）→推测（认长冠长喙的轮廓）→推论（公鸟共享轮廓同受益）。推测限定贯穿，无绝对化因果。"
+    }
+  ],
+  "attribution_checks": [
+    {
+      "claim": "归因①：臭味主因是腺体内共生细菌代谢挥发物（而非腺体自身分泌）",
+      "is_primary_cause": true,
+      "note": "抗生素清除实验（2009/2010）证明挥发物大部分随细菌消失，细菌是主因；巢粪发酵为次要加成，文中以『添把火』正确降权。"
+    },
+    {
+      "claim": "归因②：蛋变棕的主因是雌鸟主动涂抹带菌分泌物（而非脏巢染色）",
+      "is_primary_cause": true,
+      "note": "修复前误将次要/民间口径（脏巢）当主因；现行文本修正为涂抹+蛋壳小坑卡膜，与 Soler 2014 / Martín-Vivaldi 2014 / Nat Geo 2014（not just because the nests are dirty）一致。"
+    },
+    {
+      "claim": "归因③：恶臭驱避蛇鼠（假说性功能断言）",
+      "is_primary_cause": false,
+      "note": "驱避功能仅有 thought to 级假说与吸血蝇实验旁证，蛇鼠无直接证据；文中已如实标注为推测并交代证据边界，不再冒充主因/定论。"
+    },
+    {
+      "claim": "归因④：抗菌保护提升蛋的孵化/出窝成功率",
+      "is_primary_cause": true,
+      "note": "蛋一侧：细菌密度与孵化成功率正相关（2014 J Anim Ecol），未孵化蛋内含病原菌更多（阻断组 vs 对照组）；修复前把方向性/相关性证据写成阻断实验直接结果（『孵化率也降』）已删除，现行文本止步于实验直接结论（蛋迟迟不变色），未越权。"
+    },
+    {
+      "claim": "归因⑤：捕食者因长冠长喙轮廓回避戴胜（假说）",
+      "is_primary_cause": false,
+      "note": "2013 论文仅推测捕食者可能因颜色以外的特征回避该物种（回避机制未定论，另有低对比度隐蔽说与先天厌恶说）；文中以『研究者推测』限定，假说地位正确。"
+    }
+  ],
+  "quote_checks": [
+    {
+      "claim": "文中转述『两年 111 次猛禽攻击只有 4 次砸向戴胜』（对 Ruiz-Rodríguez et al. 2013 Oecologia 实验数据的转述）",
+      "verbatim_match": true,
+      "source": "Ruiz-Rodríguez et al. 2013 Oecologia 全文（DOI 10.1007/s00442-013-2599-6，经 WebFetch 核对）：『Hoopoe models received a total of four attacks by the end of the study』；总攻击 111 次、实验 2008-2009 两年、黑鸢占 56%",
+      "note": "数字、时长、捕食者构成与论文一致，无夸大无缩水。"
+    },
+    {
+      "claim": "文中转述『对照实验里拦住雌鸟不许涂，蛋就迟迟不变色』（对 Soler et al. 2014 阻断实验的转述）",
+      "verbatim_match": true,
+      "source": "Soler et al. 2014 Naturwissenschaften 101:697-705（PMID 25011415）摘要：『We found that eggs stayed bluish-gray in nests where female access to the uropygial secretion was experimentally blocked』",
+      "note": "与论文原文一致；且未越界转写孵化率结论（Nat Geo 2014：两组抚育出窝成功率无差异），删除『孵化率也降』后转述与原文严格对齐。"
+    }
+  ],
+  "term_checks": [
+    {
+      "term": "尾脂腺",
+      "used": "尾脂腺",
+      "correct": "尾脂腺（uropygial gland / preen gland）",
+      "exact": true,
+      "note": "术语规范，首次出现即带白话锚点（『尾巴根上藏着个尾脂腺，平时只产无味油脂』），符合 FP-17 首次术语须解释的要求。"
+    },
+    {
+      "term": "粪肠球菌",
+      "used": "粪肠球菌",
+      "correct": "粪肠球菌（Enterococcus faecalis）",
+      "exact": true,
+      "note": "菌名用字规范；与文献中腺体优势共生菌一致（2012 PLOS ONE：占测序分离株 45%）。"
+    },
+    {
+      "term": "细菌素/抗菌肽",
+      "used": "细菌素（一类抗菌肽）",
+      "correct": "细菌素（bacteriocins，一类抗菌肽 antimicrobial peptides）",
+      "exact": true,
+      "note": "用字规范、括号注解准确；论文原文即将 bacteriocins 定义为 antimicrobial peptides（2012 PLOS ONE）。修复前单独突出『抗菌肽』易让人把金葡菌抑制都归给肽类，现表述已修正。"
+    }
+  ],
+  "gap_checks": [
+    {
+      "pattern_id": "G-01",
+      "triggered": false,
+      "checked": true,
+      "finding": "动物科普话题，A 段无健康/饮食/用药/安全类读者顾虑（无『不敢/怕/能不能吃/有害吗』等触发词），不涉及后果不可逆领域；安全性闭环不适用。"
+    },
+    {
+      "pattern_id": "G-02",
+      "triggered": false,
+      "checked": true,
+      "finding": "逐词重扫绝对化与效果说满：『只有坐巢的雌鸟和雏鸟开机』有文献支持（2009：雄性分泌物 invariably white and odourless）；『已知唯一』含认识论限定且与 BirdGuides/ScienceDaily/UGR『only bird known』口径一致；『不是颜色』有 2013 实验直接支持并带『研究者推测』限定；『全抹在蛋和羽毛上』的『全』指覆盖对象（蛋+羽毛）而非程度说满；Q2 驱避功能已明示推测与证据边界。修复前 3 处效果说满（挡在洞外/直接劝退/唬住）均已软化或删除，本轮无命中。"
+    },
+    {
+      "pattern_id": "G-03",
+      "triggered": false,
+      "checked": true,
+      "finding": "化学成分断言本轮回原始文献逐项核对：2010 Proc R Soc B Table 1 证实丁酸、吲哚在欧亚戴胜分泌物中且抗生素处理后显著下降，无含硫化合物；二甲基二硫归属绿林戴胜（Burger et al. 2004，论文引言明示 woodhoopoe but not European hoopoes）。修复前 P0（含硫/二甲基硫醚）已由正确的『丁酸、吲哚一类挥发物』替代，无残留。"
+    },
+    {
+      "pattern_id": "G-04",
+      "triggered": false,
+      "checked": true,
+      "finding": "蛋变棕机制链已补全：雌鸟主动涂抹带菌臭液→蛋壳小坑（crypts）卡住膜→蛋慢慢变棕→阻断实验反证（蛋迟迟不变色）。修复前停留在脏巢染色民间口径、缺主环节的问题已消除，无跳步。"
+    },
+    {
+      "pattern_id": "G-05",
+      "triggered": false,
+      "checked": true,
+      "finding": "文中无古文/论文逐字直接引语；生物学术语（尾脂腺、粪肠球菌、丁酸、吲哚、挥发物、细菌素、抗菌肽、金黄色葡萄球菌、一夫一妻）用字均规范，无『上颚/上腭』类形近错误；对实验数据的转述（111/4、蛋不变色）均与原文核对一致（见 quote_checks）。"
+    },
+    {
+      "pattern_id": "G-06",
+      "triggered": false,
+      "checked": true,
+      "finding": "文中全部具体研究型断言本轮已逐条回溯原始文献核验：8 倍/30 倍/第八天（Martín-Vivaldi 2009，T&F 2025 引述+论文原文口径）、化学成分（2010 Proc R Soc B Table 1）、粪肠球菌与细菌素与金葡菌（2012 PLOS ONE）、111/4 攻击与轮廓假说（2013 Oecologia 全文）、蛋不变色与出窝成功率无差异（Soler 2014 Naturwissenschaften + Nat Geo 2014）、唯一性（UGR 官方新闻稿多源）、一夫一妻（Wikipedia）、吸血蝇驱避（Tomás 2020）。修复前无法溯源的『老鼠垫料实验』已删除，现存断言无一停留在大众转述层。"
+    },
+    {
+      "pattern_id": "G-07",
+      "triggered": false,
+      "checked": true,
+      "finding": "归因完整性复核：臭味归因主因（共生细菌）+次因（巢粪发酵）权重正确；蛋变棕已给主因（雌鸟涂抹）而非次要民间口径；驱避蛇鼠如实标注为假说；抗菌收益止步于实验直接结论。无主次倒置或归因偏漏。"
+    }
+  ],
+  "issue_responses": [
+    {
+      "issue_index": 0,
+      "status": "resolved",
+      "evidence": "一轮 P0『含硫的恶臭物质』（C段 Q1 第 7 行）已修复：现行文本为『臭味出自腺体里养的共生细菌（主角是粪肠球菌），代谢出丁酸、吲哚一类挥发物』（第 7 行）。本轮独立核对 Martín-Vivaldi et al. 2010（Proc R Soc B, PMC2842625）Table 1：丁酸与吲哚确在欧亚戴胜分泌物 GC-MS 检出物中（且抗生素处理后显著下降），无含硫化合物；二甲基二硫属绿林戴胜（Burger et al. 2004，论文引言原文 'woodhoopoe secretions, but not that of European hoopoes'）。注意：修复前 v2 审校报告曾记录的中间错误态『二甲基硫醚一类挥发物』（比一轮更具体的错误）已不存在，现行表述与原始文献一致。"
+    },
+    {
+      "issue_index": 1,
+      "status": "resolved",
+      "evidence": "一轮 P1『老鼠垫料实验无法溯源+驱避假说写成定论』（C段 Q2 第 9 行）已修复：现行 Q2 整句为『蛇、老鼠都靠鼻子找饭吃。研究者推测，恶臭像堵化学围墙能让它们绕道，但这仍是推测：坐实的是驱避吸血蝇，驱蛇鼠缺直接证据。』无法溯源的『有研究者把戴胜巢的垫料递给老鼠，老鼠退避三舍』已整句删除；驱避功能改带『研究者推测』限定并明示证据等级（吸血蝇有 Tomás et al. 2020 实验、蛇鼠缺直接证据），与 Wikipedia『is thought to help deter predators』口径一致。"
+    },
+    {
+      "issue_index": 2,
+      "status": "resolved",
+      "evidence": "一轮 P1『蛋变棕归因停留在脏巢民间口径、遗漏雌鸟主动涂抹主机制』（C段 Q3 第 11 行）已修复：现行文本为『戴胜的蛋产下时是淡蓝色，雌鸟把带菌臭液一遍遍涂上去，蛋壳小坑卡住膜，蛋慢慢变棕』。与 Soler et al. 2014（Naturwissenschaften：颜色变化由深色分泌物导致、阻断后蛋保持蓝灰）、Martín-Vivaldi et al. 2014（J Anim Ecol：crypts 结构与主动涂抹）、Nat Geo 2014（'not just because the nests are dirty'）一致，主因归位且与同段抗菌功能衔接。"
+    },
+    {
+      "issue_index": 3,
+      "status": "resolved",
+      "evidence": "一轮 P1『F 段凤冠配套警告标志写成定论』（F段第 15 行）已修复：现行文本为『有实验撑腰：石膏模型放进黑鸢多的保护区，两年111次猛禽攻击只有4次砸向戴胜，研究者推测捕食者认的是长冠长喙的轮廓，不是颜色，公鸟蹭的正是这副招牌。』『研究者推测』限定已补回；111 次攻击/4 次砸向戴胜/两年/黑鸢主场均经本轮核对 2013 Oecologia 全文确认（'Hoopoe models received a total of four attacks by the end of the study'，黑鸢占 56%）；『不是颜色』有该论文实验直接支持（鲜艳与土褐模型受攻击率均低），推测部分（轮廓识别）与论文讨论部分的非互斥假说定位一致。"
+    },
+    {
+      "issue_index": 4,
+      "status": "resolved",
+      "evidence": "一轮 P2『抗菌肽表述易让金葡菌抑制都被归给肽类』（C段 Q3 第 11 行）已修复：现行文本为『共生细菌放出抑菌挥发物，还产出细菌素（一类抗菌肽），能压制金黄色葡萄球菌等致病菌』。细菌素以主位、抗菌肽作括注，且与前半句『抑菌挥发物』并列为两条独立抗菌路径，不再把 2010 年挥发物混合实验（19 菌含 S. aureus）的证据错挂到肽类名下；术语本身与 Ruiz-Rodríguez et al. 2012（PLOS ONE）原文口径一致。"
+    },
+    {
+      "issue_index": 5,
+      "status": "resolved",
+      "evidence": "一轮 P2『蛋和雏鸟烂掉概率明显下降+孵化率也降效果说满』（C段 Q3 第 11 行）已修复：现行文本收束为『对照实验里拦住雌鸟不许涂，蛋就迟迟不变色』。『孵化率也降』已删除（Nat Geo 2014 明确阻断组与对照组抚育出窝成功率无差异 'just as likely to raise successfully hatching eggs'，蛋孵化为相关性证据）；『蛋迟迟不变色』有 Soler et al. 2014 直接支持（'eggs stayed bluish-gray in nests where female access to the uropygial secretion was experimentally blocked'），本轮经 PubMed/AGRIS 摘要逐字核对确认。"
+    }
+  ],
+  "forbidden_violations": [],
+  "overall_comment": "修复后复审（第 2 轮，最终轮）结论：通过（P0=0，P1=0，P2=0，score=100）。三处修复全部确认为真修复，且均经本轮独立工具核验而非照单全收：① P0 修复（Q1『二甲基硫醚一类挥发物』→『丁酸、吲哚一类挥发物』）——经 WebFetch 核对 Martín-Vivaldi et al. 2010 Proc R Soc B（PMC2842625）Table 1 原文：丁酸（χ²=9.33, p=0.009）与吲哚（χ²=9.00, p=0.011）确为欧亚戴胜分泌物 GC-MS 检出物且随抗生素处理显著下降，全文无含硫化合物；二甲基二硫经论文引言原文（'The chemical composition of woodhoopoe secretions, but not that of European hoopoes...'）确认属绿林戴胜（Burger et al. 2004）。特别说明：修复前 v2 报告记录的中间态『二甲基硫醚』比一轮『含硫』更具体且同样错误，现行版本已回归有据表述。② P1 修复（F 段轮廓/颜色断言）——补回『研究者推测』限定；111 次攻击/4 次砸向戴胜/两年/黑鸢主场经 2013 Oecologia 全文逐字核对（'Hoopoe models received a total of four attacks by the end of the study'，黑鸢占 56%），『不是颜色』有该论文实验直接支持（鲜艳与土褐模型受攻击率无差异），推测部分与论文讨论定位一致。③ P2 修复（删除『，孵化率也降』）——删除正确：Nat Geo 2014 明确阻断组与对照组出窝成功率无差异；保留的『蛋迟迟不变色』有 Soler et al. 2014 Naturwissenschaften 直接支持（'eggs stayed bluish-gray...'）。此外，一轮其余 3 条 issues（老鼠实验删除、蛋变棕归因修正、抗菌肽→细菌素）在本轮核对中亦全部确认已修。附加独立核验全部通过：8 倍腺体（T&F 2025 引 2009 论文）、30 倍分泌量与育雏第八天时间线（2009 论文原文口径+多源转述一致）、粪肠球菌优势地位（2012 PLOS ONE：占分离株 45%）、细菌素与金葡菌（2012+2010）、『已知唯一』（UGR/BirdGuides/ScienceDaily 多源）、一夫一妻（Wikipedia）、抗生素减臭（2009/2010）、吸血蝇驱避（Tomás 2020）。CHECKLIST/FORBIDDEN 逐项扫描无新命中：无套话开头、无 AI 味排比、无虚构机构、无未溯源引用、无 Markdown 不安全字符（grep 确认无 ~/——/HTML 实体）、F 段与 Q3 无重复、开头钩子闭环、字数 687 不超过 690 全文硬上限、连接词 0 个、分隔线 2 个、风格表格分类『动物世界』在 6 枚举内。validate_article.py 直接对文章运行：exit_code=0、12 项检查全过、687 字符。按 100-30×P0-3×P1-1×P2 计分得 100。"
+}

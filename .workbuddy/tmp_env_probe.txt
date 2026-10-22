@@ -1,0 +1,112 @@
+D:\Program Files\WorkBuddy\resources\app.asar | 2026-09-10 18:47:52 | 297844411 bytes
+D:\Program Files\WorkBuddy\resources\app.asar.unpacked | 2026-09-11 17:03:06 | 0 bytes
+D:\Program Files\WorkBuddy\WorkBuddy.exe | 2026-09-10 18:47:52 | 204585000 bytes
+D:\Program Files\WorkBuddy\resources\package.json | ERROR: [WinError 2] 系统找不到指定的文件。: 'D:\\Program Files\\WorkBuddy\\resources\\package.json'
+D:\Program Files\WorkBuddy\resources\app.asar.unpacked\cli\bin | 2026-09-11 17:02:58 | 0 bytes
+D:\Program Files\WorkBuddy\resources\app.asar.unpacked\cli\dist | 2026-09-11 17:02:58 | 0 bytes
+D:\Program Files\WorkBuddy\resources\app.asar.unpacked\cli\node_modules | 2026-09-11 17:03:01 | 0 bytes
+D:\Program Files\WorkBuddy\resources\app.asar.unpacked\cli\package.json | 2026-09-10 18:47:52 | 13164 bytes
+D:\Program Files\WorkBuddy\resources\app.asar.unpacked\cli\product.cloudhosted.json | 2026-09-10 18:47:52 | 23333 bytes
+D:\Program Files\WorkBuddy\resources\app.asar.unpacked\cli\product.internal.json | 2026-09-10 18:47:52 | 33904 bytes
+D:\Program Files\WorkBuddy\resources\app.asar.unpacked\cli\product.ioa.json | 2026-09-10 18:47:52 | 61241 bytes
+D:\Program Files\WorkBuddy\resources\app.asar.unpacked\cli\product.json | 2026-09-10 18:47:52 | 384166 bytes
+D:\Program Files\WorkBuddy\resources\app.asar.unpacked\cli\product.selfhosted.json | 2026-09-10 18:47:52 | 10175 bytes
+D:\Program Files\WorkBuddy\resources\app.asar.unpacked\cli\vendor | 2026-09-11 17:03:02 | 4096 bytes
+shim-file | vendor\native-builds.json | 2026-09-10 18:47:52
+shim-file | vendor\assets\icon.png | 2026-09-10 18:47:52
+shim-file | vendor\genie-trash\win32-x64.exe | 2026-09-10 18:47:52
+shim-file | vendor\ripgrep\COPYING | 2026-09-10 18:47:52
+shim-file | vendor\ripgrep\x64-win32\rg.exe | 2026-09-10 18:47:52
+shim-file | vendor\ripgrep\x64-win32\ripgrep.node | 2026-09-10 18:47:52
+shim-file | vendor\sandbox\5.5.5\betterleaks.exe | 2026-09-10 18:47:52
+shim-file | vendor\sandbox\5.5.5\msvcp140.dll | 2026-09-10 18:47:52
+shim-file | vendor\sandbox\5.5.5\sandbox-center.exe | 2026-09-10 18:47:52
+shim-file | vendor\sandbox\5.5.5\sandbox-cli-gc.exe | 2026-09-10 18:47:52
+shim-file | vendor\sandbox\5.5.5\sandbox-cli.exe | 2026-09-10 18:47:52
+shim-file | vendor\sandbox\5.5.5\sandbox_ffi.dll | 2026-09-10 18:47:52
+shim-file | vendor\sandbox\5.5.5\tsbx.dll | 2026-09-10 18:47:52
+shim-file | vendor\sandbox\5.5.5\tsbx_rules.json | 2026-09-10 18:47:52
+shim-file | vendor\sandbox\5.5.5\tsbx_sdk.dll | 2026-09-10 18:47:52
+shim-file | vendor\sandbox\5.5.5\vcruntime140.dll | 2026-09-10 18:47:52
+shim-file | vendor\sandbox\5.5.5\vcruntime140_1.dll | 2026-09-10 18:47:52
+shim-file | vendor\shim\broker-ipc-client.cjs | 2026-09-10 18:47:52
+shim-file | vendor\shim\broker-program-policy-check.cjs | 2026-09-10 18:47:52
+shim-file | vendor\shim\brokered-sandbox-bash-env.sh | 2026-09-10 18:47:52
+shim-file | vendor\shim\genie-safe-delete.cjs | 2026-09-10 18:47:52
+shim-file | vendor\shim\node-brokered-fs-shim.cjs | 2026-09-10 18:47:52
+shim-file | vendor\shim\node-language-shim.cjs | 2026-09-10 18:47:52
+shim-file | vendor\shim\node-safe-delete-shim.cjs | 2026-09-10 18:47:52
+shim-file | vendor\shim\safe-delete-broker-delete.cjs | 2026-09-10 18:47:52
+shim-file | vendor\shim\safe-delete-bulk-guard.cjs | 2026-09-10 18:47:52
+shim-file | vendor\shim\shell-runtime-bash-env.sh | 2026-09-10 18:47:52
+shim-file | vendor\shim\sitecustomize.py | 2026-09-10 18:47:52
+shim-file | vendor\shim\brokered-bin\cat | 2026-09-10 18:47:52
+shim-file | vendor\shim\brokered-bin\chmod | 2026-09-10 18:47:52
+shim-file | vendor\shim\brokered-bin\codebuddy-toybox-dispatch | 2026-09-10 18:47:52
+shim-file | vendor\shim\brokered-bin\cp | 2026-09-10 18:47:52
+shim-file | vendor\shim\brokered-bin\dd | 2026-09-10 18:47:52
+shim-file | vendor\shim\brokered-bin\find | 2026-09-10 18:47:52
+shim-file | vendor\shim\brokered-bin\grep | 2026-09-10 18:47:52
+shim-file | vendor\shim\brokered-bin\head | 2026-09-10 18:47:52
+shim-file | vendor\shim\brokered-bin\ln | 2026-09-10 18:47:52
+shim-file | vendor\shim\brokered-bin\ls | 2026-09-10 18:47:52
+shim-file | vendor\shim\brokered-bin\mkdir | 2026-09-10 18:47:52
+shim-file | vendor\shim\brokered-bin\mv | 2026-09-10 18:47:52
+shim-file | vendor\shim\brokered-bin\readlink | 2026-09-10 18:47:52
+shim-file | vendor\shim\brokered-bin\realpath | 2026-09-10 18:47:52
+shim-file | vendor\shim\brokered-bin\rm | 2026-09-10 18:47:52
+shim-file | vendor\shim\brokered-bin\rmdir | 2026-09-10 18:47:52
+shim-file | vendor\shim\brokered-bin\sed | 2026-09-10 18:47:52
+shim-file | vendor\shim\brokered-bin\tail | 2026-09-10 18:47:52
+shim-file | vendor\shim\brokered-bin\tee | 2026-09-10 18:47:52
+shim-file | vendor\shim\brokered-bin\touch | 2026-09-10 18:47:52
+shim-file | vendor\shim\brokered-bin\truncate | 2026-09-10 18:47:52
+shim-file | vendor\shim\brokered-bin\unlink | 2026-09-10 18:47:52
+shim-file | vendor\shim\brokered-bin\wc | 2026-09-10 18:47:52
+shim-file | vendor\shim\native\binding.gyp | 2026-09-10 18:47:52
+shim-file | vendor\shim\native\brokered_sandbox_native.c | 2026-09-10 18:47:52
+shim-file | vendor\shim\native\darwin-arm64\brokered-sandbox-native.node | 2026-09-10 18:47:52
+shim-file | vendor\shim\native\darwin-x64\brokered-sandbox-native.node | 2026-09-10 18:47:52
+shim-file | vendor\shim\safe-bin\rm | 2026-09-10 18:47:52
+shim-file | vendor\shim\safe-bin\rmdir | 2026-09-10 18:47:52
+shim-file | vendor\shim\safe-bin\safe-delete-bash-env.sh | 2026-09-10 18:47:52
+shim-file | vendor\shim\safe-bin\safe-delete-common.sh | 2026-09-10 18:47:52
+shim-file | vendor\shim\safe-bin\unlink | 2026-09-10 18:47:52
+shim-file | vendor\toybox-macos\LICENSE | 2026-09-10 18:47:52
+shim-file | vendor\toybox-macos\toybox | 2026-09-10 18:47:52
+shim-file | vendor\toybox-macos\toybox.sb | 2026-09-10 18:47:52
+shim-file | vendor\zsh-macos\LICENSE | 2026-09-10 18:47:52
+shim-file | vendor\zsh-macos\bin\zsh | 2026-09-10 18:47:52
+D:\Program Files\WorkBuddy\resources\app.asar.unpacked\cli\package.json | 2026-09-10 18:47:52 | 13164 bytes
+D:\Program Files\WorkBuddy\resources\app.asar.unpacked\cli\node_modules\@lydell\node-pty\package.json | 2026-09-10 18:47:52 | 897 bytes
+D:\Program Files\WorkBuddy\resources\app.asar.unpacked\cli\node_modules\@lydell\node-pty-darwin-arm64\package.json | 2026-09-10 18:47:52 | 375 bytes
+D:\Program Files\WorkBuddy\resources\app.asar.unpacked\cli\node_modules\@lydell\node-pty-darwin-x64\package.json | 2026-09-10 18:47:52 | 369 bytes
+D:\Program Files\WorkBuddy\resources\app.asar.unpacked\cli\node_modules\@lydell\node-pty-linux-arm64\package.json | 2026-09-10 18:47:52 | 372 bytes
+D:\Program Files\WorkBuddy\resources\app.asar.unpacked\cli\node_modules\@lydell\node-pty-linux-x64\package.json | 2026-09-10 18:47:52 | 366 bytes
+D:\Program Files\WorkBuddy\resources\app.asar.unpacked\cli\node_modules\@lydell\node-pty-win32-arm64\package.json | 2026-09-10 18:47:52 | 372 bytes
+D:\Program Files\WorkBuddy\resources\app.asar.unpacked\cli\node_modules\@lydell\node-pty-win32-x64\package.json | 2026-09-10 18:47:52 | 366 bytes
+D:\Program Files\WorkBuddy\resources\app.asar.unpacked\cli\node_modules\koffi\package.json | 2026-09-10 18:47:52 | 981 bytes
+D:\Program Files\WorkBuddy\resources\app.asar.unpacked\cli\node_modules\koffi\src\cnoke\package.json | 2026-09-10 18:47:52 | 506 bytes
+D:\Program Files\WorkBuddy\resources\app.asar.unpacked\native\perf-metrics\package.json | 2026-09-10 18:47:52 | 243 bytes
+D:\Program Files\WorkBuddy\resources\app.asar.unpacked\native\turing-sdk\package.json | 2026-09-10 18:47:52 | 221 bytes
+D:\Program Files\WorkBuddy\resources\app.asar.unpacked\native\wechat-copydata-decoder\package.json | 2026-09-10 18:47:52 | 275 bytes
+D:\Program Files\WorkBuddy\resources\app.asar.unpacked\node_modules\@lydell\node-pty-darwin-arm64\package.json | 2026-09-10 18:47:52 | 375 bytes
+D:\Program Files\WorkBuddy\resources\app.asar.unpacked\node_modules\@lydell\node-pty-darwin-x64\package.json | 2026-09-10 18:47:52 | 369 bytes
+D:\Program Files\WorkBuddy\resources\app.asar.unpacked\node_modules\@lydell\node-pty-linux-arm64\package.json | 2026-09-10 18:47:52 | 372 bytes
+D:\Program Files\WorkBuddy\resources\app.asar.unpacked\node_modules\@lydell\node-pty-linux-x64\package.json | 2026-09-10 18:47:52 | 366 bytes
+D:\Program Files\WorkBuddy\resources\app.asar.unpacked\node_modules\@lydell\node-pty-win32-arm64\package.json | 2026-09-10 18:47:52 | 372 bytes
+D:\Program Files\WorkBuddy\resources\app.asar.unpacked\node_modules\@lydell\node-pty-win32-x64\package.json | 2026-09-10 18:47:52 | 366 bytes
+D:\Program Files\WorkBuddy\resources\app.asar.unpacked\node_modules\@tencent\qimei-node\package.json | 2026-09-10 18:47:52 | 404 bytes
+D:\Program Files\WorkBuddy\resources\app.asar.unpacked\node_modules\@tencent\tencent-docs-ai-engine\package.json | 2026-09-10 18:47:52 | 1441 bytes
+D:\Program Files\WorkBuddy\resources\app.asar.unpacked\node_modules\@tencent\tencent-docs-ai-engine\node_modules\@modelcontextprotocol\sdk\package.json | 2026-09-10 18:47:52 | 3814 bytes
+D:\Program Files\WorkBuddy\resources\app.asar.unpacked\node_modules\@tencent\tencent-docs-ai-engine\node_modules\@modelcontextprotocol\sdk\dist\cjs\package.json | 2026-09-10 18:47:52 | 21 bytes
+D:\Program Files\WorkBuddy\resources\app.asar.unpacked\node_modules\@tencent\tencent-docs-ai-engine\node_modules\@modelcontextprotocol\sdk\dist\esm\package.json | 2026-09-10 18:47:52 | 19 bytes
+D:\Program Files\WorkBuddy\resources\app.asar.unpacked\node_modules\better-sqlite3\package.json | 2026-09-10 18:47:52 | 1427 bytes
+D:\Program Files\WorkBuddy\resources\app.asar.unpacked\node_modules\fsevents\package.json | 2026-09-10 18:47:52 | 545 bytes
+D:\Program Files\WorkBuddy\resources\app.asar.unpacked\node_modules\koffi\package.json | 2026-09-10 18:47:52 | 981 bytes
+D:\Program Files\WorkBuddy\resources\app.asar.unpacked\node_modules\koffi\src\cnoke\package.json | 2026-09-10 18:47:52 | 506 bytes
+D:\Program Files\WorkBuddy\resources\app.asar.unpacked\node_modules\node-pty\package.json | 2026-09-10 18:47:52 | 915 bytes
+D:\Program Files\WorkBuddy\resources\app.asar.unpacked\node_modules\node-pty\node_modules\node-addon-api\package.json | 2026-09-10 18:47:52 | 928 bytes
+D:\Program Files\WorkBuddy\resources\app.asar.unpacked\resources\plugins\workbuddy-builtin\builtin-plugins\sheetagent\mcp\package.json | 2026-09-10 18:47:52 | 197 bytes
+C:\Users\admin\.workbuddy\binaries\PortableGit | 2026-08-13 10:07:23 | 0 bytes
+C:\Users\admin\.workbuddy\binaries\PortableGit\versions\1.2.0\bin\bash.exe | 2026-07-10 23:26:26 | 47448 bytes

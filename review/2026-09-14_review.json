@@ -1,0 +1,103 @@
+{
+  "article_id": "2026-09-14",
+  "review_timestamp": "2026-09-14T09:55:25+0800",
+  "pass": true,
+  "p0_count": 0,
+  "p1_count": 0,
+  "p2_count": 1,
+  "score": 100,
+  "script_result": {
+    "char_count": 581,
+    "score": 100,
+    "p0_count": 0,
+    "p1_count": 0,
+    "p2_count": 0
+  },
+  "fact_checks": [
+    {
+      "claim": "典型木质部导管半径约 2.5 微米，纯毛细只能把水顶高约 6 米",
+      "source_verified": true,
+      "detail_verified": true,
+      "verdict": "verified",
+      "note": "Jurin 定律 h = 2γcosθ/(ρgr)，取 γ=0.0728 N/m、ρ=1000 kg/m³、g=9.81、r=2.5×10⁻⁶ m → h≈5.9 m≈6 m，与文中一致。该半径属木质部偏细端（多数导管半径约 10–400 μm），但数值自洽，且用于论证『毛细不足以送达百米大树』的论点成立。"
+    },
+    {
+      "claim": "叶子蒸发在细胞壁纳米级孔隙造出约 15 到 20 个大气压的负压（拉力）",
+      "source_verified": true,
+      "detail_verified": true,
+      "verdict": "verified",
+      "note": "Britannica：静止水柱顶端张力约 9 atm，正午蒸腾的红杉至少 −14 atm，基部 −10 atm 时顶端可达 −25 atm；scienceinsights：海岸红杉顶水约需 1900 kPa≈19 atm；studyguides：木质部负压可达 −20 atm。15–20 atm 区间与权威源吻合。"
+    },
+    {
+      "claim": "百米红杉（高约 100 米）靠叶子蒸发的蒸腾拉力而非毛细把水抽到树顶",
+      "source_verified": true,
+      "detail_verified": true,
+      "verdict": "verified",
+      "note": "Britannica/Scientific American/LibreTexts 均确认最高树约 100–113 m，纯毛细不足以送达；主因为内聚力-张力理论（蒸腾拉力）。海岸红杉(Sequoia sempervirens)实测 112.7 m，需张力约 1.9 MPa。"
+    },
+    {
+      "claim": "内聚力-张力理论（cohesion-tension theory）是树木输水主机制，毛细只是配角",
+      "source_verified": true,
+      "detail_verified": true,
+      "verdict": "verified",
+      "note": "Britannica、Scientific American、LibreTexts、OpenStax 一致确认：毛细作用对高大树木仅为次要/支撑角色，蒸腾产生的负压 + 水柱内聚力-附着力才是主因。文中『毛细只是配角』表述准确且已正确限定范围（指树木，非毛巾）。"
+    }
+  ],
+  "quote_checks": [],
+  "mechanism_checks": [
+    {
+      "claim": "Q1 毛巾吸水 = 毛细现象：水对纤维附着力胜过内聚力 → 水被管壁拽着上行，缝越细爬得越高（表面张力为总导演）",
+      "direction_ok": true,
+      "elements_complete": true,
+      "note": "因果方向自洽：润湿 + 毛细上升，附着力/内聚力/表面张力三者关系正确，无矛盾环节。"
+    },
+    {
+      "claim": "Q2 润湿 / 不润湿决定毛细升降方向",
+      "direction_ok": true,
+      "elements_complete": true,
+      "note": "玻璃/棉/纸巾润湿 → 水面上升；蜡/油不润湿 → 水面下凹下沉，方向相反，方向正确。"
+    },
+    {
+      "claim": "Q3 树木输水 = 叶蒸腾失水造负压，经细胞壁纳米孔隙拉动整条连续水柱（内聚力-张力理论）",
+      "direction_ok": true,
+      "elements_complete": true,
+      "note": "叶蒸腾 → 负压 → 水柱内聚力整体被拉至叶尖；方向自洽，主因明确，未与毛细机制混用两套矛盾图景。"
+    }
+  ],
+  "attribution_checks": [
+    {
+      "claim": "树木把水送到树顶的主因 = 叶蒸腾产生的负压拉力（内聚力-张力理论）",
+      "is_primary_cause": true,
+      "note": "Britannica 等确认高大树木主因为蒸腾拉力，毛细仅为次要/支撑角色；文中归因正确，未遗漏更主因（根压对高大树木仅为 2–3 m 的辅助力，略过合理）。"
+    },
+    {
+      "claim": "毛巾吸水归因于毛细现象（附着力 + 内聚力 + 表面张力）",
+      "is_primary_cause": true,
+      "note": "毛巾/纸巾吸水主机制即毛细作用，归因正确。"
+    }
+  ],
+  "term_checks": [],
+  "gap_checks": [
+    { "pattern_id": "G-01", "triggered": false, "checked": true, "finding": "" },
+    { "pattern_id": "G-02", "triggered": false, "checked": true, "finding": "" },
+    { "pattern_id": "G-03", "triggered": false, "checked": true, "finding": "" },
+    { "pattern_id": "G-04", "triggered": false, "checked": true, "finding": "" },
+    { "pattern_id": "G-05", "triggered": false, "checked": true, "finding": "" },
+    { "pattern_id": "G-06", "triggered": false, "checked": true, "finding": "" },
+    { "pattern_id": "G-07", "triggered": false, "checked": true, "finding": "" }
+  ],
+  "forbidden_violations": [
+    { "fp": "FP-05", "level": "P2", "note": "F段冷知识反转与 Q3 的树木论点（纯毛细仅约6米、百米大树靠蒸腾拉力）实质重复，未提供 Q3 之外的新角度/新延伸，属轻微问题。" }
+  ],
+  "issues": [
+    {
+      "level": "P2",
+      "category": "FORBIDDEN-FP-05 / CHECKLIST-§17",
+      "location": "F段",
+      "description": "F段冷知识反转与 Q3 的树木论点（纯毛细仅约6米、百米大树靠蒸腾拉力）实质重复，未提供 Q3 之外的新角度或新延伸。",
+      "suggestion": "在 F段补充一个 Q3 未涉及的新信息或生活延伸（例如：生活中还有哪些现象常被误归为毛细其实不是；或毛巾 vs 蜡布吸水的对照延伸），使反转段具备增量价值。"
+    }
+  ],
+  "revised_after_review": true,
+  "overall_comment": "整体质量优秀，validate_article.py 满分（char_count=581，score=100，P0/P1/P2=0，采纳1处P2后重验未回退）。事实断言——木质部半径约2.5μm→纯毛细约6m、蒸腾负压约15–20atm、百米红杉、内聚力-张力理论——经 WebSearch 独立核实（Britannica/Scientific American/LibreTexts/OpenStax）全部属实；机制方向自洽、归因主因正确、无绝对化、无AI味排比。结构齐备：A段引用块、C段**Q1/Q2/Q3：**格式、F段『冷知识反转』标签、结尾风格表格含话题/分类(物理化学，属6选1枚举)/核心机制/冷知识反转四字段。仅一处轻微 P2：F段与Q3内容重叠，建议补充新角度。G-01~G-07 七类历史差距对照均未触发。无 FORBIDDEN 硬违例。通过条件（P0=0 且 P1≤2）满足，审校判定 pass=true。"
+}

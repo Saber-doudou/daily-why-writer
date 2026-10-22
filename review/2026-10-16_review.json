@@ -1,0 +1,206 @@
+{
+  "article_id": "2026-10-16",
+  "article_file": "F:/WorkBuddy/daily-why/articles/2026-10/2026-10-16-每日冷知识-雨滴带电.md",
+  "review_timestamp": "2026-10-16T09:58:57+0800",
+  "pass": true,
+  "p0_count": 0,
+  "p1_count": 1,
+  "p2_count": 2,
+  "score": 91,
+  "script_result": {
+    "exit_code": 0,
+    "score": 100,
+    "char_count": 669,
+    "p0_count": 0,
+    "p1_count": 0,
+    "p2_count": 0,
+    "revised": true
+  },
+  "issues": [
+    {
+      "level": "P1",
+      "category": "CHECKLIST-§79/FP-49",
+      "description": "机制归因使用'不是A而是B'绝对否定，共2处：①Q3'真正动手的不是撞击，也不是溶解的酸，而是那丁点静电'；②结尾表格'腐蚀车漆的元凶不是酸雨也不是冲击力，而是雨滴自己带的静电'。经WebSearch核对Nature论文口径（Ni et al., Nature 2026, DOI 10.1038/s41586-026-10941-6）：论文将电荷表述为'previously unknown / another factor'（新识别因素），机械磨损与酸性腐蚀是学界长期公认的既有机制，论文并未将其证伪或排除；Science.org报道口径为'offers a new reason why'（新增一条原因）。文章把'新增第三因素'拔高为'替换旧归因'，与论文口径不符。",
+      "location": "C段Q3末句（第11行）与结尾表格'冷知识反转'格（第18行）",
+      "suggestion": "改为相对表述：Q3可用'都不是这次的主角——新研究锁定的主凶，是那丁点静电'；表格可用'在学界新识别的腐蚀路径中，元凶不是酸雨也不是冲击力，而是雨滴滑动时自带的静电'，保留酸雨/冲击力作为并存机制、只降权重不绝对排除。"
+    },
+    {
+      "level": "P2",
+      "category": "FP-32/CHECKLIST-§18",
+      "description": "Q2'锥尖处的电场远超涂层的耐受极限'使用'远超'，但全文未给出电场与耐受极限的倍数依据。按§18'远超仅用于10倍以上差距'，尖端场增强虽通常远大，文中无数据支撑时宜换用无倍数暗示的表述。",
+      "location": "C段Q2（第9行）",
+      "suggestion": "改为'锥尖处的电场明显强过涂层的耐受极限'或'电场强到越过涂层的耐受极限'。"
+    },
+    {
+      "level": "P2",
+      "category": "CHECKLIST-§2",
+      "description": "Q2'高温高压在涂层上留下纳米级孔洞'中'高温高压'表述与论文口径有偏差：Nature论文及多个信源（科普中国/上观新闻编译）的口径为'放电在涂层上形成纳米至微米级孔洞与缺陷'，机制是介电击穿（放电），'高压'指代不明（易误读为水压/冲击压力）。",
+      "location": "C段Q2（第9行）",
+      "suggestion": "改为'放电在涂层上留下纳米级孔洞'或'这一下放电，在涂层上留下纳米级的孔洞'。"
+    }
+  ],
+  "fact_checks": [
+    {
+      "claim": "德国马克斯·普朗克高分子研究所团队的相关研究于2026年8月26日发表在《自然》期刊",
+      "source_verified": true,
+      "detail_verified": true,
+      "verdict": "verified",
+      "note": "多信源确认：Ni, Z., Li, X., Ratschow, A.D. et al. 'Spontaneously charged water drops induce corrosion', Nature (2026), DOI 10.1038/s41586-026-10941-6；马普所官网新闻稿（mpip-mainz.mpg.de）、Nature Asia 新闻稿、科学网/中国科学报（2026-08-27）、中国新闻网均报道8月26日刊出；第一作者Zhongyuan Ni，通讯Rüdiger Berger与Hans-Jürgen Butt。机构、年份、期刊三要素全部属实。"
+    },
+    {
+      "claim": "一滴35微升的模拟雨水滑过4厘米，可带上0.2到2纳库仑电荷，电位最高9000伏",
+      "source_verified": true,
+      "detail_verified": true,
+      "verdict": "verified",
+      "note": "逐项核实：35微升（含约1mM氯化钠模拟雨水，XenoSpectrum/car-revs-daily详细报道）、滑动约4厘米（50度斜面）、电荷0.2到2纳库仑（Nature Asia新闻稿'between 0.2 and 2 nanocoulombs'，叶片约0.2nC、氟化石英约2nC）；电位9000伏有XenoSpectrum明确记载'up to roughly 9,000 V'（科普中国/上观新闻口径为'超过1000伏'，为同一数量级的保守表述，文章取'最高9000伏'与论文报道一致且带'最高'限定）。全部数据与论文口径吻合。"
+    },
+    {
+      "claim": "3000次撞击后带电水滴组涂层出现孔洞状损伤，不带电的中性水滴撞同样次数涂层完好无损",
+      "source_verified": true,
+      "detail_verified": true,
+      "verdict": "verified",
+      "note": "Nature Asia新闻稿原文'Observations made after 3,000 drops fell from the surfaces to the Teflon-coated copper found that the coating broke down... When the drops had no charge, no surface damage was observed'；马普所官网同样确认'With uncharged droplets, no changes to the coating were visible under the microscope even after 3,000 impacts'。3000次与中性对照均属实，'密密麻麻的小孔'对应论文'孔洞状缺陷/ pits'（原子力显微镜显示孔洞深达纳米级并穿透60纳米特氟龙膜）。"
+    },
+    {
+      "claim": "2纳库仑的电荷理论上足以击穿10微米厚的特氟龙涂层或50微米厚的聚苯乙烯涂层",
+      "source_verified": true,
+      "detail_verified": true,
+      "verdict": "verified",
+      "note": "科普中国/上观新闻编译明确记载'理论模型计算表明，约2纳库仑的电荷量产生的电场，足以击穿约10微米厚的特氟龙涂层，或是50微米厚的聚苯乙烯涂层'；文章表述'理论上足以击穿'准确保留了理论模型口径（实验实际涂层为60纳米特氟龙，文章未混淆实验厚度与理论厚度）。"
+    },
+    {
+      "claim": "受损铜表面检出氧化亚铜等腐蚀产物；涂层破损后形成微型原电池启动电化学腐蚀",
+      "source_verified": true,
+      "detail_verified": true,
+      "verdict": "verified",
+      "note": "科普中国/上观新闻编译记载'研究人员在下方的铜表面鉴定出腐蚀产物——碱式氯化铜和氧化亚铜'及'缺陷区域与完好区域形成电位差，催生微原电池，启动电化学腐蚀'。氧化亚铜确为论文报告的腐蚀产物之一（文章用'等'涵盖碱式氯化铜，表述严谨）。"
+    }
+  ],
+  "quote_checks": [
+    {
+      "claim": "F段转述Nature 2026论文核心数据（0.2到2纳库仑、3000次、10微米/50微米理论击穿厚度）",
+      "verbatim_match": true,
+      "source": "Nature Asia press release (natureasia.com/en/info/press-releases/detail/9428)；马普所官网新闻稿 mpip-mainz.mpg.de/1190362/PM2026-17；科普中国编译 kepuchina.cn",
+      "note": "文中引用的具体数值（0.2-2 nC、3000次撞击、2 nC理论击穿10微米特氟龙/50微米聚苯乙烯）与论文新闻稿逐项一致；机构+年份+期刊三要素齐全且融入行文，符合§9/FP-12。"
+    },
+    {
+      "claim": "Q2泰勒锥与介电击穿机制转述",
+      "verbatim_match": true,
+      "source": "科普中国/上观新闻编译：'带电水滴接近金属表面时，底部会拉伸变形，形成圆锥状的泰勒锥……引发介电击穿……在涂层上形成纳米至微米级孔洞'",
+      "note": "机制链条（滑动起电→电场增强→泰勒锥→介电击穿→孔洞→电化学腐蚀）与论文及权威编译一致；'两个电极'类比为编译原文口径。"
+    }
+  ],
+  "mechanism_checks": [
+    {
+      "claim": "Q1滑动起电：两种材料接触后又分开，电子搬个家，水滴带相反电荷继续滚",
+      "direction_ok": true,
+      "elements_complete": true,
+      "note": "电荷分离方向正确（水滴从绝缘表面获得电荷、表面留下反号电荷，与论文'droplet strips charge from the surface'一致）；接触→分离→带电的关键环节齐备，无跳步。"
+    },
+    {
+      "claim": "Q2损伤链：水滴靠近金属→电场骤然增强→打败表面张力形成泰勒锥→介电击穿→纳米孔洞",
+      "direction_ok": true,
+      "elements_complete": true,
+      "note": "因果方向自洽：电荷集中→尖端电场增强→液体锥形化（泰勒锥）→涂层击穿，每一步均有论文支撑（高速摄像观测锥形+介电击穿）。3000次撞击与中性对照构成完整证据链。"
+    },
+    {
+      "claim": "Q3腐蚀链：涂层破损→金属暴露→缺口与完好区电位差→微型原电池→电化学腐蚀（检出氧化亚铜）",
+      "direction_ok": true,
+      "elements_complete": true,
+      "note": "电位差→原电池→腐蚀的方向正确，腐蚀产物有论文检测支撑（氧化亚铜、碱式氯化铜）；机制要素齐备。"
+    }
+  ],
+  "attribution_checks": [
+    {
+      "claim": "雨滴腐蚀车漆的核心机制归因于滑动起电的静电放电",
+      "is_primary_cause": true,
+      "note": "主因判定正确：Nature论文以对照实验（带电3000次损伤 vs 中性3000次无损）证明电荷是该实验体系中涂层损伤的充分机制，静电确为论文识别的核心新因素。"
+    },
+    {
+      "claim": "Q3/表格将酸雨与冲击力排除出'主凶/真正动手'位置",
+      "is_primary_cause": false,
+      "note": "归因强化过度：论文口径为'another previously unknown factor'，机械磨损与酸性腐蚀是学界公认并存机制，未被论文证伪。文章以'不是A而是B'绝对否定将其排除，与论文口径不符，已按§79/FP-49标P1（见issues第1条）。"
+    },
+    {
+      "claim": "A段'刚洗完的车……一场雨'场景与Q段机制的对应",
+      "is_primary_cause": true,
+      "note": "场景归因自洽：A段'在滚落的时候已经悄悄给自己充满了电'即Q1滑动起电的悬念铺垫，标题'放电'由Q2击穿机制兑现，钩子闭环。"
+    }
+  ],
+  "term_checks": [
+    {
+      "term": "氧化亚铜",
+      "used": "氧化亚铜",
+      "correct": "氧化亚铜",
+      "exact": true,
+      "note": "化学术语用字精确：Cu2O中文规范名'氧化亚铜'（一价铜氧化物），与论文腐蚀产物命名一致；未误写为'氧化铜'（CuO，二价）。"
+    },
+    {
+      "term": "介电击穿",
+      "used": "介电击穿",
+      "correct": "介电击穿（介质击穿）",
+      "exact": true,
+      "note": "物理术语用字精确，规范译名；术语出现前已用白话铺路（'涂层瞬间被打穿，学名叫介电击穿'），符合§77先定性后注名。"
+    }
+  ],
+  "gap_checks": [
+    {
+      "pattern_id": "G-01",
+      "triggered": false,
+      "checked": true,
+      "finding": "已逐条核对触发信号：A段无'不敢/怕/有毒吗/能不能吃/会不会伤/有害吗/安全吗/能不能用'等读者顾虑表述（'心想这波不亏'为叙事口吻非安全焦虑）；话题为物理化学（车漆腐蚀），不属饮食/健康/用药/电器/儿童/宠物后果不可逆领域。安全性闭环要求不适用，无需就医或行动边界提示。"
+    },
+    {
+      "pattern_id": "G-02",
+      "triggered": false,
+      "checked": true,
+      "finding": "关键词逐项扫描零命中：'不可能/全看/全都/一定/绝对/必然/永远/无非'均无，'就清爽多了/彻底解决/完全不会/再也/保证'均无。但按收紧标准发现相邻类型问题：Q3与表格存在§79型'不是A而是B'绝对否定2处（'真正动手的不是撞击，也不是溶解的酸'、'元凶不是酸雨也不是冲击力'），与G-02同类（绝对化家族）但关键词表未覆盖，已按CHECKLIST §79/FP-49标P1（issues第1条）。"
+    },
+    {
+      "pattern_id": "G-03",
+      "triggered": false,
+      "checked": true,
+      "finding": "对全部'听起来合理'的定性/定量描述逐一回权威源核对（非凭常识放行）：35微升、4厘米、0.2到2纳库仑、9000伏、3000次、10微米、50微米、氧化亚铜、泰勒锥、介电击穿均经Nature新闻稿/马普所官网/科普中国编译/XenoSpectrum多源交叉确认，未发现看似合理的事实性错误。"
+    },
+    {
+      "pattern_id": "G-04",
+      "triggered": false,
+      "checked": true,
+      "finding": "机制链逐环节追问无跳步：Q1起电（接触→分离→带电）、Q2损伤（电场增强→锥形化→击穿→孔洞）、Q3腐蚀（电位差→原电池→电化学腐蚀）每一步均可由文中描述自行推出，中间无省略的必要环节（如'为什么电场会增强'由'两个电极'+电荷集中回答，'为什么中性无损'由对照实验直接给出）。"
+    },
+    {
+      "pattern_id": "G-05",
+      "triggered": false,
+      "checked": true,
+      "finding": "引用精度：无古籍/他人原话引用，不存在逐字核对问题；术语用字经term_checks核验（氧化亚铜、介电击穿均规范）。论文转述数据经quote_checks逐项比对新闻稿原文，无语义漂移。"
+    },
+    {
+      "pattern_id": "G-06",
+      "triggered": false,
+      "checked": true,
+      "finding": "本文引用标记（Nature 2026-08-26、马普所、具体数值）未停留在'来源存在'层面：已核对干预物（35微升含1mM氯化钠模拟雨水）、实验条件（50度斜面滑4厘米、落到60纳米特氟龙涂层铜基底、对照为未经滑动的带电/中性水滴）、精确数值（0.2-2nC/最高约9000V/3000次/理论击穿10微米与50微米）与腐蚀产物（氧化亚铜+碱式氯化铜），细节全部逐字核实，无'来源存在但细节未核'问题。"
+    },
+    {
+      "pattern_id": "G-07",
+      "triggered": false,
+      "checked": true,
+      "finding": "归因充分性核查：文章将涂层损伤主因归于静电放电，与论文实验证据（带电组损伤/中性组无损）一致，为主因非配角；酸雨与冲击力作为被排除的并存机制另有独立讨论（Q3），未把配角当主因、也未遗漏论文指出的主要机制。唯一归因瑕疵为绝对否定语气（P1，已记issues第1条），不属'只说次要原因'的偏漏类型。"
+    }
+  ],
+  "issue_responses": [],
+  "forbidden_violations": [
+    {
+      "fp": "FP-49/CHECKLIST-§79",
+      "description": "Q3与结尾表格以'不是A而是B'句式绝对否定酸雨与冲击力的腐蚀作用（2处），论文口径为并存的新增因素，应改相对表述",
+      "level": "P1"
+    },
+    {
+      "fp": "FP-32",
+      "description": "Q2'远超涂层的耐受极限'无10倍以上倍数依据",
+      "level": "P2"
+    }
+  ],
+  "overall_comment": "审校结论：通过（P0=0，P1=1≤2，强制输出物齐备）。脚本100分（678字，未超690上限）；人工核验：①全部关键事实断言（马普所、Nature 2026-08-26、35微升/4厘米/0.2到2纳库仑/9000伏/3000次/10微米特氟龙/50微米聚苯乙烯/氧化亚铜/泰勒锥/介电击穿）经多信源交叉核实无误，9000伏有XenoSpectrum明确信源；②最小结构完整：A段引用块、Q1/Q2/Q3格式、F段'冷知识反转'标签、结尾风格表格（话题/分类+核心机制/冷知识反转，与历史文章一致）均在位；③无AI味排比、连接词0个、无Markdown不安全字符（无~与——）、无乱码；④GAP七类逐条对照，G-01安全性闭环不触发（物理化学话题、无读者安全顾虑）。唯一P1为§79型绝对否定（Q3与表格把酸雨/冲击力排除出主因，与论文'another factor'口径不符），建议改为降权重的相对表述；2条P2为'远超'倍数依据与'高温高压'措辞微调。",
+  "revised_after_review": true,
+  "revision_note": "采纳 P1x1(§79/FP-49 不是A而是B绝对否定)x2处 + P2x2(远超->超过/留下->打出)后重跑 validate_article.py：100分 669字 未回退"
+}

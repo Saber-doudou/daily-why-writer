@@ -1,0 +1,139 @@
+{
+  "article_id": "2026-10-08",
+  "review_timestamp": "2026-10-08T14:39:40+0800",
+  "pass": true,
+  "p0_count": 0,
+  "p1_count": 0,
+  "p2_count": 1,
+  "score": 98,
+  "script_result": {
+    "exit_code": 0,
+    "score": 100,
+    "char_count": 688,
+    "p0_count": 0,
+    "p1_count": 0,
+    "p2_count": 0
+  },
+  "issues": [
+    {
+      "level": "P2",
+      "category": "FACT-电视刷新率简化",
+      "description": "Q3 举例「狗看老式电视（50到60赫兹）会看到满屏闪烁……直到120赫兹现代屏才越过阈值」对现代屏的刷新率要求略简化：狗 CFF 约70-80Hz，理论上刷新率≥70-80Hz 即平滑，90Hz 屏也已越阈；且现代 LCD/LED 多为恒定背光、像素不按帧闪灭，60Hz LCD 通常本就不产生刷新闪烁（Springer 2017 狗视觉综述明确指出 LCD 通常无 refresh-rate-induced flicker）。「120赫兹才越过阈值」把阈值点说满，属次要科普简化，不影响 CFF 主论点。",
+      "location": "Q3 段（第14行）",
+      "suggestion": "可改为「老式 50-60 赫兹电视在狗眼里满屏闪烁；现代高刷屏（90 赫兹以上，尤其 120 赫兹）才稳稳越过它的阈值」，既保留叙事又不把 120Hz 说成唯一门槛。"
+    }
+  ],
+  "fact_checks": [
+    {
+      "claim": "狗的临界闪烁融合频率（CFF）约 70-80 赫兹，人约 60 赫兹（亮光下）；狗每秒采样比人多出约四分之一到三分之一",
+      "source_verified": true,
+      "detail_verified": true,
+      "omission_severity": "minor",
+      "verdict": "verified",
+      "note": "Springer 2017 综述《What do dogs see?》明确：行为学测试下清醒狗 flicker detection 约 70-80 Hz，并引 Healy et al. 2013 测得狗 80Hz、人 60Hz；ResearchGate 2020 比较综述亦给出狗 ~70-80Hz、人 ~50-60Hz。80/60≈1.33（约多 1/3），上限自洽。数值属实。"
+    },
+    {
+      "claim": "2013 年都柏林三一学院 Healy 团队在《动物行为》期刊汇总 34 种脊椎动物数据，得出「体型越小、代谢越快，视觉时间分辨率（CFF）越高」的跨物种规律",
+      "source_verified": true,
+      "detail_verified": true,
+      "omission_severity": "minor",
+      "verdict": "verified",
+      "note": "PubMed (PMID 24109147, DOI 10.1016/j.anbehav.2013.06.018)：Healy K, McNally L, Ruxton GD, Cooper N, Jackson AL，隶属 Trinity College Dublin，发表于 Animal Behaviour 2013;86(4):685-696。Nature Scitable 科普解读明确「included data from 34 species, including mammals, birds, reptiles, amphibians, fish and sharks」（均为脊椎动物），结论为小体型+高代谢+强光环境者 CFF 最高。机构/年份/期刊/样本数(34)/核心结论四要素全部逐字核实属实。"
+    },
+    {
+      "claim": "网上流传「人一秒等于狗四秒」纯属夸张，真实差距约四分之一到三分之一",
+      "source_verified": true,
+      "detail_verified": true,
+      "verdict": "verified",
+      "note": "真实狗/人 CFF 比约 80/60≈1.33（上限），与「4 倍」相差甚远，文中「夸张」定性正确，属合理辟谣，未夸大也未一刀切否定真实差距。"
+    }
+  ],
+  "quote_checks": [
+    {
+      "claim": "Healy 2013 研究结论转述（体型小/代谢快 → 视觉刷新率高）",
+      "verbatim_match": true,
+      "source": "PubMed PMID 24109147; Nature Scitable blog 'Metabolism and Body Size Influence the Perception of Movement and Time'",
+      "note": "文中为转述非逐字引用，语义与原文「small animals with high metabolic rates that evolved in high-light conditions had the fastest CFFs」一致，无偏差；34 种脊椎动物、三一学院、2013、《Animal Behaviour》均逐字对应原文。"
+    }
+  ],
+  "mechanism_checks": [
+    {
+      "claim": "CFF（时间分辨率）高 → 快速动作在狗眼里被拆成更多更清晰的「分镜」而非模糊团 → 相对人类显得像慢动作",
+      "direction_ok": true,
+      "elements_complete": true,
+      "note": "因果方向自洽：采样率（帧率）高 → 高速运动被分解为更多帧 → 相对人类更清晰/更「慢」。机制链完整，无跳步或反推矛盾。Q2 补「读肩膀方向+手腕角度」属叠加说明，不冲突。"
+    },
+    {
+      "claim": "体型小、代谢快 → 视觉刷新率高（进化上利于捕猎与避险）",
+      "direction_ok": true,
+      "elements_complete": true,
+      "note": "与 Healy 2013 异速标度（allometric scaling）结论一致：CFF 随质量特异性代谢率升高、随体型增大而降低。进化叙事与论文「捕食者/猎物生死攸关」框架吻合，方向自洽。"
+    }
+  ],
+  "attribution_checks": [
+    {
+      "claim": "狗高视觉刷新率归因于进化优势（追捕猎物/躲避天敌需更快处理画面）",
+      "is_primary_cause": true,
+      "note": "Healy 2013 明确将高时间分辨率与捕食者/猎物的生存利害挂钩，且指出高 CFF 需更高能量代价，故「小体型+高代谢才演化出高 CFF」框架成立。归因主因，非偏漏。"
+    },
+    {
+      "claim": "视觉刷新率高归因于体型小、代谢快",
+      "is_primary_cause": true,
+      "note": "论文主结论即 CFF 随质量特异性代谢率升高、随体型增大而降低，为主因；文中未隐瞒其他调节变量（光照条件），且已注明「会随亮度、品种和年龄浮动」，归因完整。"
+    }
+  ],
+  "term_checks": [],
+  "gap_checks": [
+    {
+      "pattern_id": "G-01",
+      "triggered": false,
+      "checked": true,
+      "finding": "本文为感知科普，A段未立『不敢/怕/有毒/能不能吃/安全吗』类顾虑，亦未触发不可逆后果领域的安全闭环要求；宠物话题但无风险悬空。不命中。"
+    },
+    {
+      "pattern_id": "G-02",
+      "triggered": false,
+      "checked": true,
+      "finding": "全文扫描无绝对词（不可能/全看/全都/一定/绝对/必然/永远/无非等）。「纯属夸张」是对网络传言的判断而非事实全称；「你输给狗的，多半不是眼神」用『多半』留余地。不命中绝对化。"
+    },
+    {
+      "pattern_id": "G-03",
+      "triggered": false,
+      "checked": true,
+      "finding": "文中定性/数值断言（Healy 2013、CFF 70-80Hz vs 60Hz、快约1/3、34种脊椎动物）经独立 WebSearch 逐项核对均属实；无『看似合理但细节错』的常识陷阱。不命中。"
+    },
+    {
+      "pattern_id": "G-04",
+      "triggered": false,
+      "checked": true,
+      "finding": "因果链（CFF高→高速动作成清晰分镜→似慢动作；体型小+代谢快→CFF高）方向对且要素完整，无跳步缺失。CFF 已先定义再解释，读者可自推。不命中。"
+    },
+    {
+      "pattern_id": "G-05",
+      "triggered": true,
+      "checked": true,
+      "finding": "术语『临界闪烁融合频率』用字准确，对应 critical flicker fusion frequency（CFF）；引文/研究转述（Healy 2013）经回源逐字核对，机构/年份/期刊/样本数/结论均一致，无古文或术语归属偏差。命中但核验通过、无问题。"
+    },
+    {
+      "pattern_id": "G-06",
+      "triggered": true,
+      "checked": true,
+      "finding": "文中有「2013年都柏林三一学院Healy团队在《动物行为》期刊」引用标记，触发细节核对：已回 PubMed/St Andrews/Nature Scitable 核干预物（CFF 实测值）、受试者（34种脊椎动物跨物种）、年份(2013)、期刊(Animal Behaviour)、结论（小体型+高代谢→高CFF）。细节全部逐字相符，无 BMJ 式『来源存在但细节错』。命中但核验通过。"
+    },
+    {
+      "pattern_id": "G-07",
+      "triggered": false,
+      "checked": true,
+      "finding": "狗高 CFF 归因进化（捕食/避险）与体型+代谢，主因已由 Healy 2013 确立；文中亦点出『读肢体』为叠加因素，无更主要成因被略过。不命中归因偏漏。"
+    }
+  ],
+  "issue_responses": [
+    {
+      "issue_index": 0,
+      "status": "resolved",
+      "evidence": "v1 报告唯一 issue（P2，结尾风格表格缺 Markdown 分隔线行）已在优化版闭环：第21行已补入「| --- | --- | --- | --- |」分隔线行，表头与数据行之间规范成表；重跑 validate_article.py 得 char_count=688、P0/P1/P2=0、score=100，得分未回退。该 P2 已修复。"
+    }
+  ],
+  "forbidden_violations": [],
+  "overall_comment": "独立审校结论：文章事实准确（狗 CFF 70-80Hz、人 60Hz，及 Healy 2013 三一学院《Animal Behaviour》34 种脊椎动物跨物种荟萃分析，均经 WebSearch 回权威源逐字核实属实）；结构完整（A段引用块、Q1/Q2/Q3 加粗格式、F段『冷知识反转』标签、四列风格表格含分隔线行、分类字段=动物世界属6选1枚举）；分隔线恰2处、字数688<690全文口径；FORBIDDEN 扫描零命中（无双破折号『——』、无交互/体验引导、比喻方向均指向『感知变慢』无失准、无绝对化）。唯一可优化点为 Q3 电视刷新率举例略简化（90Hz 以上即越阈、LCD 60Hz 常无闪烁），标 P2 不阻断通过。v1 唯一 P2 已闭环。综合判定通过（P0=0，P1=0≤2）。"
+}

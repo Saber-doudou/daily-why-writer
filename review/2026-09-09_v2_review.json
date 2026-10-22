@@ -1,0 +1,178 @@
+{
+  "date": "2026-09-09",
+  "reviewer": "independent-reviewer-v2",
+  "review_timestamp": "2026-09-09T11:09:17+0800",
+  "file_reviewed": "F:/WorkBuddy/daily-why/articles/2026-09/2026-09-09-优化版-每日冷知识-反转浮力.md",
+  "scores": {
+    "v2_final_score": 100,
+    "script_score": 100,
+    "char_count": 673,
+    "char_limit_full_text": 690
+  },
+  "script_result": {
+    "exit_code": 0,
+    "score": 100,
+    "char_count": 673,
+    "p0_count": 0,
+    "p1_count": 0,
+    "p2_count": 0,
+    "checks_passed": 12,
+    "errors": [],
+    "warnings": []
+  },
+  "p0_count": 0,
+  "p1_count": 0,
+  "p2_count": 0,
+  "pass": true,
+  "p0_issues": [],
+  "p1_issues": [],
+  "p2_issues": [
+    {
+      "level": "P2",
+      "category": "FORBIDDEN-FP-05（轻微，不扣通过）",
+      "description": "F段『原理没被推翻，只是被翻了一面』与Q3『不是推翻，是换了场景』语义部分重叠；但F段补入了矿物浮选/化学反应应用这一Q3没有的新信息，反转段有增量，不构成FP-05违规，仅提示未来同类文章可再收敛重复度",
+      "location": "F段 vs Q3",
+      "suggestion": "可选：F段保留应用增量，反转金句换个措辞角度"
+    }
+  ],
+  "issues": [
+    {
+      "level": "P2",
+      "category": "FP-05",
+      "description": "F段金句与Q3结论语义部分重叠，但F段含新应用信息，有增量",
+      "location": "F段 vs Q3",
+      "suggestion": "可选优化，不影响通过"
+    }
+  ],
+  "fact_checks": [
+    {
+      "claim": "2020年9月法国研究团队把实验发表在《自然》上",
+      "source_verified": true,
+      "detail_verified": true,
+      "omission_severity": "minor",
+      "verdict": "match",
+      "note": "论文 Apffel et al., Nature 585（2020-09-02 在线发表），通讯作者 Emmanuel Fort（法国巴黎高等物理化工学院 ESPCI Paris / PSL / CNRS），法国团队属实；文章未点名作者与院校属科普合理省略",
+      "source": "https://news.sciencenet.cn/sbhtmlnews/2020/9/357513.shtm ; https://doi.org/10.1038/s41586-020-2643-8"
+    },
+    {
+      "claim": "振动频率约每秒一百次（100Hz）",
+      "source_verified": true,
+      "detail_verified": true,
+      "omission_severity": "minor",
+      "verdict": "match",
+      "note": "Physics World 报道原文：They vibrated the container at 100 Hz，与文章『每秒一百次』一致",
+      "source": "https://physicsworld.com/a/inverted-buoyancy-makes-tiny-boat-appear-to-defy-gravity"
+    },
+    {
+      "claim": "油里的气泡不往上冒，反而往下沉",
+      "source_verified": true,
+      "detail_verified": true,
+      "omission_severity": "minor",
+      "verdict": "match",
+      "note": "《中国科学报》与 Science News 均证实：振动液体中下部气泡下沉而非上升（此前实验已观察到的反重力效应）；且 Nature 同期评论人 Sorokin 正是研究该现象的学者",
+      "source": "https://news.sciencenet.cn/sbhtmlnews/2020/9/357513.shtm ; https://www.ikcest.org/articleS-583897.htm"
+    },
+    {
+      "claim": "用振动操控气泡的路子，矿物浮选和化学反应里早就在用",
+      "source_verified": true,
+      "detail_verified": true,
+      "omission_severity": "minor",
+      "verdict": "match",
+      "note": "Science.org 报道原文：Vibrations have been used to control the motion of bubbles in fluids for mineral processing and chemical reactions，与文章表述一致",
+      "source": "https://www.science.org/content/article/watch-levitating-upside-down-boats-flip-law-buoyancy"
+    }
+  ],
+  "quote_checks": [],
+  "mechanism_checks": [
+    {
+      "claim": "Q1：振动让气泡下沉、长大、铺成气垫，油浮在气垫上；每次油想下滴，振动在下坠完成前把它接回去（动态稳定）",
+      "direction_ok": true,
+      "elements_complete": true,
+      "note": "与 Physics World 描述的机制链一致：注入空气→气泡下沉长大→铺成空气层→液体悬浮；『动态稳定而非静止平衡、关振动即塌』与实验事实相符（振幅降低后液层塌落）"
+    },
+    {
+      "claim": "Q2：悬浮油层下界面等效重力反转，比油轻的东西反而往下浮，液体把船往油层里按，托住船重",
+      "direction_ok": true,
+      "elements_complete": true,
+      "note": "方向自洽：下界面浮力方向指向液体内部（视觉上的『下』），与论文『浮力映射在悬浮液层下界面』的解释一致；且点明振动同时负责稳定该平衡（原文 poke 后仍稳定）"
+    },
+    {
+      "claim": "Q3：不是推翻阿基米德原理，是振动造出反向等效重力、换了场景",
+      "direction_ok": true,
+      "elements_complete": true,
+      "note": "定性准确：学界口径为『挑战直觉』而非推翻阿基米德原理；两艘一模一样的小船上下互为倒影的细节与原文一致"
+    }
+  ],
+  "attribution_checks": [
+    {
+      "claim": "油层悬浮归因于垂直振动+注入空气层（Q1）",
+      "is_primary_cause": true,
+      "note": "主因正确：垂直振动阻止液体下滴、托住空气层，为论文与各权威报道一致的主因"
+    },
+    {
+      "claim": "气泡下沉归因于振动液体中的反重力效应（Q3/F段）",
+      "is_primary_cause": true,
+      "note": "归因完整，与此前实验（Sorokin 研究方向）一致"
+    }
+  ],
+  "term_checks": [],
+  "gap_checks": [
+    {
+      "pattern_id": "G-01",
+      "triggered": false,
+      "checked": true,
+      "finding": "物理实验类话题，无饮食/健康/安全顾虑表述，无安全性闭环要求"
+    },
+    {
+      "pattern_id": "G-02",
+      "triggered": false,
+      "checked": true,
+      "finding": "全文扫描绝对词：『整个翻了过来』『立刻塌下来』为实验事实范围内的描述（关振动液层确实塌落），非无例外全称判断；未命中『不可能/一定/永远/全看』类绝对化"
+    },
+    {
+      "pattern_id": "G-03",
+      "triggered": true,
+      "checked": true,
+      "finding": "定性物理断言（气泡下沉、下界面轻物下浮、100Hz、浮力映射下界面）已全部回权威源核对，全部属实，无常识陷阱命中"
+    },
+    {
+      "pattern_id": "G-04",
+      "triggered": false,
+      "checked": true,
+      "finding": "三条机制的因果链（注气→气泡下沉长大→气垫→动态稳定→下界面反转）环节齐备，无跳步"
+    },
+    {
+      "pattern_id": "G-05",
+      "triggered": false,
+      "checked": true,
+      "finding": "无古文引文；无解剖/医学术语；『阿基米德原理』『动态稳定』等术语归属正确且已通俗解释"
+    },
+    {
+      "pattern_id": "G-06",
+      "triggered": true,
+      "checked": true,
+      "finding": "存在『2020年9月+《自然》』引用标记，已逐项核对（年份、期刊、团队国籍、实验细节），全部逐字吻合，无『来源在但细节错』"
+    },
+    {
+      "pattern_id": "G-07",
+      "triggered": false,
+      "checked": true,
+      "finding": "各归因（振动为悬浮主因、振动为气泡下沉原因）均为主因，无只提配角的情况"
+    }
+  ],
+  "forbidden_violations": [],
+  "checklist_scan": {
+    "forbidden_items_scanned": 67,
+    "note": "FORBIDDEN.md 实际条目 FP-01 至 FP-68（FP-58 归档留空）共 67 条逐一扫描；重点核 FP-25（无~、无——）、FP-03（Q段无表面矛盾）、FP-05（F段有新应用信息，未违规）、FP-46（已知量级已给精确值）、FP-55/FP-67（无界面方向矛盾）",
+    "structure_check": {
+      "A段引用块": true,
+      "C段Q格式加粗": true,
+      "F段引用块含冷知识反转标签": true,
+      "结尾风格表格四行": true,
+      "分类枚举合法": "物理化学（6选1枚举内）",
+      "字数_全文口径": "673，≤690 硬上限"
+    }
+  },
+  "passed": true,
+  "summary": "v2 优化版《反转浮力》审校通过。脚本 100 分（char_count 673，全文口径 690 硬上限内），12 项检查全过，P0=0、P1=0、P2=1（F段金句与Q3结论语义部分重叠的轻微提示，不影响通过）。6 处关键事实断言（2020年9月法国团队发表于《自然》、100Hz 振动、气泡下沉、注空气层托住液体、下界面浮力反转、振动操控气泡用于矿物浮选与化学反应）经 WebSearch 独立核验全部属实。结构四件套完整、分类枚举合法、机制因果链自洽无跳步、无禁用模式命中。判定：通过（P0=0 且 P1=0 ≤ 2）。"
+}

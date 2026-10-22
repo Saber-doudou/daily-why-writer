@@ -1,0 +1,171 @@
+{
+  "article_id": "2026-10-09",
+  "review_timestamp": "2026-10-09T14:06:14+0800",
+  "review_mode": "independent_reviewer_v2",
+  "passed": true,
+  "p0_count": 0,
+  "p1_count": 1,
+  "p2_count": 1,
+  "score": 95,
+  "script_result": {
+    "char_count": 685,
+    "score": 100,
+    "p0": [],
+    "p1": [],
+    "p2": []
+  },
+  "issues": [
+    {
+      "level": "P1",
+      "category": "FORBIDDEN-FP-25",
+      "location": "第7行、第11行、第15行",
+      "description": "全文仍含 3 处双破折号「——」（第7行『507 岁——差了整整一个世纪』、第11行『起了名字——\"明\"』、第15行『死去——不是谁的疏忽』），违反 FP-25 禁止用「——」做转折（部分渲染器会把双破折号解析为删除线）。validate_article.py 脚本满分未捕获此问题，属审校盲区，须人工兜底。一轮审校曾声称已将 Q1 的「——它太老了」改为逗号，但本 v2 在 Q1/Q3/F 段另行保留了 3 处双破折号，FP-25 仍未闭环。",
+      "suggestion": "将 3 处「——」改为逗号或句号：第7行『修正为 507 岁，差了整整一个世纪』；第11行『给它起了名字，叫\"明\"』；第15行『它在研究过程中死去，不是谁的疏忽』。"
+    },
+    {
+      "level": "P2",
+      "category": "CHECKLIST-§62",
+      "location": "F 段与结尾风格表格",
+      "description": "F 段首句『这只\"明\"是吉尼斯认证的\"已知最长寿的非群体动物\"，活到 507 岁。可惜测定年龄必须切开它的壳、数清每一道纹……』与结尾表格「冷知识反转」列『507岁的\"明\"是已知最长寿的非群体动物；读它的年纪要剖壳数纹』重复表达同一个反转核心（507岁+非群体动物+剖壳数纹）。违反 §62「F段与表格内容差异化」——表格属精华提炼，不应原样复述 F 段首句。F 段新增的『天然气候档案』『汤里同龄的北极圆蛤』确为新角度，已差异化，故仅判 P2。",
+      "suggestion": "表格「冷知识反转」列建议提炼为 F 段未直接点明的记忆点（如『吉尼斯认证的最长寿非群体动物，年龄是用碳-14 复核的』），避免与 F 段首句字面重复。"
+    }
+  ],
+  "fact_checks": [
+    {
+      "claim": "《星期日泰晤士报》的记者因为这一年号（约1499年明朝），给它起了名字「明」",
+      "verdict": "true",
+      "source_verified": true,
+      "detail_verified": true,
+      "source": "Wikipedia《Ming (clam)》: \"The clam was initially named Ming by Sunday Times journalists, in reference to the Ming dynasty in China, during which it was born.\" (wikipedia.org)",
+      "note": "与正文逐字对应：星期日泰晤士报记者 + 因生于明朝起名「明」。细节完全属实。"
+    },
+    {
+      "claim": "2006 年英国班戈大学团队在冰岛海域捞北极圆蛤做气候变化研究；初判 405 岁，2013 年用碳-14 等更精细方法重新测定修正为 507 岁；壳缘几百道纹挤在几毫米里早年读偏",
+      "verdict": "true",
+      "source_verified": true,
+      "detail_verified": true,
+      "source": "Wikipedia《Ming (clam)》/ Butler et al. 2013 Palaeogeography Palaeoclimatology Palaeoecology 373:141-151; 中新网 2013-12-17「507岁北极蛤」。班戈大学海洋科学学院 2006 年冰岛海域气候变化研究、2007 年公布 405 岁、2013 年复核 507 岁（碳-14 支持，误差 1 到 2 年）、早期外壳纹路过密致误差均属实。",
+      "note": "关键数字与机构/年份/方法全部核实，无误。"
+    },
+    {
+      "claim": "明蛤死因：研究过程中死去，读它的年纪本就要付出代价（须切开壳数纹）",
+      "verdict": "true",
+      "source_verified": true,
+      "detail_verified": true,
+      "source": "Wikipedia《Ming (clam)》: \"The clam was frozen and killed during the 2006 collection, before its exceptional age was known.\" / \"The clam must be killed to determine its age.\" (wikipedia.org)",
+      "note": "正文『研究过程中死去……读它的年纪本就要付出代价』准确：确定年龄须切开壳，必然致死；死亡发生于 2006 年采集/冷冻运输途中，研究者当时不知其高龄。非故意杀害，与权威源一致。一轮质疑的『误导为科学家故意杀害』在本 v2 已通过『不是谁的疏忽』消解。"
+    },
+    {
+      "claim": "格陵兰鲨照样要觅食躲天敌，也能活上百年到几百年",
+      "verdict": "true",
+      "source_verified": true,
+      "detail_verified": true,
+      "source": "NOAA National Ocean Service (oceanservice.noaa.gov): Greenland shark \"may live over 500 years\"; 新华社/中新网 2016-08-12 据《Science》报告『寿命可长达 400 年』；2016 年《Science》研究最大个体 392±120 岁。",
+      "note": "『活上百年到几百年』表述稳妥，与权威源一致，无误。"
+    },
+    {
+      "claim": "F 段：明蛤壳上每层刻着那年北大西洋海温，是天然气候档案",
+      "verdict": "true",
+      "source_verified": true,
+      "detail_verified": true,
+      "source": "中新网 2013-12-17 引包振民：『贝壳积累了不同比例的各种同位素可反映海洋水温变化』；Wikipedia《Ming (clam)》: \"Ming's shell preserves a year-by-year record of the environment\"。",
+      "note": "壳纹记录海洋水温、可作气候档案，属已确立科学事实，无误。"
+    }
+  ],
+  "quote_checks": [
+    {
+      "claim": "《星期日泰晤士报》记者因明生于明朝（约1499年）而命名「明」",
+      "verbatim_match": true,
+      "source": "Wikipedia《Ming (clam)》: \"The clam was initially named Ming by Sunday Times journalists, in reference to the Ming dynasty in China, during which it was born.\"",
+      "note": "正文『《星期日泰晤士报》的记者因为这一年号，给它起了名字——\"明\"』与权威源逐字对应（记者身份、命名缘由、明朝纪元均一致）。"
+    }
+  ],
+  "mechanism_checks": [
+    {
+      "claim": "长寿机制：趴在北大西洋冰冷海底、成年后几乎不挪窝、天冷食物少，把新陈代谢压到最低，衰老自然慢（等于低温保鲜箱）",
+      "direction_ok": true,
+      "elements_complete": true,
+      "note": "因果链完整：环境严酷（低温+食物少）→ 代谢压低 → 衰老慢，无跳步；与中新网引包振民『北极蛤生长在水温寒冷的北极深海』『细胞代谢缓慢』一致。正文还主动补充『代谢慢不是唯一开关』，并举陆龟/弓头鲸/格陵兰鲨反例，未过度归因。"
+    },
+    {
+      "claim": "Q1 年龄测定机制：一年长一层薄壳如年轮；壳缘几百道纹挤在几毫米里早年读偏，2013 年用碳-14 等更精细方法复核",
+      "direction_ok": true,
+      "elements_complete": true,
+      "note": "解释了初判 405 到修正 507 的差异来源（外壳纹路过密、碳-14 复核），机制完整；与权威源『more than 500 rings packed into a space just millimeters across』『revised age supported by carbon-14 dating』一致。"
+    }
+  ],
+  "attribution_checks": [
+    {
+      "claim": "将明蛤长寿主因归于『低温+低食物→代谢压到最低→衰老慢』，并明示『代谢慢不是唯一开关』",
+      "is_primary_cause": true,
+      "note": "这是研究者（班戈大学/包振民）提出的主流解释（环境寒冷+代谢缓慢），属主因而非配角；正文同时强调长寿不止一条路、列举其他长寿动物，未隐瞒多因素，无归因偏漏。"
+    }
+  ],
+  "term_checks": [],
+  "gap_checks": [
+    {
+      "pattern_id": "G-01",
+      "triggered": false,
+      "checked": true,
+      "finding": "纯科普寿命话题，A 段为海鲜店蛤蜊汤场景，无读者顾虑/恐惧/禁忌类表述（无『有毒吗/能不能吃/安全吗』），不属饮食健康安全不可逆领域，未命中。"
+    },
+    {
+      "pattern_id": "G-02",
+      "triggered": false,
+      "checked": true,
+      "finding": "扫描全文绝对词（不可能/全看/一定/绝对/必然/永远/无非）零命中；『最长寿的非群体动物』已加『已知能精确测定年龄的/非群体』限定，非绝对化承诺；『坐稳了天花板』为口语化比较，已有边界限定。FP-25 双破折号属标点规范问题，单列 P1，不计入本绝对化类型。"
+    },
+    {
+      "pattern_id": "G-03",
+      "triggered": false,
+      "checked": true,
+      "finding": "关键事实（班戈大学 2006、405→507 岁、1499 年明朝、碳-14 复核、格陵兰鲨数百年、壳纹记海温）已 WebSearch 多源核实全部属实，无『听起来对但细节错』的常识陷阱；『非群体动物』限定准确。"
+    },
+    {
+      "pattern_id": "G-04",
+      "triggered": false,
+      "checked": true,
+      "finding": "机制链完整：环境严酷→低温食物少→代谢压低→衰老慢；Q1 年龄差异有独立解释（外壳纹密+碳-14 复核），无跳步，读者可自推。"
+    },
+    {
+      "pattern_id": "G-05",
+      "triggered": false,
+      "checked": true,
+      "finding": "无古书/论文逐字引文；『碳-14』『年轮/生长纹』『代谢』均为规范或通俗用字，无『上腭/黏膜』类错字；概念归属（吉尼斯认证/班戈大学/非群体动物）准确。"
+    },
+    {
+      "pattern_id": "G-06",
+      "triggered": true,
+      "checked": true,
+      "finding": "文中含『2006 年英国班戈大学的团队……做气候变化研究』『2013 年……碳-14』等引用标记，已逐项核对细节：班戈大学海洋科学学院、2006 冰岛气候变化项目、2007 公布 405 岁、2013 复核 507 岁（碳-14 支持、误差 1 到 2 年）、早期外壳纹密致误差——非仅『来源存在』，细节逐字核实，无遗漏限定。"
+    },
+    {
+      "pattern_id": "G-07",
+      "triggered": false,
+      "checked": true,
+      "finding": "Q2 将长寿主因归于『低温低食物→代谢慢』，该归因即研究者主流解释（属主因）；正文还明示『代谢慢不是唯一开关』并举陆龟/弓头鲸/格陵兰鲨反例，未略过更主要成因，无归因偏漏。"
+    }
+  ],
+  "issue_responses": [
+    {
+      "issue_index": 0,
+      "status": "unresolved",
+      "evidence": "一轮审校声称已把 Q1 的「——它太老了」改为逗号，但本 v2 仍在第7行『507 岁——差了整整一个世纪』、第11行『起了名字——\"明\"』、第15行『死去——不是谁的疏忽』保留 3 处双破折号，FP-25 禁令未闭环（脚本满分也未捕获，属人工兜底项）。FP-25 问题在 v2 中依旧存在，故判未解决。"
+    },
+    {
+      "issue_index": 1,
+      "status": "resolved",
+      "evidence": "v2 F 段改为『它在研究过程中死去——不是谁的疏忽，是读它的年纪本就要付出代价』（『——』仍属 FP-25 待修，但死因归因本身已准确化）：明确死亡发生在研究/采集过程中、且『读年龄须剖壳』必然致死，与权威源（Wikipedia：2006 冷冻运输途中死亡；『确定年龄须切开壳』）一致，不再误导为『科学家故意杀害』。一轮所质疑的死因误导问题已闭环。"
+    }
+  ],
+  "forbidden_violations": [
+    {
+      "fp_id": "FP-25",
+      "occurrences": 3,
+      "locations": ["第7行", "第11行", "第15行"],
+      "severity": "P1",
+      "note": "双破折号「——」做转折，违反 Markdown 渲染安全字符禁令；脚本未捕获，须人工修改。"
+    }
+  ],
+  "overall_comment": "事实层面零硬伤：明蛤命名（星期日泰晤士报记者因明朝起名）、班戈大学 2006 采集、405→507 岁碳-14 复核、死因（研究/采集过程死亡、读龄须剖壳）、格陵兰鲨数百年、壳纹记海温——经 WebSearch 多源核实全部属实。结构（A段引用块/Q格式/F段冷知识反转标签/四字段风格表格/分类『动物世界』枚举内）完整，字数 685 未超 690。唯一阻断性问题是 FP-25 双破折号残留 3 处（脚本漏判，P1），另 F段与表格冷知识反转列存在轻微字面重复（P2）。P0=0、P1=1，满足通过条件（P1≤2）。建议修正 3 处双破折号后即可发布。"
+}

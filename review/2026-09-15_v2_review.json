@@ -1,0 +1,122 @@
+{
+  "article_id": "2026-09-15",
+  "review_timestamp": "2026-09-15T20:54:57+0800",
+  "pass": true,
+  "p0_count": 0,
+  "p1_count": 0,
+  "p2_count": 0,
+  "score": 100,
+  "script_result": {
+    "exit_code": 0,
+    "score": 100,
+    "char_count": 678,
+    "p0_count": 0,
+    "p1_count": 0,
+    "p2_count": 0
+  },
+  "issues": [],
+  "fact_checks": [
+    {
+      "claim": "2022年中美科学家在《科学报告》发表始熊猫（Ailurarctos）化石研究：云南昭通水塘坝出土，约700万至600万年前，伪拇指比今天更长、缺末端弯钩，始熊猫已开始吃竹子",
+      "source_verified": true,
+      "detail_verified": true,
+      "verdict": "verified",
+      "note": "Wang et al., Scientific Reports 2022（论文号 s41598-022-13402-y）。新华社/光明日报/China Daily/EurekAlert 多源一致确认机构（中科院古脊椎所+昆明动物所+美国洛杉矶自然历史博物馆）、地点（云南昭通水塘坝）、年代（约600万至700万年前，晚中新世）与结论（化石伪拇指比现生长且直、缺弯钩；始熊猫臼齿证据显示已吃竹子）。论文摘要原文 'since the late Miocene, the thumb has not enlarged further' 与本文 Q3 一致。"
+    },
+    {
+      "claim": "亲缘很远的小熊猫为吃竹子也演化出相似伪拇指，正是趋同进化",
+      "source_verified": true,
+      "detail_verified": true,
+      "verdict": "verified",
+      "note": "小熊猫属 Ailuridae（近缘浣熊/鼬科），大熊猫属 Ursidae，二者独立由食肉祖先进化出增大的桡侧籽骨。基因组研究（Hu et al., PNAS 2017；PMC5293045）确认其为经典趋同进化案例，且 TAS1R1 鲜味受体在两熊猫中均假基因化。"
+    },
+    {
+      "claim": "桡侧籽骨是骨组织（P0 修正核验）：'人类等哺乳动物的籽骨通常很小、并未特化成拇指'，修正原稿'软骨'事实错误",
+      "source_verified": true,
+      "detail_verified": true,
+      "verdict": "verified",
+      "note": "籽骨（sesamoid bone）为骨组织，髌骨是人体最大籽骨（维基百科 Sesamoid bone 确认）。原文'软骨'说法实错。修正后'通常很小'与论文 'a relatively small and flat radial sesamoid' 一致，且'一块小骨头'与'很小'自洽，前文矛盾已消除。"
+    },
+    {
+      "claim": "大熊猫跖行式走路、伪拇指须兼顾承重，过长会凸出掌面干扰行走（硌脚，并非容易折断）",
+      "source_verified": true,
+      "detail_verified": true,
+      "verdict": "verified",
+      "note": "论文摘要明确 'weight bearing while walking in a plantigrade posture' 是限制因素。光明日报权威报道原文'强烈伸长的桡侧籽骨会突出于掌面，从而对行走产生干扰，通俗地说，就是会硌脚'。本文'硌脚'与'并非容易折断'均源自并忠于该权威表述，机制方向正确。"
+    }
+  ],
+  "quote_checks": [
+    {
+      "claim": "2022年，中美科学家在《科学报告》发表研究：云南昭通水塘坝出土的始熊猫化石……",
+      "verbatim_match": true,
+      "source": "Scientific Reports 2022（s41598-022-13402-y），Wang, Su, Jablonski, Ji, Flynn 等；新华社/光明日报报道佐证"
+    }
+  ],
+  "mechanism_checks": [
+    {
+      "claim": "伪拇指须同时抓竹竿与承重走路（跖行式），再长会凸出掌面干扰行走（硌脚）",
+      "direction_ok": true,
+      "elements_complete": true,
+      "note": "抓握增强 vs 行走干扰的权衡方向正确；论文核心即 'conflicting demands for locomotion and feeding'，机制完整，无跳步。"
+    },
+    {
+      "claim": "被动抓握：桡侧籽骨被关节锁死，与第一掌骨/舟月骨成复合体，与其他掌骨联动对握卡住竹子",
+      "direction_ok": true,
+      "elements_complete": true,
+      "note": "与论文 'fixed joint, forms a complex with first metacarpal and scaphoid/lunar bones' 及 'passive grip' 一致，方向与要素均自洽。"
+    }
+  ],
+  "attribution_checks": [
+    {
+      "claim": "Q2：伪拇指因改吃竹子而演化（竹子食性为主因）",
+      "is_primary_cause": true,
+      "note": "论文与多源确认竹子食性是伪拇指演化的主驱动；'祖先原本吃肉'亦属实（食肉目由食肉祖先进化，论文 'evolving from a carnivorous ancestor'）。"
+    },
+    {
+      "claim": "Q3：伪拇指不长成真手指，主因是兼顾承重走路的功能权衡（硌脚）",
+      "is_primary_cause": true,
+      "note": "论文摘要：'weight-bearing constraint could be the main reason the false thumb never evolved into a full digit'，主因判定准确，无偏漏。"
+    }
+  ],
+  "term_checks": [
+    {
+      "term": "桡侧籽骨",
+      "used": "桡侧籽骨",
+      "correct": "桡侧籽骨",
+      "exact": true,
+      "note": "radial sesamoid，标准解剖学术语，用字精确。"
+    },
+    {
+      "term": "籽骨",
+      "used": "籽骨",
+      "correct": "籽骨",
+      "exact": true,
+      "note": "sesamoid bone，标准术语，无音近/形近混淆。"
+    },
+    {
+      "term": "跖行式",
+      "used": "跖行式",
+      "correct": "跖行式",
+      "exact": true,
+      "note": "plantigrade，熊科跖行，用字精确（跖=足底）。"
+    },
+    {
+      "term": "臼齿",
+      "used": "臼齿",
+      "correct": "臼齿",
+      "exact": true,
+      "note": "molar，标准术语。"
+    }
+  ],
+  "gap_checks": [
+    { "pattern_id": "G-01", "triggered": false, "checked": true, "finding": "" },
+    { "pattern_id": "G-02", "triggered": false, "checked": true, "finding": "" },
+    { "pattern_id": "G-03", "triggered": true,  "checked": true, "finding": "触发信号命中（生物定性描述+年代数字'约700万至600万年前'）。重点核验原 P0 修正处：'人类等哺乳动物的籽骨通常很小、并未特化成拇指'——籽骨为骨组织（髌骨为人体最大籽骨，Sesamoid bone 来源确认），修正后与前文'一块小骨头'自洽，无误；始熊猫化石年代、伪拇指比今长且缺弯钩、已吃竹子等均经 WebSearch 核验属实 → 不标 P1" },
+    { "pattern_id": "G-04", "triggered": false, "checked": true, "finding": "" },
+    { "pattern_id": "G-05", "triggered": true,  "checked": true, "finding": "触发信号命中（《科学报告》研究引用+解剖学术语'桡侧籽骨/籽骨/跖行式/臼齿'）。经核验：期刊名《科学报告》=Scientific Reports（2022，s41598-022-13402-y）属实；各解剖学术语用字精确，无误 → 不标 P1" },
+    { "pattern_id": "G-06", "triggered": true,  "checked": true, "finding": "触发信号命中（'2022年，中美科学家在《科学报告》发表研究'含期刊+年份+研究对象）。逐项核对细节：机构（中科院古脊椎所+昆明动物所+美国洛杉矶自然历史博物馆）、地点（云南昭通水塘坝）、化石（始熊猫 Ailurarctos）、年代（约600万至700万年前，晚中新世）、结论（伪拇指比今长且缺弯钩、始熊猫已吃竹子）全部与原文一致 → 不标 P1" },
+    { "pattern_id": "G-07", "triggered": false, "checked": true, "finding": "" }
+  ],
+  "forbidden_violations": [],
+  "overall_comment": "v2 优化版全文质量优秀，脚本满分通过（char_count=678，结构齐全：A段引用块、C段Q1/Q2/Q3格式、F段'冷知识反转'标签、结尾风格表格分类=动物世界属6枚举）。关键事实断言经 WebSearch 独立核验全部属实：① 2022《科学报告》始熊猫化石研究（Wang et al., s41598-022-13402-y）机构/地点/年代/结论与原文逐字一致；② 小熊猫趋同进化有基因组研究支撑；③ 跖行式承重权衡与'硌脚'表述源自权威中文报道。最重要的核验项——原 P0 事实错误'软骨'已修正为'很小、并未特化成拇指'，籽骨确为骨组织（髌骨为最大籽骨），修正后与前文'一块小骨头'完全自洽，矛盾已消除。G-03 触发信号命中但核验无误，不标 P1。全文无 FP 违规（无~、无双破折号、无绝对化词、连接词≤2、字数未超690）。判定：P0=0、P1=0、P2=0，通过。"
+}

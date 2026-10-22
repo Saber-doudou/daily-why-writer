@@ -1,0 +1,128 @@
+{
+  "article_id": "2026-09-10",
+  "review_timestamp": "2026-09-10T10:02:35+0800",
+  "revised_after_review": true,
+  "pass": true,
+  "p0_count": 0,
+  "p1_count": 0,
+  "p2_count": 1,
+  "score": 96,
+  "script_result": {
+    "exit_code": 0,
+      "score": 100,
+      "char_count": 487,
+    "p0_count": 0,
+    "p1_count": 0,
+    "p2_count": 0
+  },
+  "issues": [
+    {
+      "level": "P2",
+      "category": "CHECKLIST-§2 机制精度",
+      "description": "Q2 写「潜热一放，周围的水紧跟着排队，整瓶瞬间凝固」，把冻结「扩散」的原因归给了潜热释放。真实机制中：冰晶一旦成核，周围水仍处于过冷态（低于0℃）且潜热被持续导走，冻结锋面才得以推进；潜热释放（再辉/recalescence）实际会让局部回温、倾向于减缓而非驱动冻结。表述方向未矛盾（水确实会凝固），但因果归因略有简化，对懂行读者略有歧义。",
+      "location": "C段 Q2",
+      "suggestion": "可改为「冰晶一旦冒头，周围还处在过冷态的水就顺着它抱成一片，热量被及时导走，整瓶眨眼冻实」，避免把潜热写成扩散的驱动力；或保留「潜热一放」但补一句「热量被导走，冻结才追着往前走」。"
+    }
+  ],
+  "fact_checks": [
+    {
+      "claim": "纯净水可过冷到约零下40℃",
+      "source_verified": true,
+      "detail_verified": true,
+      "omission_severity": "minor",
+      "verdict": "accurate",
+      "note": "WebSearch 多源确认：纯水均相成核（homogeneous nucleation）温度普遍公认约 -38 到 -40℃（235 K）；实验室微米级超纯液滴可冷至约 -38 到 -40℃ 才自发结晶。文中「约零下40℃」为合理近似，数据准确。无机构/年份/受试者类细节需逐字核对（属常识性物性数据）。"
+    },
+    {
+      "claim": "高空云里飘着低于0℃还不结冰的小水滴，飞机穿过会在机翼瞬间结霜",
+      "source_verified": true,
+      "detail_verified": true,
+      "omission_severity": "minor",
+      "verdict": "accurate",
+      "note": "WebSearch 确认：过冷水滴（supercooled droplets）在混合相云（0℃ 到约 -38℃）中普遍存在，是云物理与航空气象核心现象；飞机穿越含过冷水滴的云层会在机翼/螺旋桨积冰，属真实危害（中国气象局、WIPIVERSE、grokipedia 等多源一致）。准确。"
+    },
+    {
+      "claim": "冬天的冻雨落到电线，也是落地才冻成冰挂",
+      "source_verified": true,
+      "detail_verified": true,
+      "omission_severity": "minor",
+      "verdict": "accurate",
+      "note": "WebSearch 确认：冻雨由过冷水滴组成，与温度低于0℃的物体（电线、树木等）碰撞立即冻结成雨凇/冰挂（中国气象局多篇科普一致）。「落地才冻成冰挂」描述准确。"
+    }
+  ],
+  "quote_checks": [],
+  "mechanism_checks": [
+    {
+      "claim": "Q1：普通水含灰尘/气泡/瓶壁划痕等现成起头，太纯太静的水缺起点→可冷到冰点以下仍液态",
+      "direction_ok": true,
+      "elements_complete": true,
+      "note": "成核位点（凝结核）缺失导致无法启动结晶，是过冷的物理本质，方向正确、要素完整，与权威源一致。"
+    },
+    {
+      "claim": "Q2：撞击/晃动/投冰=提供凝结核（排队的头儿），水分子顺它成晶，整瓶瞬间凝固",
+      "direction_ok": true,
+      "elements_complete": true,
+      "note": "扰动提供异相成核位点、临界晶核形成后冻结锋面传播，方向正确。仅「潜热一放→周围排队」的因果措辞略有简化（见 issues P2），不改变整体机制正确性。"
+    },
+    {
+      "claim": "Q3：云滴靠太小太干净扛住结冰，与纯净水靠太纯太静同理——没凝结核就排不了队",
+      "direction_ok": true,
+      "elements_complete": true,
+      "note": "云中微米级洁净液滴深过冷、冻雨/飞机积冰均为过冷自然实例，归因统一于「缺凝结核」，方向自洽、无内部矛盾。"
+    }
+  ],
+  "attribution_checks": [
+    {
+      "claim": "水低于零度不结冰的主因=缺凝结核（无成核起点）",
+      "is_primary_cause": true,
+      "note": "过冷的本质即缺乏异相成核位点，是公认主因（均匀成核需深冷至约 -38 到 -40℃）。文中未遗漏更主要成因，归因完整。"
+    }
+  ],
+  "term_checks": [],
+  "gap_checks": [
+    {
+      "pattern_id": "G-01",
+      "triggered": false,
+      "checked": true,
+      "finding": "本文为物理化学科普，A段为「惊叹式」场景（纯净水晃荡却未冻），未出现「不敢/怕/有毒吗/能不能吃/安全吗」等顾虑或禁忌表述，话题不属于饮食/健康/用药/电器/儿童/宠物等不可逆领域。安全性闭环触发信号未命中。"
+    },
+    {
+      "pattern_id": "G-02",
+      "triggered": false,
+      "checked": true,
+      "finding": "逐词扫描绝对词（不可能/全看/全都/一定/绝对/必然/永远/无非）与说满承诺（彻底/完全不会/保证），均未出现。「到处都是」为口语化全称、指代过冷水滴在混合相云中普遍存在，属事实陈述而非夸大；「没凝结核就排不了队」为机制本质，非绝对化错误。G-02 未命中。"
+    },
+    {
+      "pattern_id": "G-03",
+      "triggered": false,
+      "checked": true,
+      "finding": "关键定性/数据断言已逐条回权威源核对：①「纯净水可过冷到约零下40℃」= 均匀成核约 -38 到 -40℃，准确；②「云中低于0℃小水滴」「飞机机翼积冰」「冻雨落地成冰挂」均为实证自然现象，准确。无「看似合理却错误」的常识陷阱。"
+    },
+    {
+      "pattern_id": "G-04",
+      "triggered": false,
+      "checked": true,
+      "finding": "Q1→Q2→Q3 机制链：缺成核位点→扰动提供位点→冻结锋面传播→自然实例，每步环节齐备、无跳步（仅 Q2 潜热措辞微简，已归 P2，非要素缺失）。G-04 未命中。"
+    },
+    {
+      "pattern_id": "G-05",
+      "triggered": false,
+      "checked": true,
+      "finding": "文中无古籍/论文原文引述，无医学/解剖/生理学术语（凝结核/水分子/潜热/冰晶均为通用物理化学词，非医学术语）。术语精度与引文逐字核对触发信号未命中；term_checks 按规则空数组（无医学/解剖术语）。"
+    },
+    {
+      "pattern_id": "G-06",
+      "triggered": false,
+      "checked": true,
+      "finding": "文中无「研究表明/XX大学/发表于XX年/实验显示」等引用标记，唯一数据「约零下40℃」为常识性物性数据且已独立核实，无需逐字核对受试群体/干预物/季节条件。G-06 未命中。"
+    },
+    {
+      "pattern_id": "G-07",
+      "triggered": false,
+      "checked": true,
+      "finding": "过冷现象成因单一且主因明确（缺凝结核/成核位点），不存在被略过的主因或次要成因偏漏。归因完整性触发信号未命中。"
+    }
+  ],
+  "forbidden_violations": [],
+  "overall_comment": "文章结构完整（A段引用块、C段 Q1/Q2/Q3、F段含「冷知识反转」标签、结尾风格表格四字段齐全且分类=物理化学属枚举内），科学机制准确、比喻体系一致（排队/抱团贯穿），无 FP 黑名单命中，无绝对化/AI味/字数超标。独立事实核验3处全部通过（含「约零下40℃」均匀成核极限）。唯一可优化点为 Q2 对潜热释放与冻结扩散的因果措辞略有简化，标 P2。综合判定 pass=true（P0=0 且 P1=0≤2）。"
+}

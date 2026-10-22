@@ -1,0 +1,164 @@
+{
+  "article_id": "2026-09-16",
+  "review_timestamp": "2026-09-16T10:59:35+08:00",
+  "pass": true,
+  "passed": true,
+  "article": "F:\\WorkBuddy\\daily-why\\articles\\2026-09\\2026-09-16-优化版-每日冷知识-金星日比年长.md",
+  "p0_count": 0,
+  "p1_count": 0,
+  "p2_count": 1,
+  "score": 95,
+  "validate_result": {
+    "char_count": 690,
+    "score": 95,
+    "p0_count": 0,
+    "p1_count": 1,
+    "p2_count": 0,
+    "note": "脚本 P1 唯一条目为「标题缺少 emoji 装饰」，属已知误报：标题实际以 🪐 开头（Read 全文第 1 行核实），不据此降级，人工复核不采纳此条。"
+  },
+  "script_result": {
+    "exit_code": 0,
+    "score": 95,
+    "char_count": 690,
+    "p0_count": 0,
+    "p1_count": 1,
+    "p2_count": 0
+  },
+  "checklist_findings": [
+    "§1 用词精准：恒星日/太阳日/逆行自转等术语首次出现均带白话解释（自转一周算一天/日出到日出/倒着转），符合首次术语附解释要求",
+    "§2 机制准确：Q1 跑道类比（原地转圈=一天、绕操场跑=一年）方向与物理过程一致；Q3 自转与公转反向互相抵消导致太阳日短于恒星日，因果方向自洽",
+    "§3 数据与引用：243天/约225天/约117天三个核心数字在 A/Q/F/表格四处出现口径完全一致（§71 通过）；约225、约117 均用约数与权威源 224.65/116.75 兼容",
+    "§4 猜测与事实边界：逆行自转成因明确写「目前还没有定论，主流推测是……或是……」，假说未定论化（§102 通过）",
+    "§13 开头钩子闭环：A 段提出的「117比225小，为什么说一天比一年长」疑问在 Q1-Q3 完整解答并反转",
+    "§17 F段提供新角度：地球日长缓慢延长（月球潮汐刹车/1.7毫秒/21.9小时）为 Q3 之外全新信息，无重复",
+    "结构四要素齐备：A段引用块、Q1/Q2/Q3 加粗格式、F段引用块含「冷知识反转」标签、结尾表格；表格分类「宇宙探索」在 6 选 1 枚举内（§105 通过）",
+    "字数：全文口径 690 字，恰在硬上限内（未超过 690，不构成 P1）"
+  ],
+  "forbidden_findings": [
+    "FP-01 套话开头：未命中（开头为第二人称场景代入）",
+    "FP-02 AI味排比：未命中（无首先/其次堆砌、无数字序号排比）",
+    "FP-03 逻辑矛盾：未命中（Q1 恒星日口径与 Q3 太阳日口径的反转已显式搭桥）",
+    "FP-07 空洞修饰：未命中",
+    "FP-23 「人类/行星独有」绝对化：命中「八大行星中唯一自转周期长于公转周期的行星」，经权威源核验属实（金星243天>公转224.7天，水星58.6天<88天，其余行星自转均以小时/日计而公转以年计），为已核实的真实全称判断，放行",
+    "FP-25 渲染不安全字符：未命中（全文无 ~ 与 ——）",
+    "FP-49 辟谣一刀切：未命中（「只对了一半」保留中间态，恒星日/太阳日两口径分说）",
+    "FP-56 口号式说教：未命中（结尾以具体数字收束）",
+    "FORBIDDEN.md 实际条目 FP-01 至 FP-74（FP-58 归档空缺，共 73 条）已逐条扫描，除上述外其余均未命中"
+  ],
+  "fact_checks": [
+    {
+      "claim": "金星恒星日（自转一周）243个地球日，公转一圈约225天",
+      "source_verified": true,
+      "detail_verified": true,
+      "omission_severity": "minor",
+      "verdict": "match",
+      "note": "人民网科普中国：自转一周需243个地球日，公转周期224.7个地球日；Wikiwand：224.65地球日。文中「约225天」与 224.65/224.7 兼容",
+      "sources": ["https://kpzg.people.com.cn/BIG5/n1/2016/0923/c404389-28735555.html", "https://www.wikiwand.com/zh-hant/%E9%87%91%E6%98%9F"]
+    },
+    {
+      "claim": "太阳日（日出到日出）约117个地球日，太阳西升东落",
+      "source_verified": true,
+      "detail_verified": true,
+      "omission_severity": "minor",
+      "verdict": "match",
+      "note": "Wikiwand：太阳日仅116.75地球日；人民日报客户端：一昼夜为117个地球日、太阳西升东落。文中「约117天」属实；「等了快两个月」与半个太阳日约58.5天的量级兼容",
+      "sources": ["https://www.wikiwand.com/zh-hant/%E9%87%91%E6%98%9F", "https://www.peopleapp.com/rmharticle/30025040116"]
+    },
+    {
+      "claim": "金星是八大行星中唯一自转周期长于公转周期的行星",
+      "source_verified": true,
+      "detail_verified": true,
+      "omission_severity": "minor",
+      "verdict": "match",
+      "note": "逐行星核对：金星243>224.7；水星自转58.6天<公转88天；其余行星自转均以小时或日计、公转以月年计。唯一性成立",
+      "sources": ["https://www.wikiwand.com/zh-hant/%E9%87%91%E6%98%9F", "https://kpzg.people.com.cn/BIG5/n1/2016/0923/c404389-28735555.html"]
+    },
+    {
+      "claim": "金星逆行自转成因未定论，主流推测为远古巨大天体撞击或浓厚大气潮汐拖曳",
+      "source_verified": true,
+      "detail_verified": true,
+      "omission_severity": "minor",
+      "verdict": "match",
+      "note": "人民网引加德夫大学戴维斯：猛烈碰撞改变自转方向；Wikiwand：太阳热在浓稠大气中创造大气潮使旋转趋缓、数十亿年潮汐效应。文中「还没有定论……主流推测……或是」的限定与学界现状一致",
+      "sources": ["https://kpzg.people.com.cn/BIG5/n1/2016/0923/c404389-28735555.html", "https://www.wikiwand.com/zh-hant/%E9%87%91%E6%98%9F"]
+    },
+    {
+      "claim": "地球一天每个世纪拉长约1.7毫秒（月球潮汐刹车）",
+      "source_verified": true,
+      "detail_verified": true,
+      "omission_severity": "minor",
+      "verdict": "match",
+      "note": "《环球科学》中文版：海洋潮汐每世纪使一天长度增加1.7毫秒；科技日报：如今继续以每百年约1.7毫秒的速度延长，月球潮汐如刹车",
+      "sources": ["https://sciam.cn/article/earth-rotation-summer-solstice", "https://yn.people.com.cn/BIG5/n2/2023/0712/c378440-40490647.html"]
+    },
+    {
+      "claim": "6亿多年前地球的一天只有约22小时",
+      "source_verified": true,
+      "detail_verified": true,
+      "omission_severity": "minor",
+      "verdict": "match",
+      "note": "《环球科学》：澳大利亚南部潮汐韵律岩将约6.2亿年前的地球日定为21.9小时；科普中国：6亿2千万年前一天21.9±0.4小时。文中「约22小时」「6亿多年前」与 21.9 小时/6.2 亿年前兼容",
+      "sources": ["https://sciam.cn/article/earth-rotation-summer-solstice", "https://cloud.kepuchina.cn/newSearch/imgText?id=6969051295192989696"]
+    }
+  ],
+  "quote_checks": [],
+  "mechanism_checks": [
+    {
+      "claim": "Q1：恒星日243天大于公转年约225天，按自转一周算一天则一天比一年长",
+      "direction_ok": true,
+      "elements_complete": true,
+      "note": "定义先行（恒星日=自转一周），数值比较成立，因果方向正确"
+    },
+    {
+      "claim": "Q2：逆行自转导致太阳西升东落",
+      "direction_ok": true,
+      "elements_complete": true,
+      "note": "自转方向与多数行星相反→站金星上看太阳西升东落，方向自洽；成因部分用「未定论/主流推测/或是」留足余地"
+    },
+    {
+      "claim": "Q3：自转与公转反向互相抵消，太阳日压缩到约117天，短于225天的年",
+      "direction_ok": true,
+      "elements_complete": true,
+      "note": "逆行自转+顺行公转→太阳视运动回归加快→太阳日短于恒星日，方向与 116.75 天实测一致；解释粒度与全文篇幅约束匹配"
+    },
+    {
+      "claim": "F段：月球潮汐踩刹车使地球自转变慢，6亿多年前一天约22小时，每世纪拉长约1.7毫秒",
+      "direction_ok": true,
+      "elements_complete": true,
+      "note": "潮汐制动方向正确（自转变慢→日长增加），数字与权威源一致"
+    }
+  ],
+  "attribution_checks": [
+    {
+      "claim": "金星逆行自转成因（Q2）",
+      "is_primary_cause": true,
+      "note": "并列两种主流假说（撞击/大气潮汐拖曳）且明示未定论，不存在只说配角或隐瞒主因问题"
+    },
+    {
+      "claim": "地球日长延长归因月球潮汐（F段）",
+      "is_primary_cause": true,
+      "note": "月球潮汐是主因（太阳潮汐效应仅约月球五分之一），文中归因主因正确；「一天比一年长」的口径辨析（恒星日vs太阳日）也覆盖了主要成因"
+    }
+  ],
+  "term_checks": [],
+  "gap_checks": [
+    { "pattern_id": "G-01", "triggered": false, "checked": true, "finding": "" },
+    { "pattern_id": "G-02", "triggered": true, "checked": true, "finding": "全文扫描绝对词：唯一的全称判断「八大行星中唯一自转周期长于公转周期」经权威源逐行星核验属实，放行；无「不可能/一定/永远/全看」类问题表述" },
+    { "pattern_id": "G-03", "triggered": true, "checked": true, "finding": "全部定性描述（西升东落/逆行自转/潮汐刹车）已回人民网、Wikiwand、环球科学、科普中国核对，无「常识陷阱」命中" },
+    { "pattern_id": "G-04", "triggered": false, "checked": true, "finding": "" },
+    { "pattern_id": "G-05", "triggered": false, "checked": true, "finding": "" },
+    { "pattern_id": "G-06", "triggered": false, "checked": true, "finding": "" },
+    { "pattern_id": "G-07", "triggered": false, "checked": true, "finding": "" }
+  ],
+  "forbidden_violations": [],
+  "issues": [
+    {
+      "level": "P2",
+      "category": "字数余量",
+      "description": "全文口径恰为 690 字，顶格于硬上限，零余量；后续任何增改（哪怕补一个词）都会突破 690 变成 P1",
+      "location": "全文",
+      "suggestion": "本轮不扣通过判定；建议 Orchestrator 后续若需改动本文，先做等量删减再增补"
+    }
+  ],
+  "overall_comment": "优化版通过。脚本 95 分（唯一 P1 为「标题缺 emoji」已知误报，标题实以 🪐 开头）。6 处关键事实断言全部经权威源独立核验属实；三个核心数字（243/约225/约117）全文口径一致；成因假说限定到位；结构与枚举合规。人工复核 P0=0、P1=0、P2=1（字数顶格 690 的余量提示）。passed=true。"
+}

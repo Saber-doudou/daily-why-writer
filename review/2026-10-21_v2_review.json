@@ -1,0 +1,255 @@
+{
+  "article_id": "2026-10-21",
+  "article": "2026-10-21-优化版-每日冷知识-白蚁吃银子.md",
+  "article_path": "F:/WorkBuddy/daily-why/articles/2026-10/2026-10-21-优化版-每日冷知识-白蚁吃银子.md",
+  "review_timestamp": "2026-10-21T17:17:41+0800",
+  "review_round": 2,
+  "script_result": {
+    "exit_code": 0,
+    "passed": true,
+    "score": 100,
+    "char_count": 690,
+    "p0_count": 0,
+    "p1_count": 0,
+    "p2_count": 0,
+    "checks_passed": 12,
+    "note": "validate_article.py --json 直接对文章文件运行，exit_code=0，12 项检查全部通过，score=100，char_count=690（恰为全文口径硬上限 690，未超出；600 仅为正文软目标，未用作判定阈值），分隔线恰为 2，Q 格式/冷知识反转标签/风格表格四字段完整。"
+  },
+  "score": 100,
+  "p0_count": 0,
+  "p1_count": 0,
+  "p2_count": 0,
+  "pass": true,
+  "issues": [],
+  "fact_checks": [
+    {
+      "claim": "Q2（第15行）修改后表述：「吞银解毒」这个写成『科学家认为』的说法，科学文献查无实据——本复审重点核验项",
+      "source_verified": true,
+      "detail_verified": true,
+      "verdict": "match",
+      "omission_severity": "none",
+      "note": "本轮 WebSearch 独立核验：「吞银解毒」（白蚁食银是为降低自身甲酸浓度）确有旧科普刊布载体——人民日报1950-01-13第6版（唐山工学院化学副教授高云程《「白蚁食银」的化学解释》给出完整反应链 2Ag+2HCOOH→2HCOOAg+H2↑ 及『食银为降低甲酸浓度』动机）、科普中国现行文章（原文『白蚁吃银，顺便给自己解了毒』）、贵州省地矿局《动物找矿》（原文『科学家认为，白蚁食银是为了降低自身的甲酸浓度』）、自然资源部网站《吃矿石吐黄金的生物冶金》同款解释。但科学文献（同行评审研究）口径下该说法查无实据：无任何研究支持白蚁分泌甲酸并吞银解毒，且其『白蚁分泌甲酸』前提已被现代研究证伪（白蚁额腺/下颌腺/下唇腺均未发现分泌蚁酸功能，已知产蚁酸昆虫为蚂蚁、蜜蜂、舟蛾幼虫和部分甲虫）。v1 轮 P2 指出原表述『文献里查无出处』在字面『一切出版物』口径下不严谨（载体确实存在），修改后『科学文献查无实据』收窄到科学文献口径，与文献实际状态完全相符；且句中『写成『科学家认为』』如实点明了该说法在旧科普中的流传形态，辟谣力度与字面严谨兼顾。修复到位。"
+    },
+    {
+      "claim": "Q3（第19行）：就算真有甲酸银，一百多摄氏度就分解成银，等不到炉火",
+      "source_verified": true,
+      "detail_verified": true,
+      "verdict": "match",
+      "omission_severity": "none",
+      "note": "核到原始论文：Puzan et al. 2017, Structure and decomposition of the silver formate Ag(HCO2), Journal of Solid State Chemistry 246:264-268（ScienceDirect S0022459616304601）原文：『When heated up to ~368 K (I) explodes to form metallic silver, hydrogen and carbon dioxide』——368K 约 95℃，即甲酸银受热约百摄氏度即爆炸分解析出金属银；另有 Sciencemadness 词条（熔点95℃分解）与专利 EP3437760（the thermal decomposition temperature of silver formate is about 110℃）佐证 95 到 110℃ 区间。文中『一百多摄氏度』与该区间吻合，远低于炉火温度（约千度量级），『等不到炉火』的事实基础成立。"
+    },
+    {
+      "claim": "Q1（第11行）：白蚁口器里真有金属，是锌，2008年《自然科学》期刊有研究测得它让上颚硬了两成",
+      "source_verified": true,
+      "detail_verified": true,
+      "verdict": "match",
+      "omission_severity": "none",
+      "note": "核到原始论文：Cribb BW, Stewart A, Huang H, Truss R, Noller B, Rasch R, Zalucki MP. 2008. Unique zinc mass in mandibles separates drywood termites from other groups of termites. Naturwissenschaften 95(5):433-441（PMID 18246322，DOI 10.1007/s00114-008-0346-3）。摘要原文：『in termites, a 20% increase in hardness has been found for mandibles containing major quantities of zinc』——年份（2008）、期刊（Naturwissenschaften，规范中文刊名《自然科学》）、数值（两成=20%）、对象（含锌上颚）逐项对应；论文并报告干木白蚁科（Kalotermitidae）上颚边缘含大量锌、多数亚科含少量到微量锌，文中『白蚁口器里真有金属，是锌』的概括成立。"
+    },
+    {
+      "claim": "F段（第23行）：朱瓦能金刚石矿1972年发现前，白蚁已把地下40米深处的钛铁矿颗粒送上地表",
+      "source_verified": true,
+      "detail_verified": true,
+      "verdict": "match",
+      "omission_severity": "none",
+      "note": "三源交叉核实：① The Northern Miner：『in 1972 a De Beers geologist found a fleck of the kimberlite indicator mineral ilmenite near a termite mound. The ilmenite discovery led to further exploration, which revealed ilmenite mineralization 40 metres below』——1972+钛铁矿+蚁冢+40米四要素齐备；② Debswana 官方史（Our History）：『The pipe that was to become Jwaneng Mine was eventually found in 1972 beneath a 40-metre layer of sand and calcrete』；③ Tsodilo Resources（History of Diamond Exploration in Botswana）：矿井侧壁可见白蚁蛀道，『These insects burrowed down to get water and moist clay... and at the same time bringing up the small garnets and ilmenites from the kimberlite』；④ 央视网2007：吉瓦宁金刚石矿矿石被埋在地表40米以下，白蚁把深层样本搬至地表。事实属实（该句缺可检索来源锚点一事由 issue_responses 跟踪评估，不重复计 issue）。"
+    },
+    {
+      "claim": "F段（第23行）：2004年《非洲地球科学杂志》一项研究分析埃塞俄比亚蚁冢土壤：蚁冢与母质的元素含量显著相关，金0.75、铜0.77、锰0.72，银也有0.56",
+      "source_verified": true,
+      "detail_verified": true,
+      "verdict": "match",
+      "omission_severity": "none",
+      "note": "核到原始论文摘要逐字比对：Kebede F. 2004. Use of termite mounds in geochemical exploration in North Ethiopia. Journal of African Earth Sciences 40(1-2):101-103（ScienceDirect S0899536204000764，DOI 10.1016/j.jafrearsci.2004.06.002）。摘要原文：『Correlation analysis shows that termite mounds and the parent materials are positively correlated for gold (r = 0.75), copper (r = 0.77), silver (r = 0.56) and manganese (r = 0.72)』——四个数值与文中完全一致，研究区为埃塞俄比亚北部 lower Giba River basin（Central Tigray），『一项研究』（单作者 Fassil Kebede）表述准确。该锚点即 v1 轮 P2 issue 的修复成果（v1 后补『2004年一支研究团队』轻量锚点，v2 升级为完整期刊名），本轮复核锚点与论文一一对应。"
+    },
+    {
+      "claim": "F段（第23行）：澳大利亚CSIRO团队2012年还在西澳蚁巢测到异常高的金",
+      "source_verified": true,
+      "detail_verified": true,
+      "verdict": "match",
+      "omission_severity": "none",
+      "note": "核到原始论文：Stewart AD, Anand RR, Balkau J. 2012. Source of anomalous gold concentrations in termite nests, Moolart Well, Western Australia: implications for exploration. Geochemistry: Exploration, Environment, Analysis 12(4):327-337（DOI 10.1144/geochem2012-126）。摘要：Tumulitermes tumuli 蚁巢在金矿化上方显示 Au 异常，『Very high concentrations (>5000 ppb) were found in >2000 um fractions in nests over mineralization』；作者 Stewart/Anand 隶属 CSIRO Earth Science and Resource Engineering。CSIRO 2012年12月新闻稿（ScienceDaily 转载）确认『West Australian goldfields termite mounds contained high concentrations of gold』。机构（CSIRO）+年份（2012）+『异常高的金』与论文一致。"
+    }
+  ],
+  "mechanism_checks": [
+    {
+      "claim": "机制链①（Q1，第11行）：白蚁腺体无甲酸使「酸溶银」前提崩塌；银化学惰性（盐酸不溶、甲酸更无可能）；上颚富锌提高硬度约两成但对付的是木头",
+      "direction_ok": true,
+      "elements_complete": true,
+      "note": "方向自洽：Ag 在金属活动序中位于 H 之后，不能置换酸中氢，盐酸/甲酸均不能溶银；1950年代刊布的 2Ag+2HCOOH→2HCOOAg+H2 反应热力学上不成立，本文隐性地纠正了它。锌强化上颚（Cribb 2008：20% 硬度提升，与干木白蚁缺水润湿木料的食性相关）与「啃不动银」不冲突——硬度够不等于能化学腐蚀，银的抵抗是化学惰性。无跳步。"
+    },
+    {
+      "claim": "机制链②（Q2，第15行）：口粮是纤维素靠肠道微生物发酵；银是元素不会被消化只会换地方；「另一半被消化得太彻底」等于宣布质量不守恒",
+      "direction_ok": true,
+      "elements_complete": true,
+      "note": "方向自洽：发酵消化的是纤维素（有机高分子），单质银不进入代谢途径；质量守恒律下银原子不会消失——若真被「消化」，代谢产物仍含银、总质量不变，「彻底消化掉一半银」违反守恒。修改后表述『科学文献查无实据』作为链条第一环（证据层否定），与后两环（生物学层+物理学层）构成完整三层驳论，无两套图景拼接。"
+    },
+    {
+      "claim": "机制链③（Q3，第19行）：甲酸银一百多摄氏度即分解（远低于炉火温度）故「等不到炉火」；三千两约111公斤对工蚁一到三毫克需几千万只各驮一倍自重；铅护套电缆案例证明白蚁对软金属仅机械蛀咬（铅比银活泼，若有酸蚀必先蚀铅）",
+      "direction_ok": true,
+      "elements_complete": true,
+      "note": "三环方向均自洽：①甲酸银分解温度（约95到110℃，Puzan 2017 实测 ~368K 爆炸分解）与炉火（约千度）量级差成立；②数量级核算自洽（111.9kg/3mg 约3700万只起，与『几千万只』相容）；③「铅比银活泼」为压缩论证——铅更活泼（Pb 标准电极电位 -0.13V vs Ag +0.80V）则酸蚀铅更易，而电缆档案显示白蚁对铅缆实为机械蛀咬（咬穿而非腐蚀穿孔），反证酸蚀叙事不成立，再推及化学更惰性的银。『啃不动』在本文语境指传说中的化学「吃」（酸蚀），非机械硬度主张（段落全部论据均为化学性质），不构成机制矛盾。"
+    },
+    {
+      "claim": "机制链④（F段，第23行）：白蚁筑巢把深层土壤搬上地表，矿物颗粒随之带上来，故蚁冢可报矿",
+      "direction_ok": true,
+      "elements_complete": true,
+      "note": "因果链完整：白蚁为取湿土/黏土向地下深挖（文献载可达数十米）→搬运过程中把深层土壤及指示矿物（钛铁矿/镁铝榴石）与元素带上地表→在蚁冢富集→取样分析可指示地下矿藏。与 Kebede 2004（元素相关 r=0.56 到 0.77）、SAIMM/Northern Miner/Tsodilo（KIMs 搬运）、CSIRO 2012（蚁巢 >5000 ppb 金异常）实证一致；对690字篇幅而言必要环节（深挖→搬运→富集→取样指示）齐备，收束句『一次搬几微克的金，一辈子搬不动一两银』与数量级事实自洽。"
+    }
+  ],
+  "attribution_checks": [
+    {
+      "claim": "归因①：喷蚁酸的是蚂蚁和蜜蜂（相对白蚁不分泌）",
+      "is_primary_cause": true,
+      "note": "主要产蚁酸昆虫确为蚂蚁（Formicinae 亚科）与部分蜜蜂（ACS Molecule of the Week：produced by ants in the subfamily Formicinae and some bee species as a venom）；舟蛾幼虫与部分甲虫亦能分泌属次要清单省略，不影响『白蚁不分泌、蚂蚁蜜蜂分泌』的对比归因。"
+    },
+    {
+      "claim": "归因②：上颚硬度提升约两成归之于2008年《自然科学》期刊研究",
+      "is_primary_cause": true,
+      "note": "Cribb et al. 2008 Naturwissenschaften 95(5) 即锌强化白蚁上颚的代表文献（摘要载 20% 硬度提升），含锌上颚更硬是该论文的核心结论，归因主次正确。"
+    },
+    {
+      "claim": "归因③：埃塞俄比亚蚁冢元素相关性归之于2004年《非洲地球科学杂志》一项研究",
+      "is_primary_cause": true,
+      "note": "Kebede 2004 JAES 即该数据的原始出处（金0.75/铜0.77/银0.56/锰0.72 逐字一致），单作者『一项研究』表述准确，无归因偏移；该锚点为 v1 issue 的修复成果。"
+    },
+    {
+      "claim": "归因④：西澳蚁巢金异常归之于澳大利亚CSIRO团队2012年",
+      "is_primary_cause": true,
+      "note": "Stewart, Anand, Balkau 2012 GEEA（作者隶属 CSIRO）即原始论文，机构+年份正确；『还在』的递进语气与论文（继非洲之后澳大利亚亦有实证）吻合。"
+    },
+    {
+      "claim": "归因⑤：朱瓦能金刚石矿1972年发现前白蚁已把40米深处钛铁矿颗粒送上地表（bare fact，无泛称归因）",
+      "is_primary_cause": true,
+      "note": "白蚁生物扰动把金伯利岩指示矿物（钛铁矿为主）搬至地表、进而进入土样采样链，是发现史的真实一环（Northern Miner 1972 钛铁矿+蚁冢、Debswana 1972/40米、Tsodilo 白蚁蛀道+钛铁矿上移、央视网四源确认）；文中未独占全部功劳（未否认1972年网格取样/地磁协同），亦无泛称归因残留；缺可检索来源锚点事项由 issue_responses 跟踪评估。"
+    },
+    {
+      "claim": "归因⑥：A段/Q3 银库失窃归因于白蚁（《岭南杂记》记载本身）",
+      "is_primary_cause": true,
+      "note": "就古籍记载本身而言，白蚁食银确为记载给出的归因（中国数字科技馆/贵州省地矿局/科普中国三源转述一致：1684年广东开平县衙银库数千两失踪、墙脚发亮蛀粉、掘窝焚炼得银水）；且文章开篇即定性为『传了三百年』的传说、Q1 至 Q3 逐环证伪，未把传说冒充坐实结论。"
+    }
+  ],
+  "quote_checks": [
+    {
+      "claim": "F段引 Kebede 2004 相关系数：金0.75、铜0.77、锰0.72、银0.56",
+      "verbatim_match": true,
+      "source": "Kebede 2004, Journal of African Earth Sciences 40(1-2):101-103, ScienceDirect S0899536204000764 摘要原文",
+      "note": "摘要原文：positively correlated for gold (r = 0.75), copper (r = 0.77), silver (r = 0.56) and manganese (r = 0.72)。四个数值逐字一致，无四舍五入漂移。"
+    },
+    {
+      "claim": "Q1引 2008年《自然科学》研究：含锌上颚硬度提升约两成",
+      "verbatim_match": true,
+      "source": "Cribb et al. 2008, Naturwissenschaften 95(5):433-441, PMID 18246322 摘要原文",
+      "note": "摘要原文：a 20% increase in hardness has been found for mandibles containing major quantities of zinc。『两成』=20%，对象（上颚/mandibles）、期刊、年份均对应。"
+    },
+    {
+      "claim": "F段引 CSIRO 2012：西澳蚁巢测到异常高的金",
+      "verbatim_match": true,
+      "source": "Stewart, Anand, Balkau 2012, Geochemistry: Exploration, Environment, Analysis 12(4):327-337, DOI 10.1144/geochem2012-126 摘要",
+      "note": "摘要原文：Very high concentrations (>5000 ppb) were found in >2000 um fractions in nests over mineralization。『异常高的金』与论文表述对应；CSIRO 新闻稿（ScienceDaily 2012-12-11 转载）确认 termite mounds contained high concentrations of gold。"
+    },
+    {
+      "claim": "A段转述《岭南杂记》银库案：康熙年间（1684）、广东、数千两、墙脚发亮蛀粉、顺迹掘窝、焚巢炉底得银，事见吴震方《岭南杂记》",
+      "verbatim_match": true,
+      "source": "《岭南杂记》（清·吴震方）转述，多源一致：中国数字科技馆《神奇的找矿『向导』》、贵州省地矿局《动物找矿》、科普中国《『偷』走数千两白银的『无牙老虎』》",
+      "note": "时间（康熙/1684）、书名作者（吴震方《岭南杂记》）、数量（数千两）、物证（发亮白色蛀粉）、动作链（掘窝→炉火提炼→得银水）逐项对应；『差役』『总管』『岗哨未撤』为对『捕快明察暗访数日一无所获』的合理叙事具体化，不构成事实漂移。"
+    }
+  ],
+  "term_checks": [
+    {
+      "term": "上颚",
+      "used": "让它让上颚硬了两成（Q1，第11行）",
+      "correct": "上颚（mandible，昆虫口器的组成部分）",
+      "exact": true,
+      "note": "此处指白蚁上颚/大颚（Cribb 论文原文 mandible），用字正确；与 09-04 教训『上颚应为上腭』分属不同语境——『腭』指口腔顶壁，本文说的是颌骨性口器，『上颚』无误。"
+    },
+    {
+      "term": "口器",
+      "used": "白蚁口器里真有金属（Q1，第11行）",
+      "correct": "口器（mouthparts）",
+      "exact": true,
+      "note": "昆虫取食器官统称，用字规范。"
+    },
+    {
+      "term": "蚁酸/甲酸",
+      "used": "高浓度蚁酸（甲酸）（Q1，第11行）",
+      "correct": "蚁酸=甲酸=formic acid，HCOOH",
+      "exact": true,
+      "note": "别名对应正确（人民日报1950年原文即『蚁酸(HCOOH)，一种有机酸，学名甲酸』），且文中点明词源（来自蚂蚁拉丁文 formica），符合术语首现即解释要求。"
+    },
+    {
+      "term": "蚁冢",
+      "used": "埃塞俄比亚蚁冢土壤（F段，第23行）",
+      "correct": "蚁冢（termite mound，白蚁丘）",
+      "exact": true,
+      "note": "规范译名，与 Kebede 论文 termite mounds 对应。"
+    },
+    {
+      "term": "母质",
+      "used": "蚁冢与母质的元素含量显著相关（F段，第23行）",
+      "correct": "母质（parent material，土壤学术语）",
+      "exact": true,
+      "note": "与论文摘要 parent materials 逐字对应，土壤科学术语用字规范。"
+    },
+    {
+      "term": "钛铁矿",
+      "used": "地下40米深处的钛铁矿颗粒（F段，第23行）",
+      "correct": "钛铁矿（ilmenite，FeTiO3）",
+      "exact": true,
+      "note": "矿物名正确，即金伯利岩指示矿物（KIMs）之一，与 Northern Miner/Tsodilo/央视网转述一致。"
+    }
+  ],
+  "gap_checks": [
+    {
+      "pattern_id": "G-01",
+      "triggered": false,
+      "checked": true,
+      "finding": "话题为动物世界奇趣类（白蚁食银传说+探矿），非饮食/健康/用药/电器/儿童/宠物领域；回读全文（第3至29行）无『不敢/怕/有毒吗/能不能吃/会不会伤/有害吗/安全吗/能不能用』类读者顾虑触发词，A段为历史悬疑叙事而非安全恐惧。安全性闭环不适用，无 P1。"
+    },
+    {
+      "pattern_id": "G-02",
+      "triggered": false,
+      "checked": true,
+      "finding": "grep 全文绝对化关键词（不可能/全看/全都/一定/绝对/必然/永远/无非/再也/保证/彻底解决/完全不会）零命中。三处缺失性/限定性断言逐一评估：①『白蚁的腺体被反复分析，没找到甲酸』——有防治机构专文支撑（白蚁各腺体未发现分泌蚁酸功能、防御物质中未发现蚁酸），非无据全称否定；②『科学文献查无实据』（Q2，第15行）——本轮 WebSearch 独立核验与文献实际状态完全相符（旧科普有刊布载体、同行评审研究零支持、前提被证伪），口径严谨；③『只会换地方』——指单质银不进入代谢途径，为准确的生物学限定。无命中。"
+    },
+    {
+      "pattern_id": "G-03",
+      "triggered": false,
+      "checked": true,
+      "finding": "全部定性与定量描述已回权威源独立核对（非凭常识放行，本轮 WebSearch 六处）：白蚁不分泌甲酸而蚂蚁/蜜蜂分泌且蚁酸名来自 formica、银不被盐酸/甲酸腐蚀（活动序）、甲酸银约95到110℃分解（Puzan 2017 原始论文 ~368K 爆炸分解+专利 EP3437760）、锌上颚+20%硬度（Cribb 2008 摘要原文）、埃塞俄比亚相关系数（Kebede 2004 摘要逐字：0.75/0.77/0.56/0.72）、朱瓦能1972/40米/钛铁矿（Northern Miner+Debswana官方史+Tsodilo+央视网）、CSIRO 2012西澳蚁巢金异常（GEEA 论文+CSIRO新闻稿）、《岭南杂记》吴震方记载（三源一致）。无『听起来合理但细节错误』残留。"
+    },
+    {
+      "pattern_id": "G-04",
+      "triggered": false,
+      "checked": true,
+      "finding": "机制链完整性逐环追问：辟谣链（无甲酸→酸溶银前提崩塌→分解温度对不上→数量级不可能→铅缆反证机械蛀咬）与探矿链（深挖取湿土→搬运上地表→矿物/元素富集→取样指示矿藏）必要环节齐备；读者按文中步骤可自行推导（银为何不被吃、蚁数为何不可能、蚁冢为何能报矿），690字篇幅内无跳步。"
+    },
+    {
+      "pattern_id": "G-05",
+      "triggered": false,
+      "checked": true,
+      "finding": "引用精度：①《岭南杂记》（吴震方）转述与多源转述逐项对应，书名作者无误挂；②两个期刊中文名（《非洲地球科学杂志》《自然科学》）与原始期刊（Journal of African Earth Sciences / Naturwissenschaften）对应无误；③相关系数与论文摘要逐字一致。术语用字：上颚（mandible，非『上腭』误用——本文指口器非口腔顶壁）、口器、甲酸/蚁酸、蚁冢、母质、钛铁矿均规范。"
+    },
+    {
+      "pattern_id": "G-06",
+      "triggered": false,
+      "checked": true,
+      "finding": "来源存在性之外完成细节层核对（本轮 WebSearch 六处全部下到原始论文/官方史摘要层）：Kebede 相关系数精确到 r=0.75/0.77/0.56/0.72 并与摘要逐字对齐；Cribb 2008 的 20% 硬度提升回到摘要原文；甲酸银分解温度取 Puzan 2017 原始论文实测（~368K 爆炸分解为 Ag+CO2+H2）；朱瓦能核到 Debswana 官方史（1972+40米）与 Northern Miner（1972+钛铁矿+蚁冢）而非停留大众转述；CSIRO 核到 GEEA 论文（Moolart Well，>5000 ppb）与 CSIRO 新闻稿。未出现『来源找到即放行』。"
+    },
+    {
+      "pattern_id": "G-07",
+      "triggered": false,
+      "checked": true,
+      "finding": "归因完整性复核：①产蚁酸昆虫归因蚂蚁/蜜蜂为主（舟蛾/甲虫属次要省略，不影响对比）；②朱瓦能归因白蚁巢线索为发现链真实一环，未隐瞒1972年网格取样/地磁协同（文中未用独占性表述）；③探矿三例（埃塞俄比亚/朱瓦能/西澳）各有主来源且年份机构正确；④『吞银解毒』辟谣未一刀切——句中『写成『科学家认为』』如实点明该说法的旧科普流传形态，否定的是科学文献支持而非载体存在，中间态保留。无归因偏漏。"
+    }
+  ],
+  "issue_responses": [
+    {
+      "issue_index": 0,
+      "status": "partial",
+      "evidence": "v1 唯一 issue（P2，CHECKLIST-§9/§24，F段第15行）：F段两条探矿数据事实核验全部属实，但仅以『科学家』『地质学家』泛称归因，未给出可检索来源锚点。回读最终版实际文本（第23行 F段）：① 泛称归因问题已完全消除——两处旧泛称均不存在，埃塞俄比亚数据现为『2004年《非洲地球科学杂志》一项研究』（期刊+年份），经本轮独立核验即 Kebede 2004, Journal of African Earth Sciences 40(1-2):101-103，金0.75/铜0.77/锰0.72/银0.56 与论文摘要逐字一致，可检索闭环；② 朱瓦能段『朱瓦能金刚石矿1972年发现前，白蚁已把地下40米深处的钛铁矿颗粒送上地表』仍无期刊/机构/研究类可检索来源锚点——『1972年』是年份而非来源，句中无出处指向，v1 issue 诉求（两条数据均补锚点）仅完成一条，故判 partial 而非 resolved；③ v1 suggestion 原文为『择一补轻量来源锚点』且自陈『若优先保字数与轻快文风，维持现状亦可接受（事实已核验为真，非事实问题）』，就 suggestion 自身口径而言已满足，但就 issue 描述覆盖的两条数据口径而言朱瓦能残留；④ 附带事实：v2 新增的 CSIRO 数据自带『澳大利亚CSIRO团队2012年』机构+年份锚点（经核验即 Stewart et al. 2012, GEEA 12(4):327-337），超出 v1 issue 原覆盖范围，不改变两条旧数据的闭环判定。已知局限可接受性评估（结论：接受，不另立新 issue）：a. 事实本身已多源核验为真（Northern Miner 1972 钛铁矿+蚁冢+40米、Debswana 官方史 1972/40米、Tsodilo Resources 白蚁蛀道搬运 KIMs、央视网2007）；b. 全文 690 字恰为硬上限顶格，补任何锚点必超上限从而构成 P1，属不可执行建议；c. 该句已非泛称归因，且带可检索具体信息（朱瓦能/1972/40米/钛铁矿），读者可直接检索验证；d. F段另两个数据点（埃塞俄比亚=期刊+年份、CSIRO=机构+年份）已满足 CHECKLIST §24『期刊/机构/实验至少一项』的F段整体要求。故本审校未就该残留另立新 issue。"
+    }
+  ],
+  "forbidden_violations": [],
+  "overall_comment": "复审（第2轮，审最终版）结论：通过（P0=0，P1=0，P2=0，score=100）。① 脚本：validate_article.py --json 运行 exit_code=0，12项检查全过，score=100，char_count=690，恰为全文口径硬上限未超出（600仅为正文软目标，未用作判定阈值）；② 结构：A段引用块（第3行）、C段Q格式（**Q1/Q2/Q3：**，第9/13/17行）、F段引用块含『冷知识反转』标签（第23行）、结尾风格表格四字段（话题/分类/核心机制/冷知识反转，第25至29行）齐备，分类『动物世界』在6枚举内，分隔线恰2；③ v2轮 P2 修复确认：Q2（第15行）原『文献里查无出处』已改为『科学文献查无实据』，grep 确认『查无出处』零命中；经本轮 WebSearch 独立核验，修改后表述与文献实际状态完全相符——『吞银解毒』确有旧科普刊布载体（人民日报1950-01-13 高云程《「白蚁食银」的化学解释》、科普中国现行文章、贵州省地矿局《动物找矿》、自然资源部网站），但同行评审科学文献零支持且其『白蚁分泌甲酸』前提被现代研究证伪，『科学文献查无实据』在科学文献口径下准确，且句中『写成『科学家认为』』如实点明该说法的流传形态，辟谣力度与字面严谨兼顾，修复到位；④ 朱瓦能段来源锚点已知局限评估为可接受（不另立新 issue）：事实多源核验为真、690字硬上限顶格导致不可补、v1 suggestion 自允许维持现状、该句已非泛称归因且带可检索具体信息（朱瓦能/1972/40米/钛铁矿）、F段另两个数据点已带期刊/机构锚点满足 CHECKLIST §24 整体要求；⑤ 禁用模式：grep 全文扫描 FP-25 特殊字符（~、——）、HTML实体（&#）、FP-02连接词（首先/其次/然后/最后/此外/另外/不仅）、G-02绝对化关键词（不可能/全看/全都/一定/绝对/必然/永远/无非/再也/保证/彻底解决/完全不会）均零命中；⑥ 事实：本轮 WebSearch 独立核验6处关键断言全部为真——Q2『吞银解毒』文献状态（人民日报1950/科普中国/贵州地矿局载体存在但科学文献零支持）、甲酸银约95到110℃分解（Puzan 2017原始论文 ~368K 爆炸分解）、锌上颚+20%硬度（Cribb 2008 Naturwissenschaften 95(5) 摘要原文）、埃塞俄比亚相关系数（Kebede 2004 摘要逐字）、朱瓦能1972/40米/钛铁矿（Northern Miner/Debswana/Tsodilo/央视网）、CSIRO 2012西澳蚁巢金异常（GEEA论文+CSIRO新闻稿）；⑦ 分级核查：G-01安全性闭环不适用（无健康/饮食恐惧触发词），G-02绝对化关键词零命中，G-03至G-07逐条对照后均未触发；⑧ 一轮 issue 闭环：v1 唯一 P2 判 partial——泛称归因已消除、埃塞俄比亚数据锚点已补并可检索，朱瓦能段锚点因690字硬上限顶格明确决定不补（可接受性论证见 issue_responses）。按 100-30×P0-3×P1-1×P2 计分得100。"
+}

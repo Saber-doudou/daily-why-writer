@@ -1,0 +1,147 @@
+{
+  "article_id": "2026-10-16",
+  "review_timestamp": "2026-10-16T11:49:46+0800",
+  "pass": true,
+  "p0_count": 0,
+  "p1_count": 0,
+  "p2_count": 0,
+  "script_result": {
+    "exit_code": 0,
+    "score": 100,
+    "char_count": 687,
+    "p0_count": 0,
+    "p1_count": 0,
+    "p2_count": 0
+  },
+  "issues": [],
+  "fact_checks": [
+    {
+      "claim": "马普所团队2026年8月26日发表于《自然》（DOI: 10.1038/s41586-026-10941-6）的研究存在且细节一致",
+      "source_verified": true,
+      "detail_verified": true,
+      "omission_severity": "minor",
+      "verdict": "match",
+      "note": "WebSearch 核实：论文标题为《Spontaneously charged water drops induce corrosion》，作者 Zhongyuan Ni、Rüdiger Berger、Hans-Jürgen Butt 等，机构为德国马普高分子研究所（Max Planck Institute for Polymer Research），2026年8月26日发表于《自然》，DOI 10.1038/s41586-026-10941-6 真实有效。文中机构（马普所）、年份（2026-08-26）、期刊（《自然》）、DOI 均与权威报道逐字一致。"
+    },
+    {
+      "claim": "实验关键参数：35微升模拟雨水滑过4厘米、带电0.2到2纳库仑、铜片60纳米特氟龙薄膜靶材、3000次中性水滴对照涂层完好、检出碱式氯化铜与氧化亚铜",
+      "source_verified": true,
+      "detail_verified": true,
+      "omission_severity": "minor",
+      "verdict": "match",
+      "note": "WebSearch 核对多家报道（科学网、C&EN、xenospectrum、科普中国、纳米人）一致：水滴35 µL、在倾斜约50°表面滑动约4厘米、电荷0.2到2 nC（叶面约0.2 nC、氟化石英约2 nC）、靶材为覆60 nm 特氟龙(PTFE)膜的铜片、3000滴中性（未带电）水滴撞击后涂层完好无损、带电组检出氧化亚铜与碱式氯化铜腐蚀产物、孔洞深数纳米并可贯穿特氟龙抵达铜基底。文中所有数值与产物名称均与原文一致，无张冠李戴。"
+    },
+    {
+      "claim": "机制链条（滑动起电→镜像电荷/泰勒锥→介电击穿纳米孔洞→涂层破口→电位差→微型原电池→电化学腐蚀）方向自洽且准确",
+      "source_verified": true,
+      "detail_verified": true,
+      "omission_severity": "minor",
+      "verdict": "match",
+      "note": "多篇权威报道确认：水滴滑过绝缘面（叶、PVC、聚苯乙烯、PFOTS石英）因接触/滑动起电带电，逼近涂覆金属时液滴底部在强电场下形成泰勒锥、发生局部介电击穿（如微小闪电）打出纳米级孔洞；涂层一旦击穿，缺陷区与完好区形成电位差、产生微原电池启动电化学腐蚀。科普中国报道原文亦使用「滑动起电」「泰勒锥」「介电击穿」等术语，与本文机制表述一致，无方向矛盾或要素缺失。"
+    }
+  ],
+  "quote_checks": [
+    {
+      "claim": "文中具体研究引用「马普所团队2026年8月26日发表于《自然》（DOI: 10.1038/s41586-026-10941-6）」",
+      "verbatim_match": true,
+      "source": "https://doi.org/10.1038/s41586-026-10941-6 ；科学网 https://news.sciencenet.cn/htmlnews/2026/8/570398.shtm ；C&EN https://cen.acs.org/physical-chemistry/surface-chemistry/electrically-charged-raindrops-can-corrode-cars/104/web/2026/08",
+      "note": "逐字核验：期刊《自然》、发表日期2026-8-26、DOI 完全对应真实论文；「马普所」为 Max Planck Institute for Polymer Research（马普高分子研究所）的通用简称，无误。引用门禁触发，本条留痕。"
+    }
+  ],
+  "mechanism_checks": [
+    {
+      "claim": "水滴从树叶、玻璃等绝缘表面滑过时发生滑动起电，电荷在两相间转移、水滴带相反电荷继续滚动",
+      "direction_ok": true,
+      "elements_complete": true,
+      "note": "与接触/滑动起电（tribocharging类比）一致，方向正确、要素完整。"
+    },
+    {
+      "claim": "带电水滴逼近金属→感应镜像电荷→电场骤增→底部被拉成泰勒锥→锥尖电场超涂层耐受极限→介电击穿打出纳米级孔洞",
+      "direction_ok": true,
+      "elements_complete": true,
+      "note": "「镜像电荷增强电场、泰勒锥为强电场前驱体、超过耐受极限发生介电击穿」三者因果方向自洽，与高速摄像观测（泰勒锥→放电→纳米孔洞）一致，无方向矛盾。"
+    },
+    {
+      "claim": "涂层击穿后金属暴露于雨水，破口与完好区产生电位差，形成微型原电池，启动电化学腐蚀",
+      "direction_ok": true,
+      "elements_complete": true,
+      "note": "「电位差→微原电池→电化学腐蚀」因果链完整，与科普中国及原始报道表述一致。"
+    }
+  ],
+  "attribution_checks": [
+    {
+      "claim": "伤涂层的是这点静电而非水滴冲击力（中性水滴撞3000次涂层完好作为对照证据）",
+      "is_primary_cause": true,
+      "note": "研究以中性（不带电）水滴3000次撞击涂层完好、带电组才击穿的实验对照证明确系静电放电所致，归因为主因成立且未否定冲击力（Q3明言冲击力「都存在」），无归因偏漏。"
+    },
+    {
+      "claim": "雨水腐蚀存在第三种此前被忽略的机制（滑动起电致击穿），与酸雨、物理冲击并列",
+      "is_primary_cause": true,
+      "note": "文中明确写「酸雨呢？冲击力呢？它们都存在，这项研究补上了第三个此前被忽略的原因」，将该机制定位为「第三机制」而非唯一原因，归因主次清晰、无单一化偏漏。"
+    }
+  ],
+  "term_checks": [],
+  "gap_checks": [
+    {
+      "pattern_id": "G-01",
+      "triggered": false,
+      "checked": true,
+      "finding": ""
+    },
+    {
+      "pattern_id": "G-02",
+      "triggered": false,
+      "checked": true,
+      "finding": ""
+    },
+    {
+      "pattern_id": "G-03",
+      "triggered": false,
+      "checked": true,
+      "finding": ""
+    },
+    {
+      "pattern_id": "G-04",
+      "triggered": false,
+      "checked": true,
+      "finding": ""
+    },
+    {
+      "pattern_id": "G-05",
+      "triggered": false,
+      "checked": true,
+      "finding": ""
+    },
+    {
+      "pattern_id": "G-06",
+      "triggered": false,
+      "checked": true,
+      "finding": ""
+    },
+    {
+      "pattern_id": "G-07",
+      "triggered": false,
+      "checked": true,
+      "finding": ""
+    }
+  ],
+  "issue_responses": [
+    {
+      "issue_index": 0,
+      "status": "resolved",
+      "evidence": "优化版 Q3（第11行）已改为『那酸雨呢？冲击力呢？ → 它们都存在，这项研究补上了第三个此前被忽略的原因』，明确保留酸雨与冲击力为并存机制、将静电定位为『第三原因』而非绝对否定；结尾表格『冷知识反转』格（第18行）现为『实验靶材是纳米级薄膜而非车漆；水滴须先滑过绝缘面才带电』，不含『元凶不是酸雨也不是冲击力』式绝对否定。两处§79/FP-49『不是A而是B』已消除。"
+    },
+    {
+      "issue_index": 1,
+      "status": "resolved",
+      "evidence": "优化版 Q2（第9行）现写『锥尖电场一旦超过涂层耐受极限，便发生介电击穿，打出纳米级孔洞』，已将原『远超』改为『超过』，未再使用无倍数依据的『远超』（FP-32）。"
+    },
+    {
+      "issue_index": 2,
+      "status": "resolved",
+      "evidence": "优化版 Q2（第9行）现写『便发生介电击穿，打出纳米级孔洞』，已删除原『高温高压在涂层上留下纳米级孔洞』中易误读为水压/冲击压力的『高温高压』，机制准确归于介电击穿放电（CHECKLIST §2）。"
+    }
+  ],
+  "forbidden_violations": [],
+  "overall_comment": "全文687字符（未超690硬上限），结构完整（A段悬念→Q1/Q2/Q3递进→F段冷知识反转→结尾风格表格四行，分类「物理化学」属6选1枚举）。事实层面经WebSearch独立核验：所引《自然》论文（DOI 10.1038/s41586-026-10941-6，2026-08-26，马普高分子研究所 Ni/Berger/Butt）真实存在，35微升、4厘米、0.2到2纳库仑、60纳米特氟龙/铜靶材、3000次中性对照、碱式氯化铜与氧化亚铜等细节均与权威报道逐字一致，无事实错误、无张冠李戴。机制链条（滑动起电→镜像电荷/泰勒锥→介电击穿纳米孔洞→微原电池电化学腐蚀）方向自洽、要素完整。绝对化表述仅「对人完全无害」一句，但纳库仑级电荷对人确属无害，属科学上成立的表述，不降为P级。FORBIDDEN扫描（含FP-25的~与——）无违规。GAP_PATTERNS七类触发信号均未命中。脚本审核满分100。综合判定：P0=0、P1=0，通过。"
+}

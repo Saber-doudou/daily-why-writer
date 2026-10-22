@@ -1,0 +1,133 @@
+{
+  "article_id": "2026-09-25",
+  "review_timestamp": "2026-09-27T22:32:09+0800",
+  "pass": true,
+  "overall_verdict": "passed",
+  "p0_count": 0,
+  "p1_count": 0,
+  "p2_count": 0,
+  "score": 100,
+  "script_result": {
+    "exit_code": 0,
+    "score": 100,
+    "char_count": 689,
+    "p0": 0,
+    "p1": 0,
+    "p2": 0,
+    "p0_count": 0,
+    "p1_count": 0,
+    "p2_count": 0
+  },
+  "issues": [],
+  "fact_checks": [
+    {
+      "claim": "苏铁雌雄花期错开：雄花在初夏（6-8月）开，雌花在深秋（10-11月）才展开",
+      "source_verified": true,
+      "detail_verified": true,
+      "omission_severity": "minor",
+      "verdict": "verified",
+      "note": "上海市绿化和市容管理局、湖北日报、西北农林科技大学新闻网、柳州市林业和园林局等多源一致确认：苏铁花期分别在6-8月（雄花）与10-11月（雌花），雌雄异株且花期不一致。与正文断言完全吻合。",
+      "source_url": "https://lhsr.sh.gov.cn/shhx/20221129/c3aeff66b3e145c4bba76e0b976cba74.html"
+    },
+    {
+      "claim": "苏铁全株有毒，含苏铁苷（cycasin），性质稳定，生吃、炖汤、煮水、泡酒均无法破坏毒素",
+      "source_verified": true,
+      "detail_verified": true,
+      "omission_severity": "minor",
+      "verdict": "verified",
+      "note": "成都市疾控中心（光明网转载）明确提示：铁树（苏铁）全身都有毒，花、叶、芽、果无一例外；『关键提醒：加热去毒无效！苏铁苷性质稳定，生吃、炖汤、煮水、泡酒均无法完全破坏毒素』。与正文『性质稳定，生吃、炖汤、煮水、泡酒都破坏不掉毒素』逐字一致。均为事实准确陈述，非虚假绝对化。",
+      "source_url": "https://m.gmw.cn/2026-07/08/content_1304525006.htm"
+    },
+    {
+      "claim": "苏铁为裸子植物、雌雄异株；南方树龄十余年进入开花年龄，雄株几乎年年开、雌株较少；单株寿命可达二百岁以上",
+      "source_verified": true,
+      "detail_verified": true,
+      "omission_severity": "minor",
+      "verdict": "verified",
+      "note": "上海绿化、湖北日报、多校园林科普均确认苏铁为裸子植物、雌雄异株，一般15-20年树龄可开花，南方环境良好时每年可见开花，寿命可达200年以上。与正文一致。",
+      "source_url": "https://news.hubeidaily.net/pc/c_3517623.html"
+    }
+  ],
+  "mechanism_checks": [
+    {
+      "claim": "北方冬天干冷、盆栽苏铁长得极慢，往往几十年难等一次开花 → 北方人觉得它稀罕",
+      "direction_ok": true,
+      "elements_complete": true,
+      "note": "因果链自洽：低温+干燥→生长缓慢→养分难积累→难以达到开花阈值，归因完整无跳步。"
+    },
+    {
+      "claim": "苏铁是裸子植物、和松柏同宗 → 根本没有真正的花和果实，所见为孢子叶球",
+      "direction_ok": true,
+      "elements_complete": true,
+      "note": "分类事实支撑形态结论（裸子植物无真花/真果），机制自洽，与Q3内容一致。"
+    },
+    {
+      "claim": "苏铁天生喜暖怕寒 → 在暖湿南方扎了根年年都开，北方温室或地栽小环境也能开但少见",
+      "direction_ok": true,
+      "elements_complete": true,
+      "note": "气候偏好→年开花频率，方向自洽，与Q1/Q2逻辑闭环；北方温室可开亦有西北农林科技大学实证支撑。"
+    }
+  ],
+  "attribution_checks": [
+    {
+      "claim": "『千年铁树开花』俗语源自北方地域视角（北方寒冷、生长慢、少见开花）",
+      "is_primary_cause": true,
+      "note": "主因为气候/地理差异，多源佐证（北方盆栽数十年难开、俗语由北方人最早说出）。未忽略显著并列成因，归因完整。"
+    }
+  ],
+  "quote_checks": [],
+  "term_checks": [],
+  "gap_checks": [
+    {
+      "pattern_id": "G-01",
+      "triggered": true,
+      "checked": true,
+      "finding": "苏铁全株有毒属健康风险话题，触发G-01。但F段已给出明确安全边界：『苏铁全株有毒，花、叶、嫩芽、种子都含苏铁苷……公园小区的苏铁只可远观，别当偏方食材』，并点明加热/炖汤/泡酒均无法去毒。安全性闭环已建立，无P级问题。"
+    },
+    {
+      "pattern_id": "G-02",
+      "triggered": false,
+      "checked": true,
+      "finding": "扫描绝对词（不可能/全看/全都/一定/绝对/必然/永远/无非）均未出现；文中用『多半』『几乎』『往往』『远非』等软化词。『都破坏不掉毒素』为经成都疾控核实的科学事实陈述，非虚假绝对化。"
+    },
+    {
+      "pattern_id": "G-03",
+      "triggered": false,
+      "checked": true,
+      "finding": "文中看似合理的定性断言（裸子植物、雌雄异株、南方十年以上每年5-8月开花/北方少开、雌雄花期6-8月与10-11月错开、苏铁苷有毒、寿命二百岁以上）经WebSearch独立核实全部属实，无误。"
+    },
+    {
+      "pattern_id": "G-04",
+      "triggered": false,
+      "checked": true,
+      "finding": "三处因果解释（北方气候→难开花、裸子植物→孢子叶球、喜暖→南方年开）方向正确且关键中间环节齐备，无机制要素缺失。"
+    },
+    {
+      "pattern_id": "G-05",
+      "triggered": false,
+      "checked": true,
+      "finding": "无古籍/论文引文；术语（苏铁苷/孢子叶球/裸子植物/雌雄异株/雄球/雌球）用字准确，无精度问题。"
+    },
+    {
+      "pattern_id": "G-06",
+      "triggered": false,
+      "checked": true,
+      "finding": "文中未出现『研究表明』『XX大学』『发表于XX年』等引用标记，无需逐字核对实验细节。"
+    },
+    {
+      "pattern_id": "G-07",
+      "triggered": false,
+      "checked": true,
+      "finding": "对『千年铁树开花』成因的归因（北方地理/气候为主因）为主因判断，未见被忽略的显著并列成因，归因无偏漏。"
+    }
+  ],
+  "issue_responses": [
+    {
+      "issue_index": 0,
+      "status": "resolved",
+      "evidence": "L1（2026-09-25_review.json）唯一P2问题为『段落长度过于均匀（偏差<19字）』。优化版已显著扩写：F段冷知识反转块约270字，并补入『寿命二百岁以上』『全株有毒、加热去不掉毒』等新信息；A段场景描写（约95字）与Q段短答（80-120字）、F段长块形成明显长度梯度，段落均匀感已消除。结尾风格表格四字段（话题/分类/核心机制/冷知识反转）齐全。"
+    }
+  ],
+  "forbidden_violations": [],
+  "overall_comment": "独立审校结论：优化版全文689字（≤690硬上限，600为软目标未用作阈值），script_result满分100、P0/P1/P2均为0。6维度扫描：①事实准确性——两处强制核验（雌雄花期6-8月/10-11月错开、苏铁苷全株有毒且加热/炖汤/泡酒无法破坏）及寿命/分类等断言，经WebSearch多权威源独立核实全部属实，无P0；②结构完整度——A段引用块、C段Q格式（Q1/Q2/Q3）、F段『冷知识反转』标签、结尾四字段风格表格齐备且闭环；③表达技法——无AI味排比、连接词未超标、无套话开头；④合规禁项——78条FP全扫描，无套话/空洞修饰/双破折号(~、——均不存在)/绝对化/伪反转等命中；⑤字数689合规；⑥机制正确性——三处因果解释方向自洽、要素完整、内部无矛盾。GAP_PATTERNS 7条逐条对照，仅G-01因毒性话题触发但安全闭环已建立。一轮L1的P2（段落均匀）已闭环为resolved。通过条件（P0=0 且 P1≤2）满足，判定 passed。"
+}

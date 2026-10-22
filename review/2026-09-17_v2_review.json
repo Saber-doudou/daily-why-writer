@@ -1,0 +1,151 @@
+{
+  "article_id": "2026-09-17",
+  "review_timestamp": "2026-09-17T14:04:39+0800",
+  "pass": true,
+  "p0_count": 0,
+  "p1_count": 0,
+  "p2_count": 1,
+  "score": 95,
+  "script_result": {
+    "exit_code": 0,
+    "score": 95,
+    "char_count": 635,
+    "p0_count": 0,
+    "p1_count": 1,
+    "p2_count": 0
+  },
+  "issues": [
+    {
+      "level": "P2",
+      "category": "G-06 / CHECKLIST-§112",
+      "description": "Q2 写'把46种货币的硬币翻了350,757次'——46 是 2023 预印本（arXiv:2310.04153）与多数媒体报道的通行口径；但正式发表于 JASA（2025-08-11）的版本将硬币种数修订为 44（EOS Wetenschap 2025 回顾明确引 final 版'44 munten'，并指出'一些小错误已被修正但不影响结论'）。文章已区分'2023预印本 / 2025 JASA 正式发表'，但未指明 46 属预印本口径；若以正式版为准，46 与 44 存在 minor 版本口径差异。",
+      "location": "Q2",
+      "suggestion": "建议改为'约46种（预印本口径；正式 JASA 2025 版记为44种）'，或直接采用 44 以贴合正式发表版。属 minor 版本修订，不影响 50.8% 核心结论，不升 P1。"
+    }
+  ],
+  "fact_checks": [
+    {
+      "claim": "2007年斯坦福统计学家 Persi Diaconis 提出抛硬币同侧概率约51%，机制为进动/手腕晃动（文中'歪着打转/陀螺摇头'），且'跟重量无关'",
+      "source_verified": true,
+      "detail_verified": true,
+      "omission_severity": "minor",
+      "verdict": "verified",
+      "note": "Diaconis、Holmes、Montgomery 2007 年 SIAM Review 论文预测同侧偏差约51%；AMS《The Fifty-one Percent Solution》明确'偏差与硬币重量/形状不对称无关，而在运动（进动/wobble）'。Q1 用'歪着打转/陀螺摇头'比喻进动，方向正确，事实无出入。"
+    },
+    {
+      "claim": "Bartoš 等 2023 预印本、2025 正式发表于 JASA；48名抛掷者、46种货币、350,757次、同侧50.8%（95%区间50.6%到50.9%）；同一人抛越多偏差越收窄",
+      "source_verified": true,
+      "detail_verified": true,
+      "omission_severity": "minor",
+      "verdict": "verified",
+      "note": "阿姆斯特丹大学 UvA 官方新闻、New Scientist、UPI、Daily Star、Ars Technica、arXiv 2310.04153 均确认：46种货币/面额（预印本口径）、350,757次、48人参与、同侧50.8%（95% CI 50.6%-50.9%）、JASA 2025-08-11 正式发表；'抛越多越稳、偏差收窄'与 flipiffy 所述一致。核心数值逐字吻合。另注：最终 JASA 2025 版将硬币种数由 46 修订为 44（EOS Wetenschap 2025 回顾引 final 版），属 minor 版本修订，已单列 P2，不影响核心结论。"
+    },
+    {
+      "claim": "连猜1000次、每次押1块，知道起抛面一方平均多赚约19块；其优势略大于二十一点顶尖玩家",
+      "source_verified": true,
+      "detail_verified": true,
+      "omission_severity": "minor",
+      "verdict": "verified",
+      "note": "Bartoš 原话（UvA 新闻 / Popular Mechanics / UPI）：'bet 1 dollar ... 1000 times ... win an average of 19 dollars if you know which side starts'；并称该优势大于六副牌二十一点最优玩家（约$5）、小于单零轮盘（约$27）。'约19块''略大'均与权威源一致。"
+    },
+    {
+      "claim": "Diaconis 造出抛币机器能100%让同一面朝上，反证偏差纯属人手晃动",
+      "source_verified": true,
+      "detail_verified": true,
+      "omission_severity": "minor",
+      "verdict": "verified",
+      "note": "AMS《The Fifty-one Percent Solution》明确 Diaconis 造出抛币机'comes up heads every single time / 100 percent'；NPR 亦证'launched exactly the same way, lands exactly the same way'，随机性来自人手不精准。F段据此推导'偏差纯属人手晃动'方向自洽、无误。"
+    }
+  ],
+  "quote_checks": [
+    {
+      "claim": "Diaconis 2007 同侧约51%（进动/wobble 机制）",
+      "verbatim_match": true,
+      "source": "AMS 2007 《The Fifty-one Percent Solution》；Diaconis, Holmes, Montgomery, SIAM Review 2007"
+    },
+    {
+      "claim": "Bartoš 等 2023 预印本、2025 正式发表于 JASA（Journal of the American Statistical Association）",
+      "verbatim_match": true,
+      "source": "Universiteit van Amsterdam 官方新闻 2023-10；DOI 10.1080/01621459.2025.2516210（JASA 2025-08-11）"
+    }
+  ],
+  "mechanism_checks": [
+    {
+      "claim": "手腕晃动（进动/歪着打转）使硬币在空中起始面停留更久 → 同侧概率约51%",
+      "direction_ok": true,
+      "elements_complete": true,
+      "note": "方向自洽：进动/wobble 让起始面朝上时间占比更高→更易同侧落地，符合 Diaconis 模型；关键环节（拇指给劲→进动→起始面滞留更久→同侧）齐备。"
+    },
+    {
+      "claim": "人手翻跟头基本笔直、没歪多少 → 偏差仅约1%",
+      "direction_ok": true,
+      "elements_complete": true,
+      "note": "偏差幅度由进动角决定，人手 wobble 小故偏差小，与 Diaconis'偏差至少约1%'一致；因果链完整。"
+    },
+    {
+      "claim": "落地冲击掺入随机 → 单次仍接近五五开，偏差只在海量统计显形",
+      "direction_ok": true,
+      "elements_complete": true,
+      "note": "落地冲击增加随机性、稀释单次确定性，与'需约25万次才能检出偏差'（Diaconis）及 F段'正反面严格各50%（CI 49.8%-50.2%）'一致；机制合理。"
+    }
+  ],
+  "attribution_checks": [
+    {
+      "claim": "偏心是手腕的锅（进动/人手晃动），'跟重量无关'",
+      "is_primary_cause": true,
+      "note": "主因确为人手抛掷的进动/wobble（Diaconis：偏差与重量、形状不对称无关，在运动本身），归因主因正确、无偏漏。"
+    },
+    {
+      "claim": "机器100%同面反证偏差纯属人手晃动",
+      "is_primary_cause": true,
+      "note": "机器以精确初始条件实现100%同面，反推人类偏差来自手部控制不精准，归因正确。"
+    }
+  ],
+  "term_checks": [],
+  "gap_checks": [
+    {
+      "pattern_id": "G-01",
+      "triggered": false,
+      "checked": true,
+      "finding": "抛硬币非健康/安全/饮食/用药等后果不可逆领域，开头无'怕/有毒/能不能吃/会不会伤'等顾虑立论，不触发安全性闭环。"
+    },
+    {
+      "pattern_id": "G-02",
+      "triggered": false,
+      "checked": true,
+      "finding": "全文无'不可能/全看/绝对/永远/彻底/完全不会/保证'等绝对词；'基本''约''几乎''严格'均用于合理限定或数学精确表述（'严格各50%'指起始面随机时确为精确50%，有 CI 49.8%-50.2% 支撑），无夸大绝对化。"
+    },
+    {
+      "pattern_id": "G-03",
+      "triggered": false,
+      "checked": true,
+      "finding": "'跟重量无关''手腕的锅''陀螺摇头''落地冲击掺随机'等定性描述均已回权威源（AMS/Diaconis/UvA）核对，均为事实，无'看似合理却错误'陷阱。"
+    },
+    {
+      "pattern_id": "G-04",
+      "triggered": false,
+      "checked": true,
+      "finding": "Q1 进动→同侧、Q1 笔直→小偏差、Q3 落地随机→单次五五开，因果链环节齐备，无跳步缺失。"
+    },
+    {
+      "pattern_id": "G-05",
+      "triggered": false,
+      "checked": true,
+      "finding": "无古文/论文直接引文；'进动'术语用字精确（precession），无'上颚→上腭''白噪音'类误用；引用精度问题见 G-06。"
+    },
+    {
+      "pattern_id": "G-06",
+      "triggered": true,
+      "checked": true,
+      "finding": "命中：文中引用 Diaconis 2007、Bartoš 2023 预印本 / 2025 JASA（48抛掷者、46种货币、350,757次、50.8% / 95% CI 50.6%-50.9%）。已 WebSearch 逐字核对机构、年份、期刊、样本数与置信区间：核心数值全部与权威源（UvA 官方新闻、AMS、New Scientist、UPI、arXiv 2310.04153）一致。发现一处 minor 版本口径差异——最终 JASA 2025 版将硬币种数由 46 修订为 44（EOS Wetenschap 2025 回顾引 final 版），已单列 P2，不影响核心结论。见 fact_checks。"
+    },
+    {
+      "pattern_id": "G-07",
+      "triggered": false,
+      "checked": true,
+      "finding": "偏差主因明确为进动/人手晃动，Diaconis 模型与 Bartoš 实证确认此为唯一主因，非次要原因冒充主因，无归因偏漏。"
+    }
+  ],
+  "forbidden_violations": [],
+  "overall_comment": "v2 优化版仅对 Q1 做表述浅显化（'歪着打转/陀螺摇头'替代'翻转轴/进动/夹角'），事实结论与数据均未改变，经独立 WebSearch 核验全部成立：Diaconis 2007 同侧约51%、Bartoš 2023 预印本/2025 JASA（48人、350,757次、50.8%±CI、1000次押注多赚约19块、Diaconis 抛币机100%同面）逐字吻合权威源。结构完整（A段引用块、C段Q格式、F段'冷知识反转'标签、结尾风格表格且分类'生活常识'在6选1枚举内），字数635在300-690内，无 FP 命中，无绝对化/AI味/逻辑矛盾。脚本 validate_article.py 报告的 P1'标题缺少 emoji 装饰'为误报——标题实际含 🪙 emoji，独立审校判定非真实问题，故顶层 p1_count=0、pass=true。唯一 minor 问题（P2）：'46种货币'为预印本/媒体口径，最终 JASA 2025 版记为 44，建议标注口径或直接采用 44，不影响核心结论。Q1 用生活比喻、表格保留'进动'术语锚点，二者互补（符合 CHECKLIST §82 术语锚点要求），非不一致。"
+}

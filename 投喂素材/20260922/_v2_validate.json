@@ -1,0 +1,22 @@
+{
+  "file": "2026-09-22-优化版-每日冷知识-落叶背面朝上.md",
+  "passed": true,
+  "score": 100,
+  "p0": [],
+  "p1": [],
+  "p2": [],
+  "errors": [],
+  "warnings": [],
+  "info": {
+    "checks_passed": 12,
+    "char_count": 684,
+    "max_score": 100,
+    "final_score": 100,
+    "p0_count": 0,
+    "p1_count": 0,
+    "p2_count": 0,
+    "p0p1_passed": true
+  },
+  "fix_suggestions": [],
+  "related_cases": []
+}

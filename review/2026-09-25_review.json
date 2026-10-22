@@ -1,0 +1,121 @@
+{
+  "article_id": "2026-09-25",
+  "review_timestamp": "2026-09-25T09:51:04+0800",
+  "pass": true,
+  "p0_count": 0,
+  "p1_count": 0,
+  "p2_count": 0,
+  "score": 100,
+  "revised_after_review": true,
+  "script_result": {
+    "exit_code": 0,
+    "score": 100,
+    "char_count": 484,
+    "p0_count": 0,
+    "p1_count": 0,
+    "p2_count": 0
+  },
+  "issues": [
+    {
+      "level": "P2",
+      "category": "FP-06/排版",
+      "description": "段落长度过于均匀（偏差 < 19 字），呈 AI 排版典型特征（validate_article.py 标记）",
+      "location": "全文（A/Q/F 段与表格）",
+      "suggestion": "可有意拉开 A 段场景描写与 Q 段短答的长度差、在 F 段补充一句新信息（如苏铁株龄可达 200 年以上），弱化均匀感"
+    }
+  ],
+  "fact_checks": [
+    {
+      "claim": "苏铁（Cycas）为裸子植物、雌雄异株，种子含苏铁苷（cycasin）有毒",
+      "source_verified": true,
+      "detail_verified": true,
+      "omission_severity": "minor",
+      "verdict": "verified",
+      "note": "多源核实：人民日报、香港医管局毒理植物库、新湖南均确认苏铁为裸子植物、雌雄异株；种子含苏铁苷（cycasin），误食可急性中毒、呕吐眩晕，国内外有误食致肝衰竭死亡案例（光明网/南京疾控）。文中事实准确。"
+    },
+    {
+      "claim": "福建、广东一带树龄十年以上的苏铁几乎每年 5 至 7 月开花；北方寒冷少开，'千年铁树开花'源自北方视角",
+      "source_verified": true,
+      "detail_verified": true,
+      "omission_severity": "minor",
+      "verdict": "verified",
+      "note": "厦门园林植物园确认苏铁主要花期 5-7 月、园区内许多植株几乎每年开花；科学网/华南植物园资料确认南方树龄 10 年以上连年开花、北方盆栽数十年难开；新湖南明确指出'铁树开花'俗语'很可能是北方人最早说出'。文中断言与权威源一致，'五到七月'与资料 5-7 月花期吻合。"
+    }
+  ],
+  "quote_checks": [],
+  "mechanism_checks": [
+    {
+      "claim": "北方冬天干冷、盆栽苏铁长得极慢，往往几十年难等一次开花 → 北方人觉得它稀罕",
+      "direction_ok": true,
+      "elements_complete": true,
+      "note": "因果方向自洽：低温+干燥→生长慢→养分难积累→难开花，归因链完整，无跳步。"
+    },
+    {
+      "claim": "苏铁是裸子植物、和松柏同宗 → 根本没有真正的花和果实，所见为孢子叶球",
+      "direction_ok": true,
+      "elements_complete": true,
+      "note": "分类事实支撑形态结论（裸子植物无真花/真果），机制自洽，与 Q3 内容一致。"
+    },
+    {
+      "claim": "苏铁天生喜暖怕寒 → 在暖湿南方扎了根年年都开",
+      "direction_ok": true,
+      "elements_complete": true,
+      "note": "气候偏好→年开花频率，方向自洽，与 Q1/Q2 闭环。"
+    }
+  ],
+  "attribution_checks": [
+    {
+      "claim": "'千年铁树开花'源自北方地域（北方寒冷生长慢少开花）",
+      "is_primary_cause": true,
+      "note": "主因为气候/地理差异，多源佐证（北方盆栽数十年难开、俗语出自北方人）；未见被忽略的显著并列成因。"
+    }
+  ],
+  "term_checks": [],
+  "gap_checks": [
+    {
+      "pattern_id": "G-01",
+      "triggered": false,
+      "checked": true,
+      "finding": ""
+    },
+    {
+      "pattern_id": "G-02",
+      "triggered": false,
+      "checked": true,
+      "finding": "扫描绝对词（不可能/全看/全都/一定/绝对/必然/永远/无非）均未出现；文中用'多半''几乎''往往'等软化词，无绝对化表述。"
+    },
+    {
+      "pattern_id": "G-03",
+      "triggered": false,
+      "checked": true,
+      "finding": "文中'看似合理'的定性断言（裸子植物、雌雄异株、南方十年以上每年5-7月开花、北方少开、苏铁苷有毒）经 WebSearch 独立核实均属实，无误。"
+    },
+    {
+      "pattern_id": "G-04",
+      "triggered": false,
+      "checked": true,
+      "finding": ""
+    },
+    {
+      "pattern_id": "G-05",
+      "triggered": false,
+      "checked": true,
+      "finding": "无古籍/论文引文；术语（苏铁苷/孢子叶球/裸子植物/雌雄异株）用字准确，无精度问题。"
+    },
+    {
+      "pattern_id": "G-06",
+      "triggered": false,
+      "checked": true,
+      "finding": ""
+    },
+    {
+      "pattern_id": "G-07",
+      "triggered": false,
+      "checked": true,
+      "finding": ""
+    }
+  ],
+  "issue_responses": [],
+  "forbidden_violations": [],
+  "overall_comment": "文章整体质量良好：核心机制（裸子植物/气候地域差）准确，A→Q→F→表格结构齐备且闭环，F段主动给出种子毒性警戒形成安全性闭环；字数 458（远低于 690 上限）、AI味/连接词未超标、无绝对化、无 FP 禁式命中。唯一问题为段落长度偏均匀（脚本标 P2）。事实断言经 2 处以上权威源独立核验全部属实，无 P0/P1。通过条件（P0=0 且 P1≤2）满足。"
+}

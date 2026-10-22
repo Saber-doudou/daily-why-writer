@@ -1,0 +1,12 @@
+===== F3-关节文 --file --angle --exclude-date(期望EXIT=0) (EXIT=0) =====
+[check_topic] ✅ 通过: 话题未使用过，可以写作
+
+===== F3-牛排废弃文 --file --angle --exclude-date(期望EXIT=1) (EXIT=2) =====
+
+[stderr] [check_topic] ❌ 无法从文件提取话题: articles/2026-10/2026-10-13-每日冷知识-牛排血水_废弃.md
+
+===== F3-关节文 --file 不带exclude(期望EXIT=1自匹配) (EXIT=1) =====
+[check_topic] ❌ 重复: 精确匹配文章文件: 2026-10-13-优化版-每日冷知识-关节预报天气.md
+
+===== generate_prompt --check (EXIT=0) =====
+✅ 规则一致性检查通过

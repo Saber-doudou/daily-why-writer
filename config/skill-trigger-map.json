@@ -1,0 +1,55 @@
+{
+  "_comment": "daily-why 三技能路由裁决表（2026-08-28 建）。唯一权威源：各 skill 的 SKILL.md description 触发词。裁决规则：动作词优先，无动作词按前缀。触发 daily-why 系列前必须先读本表核对路由。",
+  "route_rule": "action_word_first",
+  "routes": [
+    {
+      "skill": "daily-why-feed-learning",
+      "level": "L2",
+      "action_words": ["学习", "投喂", "总结"],
+      "trigger_words": [
+        "每日一个为什么学习",
+        "每日一个为什么学习总结",
+        "每日一个为什么投喂",
+        "dailywhy学习",
+        "dailywhy学习总结"
+      ],
+      "action": "L2 四AI投喂学习全流程（Phase 0 到 6：差额分析→v2重写→规则提炼→技能同步→学习总结→记忆更新）",
+      "note": "动作词优先最高级。『学习总结』为执行指令，非生成总结报告请求。"
+    },
+    {
+      "skill": "daily-why-publish",
+      "level": "L3",
+      "action_words": ["发布", "推送", "审计", "备份"],
+      "trigger_words": [
+        "每日一个为什么发布",
+        "每日一个为什么推送",
+        "每日一个为什么审计",
+        "每日一个为什么备份",
+        "每日一个为什么推送备份",
+        "每日一个为什么发布备份",
+        "dailywhy发布",
+        "dailywhy推送",
+        "dailywhy审计",
+        "dailywhy备份",
+        "dailywhy推送备份",
+        "dailywhy发布备份"
+      ],
+      "action": "L3 验证发布流程（脚本预检→AI语义验证→IMA备份→GitHub推送→记忆归档）"
+    },
+    {
+      "skill": "daily-why-writer",
+      "level": "L1",
+      "action_words": [],
+      "trigger_words": [
+        "每日一个为什么",
+        "每日一个为什么写作",
+        "dailywhy写",
+        "dailywhy写作",
+        "每日冷知识"
+      ],
+      "action": "L1 写作流程（选题→去重→查证→A+C+F写作→审校→记录）",
+      "note": "L1 为兜底：无 L2/L3 动作词且命中前缀时触发。裸词 dailywhy 自 2026-08-28 起不再作为 L1 触发词（前缀冲突修复，C 方案）。"
+    }
+  ],
+  "conflict_resolution": "若输入同时命中多技能，按 routes 顺序优先：先 L2（含学习/投喂/总结），再 L3（含发布/推送/审计/备份），最后 L1（写作兜底）。"
+}

@@ -1,0 +1,227 @@
+{
+  "article_id": "2026-10-14",
+  "review_timestamp": "2026-10-14T10:13:56+0800",
+  "pass": true,
+  "p0_count": 0,
+  "p1_count": 0,
+  "p2_count": 1,
+  "score": 95,
+  "script_result": {
+    "exit_code": 0,
+    "score": 100,
+    "char_count": 597,
+    "p0_count": 0,
+    "p1_count": 0,
+    "p2_count": 0
+  },
+  "issues": [
+    {
+      "level": "P2",
+      "category": "CHECKLIST-§9",
+      "description": "Q2 对 2013 年研究的引用仅标注机构与年份（“2013年，波兰弗罗茨瓦夫大学的研究者”），未标注发表期刊，亦未提及研究者姓名。CHECKLIST §9（活跃区，写后必查）要求首次引用完整标注“机构+年份+期刊”。经 WebSearch 核实该研究真实存在（Wesołowska & Wesołowski，Wrocław University，2013，Journal of Zoology，DOI 10.1111/jzo.12094），机构与年份均无误，仅缺期刊名，属引用完整性瑕疵而非事实错误。",
+      "location": "C段Q2（第9行）",
+      "suggestion": "补期刊名即可，如改为“2013年，波兰弗罗茨瓦夫大学的研究者在《动物学杂志》上发表研究，证实了这套操控”；字数约增10字，全文仍在690字上限内。"
+    }
+  ],
+  "fact_checks": [
+    {
+      "claim": "双盘吸虫成虫体长2到4毫米，像片小树叶，住在鸟的肠道里",
+      "source_verified": true,
+      "detail_verified": true,
+      "omission_severity": "minor",
+      "verdict": "supported",
+      "note": "科普中国“奇葩动物”专栏明确记载“成虫约2到4毫米……像一片微小的树叶……成虫生活在鸟类的肠道里”，与文中逐字吻合；维基百科记载成虫 distome 约1.5毫米，与科普中国口径略有出入，但2到4毫米有权威中文科普源明确支撑，非孤证，不构成事实错误。"
+    },
+    {
+      "claim": "孢囊搏动每分钟约40到80次，光线越足扭得越欢",
+      "source_verified": true,
+      "detail_verified": true,
+      "omission_severity": "minor",
+      "verdict": "supported",
+      "note": "多源一致：科普中国“每分钟约40到80次”；A-Z Animals“40 to 80 pulses a minute”；BBC Wildlife“up to 80 pulses per minute”；维基百科“40 to 75 times a minute depending on temperature, but they cease in the dark”；HowStuffWorks 引2022年 Journal of Environmental Biology 研究“broodsacs pulsate faster under daylight conditions than in the dark”。“光线越足扭得越欢”与“黑暗中停止搏动”的权威口径一致。"
+    },
+    {
+      "claim": "2013年，波兰弗罗茨瓦夫大学的研究者用实验证实了这套操控",
+      "source_verified": true,
+      "detail_verified": true,
+      "omission_severity": "minor",
+      "verdict": "supported",
+      "note": "论文原文核实：Wesołowska & Wesołowski（Wrocław University 生物多样性及演化分类学系/森林生物学实验室），Do Leucochloridium sporocysts manipulate the behaviour of their snail hosts?，Journal of Zoology，2013年11月29日在线发表，DOI 10.1111/jzo.12094；野外观察于2013年5至6月在波兰 Białowieża 国家公园完成，论文结论原话“we demonstrated that... L. paradoxum sporocysts also changed the behaviour of their intermediate S. putris hosts”。机构、年份、“证实行为操控”三点均与原文一致；研究属野外对照观察，文中“实验”为通俗化表述，可接受。"
+    },
+    {
+      "claim": "被感染的蜗牛活动量可达三倍，专挑高处亮处蹲，连鸟的影子压下来都不缩头",
+      "source_verified": true,
+      "detail_verified": true,
+      "omission_severity": "minor",
+      "verdict": "supported",
+      "note": "“三倍”有据：Wesołowski 本人在媒体访谈中称“infected snails are up to three times as active as their non-zombified peers”（Buffer/Absurd Creature of the Week 转载），论文讨论部分亦称感染蜗牛移动性“much more mobile – actually this was the strongest affected variable of all”。“高处亮处”与论文“situated higher in the vegetation... more exposed and better illuminated places”一致；“不缩头”与论文“only occasionally hid their tentacles inside the body”及维基百科“眼柄被孢囊占据后无法缩回”的记载一致。"
+    },
+    {
+      "claim": "蜗牛自己的眼睛只是眼柄顶端一个只能分辨明暗的小眼点",
+      "source_verified": true,
+      "detail_verified": true,
+      "omission_severity": "minor",
+      "verdict": "supported",
+      "note": "Biology Insights：陆蜗牛上触角（ommatophores）顶端的眼“relatively simple, primarily detecting changes in light intensity and shadow rather than forming detailed images”；澎湃新闻：蜗牛眼睛“结构相对简单……视力很弱”。文中“只能分辨明暗”与权威表述一致。"
+    },
+    {
+      "claim": "失去眼柄的蜗牛不会马上死，伤口几周内愈合，新眼柄会慢慢长回来；再吞带虫卵的鸟粪会重新被感染",
+      "source_verified": true,
+      "detail_verified": true,
+      "omission_severity": "minor",
+      "verdict": "supported",
+      "note": "科普中国：“被鸟啄食眼柄的蜗牛，不会马上死亡……伤口会愈合，新的眼柄会在几周内重新长出来”；Live Science：“it can be reinfected and again act as a host for the parasite”。维基百科亦载“the snail may survive this”。"
+    },
+    {
+      "claim": "中间宿主为蜗牛、终宿主为鸟类；虫卵随鸟粪落地被蜗牛吞食，幼虫钻进消化腺发育为孢囊，孢囊无嘴靠皮肤吸收营养，分支伸入眼柄",
+      "source_verified": true,
+      "detail_verified": true,
+      "omission_severity": "minor",
+      "verdict": "supported",
+      "note": "维基百科：中间宿主为陆生蜗牛（通常 Succinea 属），鸟类为终宿主；虫卵被蜗牛吞食后孵化出毛蚴，到达肝胰脏（hepatopancreas，即消化腺）发育为孢囊，成熟孢囊分支经血腔伸入触角末端形成搏动的 broodsac。科普中国：“它们没有嘴，只需要吸收蜗牛辛苦摄取的营养物质”。生活史链条完整且方向正确。"
+    }
+  ],
+  "quote_checks": [
+    {
+      "claim": "文中对2013年弗罗茨瓦夫大学研究的转述（“用实验证实了这套操控”）",
+      "verbatim_match": true,
+      "source": "Wesołowska & Wesołowski 2013, Journal of Zoology, DOI 10.1111/jzo.12094（论文摘要结论段）",
+      "note": "文中为意译转述而非直接引文；论文结论“we demonstrated that... L. paradoxum sporocysts also changed the behaviour of their intermediate S. putris hosts”与文中“证实了这套操控”语义一致，未夸大也未删改关键限定（论文自身即用 demonstrated 表述）。"
+    }
+  ],
+  "mechanism_checks": [
+    {
+      "claim": "Q1生活史链：虫卵随鸟粪落地→被蜗牛吞下孵出幼虫→钻进消化腺→长成孢囊→伸出分支爬进眼柄→撑成装满幼虫的“荧光棒”",
+      "direction_ok": true,
+      "elements_complete": true,
+      "note": "因果链与维基百科生活史逐环对应（卵→毛蚴→肝胰脏内孢囊→分支入触角→broodsac 膨大变色），方向正确、无跳步缺环。"
+    },
+    {
+      "claim": "Q2操控链：感染→蜗牛行为改变（高处/亮处/活跃/不缩头）+孢囊光依赖搏动→提升对昼行鸟类的可见性与可及性→被啄食→寄生虫进入鸟体完成循环",
+      "direction_ok": true,
+      "elements_complete": true,
+      "note": "行为改变（2013论文实测）与搏动（光依赖、40到80次每分钟）两个机制共同服务“提高被鸟啄食概率”这一目标，方向自洽；关键环节齐备，无反推或图景混用。"
+    },
+    {
+      "claim": "Q2搏动时机：光线越足搏动越欢、黑暗中停止，正好匹配鸟类白天觅食",
+      "direction_ok": true,
+      "elements_complete": true,
+      "note": "维基百科“cease in the dark”及2022年 Journal of Environmental Biology 研究（日光下搏动更快）均支持；鸟类昼行视觉捕食亦与论文假设“day-active, visually hunting, insectivorous birds”一致。"
+    },
+    {
+      "claim": "Q3生存链：眼柄被啄→蜗牛不会马上死→伤口愈合、眼柄再生→再感染可重新“亮灯”",
+      "direction_ok": true,
+      "elements_complete": true,
+      "note": "存活与再生（科普中国、Live Science、维基）及再感染可能（Live Science）均有源；链条完整，未出现“再生=立刻复原”类开关式表述（用词为“慢慢长回来”）。"
+    }
+  ],
+  "attribution_checks": [
+    {
+      "claim": "“活动量可达三倍”归因于双盘吸虫感染对蜗牛的操控",
+      "is_primary_cause": true,
+      "note": "Wesołowski 2013 论文及本人访谈均将活跃度提升列为感染效应（“up to three times as active”“strongest affected variable”），归因主因正确。"
+    },
+    {
+      "claim": "眼柄的搏动归因于孢囊（寄生虫）而非蜗牛自身肌肉/神经",
+      "is_primary_cause": true,
+      "note": "搏动主体是孢囊壁肌肉收缩（科普中国高速摄影证实“孢囊内部的肌肉纤维有规律地收缩和舒张”），文中表述为“孢囊的搏动”，归属正确，未错配给蜗牛。"
+    },
+    {
+      "claim": "蜗牛行为改变归因于寄生虫操控，且化学信号机制如实标注为未破解",
+      "is_primary_cause": true,
+      "note": "2013年论文证实行为改变与感染相关； proximate 机制（化学信号）学界未定论，文中“科学家至今没完全破解”与 Wesołowski 原话“We have no idea how this happens”一致，未把假说写成定论。"
+    }
+  ],
+  "term_checks": [
+    {
+      "term": "眼柄",
+      "used": "眼柄（全文多处，如“两根眼柄粗得像灌满的香肠”）",
+      "correct": "眼柄（eyestalk/大触角，蜗牛顶端长有眼睛的触角）",
+      "exact": true,
+      "note": "术语使用正确。Succinea putris 等陆蜗牛的上触角即眼柄，顶端生眼；文中“眼柄顶端一个……小眼点”的层级关系准确。"
+    },
+    {
+      "term": "眼点",
+      "used": "小眼点",
+      "correct": "眼点（eyespot，位于眼柄顶端的简易感光眼）",
+      "exact": true,
+      "note": "用字规范，未与“眼柄”混用；蜗牛眼点为简易感光结构、仅辨明暗，与文中描述一致。"
+    },
+    {
+      "term": "消化腺",
+      "used": "幼虫钻进消化腺",
+      "correct": "消化腺（蜗牛的肝胰脏/hepatopancreas，消化与吸收器官）",
+      "exact": true,
+      "note": "定位准确：维基百科明确毛蚴到达蜗牛 hepatopancreas 后发育为孢囊，中文即消化腺，无术语错配。"
+    },
+    {
+      "term": "孢囊",
+      "used": "孢囊（“长成没有嘴、只靠皮肤吸食营养的孢囊”）",
+      "correct": "孢囊（sporocyst，吸虫幼虫阶段，无口、经体壁吸收营养）",
+      "exact": true,
+      "note": "用字与生物学定义一致；孢囊无消化道、靠皮层吸收宿主营养为吸虫纲常识，科普中国亦用“孢蚴”指同一阶段。"
+    },
+    {
+      "term": "双盘吸虫",
+      "used": "双盘吸虫（加粗术语）",
+      "correct": "双盘吸虫（Leucochloridium，彩蚴吸虫科；又称彩蚴吸虫）",
+      "exact": true,
+      "note": "Leucochloridium paradoxum 的规范中文名即双盘吸虫/彩蚴吸虫，加粗合理（属标准学术名而非自造词，符合FP-28）。"
+    }
+  ],
+  "gap_checks": [
+    {
+      "pattern_id": "G-01",
+      "triggered": false,
+      "checked": true,
+      "finding": "A段为场景叙事（蜗牛眼柄变彩灯、画眉啄食），未出现“不敢/怕/有毒吗/能不能吃/会不会伤/有害吗/安全吗/能不能用”类读者顾虑或禁忌表述；话题属动物世界，不属饮食/健康/用药/电器/儿童/宠物领域，无需安全或行为闭环，未触发。"
+    },
+    {
+      "pattern_id": "G-02",
+      "triggered": false,
+      "checked": true,
+      "finding": "已用检索式对全文扫描“不可能/全看/全都/一定/绝对/必然/永远/无非/完全不会/再也/保证/彻底”，零命中；文中“只有2到4毫米”“只能分辨明暗”“不会马上死”均为经权威源验证的事实能力表述，非无例外全称判断，未触发。"
+    },
+    {
+      "pattern_id": "G-03",
+      "triggered": false,
+      "checked": true,
+      "finding": "全部生物定性描述与可核验量均已回权威源逐项核对（科普中国、维基百科、Journal of Zoology 论文原文、BBC Wildlife、A-Z Animals、Biology Insights、Live Science）：成虫2到4毫米、搏动40到80次每分钟、活动量三倍、眼点仅辨明暗、数周再生、2013年弗罗茨瓦夫大学研究，均属实，无“听起来合理但细节错误”的常识陷阱，未触发。"
+    },
+    {
+      "pattern_id": "G-04",
+      "triggered": false,
+      "checked": true,
+      "finding": "四处因果解释（生活史链、操控链、搏动时机链、生存再生链，详见 mechanism_checks）方向均自洽且关键环节齐备，无一句话概括多步骤或中间跳步，未触发。"
+    },
+    {
+      "pattern_id": "G-05",
+      "triggered": false,
+      "checked": true,
+      "finding": "文中无古文或研究者原话逐字引用；解剖学术语“眼柄/眼点/消化腺/孢囊/双盘吸虫”用字精确（详见 term_checks），无“上颚/上腭”类形近误用；2013年研究转述与论文结论语义一致，未触发。"
+    },
+    {
+      "pattern_id": "G-06",
+      "triggered": false,
+      "checked": true,
+      "finding": "引用源（2013年波兰弗罗茨瓦夫大学研究）已回论文原文逐项核对：作者 Wesołowska & Wesołowski、机构 Wrocław University、年份2013、期刊 Journal of Zoology、研究结论均与文中一致，不存在“来源存在但细节未核对”；各数值亦经多源交叉核对，未触发。"
+    },
+    {
+      "pattern_id": "G-07",
+      "triggered": false,
+      "checked": true,
+      "finding": "归因主次正确：搏动归孢囊（寄生虫）而非蜗牛、行为改变归双盘吸虫操控（2013论文证实）、蜗牛存活归其再生能力；化学信号机制如实标注未破解，未把配角当主因或隐瞒主因，未触发。"
+    }
+  ],
+  "issue_responses": [
+    {
+      "level": "P2",
+      "category": "CHECKLIST-§9",
+      "action": "adopted",
+      "detail": "Q2 补期刊名《动物学杂志》（Wesołowska & Wesołowski 2013, Journal of Zoology, DOI 10.1111/jzo.12094，Reviewer 已核实）；改后重跑 validate_article.py：score=100 未回退，char_count 589→597≤690"
+    }
+  ],
+  "forbidden_violations": [],
+  "overall_comment": "审校结论：P0=0、P1=0、P2=1，pass=true，score=95。脚本审核100分（589字，12项检查全过）。最小结构验证齐备：A段引用块（第3行）、C段Q1/Q2/Q3格式（第7/9/11行）、F段引用块含“冷知识反转”标签（第15行）、结尾风格表格四字段（话题/分类/核心机制/冷知识反转，第17至18行，4列2行为项目主流格式，10月全部文章均如此）；分类=动物世界属合法6选1枚举。事实核验：7组关键断言（成虫2到4毫米、搏动40到80次每分钟且光依赖、2013年弗罗茨瓦夫大学研究、活动量三倍、眼点仅辨明暗、数周再生与再感染、蜗牛-鸟类宿主关系）全部经WebSearch独立核实属实。FORBIDDEN.md 实际79条FP（FP-01至FP-80，FP-58归档空缺）全量扫描无命中；全文无波浪线范围符与双破折号字符（grep零命中）；无禁用连接词与绝对化词汇（grep零命中）。GAP七条对照均未触发，其中G-01（本文无安全顾虑框架，不适用）与G-02（绝对词扫描零命中）已按重点核查。CHECKLIST活跃区逐项人工对照通过（引用研究已核实、Q段边界不重叠、全文数据口径一致、Q问必答、F段提供新角度且有记忆锚点金句）。唯一瑕疵为P2：Q2引用2013年研究缺期刊名（CHECKLIST §9要求机构+年份+期刊），建议补“在《动物学杂志》上发表研究”。整体达到发布水准。",
+  "revised_after_review": true
+}

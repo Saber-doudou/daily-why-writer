@@ -1,0 +1,62 @@
+{
+  "article_id": "2026-09-01",
+  "review_timestamp": "2026-09-01T09:55:43+0800",
+  "pass": true,
+  "p0_count": 0,
+  "p1_count": 0,
+  "p2_count": 2,
+  "score": 95,
+  "script_result": {
+    "exit_code": 0,
+    "passed": true,
+    "score": 100,
+    "p0": [],
+    "p1": [],
+    "p2": [],
+    "char_count": 416
+  },
+  "issues": [
+    {
+      "level": "P2",
+      "category": "CHECKLIST-§1 用词精准度",
+      "description": "结尾风格表格中「分类 | 物理化学」标注欠精确。谷物圈聚拢属软物质物理/流体力学（界面现象），并非物理化学研究范畴；读者按分类检索易产生学科归属偏差。",
+      "location": "结尾风格表格·分类行",
+      "suggestion": "建议改为「物理（界面现象/流体力学）」或「物理·软物质」，更贴合 Cheerios effect 的学科归属。"
+    },
+    {
+      "level": "P2",
+      "category": "CHECKLIST-§93 记忆锚点",
+      "description": "结尾仅有风格表格，缺少一条可独立复述给朋友的「一句话记忆锚点」金句。CHECKLIST 活跃区 §93 明确要求表格之外补一句可复述核心结论，以增强传播性。",
+      "location": "F段与风格表格之间/表格之后",
+      "suggestion": "建议在表格后补一句，如：「麦圈抱团不是被表面张力吸住，是浮力把液面拱成了把它们推到一起的斜坡；重的图钉压出的是凹坑，自然和麦圈互相躲开。」"
+    }
+  ],
+  "forbidden_violations": [],
+  "fact_check": {
+    "verified": [
+      {
+        "assertion": "2005年哈佛的 Mahadevan 和 Vella 在《美国物理杂志》发表 Cheerios effect 论文",
+        "result": "属实",
+        "source": "arXiv:cond-mat/0411688v2；Am. J. Phys. 73 (9), 817-825 (2005)；论文署名单位 Division of Engineering and Applied Sciences, Harvard University（两人并列哈佛），故「哈佛的 Mahadevan 和 Vella」机构归属无误。"
+      },
+      {
+        "assertion": "对小颗粒，浮力主导，毛细吸力只是配角",
+        "result": "属实，精确对应论文结论",
+        "source": "论文摘要原文：'We highlight the crucial role of buoyancy in this interaction, which, for small particles, prevails over the capillary suction that is often assumed to be the dominant effect.' 文章表述与原文一致，非事实错误。"
+      },
+      {
+        "assertion": "重的图钉（靠表面张力悬、压出凹坑）与轻的麦圈（液面凸起）互相推开",
+        "result": "属实",
+        "source": "Wikipedia Cheerios effect：'Objects of the same type will appear to attract one another, and objects of opposite types will appear to repel one another.' 异型（山包 vs 凹坑）相斥，符合物理结论。"
+      }
+    ]
+  },
+  "structure_check": {
+    "A_block_quote": true,
+    "C_q_bold_format": true,
+    "F_block_quote_with_label": true,
+    "ending_style_table_four_rows": true,
+    "all_pass": true
+  },
+  "overall_comment": "程序化审核满分（score 100，字数 416）。六维度人工复核与 WebSearch 事实核验均无 P0/P1 问题：核心机制（浮力主导、异型相斥）与 2005 年哈佛 Mahadevan & Vella 论文结论一致，结构四要素齐全，无 FP 违规、无 AI 味连接词、字数未超 600、无绝对化与类比失准。仅 2 处 P2 完善项（分类标注精度、缺一句话记忆锚点）。整体达标，建议按 P2 微调后可直接发布。"
+}

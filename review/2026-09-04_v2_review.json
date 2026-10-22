@@ -1,0 +1,89 @@
+{
+  "review_timestamp": "2026-09-04T10:50:34+0800",
+  "article": "2026-09-04-优化版-每日冷知识-冰淇淋头痛.md",
+  "round": 2,
+  "script_result": {
+    "exit_code": 0,
+    "passed": true,
+    "score": 100,
+    "char_count": 671,
+    "p0_count": 0,
+    "p1_count": 0,
+    "p2_count": 0
+  },
+  "p0": [],
+  "p1": [
+    {
+      "level": "P1",
+      "category": "归因主次（Step 5.6 归因完整性）",
+      "location": "Q3 首句",
+      "description": "Q3 问的是「为什么有人一吃就中招、有人没事」（个体差异），正文首句答「差别主要在速度」。速度是已证的可控风险因素（BMJ 2002 相对风险 2.2），但决定个体易感性的主因是血管反应性与三叉神经痛阈差异（同批 145 人终生患病率 79%，仍有约两成从未中招，说明速度之外存在体质门槛）。只把「主要」归给速度，属主次归因偏移；文末虽提「偏头痛体质更明显」，但被置于次要位置。",
+      "suggestion": "改为「速度是最容易验证也最可控的一条」，并把体质差异并列为另一条主线，如「另一半差别在个体：血管对骤冷的反应强度和三叉神经的痛阈本就人各不同」。"
+    }
+  ],
+  "p2": [
+    {
+      "level": "P2",
+      "category": "CHECKLIST §1 用词精准度",
+      "location": "Q1、Q2、F段、结尾表格（共 4 处）",
+      "description": "解剖名用「上颚」。严格意义上「颚」指上下颌骨，口腔顶部应为「腭」（硬腭/软腭）；文中已用括号「（口腔顶部的硬腭）」补正，语义不致误解，但全文四处术语不统一（颚/腭混用）。",
+      "suggestion": "全文统一为「上腭」，括号解释保留一次即可。"
+    },
+    {
+      "level": "P2",
+      "category": "CHECKLIST §1 避免模糊指代",
+      "location": "Q3 末句「偏头痛体质的人往往觉得更明显，这并非疾病」",
+      "description": "「这」的指代对象在「偏头痛体质」与「冰淇淋头痛」之间存在歧义；若被读成前者，会传达「偏头痛不是病」的错误信息。",
+      "suggestion": "把指代补实：「不过这阵冰淇淋头痛本身并不是疾病，只是血管被骤冷一激后的短暂反应」。"
+    }
+  ],
+  "fact_checks": [
+    {
+      "claim": "2002 年《英国医学杂志》(BMJ) ICE-H 试验：145 名中学生随机分组，5 秒内吃完组 27% 头痛、超过 30 秒组 13%，风险翻倍以上",
+      "verdict": "verified",
+      "source": "https://www.scilit.com/publications/772d749970e14737a2735fa9d66209eb"
+    },
+    {
+      "claim": "实验在加拿大寒冬进行，时间为 2001 年 12 月至次年 1 月（六场进食场次），目的是检验「冰淇淋头痛只在热天发生」的说法",
+      "verdict": "verified",
+      "source": "https://www.scilit.com/publications/772d749970e14737a2735fa9d66209eb"
+    },
+    {
+      "claim": "同批参与者中 79% 一生至少发生过一次冰淇淋头痛（终生患病率 115/145）",
+      "verdict": "verified",
+      "source": "https://www.unboundmedicine.com/medline/citation/12493658"
+    },
+    {
+      "claim": "机制：冷刺激上腭使血管先收缩、随后反弹扩张，扩张被痛觉感受器感知，信号经三叉神经上传，属主流解释而非定论（另有前脑动脉血流假说）",
+      "verdict": "verified",
+      "source": "https://www.hopkinsmedicine.org/health/conditions-and-diseases/how-to-ease-brain-freeze"
+    },
+    {
+      "claim": "牵涉痛：三叉神经同时管上腭与额头、太阳穴，大脑把痛感定位到额头，与心脏病发作时肩膀疼属同一类现象",
+      "verdict": "verified",
+      "source": "https://en.wikipedia.org/wiki/Cold-stimulus_headache"
+    },
+    {
+      "claim": "缓解方式：用舌头压住上腭回暖、或喝温水可加速缓解；偏头痛人群更易发生",
+      "verdict": "verified",
+      "source": "https://www.hopkinsmedicine.org/health/conditions-and-diseases/how-to-ease-brain-freeze"
+    }
+  ],
+  "forbidden_violations": [],
+  "forbidden_scanned": 66,
+  "targeted_recheck": {
+    "double_dash_remaining": 0,
+    "tilde_remaining": 0,
+    "mechanism_qualified": true,
+    "mechanism_qualifier_text": "目前主流观点认为（与 Johns Hopkins「several theories，其中最说得通的一种」口径一致，符合 CHECKLIST §4 猜测与事实边界）",
+    "speed_only_claim": true,
+    "warm_water_tip_present": true
+  },
+  "p0_count": 0,
+  "p1_count": 1,
+  "p2_count": 2,
+  "score": 100,
+  "passed": true,
+  "pass": true,
+  "notes": "二轮复审：脚本 100 分、671 字（≤690 全文口径）、P0/P1/P2 全 0；结构四要素齐备，分隔线 2 条，分类「人体奥秘」在 6 选 1 枚举内。一轮四项修订均已落实——「——」与「~」全文 0 处，机制已由「目前主流观点认为」限定（不再作定论），「速度和量」已收敛为「速度」（与 BMJ 试验唯一变量一致），缓解句已补温水建议（约翰霍普金斯明确支持）。六处关键断言 WebSearch 独立核实全部 verified，含此前存疑的实验时段「2001 年 12 月至次年 1 月」（原文六场进食场次，已核到论文正文）。人工复审新增 1 项 P1（Q3 把个体差异主因归于速度，属主次归因偏移）与 2 项 P2（上颚/上腭术语统一、「这并非疾病」指代歧义），均不阻断。FORBIDDEN 66 条实存条目扫描 0 违规。P0=0 且 P1=1≤2，判定通过。"
+}

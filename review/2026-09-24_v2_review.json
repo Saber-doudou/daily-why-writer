@@ -1,0 +1,119 @@
+{
+  "article_id": "2026-09-24",
+  "review_timestamp": "2026-09-24T14:26:17+0800",
+  "pass": true,
+  "p0_count": 0,
+  "p1_count": 0,
+  "p2_count": 0,
+  "score": 100,
+  "script_result": {
+    "exit_code": 0,
+    "score": 100,
+    "char_count": 612,
+    "p0_count": 0,
+    "p1_count": 0,
+    "p2_count": 0
+  },
+  "issues": [],
+  "fact_checks": [
+    {
+      "claim": "9点位置秒针水平伸出、重力竖直向下，重力力臂最长，阻力矩最大，为整圈最吃力的位置（3点重力顺转动方向帮忙，12点与6点力臂接近零、阻力矩接近零）",
+      "source_verified": true,
+      "detail_verified": true,
+      "omission_severity": "minor",
+      "verdict": "verified",
+      "note": "WebSearch 多源独立核实：作业帮/青夏教育/湖北科普网/陕西科技报/科普天津云一致指出 9 点处支点到重力作用线距离最大→重力矩（阻力矩）最大，3点水平位但重力为动力、12与6点力臂≈0；与文中机制完全一致。"
+    },
+    {
+      "claim": "此现象只在挂墙、表盘竖直的钟上出现；平放时重力沿转轴方向，阻力矩消失，秒针可停任意位置",
+      "source_verified": true,
+      "detail_verified": true,
+      "omission_severity": "minor",
+      "verdict": "verified",
+      "note": "WebSearch 核实：头条科普文明确『平放时重力不捣乱，只有挂起来、指针垂直墙面转动，重力才变成阻力』；百度知道『如果表盘平放，就没这个问题了』。与文中『平放时重力沿转轴方向，阻力矩消失』一致。"
+    },
+    {
+      "claim": "手表秒针又短又轻，重力矩微弱到可忽略，故很少出现此现象",
+      "source_verified": true,
+      "detail_verified": true,
+      "omission_severity": "minor",
+      "verdict": "verified",
+      "note": "WebSearch 核实：9点魔咒本质是所有指针式时计共有的『力矩峰值』现象，但秒针越短越轻则重力矩越小；『古董怀表由于秒针更长，停45秒现象更普遍』反证短轻表针重力矩可忽略。文中『很少这样』措辞留有余地，与权威源一致，无误。"
+    }
+  ],
+  "quote_checks": [],
+  "mechanism_checks": [
+    {
+      "claim": "Q2 机制：9点秒针水平伸出→重力作用线到转轴垂距（阻力臂）最长→阻力矩最大→最易停摆；3点顺向助力、12与6点力臂接近零",
+      "direction_ok": true,
+      "elements_complete": true,
+      "note": "方向自洽：顺时针转动下，9点重力矩逆时针=阻力最大；3点重力矩顺时针=助力；12与6点重力作用线过轴心，力矩≈0。机制要素完整，无跳步。"
+    }
+  ],
+  "attribution_checks": [
+    {
+      "claim": "秒针停 9 点主因为 9 点处重力阻力矩最大（叠加电池驱动力随电量衰减）",
+      "is_primary_cause": true,
+      "note": "重力阻力矩最大是主因；电池驱动力衰减是必要前提。归因完整，无遗漏显著成因（多源均将『电量衰弱+重力阻力』并列，主因落在9点阻力矩最大）。"
+    }
+  ],
+  "term_checks": [],
+  "gap_checks": [
+    {
+      "pattern_id": "G-01",
+      "triggered": false,
+      "checked": true,
+      "finding": ""
+    },
+    {
+      "pattern_id": "G-02",
+      "triggered": false,
+      "checked": true,
+      "finding": "全文无不当绝对化/夸大表述；『力臂最长、阻力矩最大』为9点处的真实物理极值，且已用『大多停在9点附近』『9点概率最高』『它也不绝对钉死在9点』等措辞软化，未违规。"
+    },
+    {
+      "pattern_id": "G-03",
+      "triggered": true,
+      "checked": true,
+      "finding": "文中含物理定性描述+常识类比（『水平伸臂提物最累』）。已 WebSearch 多源独立核实：9点处重力力臂最长→阻力矩最大、3点顺向、12与6点力臂≈0、平放钟无此现象、手表短轻重力矩可忽略——物理正确，无事实错误。"
+    },
+    {
+      "pattern_id": "G-04",
+      "triggered": false,
+      "checked": true,
+      "finding": "机制链完整：电量衰减→脉冲减弱→9点阻力矩最大→卡停；无缺失关键环节，读者可据文自推出现象。"
+    },
+    {
+      "pattern_id": "G-05",
+      "triggered": false,
+      "checked": true,
+      "finding": "正文无引文/古书/医学术语；『力臂』『阻力矩』『重力矩』为标准物理术语且用法准确，无精度问题。"
+    },
+    {
+      "pattern_id": "G-06",
+      "triggered": false,
+      "checked": true,
+      "finding": "正文无书名号、年份、机构、期刊等具体研究引用标记，无需逐字引用核验。"
+    },
+    {
+      "pattern_id": "G-07",
+      "triggered": false,
+      "checked": true,
+      "finding": "主因为9点阻力矩最大，电池衰减为必要前提，归因完整无偏漏，已覆盖双因素。"
+    }
+  ],
+  "issue_responses": [
+    {
+      "issue_index": 0,
+      "status": "resolved",
+      "evidence": "v2 Q3 已重写：删去『大多落在7点到10点之间』的宽区间表述，改为『落点大多在8到9点附近、9点概率最高，有的偏到10点一侧』，并用『几度到十几度』描述挂歪/配重偏差的偏移，归因与后文自洽，原 P2 措辞偏松问题已修复。"
+    },
+    {
+      "issue_index": 1,
+      "status": "resolved",
+      "evidence": "v2 标题已由『总停在9点』改为『大多停在9点附近』，与正文 Q3『9点概率最高』口径对齐，消除了标题绝对化与正文『概率最高』的矛盾，原 P2 口径不一致问题已修复。"
+    }
+  ],
+  "forbidden_violations": [],
+  "overall_comment": "v2 优化版独立审校：脚本校验满分（score=100，char_count=612，全文<690）。三项核心物理断言（9点阻力矩最大、平放钟无9点偏好、手表短轻重力矩可忽略）均经 WebSearch 多源独立核实为真，无事实错误。结构完整（A段引用块、Q1-Q3加粗问答、F段『冷知识反转』标签、结尾四行风格表格齐全，分类『物理化学』属6选1枚举合法）。无 FORBIDDEN 违规、无绝对化/类比失准/超字数。一轮审校两条 P2（7-10点区间归因偏窄、标题『总停』与正文口径不一致）在 v2 中均已修复（resolved）。结论：P0=0、P1=0、P2=0，达到通过条件。"
+}

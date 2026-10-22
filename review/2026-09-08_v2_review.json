@@ -1,0 +1,143 @@
+{
+  "file": "F:/WorkBuddy/daily-why/articles/2026-09/2026-09-08-优化版-每日冷知识-蜂蜜不坏.md",
+  "article_id": "2026-09-08",
+  "review_version": "v2",
+  "review_timestamp": "2026-09-08T10:49:49+0800",
+  "p0": [],
+  "p1": [
+    {
+      "issue": "绝对化表述（G-02 / CHECKLIST §2）",
+      "description": "Q1 写\"像无数双看不见的手，把想安家的细菌体内水分全'抽干'，微生物直接脱水死掉\"——\"全抽干\"+\"直接死掉\"为无例外的全称判断，且与 Q3\"原本休眠的嗜渗酵母就苏醒繁殖\"内部张力：休眠本身说明此类微生物并未被杀死，多数微生物是被抑制繁殖而非全部死亡。",
+      "suggestion": "改为相对表述：\"把想安家的细菌体内的水分'抽干'，绝大多数微生物无法存活\"或\"让绝大多数微生物脱水失活、无法繁殖\"，与 Q3 嗜渗酵母休眠存活的表述自洽。"
+    }
+  ],
+  "p2": [
+    {
+      "issue": "相关数值衔接逻辑（CHECKLIST §68/§71）",
+      "description": "Q1 写\"成熟蜂蜜含水量只有17%到20%\"，Q3 写\"含水量一过约19%就发酵\"。读者会困惑：既然成熟蜜可达 20%，为何 19% 以上就发酵？两数值未说明关系（17%到20%是常见范围/国标口径，越接近上限越接近发酵风险区）。",
+      "suggestion": "Q1 改为\"成熟蜂蜜含水量通常不到 20%\"，或在 Q3 补半句\"成熟蜜本就压在安全线内，怕的只是吸潮后越线\"，点明两个数值的衔接。"
+    },
+    {
+      "issue": "安全性边界可再补一句（G-01 弱触发）",
+      "description": "Q3 给出发酵表现\"发酸冒泡\"，但未明说\"此时的蜂蜜不建议再食用\"。A 段顾虑（担心长毛/坏没坏）已闭环结晶部分，但\"发酵后还能不能吃\"这一饮食安全边界留白。",
+      "suggestion": "Q3 末补一句\"发酸冒泡的蜂蜜风味已坏，不建议再吃\"，安全边界即完整。"
+    }
+  ],
+  "score": 93,
+  "passed": true,
+  "notes": "脚本校验：P0/P1/P2 全 0，得分 100，594 字（全文口径 690 上限内）。人工审校检出 1 处绝对化表述（P1）与 2 处完善建议（P2）。三处关键事实断言均经 WebSearch 独立核验通过：①古埃及墓葬出土数千年蜂蜜罐（多源确认：图坦卡蒙墓器皿蜂蜜残留、格鲁吉亚约5500年前蜂蜜残留，文章表述与证据强度相符）；②含水量约19%嗜渗酵母发酵阈值（FAO 与蜂蜜化学资料一致：超过 19% 几乎必然发酵，文中带'约'字准确）；③'1913年金字塔蜂蜜'实为泡碱（上海辟谣平台与 Theodore M. Davis 1907 年原始记录一致：检出为泡碱即木乃伊防腐剂，讹传以 1913 年 National Geographic 流传——文章在反转段揭露讹传，与证据一致，属有意的写作决策）。结构验证：A段引用块、Q1/Q2/Q3 格式、F段'冷知识反转'引用块、结尾四行表格均齐备，分类'生活常识'在 6 选 1 枚举内。开头'百年乌龙'悬念由 F 段揭晓，钩子闭环。机制归因主次清楚（低水分主因、酸与过氧化氢辅助防线，Q2 明确'辅助防线'）。",
+  "script_result": {
+    "exit_code": 0,
+    "score": 100,
+    "char_count": 594,
+    "p0_count": 0,
+    "p1_count": 0,
+    "p2_count": 0
+  },
+  "fact_checks": [
+    {
+      "claim": "古埃及墓葬里确实出土过数千年前的蜂蜜罐",
+      "source_verified": true,
+      "detail_verified": true,
+      "omission_severity": "minor",
+      "verdict": "match",
+      "note": "多源确认（scienceblog/spacedaily/terradaily 2026）：图坦卡蒙墓等埃及墓藏确有含蜂蜜的器皿出土，格鲁吉亚 Sakire 约5500年前墓葬有蜂蜜残留（花粉鉴定）；文章仅称'出土过蜂蜜罐'，未夸大为'考古学家尝过且可食用'，与证据强度相符"
+    },
+    {
+      "claim": "含水量一过约19%，原本休眠的嗜渗酵母就苏醒繁殖",
+      "source_verified": true,
+      "detail_verified": true,
+      "omission_severity": "minor",
+      "verdict": "match",
+      "note": "FAO《Value-added products from beekeeping》及蜂蜜化学资料：含水量超过约19%时即使酵母数极低也会发酵，17.1%以下一年内几乎不发酵；文中'一过约19%'带约字，准确"
+    },
+    {
+      "claim": "流传最广的'1913年金字塔挖出三千年蜂蜜'，经查证检测出来是泡碱",
+      "source_verified": true,
+      "detail_verified": true,
+      "omission_severity": "minor",
+      "verdict": "match",
+      "note": "上海辟谣平台（上观新闻）与 irna.fr 引 Theodore M. Davis《The tomb of Iouiya and Touiyou》原始记录一致：该罐初疑为蜂蜜，后经检测为泡碱（natron，木乃伊防腐剂）；讹传源自 1913 年 National Geographic 转述——文章在反转段揭露讹传而非复述讹传，属有意写作决策，不判事实错误"
+    }
+  ],
+  "quote_checks": [],
+  "mechanism_checks": [
+    {
+      "claim": "Q1：高渗透压把微生物体内水分抽干使其失活",
+      "direction_ok": true,
+      "elements_complete": true,
+      "note": "渗透压脱水方向正确；'全抽干/直接死掉'的绝对化程度见 P1，但机制方向与要素完整"
+    },
+    {
+      "claim": "Q2：葡萄糖氧化酶将葡萄糖转为葡萄糖酸和微量过氧化氢抑菌",
+      "direction_ok": true,
+      "elements_complete": true,
+      "note": "与权威源一致；酸（pH 3.2到4.5）与过氧化氢并列且标注'辅助防线'，主次清楚"
+    },
+    {
+      "claim": "Q3：吸潮后嗜渗酵母将糖变为酒精和二氧化碳，酒精再氧化为醋酸，发酸冒泡",
+      "direction_ok": true,
+      "elements_complete": true,
+      "note": "发酵因果链完整（糖→酒精+CO2→醋酸），与 FAO/资料一致"
+    }
+  ],
+  "attribution_checks": [
+    {
+      "claim": "蜂蜜耐存主因是低水分（高渗透压），酸与过氧化氢为辅助",
+      "is_primary_cause": true,
+      "note": "主辅权重标注正确：'关键在一个字：干'为主因，Q2/Q1 明确酸与过氧化氢为护盾/辅助防线"
+    },
+    {
+      "claim": "市售蜂蜜标保质期：法规要求必须标 + 防吸水发酵",
+      "is_primary_cause": true,
+      "note": "归因完整，与辟谣平台核查一致（食品安全法要求标注，实际风险是吸潮发酵）"
+    }
+  ],
+  "term_checks": [],
+  "gap_checks": [
+    {
+      "pattern_id": "G-01",
+      "triggered": true,
+      "checked": true,
+      "finding": "弱触发：A 段'担心早该长毛了'属轻度顾虑。结晶问题 A 段+F 段双重闭环（'结晶也不叫坏，温水一泡就回来'）；但 Q3'发酸冒泡'后未明说'不建议食用'，安全边界留半句 → P2"
+    },
+    {
+      "pattern_id": "G-02",
+      "triggered": true,
+      "checked": true,
+      "finding": "命中 1 处：Q1'把想安家的细菌体内水分全抽干，微生物直接脱水死掉'——全称绝对化，且与 Q3 嗜渗酵母休眠存活内部张力 → P1"
+    },
+    {
+      "pattern_id": "G-03",
+      "triggered": true,
+      "checked": true,
+      "finding": "定性断言逐条回权威源核对：泡碱讹传、19% 阈值、pH 3.2到4.5、葡萄糖氧化酶产过氧化氢均核验通过，无'听起来合理实则错误'项；唯一问题为 G-02 所记绝对化"
+    },
+    {
+      "pattern_id": "G-04",
+      "triggered": false,
+      "checked": true,
+      "finding": "三问机制因果链完整（干/酸/酶产H2O2、发酵两步链），未见跳步"
+    },
+    {
+      "pattern_id": "G-05",
+      "triggered": false,
+      "checked": true,
+      "finding": "术语（嗜渗酵母/葡萄糖氧化酶/泡碱/渗透压/葡萄糖结晶）用字精确，无引文转述，无医学解剖术语"
+    },
+    {
+      "pattern_id": "G-06",
+      "triggered": false,
+      "checked": true,
+      "finding": "文中无'研究表明/某年某机构'式具体研究引用，不存在来源细节未核对的触发点；三处事实断言已按 Step 5 独立核验"
+    },
+    {
+      "pattern_id": "G-07",
+      "triggered": true,
+      "checked": true,
+      "finding": "归因已含主因：低水分为主、酸与过氧化氢为辅且标注权重；保质期归因两条并列完整，无归因偏漏"
+    }
+  ],
+  "forbidden_violations": [],
+  "overall_comment": "优化版质量良好。删除'1913年金字塔蜂蜜没坏'原叙事并改为反转段揭露泡碱讹传，经核验与权威证据一致，是正确的写作决策。仅 1 处绝对化表述需软化（P1），2 处 P2 完善建议：数值衔接（17%到20% 与 19% 阈值的关系）与发酵后食用边界。P0=0、P1=1≤2，通过。"
+}

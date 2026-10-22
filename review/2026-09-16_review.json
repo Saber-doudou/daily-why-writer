@@ -1,0 +1,99 @@
+{
+  "article_id": "2026-09-16",
+  "review_timestamp": "2026-09-16T09:47:56+0800",
+  "pass": true,
+  "p0_count": 0,
+  "p1_count": 0,
+  "p2_count": 1,
+  "score": 93,
+  "script_result": {
+    "exit_code": 0,
+    "score": 93,
+    "char_count": 561,
+    "p0_count": 0,
+    "p1_count": 1,
+    "p2_count": 1
+  },
+  "issues": [
+    {
+      "level": "P2",
+      "category": "FP-06 / 段落机械感",
+      "location": "Q1/Q2/Q3 段",
+      "description": "Q1、Q2、Q3 三段正文字数偏差小于18字，呈现AI排版的典型均匀感（脚本亦标记此点）",
+      "suggestion": "可略调Q段详略或拆句，打破机械均匀感；属轻微排版瑕疵，非硬性缺陷"
+    }
+  ],
+  "fact_checks": [
+    {
+      "claim": "金星恒星日（自转一周）约243地球日，公转年约225地球日，243大于225，故'一天比一年长'（恒星日口径）成立",
+      "source_verified": true,
+      "detail_verified": true,
+      "omission_severity": "minor",
+      "verdict": "verified",
+      "note": "NASA Venus Fact Sheet 恒星日243.02天、公转224.70天；JAXA（243.02/224.7）、ESA（243.0185/224.7）、Wikipedia（243/224.7）一致确认。243大于224.7成立，恒星日口径下'日大于年'正确。"
+    },
+    {
+      "claim": "金星太阳日（日出到日出）约117地球日，因逆行自转被压缩至短于公转年（225天）",
+      "source_verified": true,
+      "detail_verified": true,
+      "omission_severity": "minor",
+      "verdict": "verified",
+      "note": "NASA给出连续日出间隔116.75天，约117天；逆行自转使太阳日（116.75天）既短于恒星日（243天）也短于公转年（225天），A段'日落到日落=117天'即完整太阳日，口径正确。"
+    },
+    {
+      "claim": "金星逆行自转（retrograde rotation），太阳从西边升起、东边落下",
+      "source_verified": true,
+      "detail_verified": true,
+      "omission_severity": "minor",
+      "verdict": "verified",
+      "note": "NASA/ESA/JAXA均确认金星自转方向与多数行星相反（顺时针），表面观测太阳西升东落。A段'太阳从西边爬上来'正确。"
+    },
+    {
+      "claim": "金星是太阳系里唯一自转比公转还慢的行星（自转周期大于公转周期）",
+      "source_verified": true,
+      "detail_verified": true,
+      "omission_severity": "minor",
+      "verdict": "verified",
+      "note": "八大行星中仅金星自转周期（243天）超过公转周期（225天）；其余行星自转均快于公转（如Mercury 58.6<88、地球1<365）。planetsforkids/NASA口径一致：'Venus is the only planet where a day is longer than a year'。"
+    }
+  ],
+  "quote_checks": [],
+  "mechanism_checks": [
+    {
+      "claim": "金星逆行自转使太阳日从恒星日243天被压缩到约117天",
+      "direction_ok": true,
+      "elements_complete": true,
+      "note": "逆行自转使行星自转方向与轨道运动相反，太阳回到同一天空位置更快（116.75天），方向自洽，关键因果要素（慢自转+逆行）齐备。"
+    },
+    {
+      "claim": "太阳西升东落由金星逆行自转导致",
+      "direction_ok": true,
+      "elements_complete": true,
+      "note": "逆行（顺时针）自转使表面观测者看到太阳自西向东的反向视运动，西升东落方向正确，无矛盾图景。"
+    }
+  ],
+  "attribution_checks": [
+    {
+      "claim": "'一天比一年长'归因于金星自转极慢（恒星日243大于年225）",
+      "is_primary_cause": true,
+      "note": "自转周期243天大于公转225天是直接且唯一主因，归因正确，无被略过的主因。"
+    },
+    {
+      "claim": "太阳西升东落归因于逆行自转",
+      "is_primary_cause": true,
+      "note": "逆行自转是西升东落的唯一主因，正确；归因完整。"
+    }
+  ],
+  "term_checks": [],
+  "gap_checks": [
+    { "pattern_id": "G-01", "triggered": false, "checked": true, "finding": "" },
+    { "pattern_id": "G-02", "triggered": false, "checked": true, "finding": "" },
+    { "pattern_id": "G-03", "triggered": false, "checked": true, "finding": "" },
+    { "pattern_id": "G-04", "triggered": false, "checked": true, "finding": "" },
+    { "pattern_id": "G-05", "triggered": false, "checked": true, "finding": "" },
+    { "pattern_id": "G-06", "triggered": false, "checked": true, "finding": "" },
+    { "pattern_id": "G-07", "triggered": false, "checked": true, "finding": "" }
+  ],
+  "forbidden_violations": [],
+  "overall_comment": "文章科学事实全部经WebSearch独立核实无误：恒星日243天、公转年225天、太阳日117天、逆行自转、太阳西升东落、'唯一自转慢于公转的行星'均获NASA/JAXA/ESA/Wikipedia权威源一致确认；结构四要素齐备（A段引用块、C段Q1/Q2/Q3格式、F段'冷知识反转'标签、结尾风格表格含话题/分类/核心机制/冷知识反转四字段），分类'宇宙探索'属6选1枚举内；无FORBIDDEN违规、无绝对化、无类比失准、全文561字小于690。脚本标记的'标题缺少emoji装饰'为误报（标题已含🪐表情）。唯一轻微瑕疵为Q段字数偏均匀（FP-06，P2）。综合判定：通过（P0=0 且 P1=0）。"
+}

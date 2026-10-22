@@ -1,0 +1,127 @@
+{
+  "article_id": "2026-09-21",
+  "review_timestamp": "2026-09-21T09:58:13+0800",
+  "pass": true,
+  "p0_count": 0,
+  "p1_count": 0,
+  "p2_count": 0,
+  "score": 100,
+  "script_result": {
+    "exit_code": 0,
+    "score": 100,
+    "char_count": 446,
+    "p0_count": 0,
+    "p1_count": 0,
+    "p2_count": 0,
+    "passed": true,
+    "note": "脚本未识别亲缘关系事实错误（已被本轮独立 WebSearch 复核确认修复），本次复核对第1轮唯一P0（弟弟→哥哥）已闭环"
+  },
+  "issues": [],
+  "fact_checks": [
+    {
+      "claim": "1855年就被开尔文的哥哥詹姆斯·汤姆森看穿（酒泪/马伦哥尼效应）",
+      "source_verified": true,
+      "detail_verified": true,
+      "verdict": "verified",
+      "note": "WebSearch 复核：James Thomson 确于1855年首次系统解释「酒泪」现象（Wikipedia: Marangoni effect / James Thomson (engineer) 一致确认）。第1轮「弟弟」已修复为「哥哥」——James Thomson（1822至1892）实为 Lord Kelvin（William Thomson，1824至1907）的兄长（年长2岁），亲缘关系与权威源一致，detail_verified=true。"
+    },
+    {
+      "claim": "1865年才由意大利人卡洛·马伦哥尼正式命名（帕维亚大学博士论文）",
+      "source_verified": true,
+      "detail_verified": true,
+      "verdict": "verified",
+      "note": "Wikipedia / 百度百科确认：Carlo Marangoni 1865 年毕业于帕维亚大学（Università di Pavia），博士论文《Sull'espansione delle gocce liquide》研究液滴铺展，效应以其姓氏命名。年份与机构均属实。"
+    },
+    {
+      "claim": "常温下纯水表面张力约73毫牛每米，沾了薄荷醇的水一下掉到约30毫牛每米",
+      "source_verified": true,
+      "detail_verified": true,
+      "verdict": "verified_approx",
+      "note": "纯水20°C表面张力约72.8 mN/m（≈73）已核实（NPTEL / EBSCO / Mech Codex）。表面活性剂（含牙膏清洁剂）可将水表面张力降至30至40 mN/m（Mech Codex）；薄荷醇本身表面张力约29.7 mN/m（百度百科 L-Menthol），整体量级与「表面活性剂降张力」机制一致，约30在合理区间，可信。"
+    }
+  ],
+  "quote_checks": [
+    {
+      "claim": "F段历史归因：「1855年就被开尔文的哥哥詹姆斯·汤姆森看穿，却到1865年才由意大利人卡洛·马伦哥尼正式命名」",
+      "verbatim_match": true,
+      "source": "Wikipedia: Marangoni effect；James Thomson (engineer)；百度百科 马兰戈尼效应",
+      "note": "年份1855、1865与帕维亚大学均属实；「哥哥」现已与权威源一致（第1轮「弟弟」误写已修复）。非逐字引文，按历史归因逐字核对处理，细节全部相符。"
+    }
+  ],
+  "mechanism_checks": [
+    {
+      "claim": "薄荷醇/表面活性剂降低局部表面张力，高张力清水把低张力水团拽走（马伦哥尼流）",
+      "direction_ok": true,
+      "elements_complete": true,
+      "note": "表面张力梯度驱动液体从低张力区流向高张力区，方向正确；Q2「橡皮膜」比喻准确表达张力差→流动，机制完整。"
+    },
+    {
+      "claim": "酒泪：酒精挥发后杯壁表面张力变高，把下方酒液往上拽",
+      "direction_ok": true,
+      "elements_complete": true,
+      "note": "酒精挥发→顶部表面张力升高→马伦哥尼流向上，与躲牙膏同源，机制自洽、无跳步。"
+    }
+  ],
+  "attribution_checks": [
+    {
+      "claim": "水躲开牙膏归因于牙膏里的薄荷醇降低表面张力",
+      "is_primary_cause": true,
+      "note": "机制归因正确：表面活性剂降低局部表面张力→马伦哥尼流是主因；点名「薄荷醇」为叙事载体（牙膏中另有清洁剂为主力表面活性剂），未误导主因，非归因偏漏。"
+    }
+  ],
+  "term_checks": [],
+  "gap_checks": [
+    {
+      "pattern_id": "G-01",
+      "triggered": false,
+      "checked": true,
+      "finding": "开头为好奇心钩子（水珠「挑三拣四」），无「不敢/怕/有毒吗/能不能吃」等顾虑或恐惧表述；话题为日常物理现象，非饮食/健康/用药/电器等不可逆后果领域，安全性闭环不适用。"
+    },
+    {
+      "pattern_id": "G-02",
+      "triggered": false,
+      "checked": true,
+      "finding": "全文扫描绝对词（不可能/全看/全都/一定/绝对/必然/永远/无非/彻底/保证）：无命中。Q3「不会」为对设问的正面回答，非绝对化断言。效果承诺类表述亦无。"
+    },
+    {
+      "pattern_id": "G-03",
+      "triggered": false,
+      "checked": true,
+      "finding": "第1轮命中的「弟弟」误写已修复为「哥哥」，与权威源一致（James Thomson 1822至1892 为 Lord Kelvin/William Thomson 1824至1907 之兄）。本轮复核亲缘关系、年份均正确，无看似合理的事实性错误。"
+    },
+    {
+      "pattern_id": "G-04",
+      "triggered": false,
+      "checked": true,
+      "finding": "机制讲解含「张力差→流动」核心环节，Q2橡皮膜比喻完整，酒泪段因果链闭合，无跳步缺失。"
+    },
+    {
+      "pattern_id": "G-05",
+      "triggered": false,
+      "checked": true,
+      "finding": "无古籍/论文逐字引文；「马伦哥尼效应」「表面张力」等术语用字准确；无医学/解剖学术语。「冷知识反转」及表格分类「物理化学」均在6选1枚举内。"
+    },
+    {
+      "pattern_id": "G-06",
+      "triggered": false,
+      "checked": true,
+      "finding": "所引历史断言（Thomson 1855 解释酒泪、Marangoni 1865 帕维亚大学命名）已回权威源逐字核对：年份、机构、命名事实及亲缘关系均属实，无「来源存在但细节未核」漏判。"
+    },
+    {
+      "pattern_id": "G-07",
+      "triggered": false,
+      "checked": true,
+      "finding": "归因「表面活性剂降张力→马伦哥尼流」为正确主因；点名薄荷醇属叙事简化而非隐瞒主因，未将次要原因伪装成主因，不构成归因偏漏。"
+    }
+  ],
+  "forbidden_violations": [],
+  "issue_responses": [
+    {
+      "issue_index": 0,
+      "status": "resolved",
+      "evidence": "第1轮 issues[0]（P0 事实错误：F段将詹姆斯·汤姆森误写为开尔文「弟弟」）已修复。修复版第15行现为「1855年就被开尔文的哥哥詹姆斯·汤姆森看穿」，亲缘关系与权威源一致：James Thomson（1822至1892）为 Lord Kelvin（William Thomson，1824至1907）之兄长，WebSearch 独立复核确认。上下文通顺，无新引入问题。"
+    }
+  ],
+  "overall_comment": "第2轮修复后复核通过。第1轮唯一P0（亲缘关系「弟弟」→「哥哥」）已正确修复并经 WebSearch 独立核实（James Thomson 实为开尔文之兄）。全篇其余事实断言（马伦哥尼1865帕维亚大学命名、纯水表面张力约73/薄荷醇约30毫牛每米）均证实无误；最小结构四要素齐全（A段引用块、C段Q1/Q2/Q3格式、F段「冷知识反转」标签、结尾四列风格表格）；无绝对化、无AI味、字数446远低于690上限、无 FP 违规、机制方向与完整度自洽。p0_count=0、p1_count=0，达到通过条件。",
+  "revised_after_review": true
+}

@@ -1,0 +1,128 @@
+{
+  "file": "F:/WorkBuddy/daily-why/articles/2026-08/2026-08-28-优化版-每日冷知识-云有多重.md",
+  "article_id": "2026-08-28",
+  "review_timestamp": "2026-09-15T12:06:11+0800",
+  "version": "v2优化版审校",
+  "score": 100,
+  "p0": 0,
+  "p1": 0,
+  "p2": 0,
+  "pass": true,
+  "verdict": "PASS",
+  "script_result": {
+    "exit_code": 0,
+    "passed": true,
+    "score": 100,
+    "char_count": 574,
+    "p0_count": 0,
+    "p1_count": 0,
+    "p2_count": 0,
+    "checks_passed": 12
+  },
+  "facts_checked": [
+    {
+      "claim": "每颗小水滴直径约0.02毫米，终端速度约每秒1厘米，比蜗牛还慢",
+      "source_verified": true,
+      "detail_verified": true,
+      "verdict": "match",
+      "note": "三源一致：ARM（arm.gov）明确云滴典型直径20微米、终端速度1厘米/秒；NWS 云发展教程给出云滴半径约20微米（0.02毫米）、平均终端沉降速度1.3厘米/秒；教科书物理推导（Stokes 区）20微米水滴极限速度0.01米/秒。文中'比蜗牛还慢'与'慢于花园蜗牛'的通行科普口径一致"
+    },
+    {
+      "claim": "一立方米云约0.5克水，同体积空气约1200克；积云长宽高各约一公里，体积10亿立方米，乘出约500吨",
+      "source_verified": true,
+      "detail_verified": true,
+      "verdict": "match",
+      "note": "USGS/Start with a Book（LeMone 教学材料）明确积云含水量0.5克/立方米、云近似边长1公里立方体、10亿立方米乘出约50万公斤（500吨）；海平面干空气密度约1.2至1.225公斤/立方米，文中'约1200克'成立"
+    },
+    {
+      "claim": "NCAR 科学家 Peggy LeMone 开车用里程表量云影宽度估算云重，打趣约100头大象",
+      "source_verified": true,
+      "detail_verified": true,
+      "verdict": "match",
+      "note": "Start with a Book 原文（What weighs more, a cloud or an elephant?）逐字确认：LeMone 开车沿云影边缘用里程表（odometer）量宽度、假设积云高与宽相等近似立方体；机构归属 NCAR（美国国家大气研究中心）正确；'100头大象'是 UCAR 科教口径（按5吨/头），另有信源按6吨/头给出83头，文中'约100头'与主流口径一致"
+    },
+    {
+      "claim": "长到约2毫米，直径只大了100倍，重量却重了100万倍",
+      "source_verified": true,
+      "detail_verified": true,
+      "verdict": "match",
+      "note": "NWS 原文：'A raindrop of diameter 2 mm contains the water equivalent of a million cloud droplets (0.02 mm diameter)'——直径比100倍、水量比100万倍逐字吻合，倍数自洽（100的立方=100万）"
+    },
+    {
+      "claim": "晴天积云寿命通常只有十几分钟，边缘不断蒸发、内部不断新生",
+      "source_verified": true,
+      "detail_verified": true,
+      "verdict": "match",
+      "note": "ScienceDirect（Cotton 等，International Geophysics 2011）：晴天积云单塔生命史以分钟计，cumulus humilis/mediocris 寿命10至30分钟；'十几分钟'落在区间内；边缘蒸发、内部新生的描述与'protuberances continually emerge... the tower evaporates completely'一致"
+    },
+    {
+      "claim": "约100头大象，或者3头蓝鲸",
+      "source_verified": true,
+      "detail_verified": true,
+      "verdict": "match",
+      "note": "成年非洲象约5至6吨（100头对应500至600吨量级）；蓝鲸约150吨（3头约450至500吨）。类比失准风险低，属合理量级类比（FP-22 参照物均标准化）"
+    }
+  ],
+  "facts_sources": [
+    "https://arm.gov/news/blog/post/18689（ARM：云滴20微米/终端速度1厘米每秒）",
+    "https://www.weather.gov/source/zhu/ZHU_Training_Page/clouds/cloud_development/clouds.htm（NWS：0.02毫米/1.3厘米每秒/2毫米雨滴=100万云滴水量）",
+    "https://www.startwithabook.org/sites/default/files/what-weighs-more-cloud-or-elephant.pdf（LeMone 里程表测云影原始教学材料）",
+    "https://en.meteorologiaenred.com/how-much-does-a-cloud-weigh.html（LeMone/NCAR/0.5克每立方米/大象类比）",
+    "https://scienceblog.com/sb-a-typical-cumulus-cloud-drifting-overhead-weighs-roughly-500-tonnes-about-the-same-as-100-elephants-suspended-in-the-air-and-stays-aloft-because-the-warmer-air-holding-it-up-is-slightly-less-dens/（500吨/100头大象/1.2公斤每立方米空气）",
+    "https://www.sciencedirect.com/topics/earth-and-planetary-sciences/cumulus-clouds（晴天积云生命史分钟级/10至30分钟）"
+  ],
+  "quote_checks": [
+    {
+      "claim": "Q2 转述 LeMone'开车时用里程表量出一朵云影子的宽度，按云近似立方体估出体积'",
+      "verbatim_match": true,
+      "source": "https://www.startwithabook.org/sites/default/files/what-weighs-more-cloud-or-elephant.pdf",
+      "note": "与原文步骤（沿影边缘记里程、积云高约等于宽）语义一致，无'埋/置'式语义漂移"
+    }
+  ],
+  "mechanism_checks": [
+    {
+      "claim": "Q3：水滴一直在下落，终端速度约每秒1厘米，被上升气流托住；长到2毫米后气流托不住，雨一颗颗落下",
+      "direction_ok": true,
+      "elements_complete": true,
+      "note": "因果链完整：终端速度慢（20微米Stokes区）→ 上升气流（米级每秒）远快于沉降 → 悬浮；碰撞增长至2毫米 → 终端速度骤增（NWS：2毫米雨滴水量为云滴100万倍）→ 气流托不住。无跳步，单图景自洽"
+    },
+    {
+      "claim": "F段：云不是'飘'在空气上，而是一边下坠一边被托回；边缘蒸发、内部新生",
+      "direction_ok": true,
+      "elements_complete": true,
+      "note": "与 Q3 机制同图景（下坠+托住），无 FP-69 式两套图景拼接；'蒸发/新生'循环与文献一致"
+    },
+    {
+      "claim": "Q1：云绝大部分是空气（0.5克水对比1200克空气）",
+      "direction_ok": true,
+      "elements_complete": true,
+      "note": "对比口径一致（均为每立方米），数值衔接逻辑清晰（CHECKLIST §68）"
+    }
+  ],
+  "attribution_checks": [
+    {
+      "claim": "云不下落归因于小水滴终端速度慢+上升气流托举",
+      "is_primary_cause": true,
+      "note": "USGS/NWS/UCAR 标准解释，主因正确；空气浮力/湿空气密度差为背景因素，科普合理省略（minor）"
+    },
+    {
+      "claim": "雨的形成归因于水滴碰撞增长到约2毫米",
+      "is_primary_cause": true,
+      "note": "NWS 碰撞-并合机制主因一致；冰晶过程（贝吉龙）属冷云机制，晴天暖积云语境下省略合理"
+    }
+  ],
+  "term_checks": [],
+  "gap_checks": [
+    { "pattern_id": "G-01", "triggered": false, "checked": true, "finding": "" },
+    { "pattern_id": "G-02", "triggered": false, "checked": true, "finding": "" },
+    { "pattern_id": "G-03", "triggered": true, "checked": true, "finding": "全文均为物理/气象定性+定量断言，已逐条回权威源核对：云滴0.02毫米/1厘米每秒、0.5克每立方米、500吨、100头大象/3头蓝鲸、2毫米=100万倍水量，全部与 NWS/ARM/USGS/ScienceDirect 一致，无比照放行项" },
+    { "pattern_id": "G-04", "triggered": true, "checked": true, "finding": "Q3 机制链（下落慢→气流托住→碰撞长大→托不住成雨）逐环齐全，无跳步；未命中要素缺失" },
+    { "pattern_id": "G-05", "triggered": true, "checked": true, "finding": "LeMone 里程表细节回原文核字一致；'终端速度'首次出现有上下文释义（一直在下落，只是约每秒1厘米）；无比照放行" },
+    { "pattern_id": "G-06", "triggered": true, "checked": true, "finding": "Q2 含人物+机构引用标记，已核到 Start with a Book 原文并逐项核对细节（里程表/云影/立方体假设/NCAR归属），非仅验证来源存在" },
+    { "pattern_id": "G-07", "triggered": false, "checked": true, "finding": "" }
+  ],
+  "forbidden_violations": [],
+  "notes": "① 脚本复核确认：100分、574字、P0/P1/P2全0、12项检查全过，与已知结果一致。② 全文口径574字，远低于690硬上限。③ CHECKLIST 重点项：数值一致性（'每秒1厘米'在Q3/F段/表格三处口径统一，§71通过）；开头钩子闭环（500吨悬念→Q1/Q2兑现，§13通过）；术语密度（每Q不超过2个，§19通过）；比喻一致性（棉花糖/电梯/大象，方向与画面自洽，§5通过）。④ FORBIDDEN FP-01至FP-72（FP-58缺，实71条）逐条扫描零命中：无套话开头、无AI排比、无绝对化（'大部分/通常/约'均留余地）、无'不是A而是B'式绝对否定（F段'不是飘在空气上'为针对常见误解的辟谣式表述且紧接正确图景，属FP-49允许的中间态）、无~与双破折号、分类'自然科学'在6选1枚举内。⑤ v1三处P0（重力表述/百万分之一指代/水汽）复核确认均已修复：'重量只有雨滴的百万分之一'已按NWS口径明确为水量当量比，'水汽'未复现，改用小水滴。⑥ 事实断言6组全部独立WebSearch核验（超过最低2处要求），detail_verified全true，无P0。⑦ 结论：P0=0且P1≤2，通过（PASS），可发布。",
+  "issues": [],
+  "overall_comment": "v2优化版质量优秀：三处v1硬伤修复到位，全部量化断言经多源独立核验一致，机制单图景自洽，结构完整（A段引用块/Q1至Q3格式/F段反转标签/四行表格/枚举内分类），574字全文口径合规。建议保持现状直接发布。"
+}

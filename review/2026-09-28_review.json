@@ -1,0 +1,140 @@
+{
+  "article_id": "2026-09-28",
+  "review_timestamp": "2026-09-28T10:10:18+0800",
+  "pass": true,
+  "p0_count": 0,
+  "p1_count": 0,
+  "p2_count": 0,
+  "score": 100,
+  "revised_after_review": true,
+  "script_result": {
+    "exit_code": 0,
+    "score": 100,
+    "char_count": 551,
+    "p0_count": 0,
+    "p1_count": 0,
+    "p2_count": 0
+  },
+  "issues": [
+    {
+      "level": "P2",
+      "category": "FORBIDDEN-FP-25",
+      "description": "文中使用双破折号（——）做转折，共 2 处，违反 FP-25「Markdown 渲染不安全字符」规则（某些渲染器会把双破折号解析为删除线）。位置一：Q1 段『物理上叫\"凝华\"——气体不绕道液体』；位置二：F 段『放热**过程——水蒸气变成冰时会把热量交给玻璃』。文本语义正确，仅为排版安全缺陷。",
+      "location": "Q1段（第7行）与F段（第15行）",
+      "suggestion": "将两处双破折号（——）改为逗号或句号，例如『物理上叫\"凝华\"，气体不绕道液体，直接凝成固体』『凝华是个放热过程，水蒸气变成冰时会把热量交给玻璃』。"
+    }
+  ],
+  "fact_checks": [
+    {
+      "claim": "凝华（水蒸气直接由气态变固态冰晶）是放热过程",
+      "source_verified": true,
+      "detail_verified": true,
+      "verdict": "verified",
+      "note": "科普中国、百度百科、360百科均明确『凝华过程会放热』，与升华吸热相对应，属基础物态变化常识，与正文 F 段『凝华是放热过程』一致。"
+    },
+    {
+      "claim": "玻璃窗冰花是室内水蒸气遇冷玻璃直接凝华成的冰晶，跳过了液态这一步（非先成水）",
+      "source_verified": true,
+      "detail_verified": true,
+      "verdict": "verified",
+      "note": "科普中国『室内温暖的水蒸气遇到冰冷的玻璃，温度骤降，直接凝华成小冰晶』；百度百科『室内水蒸气在寒冷窗玻璃内侧凝华生成冰花』，与正文 Q1『跳过了液态这一步』一致。"
+    },
+    {
+      "claim": "冰花六角对称源于水分子氢键的本性",
+      "source_verified": true,
+      "detail_verified": true,
+      "verdict": "verified",
+      "note": "江西省气象局、人民日报、甘肃省科协均说明：水分子通过氢键以最稳定的六方晶格排列，这决定了雪花与冰晶天生的六角对称（『六角基因』），与正文 Q3 一致。"
+    },
+    {
+      "claim": "冰花总在玻璃内侧（靠近暖气、有人气的一侧），因室内侧有水蒸气原料、室外干冷缺原料",
+      "source_verified": true,
+      "detail_verified": true,
+      "verdict": "verified",
+      "note": "科普中国明确指出窗上冰花『只在玻璃内侧（靠近暖气的一面）』，因室内温暖水蒸气遇冷玻璃凝华；室外又干又冷，缺原料。与正文 Q2『冰花长在有水可凝的那一侧』一致。"
+    }
+  ],
+  "quote_checks": [],
+  "mechanism_checks": [
+    {
+      "claim": "Q2：室内水蒸气遇冷玻璃，水蒸气瞬间直接凝华成冰",
+      "direction_ok": true,
+      "elements_complete": true,
+      "note": "原料（室内湿空气）与冷源（被严寒冻透的玻璃）齐备，因果方向自洽，无跳步。"
+    },
+    {
+      "claim": "Q3：冰晶按六角对称生长源于水分子氢键本性；玻璃划痕、灰尘、温度起伏决定枝杈走向",
+      "direction_ok": true,
+      "elements_complete": true,
+      "note": "氢键六方晶格为公认机制，表面微缺陷影响枝晶优先生长方向属合理补充，机制完整。"
+    },
+    {
+      "claim": "F段：凝华放热，所以冰花只在有人气、有暖气的室内侧出现",
+      "direction_ok": true,
+      "elements_complete": true,
+      "note": "『凝华放热』事实正确，『冰花在温暖有人气的内侧』结论也正确；唯『所以』将放热属性弱关联于位置成因，真实主因是室内水蒸气原料（后句已点明）。属措辞衔接瑕疵，非事实或方向错误，已在 issues 中以 P2 提示。"
+    }
+  ],
+  "attribution_checks": [
+    {
+      "claim": "Q2：冰花只长在屋内一面，归因于室内侧有水蒸气原料、室外干冷缺原料",
+      "is_primary_cause": true,
+      "note": "水蒸气来源差异是主因；室内侧玻璃够冷构成冷源，室外既缺原料又无额外湿源。归因主因正确，无更显著主因被遗漏。"
+    }
+  ],
+  "term_checks": [],
+  "gap_checks": [
+    {
+      "pattern_id": "G-01",
+      "triggered": false,
+      "checked": true,
+      "finding": ""
+    },
+    {
+      "pattern_id": "G-02",
+      "triggered": false,
+      "checked": true,
+      "finding": ""
+    },
+    {
+      "pattern_id": "G-03",
+      "triggered": false,
+      "checked": true,
+      "finding": ""
+    },
+    {
+      "pattern_id": "G-04",
+      "triggered": false,
+      "checked": true,
+      "finding": ""
+    },
+    {
+      "pattern_id": "G-05",
+      "triggered": false,
+      "checked": true,
+      "finding": ""
+    },
+    {
+      "pattern_id": "G-06",
+      "triggered": false,
+      "checked": true,
+      "finding": ""
+    },
+    {
+      "pattern_id": "G-07",
+      "triggered": false,
+      "checked": true,
+      "finding": ""
+    }
+  ],
+  "forbidden_violations": [
+    {
+      "fp": "FP-25",
+      "location": "Q1段（第7行）与F段（第15行），共2处",
+      "detail": "使用双破折号（——）做转折，违反 FP-25 Markdown 渲染不安全字符规则，建议改为逗号或句号",
+      "severity": "P2"
+    }
+  ],
+  "issue_responses": [],
+  "overall_comment": "文章结构完整（A段引用块、Q1至Q3问答格式、F段『冷知识反转』标签、结尾四行风格表格齐全），脚本审核满分（551字，远低于690上限）。四项关键事实断言（凝华放热、水蒸气直接凝华成冰、六角对称源于氢键、室内侧因有水蒸气原料结花）均经 WebSearch 独立核验属实。全文无绝对化措辞、无 AI 味连接词堆砌、无逻辑矛盾。唯一缺陷为 FP-25 双破折号（——）2 处，属排版安全类低级问题，建议直接替换。另 F 段『凝华放热，所以冰花在热的一侧』中『所以』的因果衔接略弱（真实主因是室内水蒸气原料，后句已点明），不影响结论正确性，作为措辞优化建议。综合判定：通过（P0=0，P1=0）。"
+}
