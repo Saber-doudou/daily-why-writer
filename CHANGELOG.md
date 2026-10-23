@@ -4,6 +4,29 @@
 
 ---
 
+## v5.3 — 2026-10-23 标题主体口径核对全链防线落地（reviewer_prompt v3.0 + CHECKLIST §128 + validate_review v1.2，缺陷 #66）
+
+**来源**：Master 人工终审抓出 P0——10-23 介形虫稿件标题「为什么有的生物，把繁衍技能点满，反而灭绝了？」被读成「介形虫类群灭绝了」，与正文「现生的只有约 1.3 万种」正面矛盾。v1、v2 两版稿件、四家 AI 投喂、三轮独立审校**全链漏判**（均盯着「因果软化」，无人核对「谁灭绝了」）。Master 二轮反馈「物种也不对吧 应该是某些分支吧」「标题一直都是一种痛 我想修无从下手」→ 授权系统性修复。
+
+**根因（结构性盲区，非粗心）**：审校 6 维度（fact/mechanism/attribution/quote/term/gap）核的全是「数字与来源对不对」，**没有一项核「标题主体与正文事实范围是否一致」**——v2 审校甚至 verified 了「现存约 1.3 万种」，却没有检查项把这条知识与标题对照。**事实核对 ≠ 范围核对**。与 #59/#60/§124 同构：约束没接到审校输入链 = 没有防线。
+
+**查证（论文原文，不停在二手转述）**：WebFetch Nature 2018 论文页（Martins et al., "High male sexual investment as a driver of extinction in fossil ostracods"）——摘要原文 "to test how sexual selection relates to **actual species extinction**. We show that **species** with more pronounced sexual dimorphism... had estimated **extinction rates** that were **ten times higher**..."，**分析单位确认为物种**（Master 猜的「分支」反而不是论文单位）；史密森尼通稿/科普中国/文汇网全部同口径。
+
+**稿件修复（两轮，maker-checker 独立复验各一轮）**：① v2「有的物种，把繁衍技能点满，反而绝了后？」修掉方向一（类群灭绝误读）但踩方向二（无限定泛称=过度外推，论文只研究 93 种白垩纪介形虫、正文自书「别急着套到孔雀或海象头上」）；② 终版「**为什么有的介形虫**，把繁衍技能点满，反而绝了后？」主体圈定到介形虫 + 单位保持物种级 + 「绝了后」语义上不可能用于现存类群 + 符合房体风格（近期标题全部点名主体）。表格「话题」字段同步。两轮独立复验均判定修复成立、无新 P0/P1/P2，终稿 589 字/100 分。
+
+**机制修复（EXP-004 约束优于指令，四处全配机械校验）**：
+
+1. **`validate_article.py` 标题 tripwire**：H1 含消亡类断言（灭绝/绝迹/消失/绝了后/消亡/灭亡/绝种）且主体为无限定泛称（有的/某些/一些+物种/生物/动物/族群/类群）→ P2 提示三项核对（主体圈定/单位与论文一致/正文现状不矛盾）。三连测试：v1、v2 两个坏标题均被抓（98 分），终版干净放过（100 分）；**全量回归 231 篇历史文章仅命中当日 v1（真阳性），误报 0**。
+2. **`reviewer_prompt.md` v2.10 → v3.0**（按「每段永不超一位数、满十进位」规范进 minor）：新增 **Step 5.11 标题主体口径核对**——方向一（主体被缩小：标题断言对象灭绝而正文表明其现存）判 P0；方向二（主体被放大：无限定泛称主体）判 P1；单位纪律（物种≠分支≠类群≠个体，以论文摘要原文为准）；三项核对（主体圈定/单位与信源一致/断言强度≤正文可支撑范围）。强制留痕 `title_checks`（subject_scoped/unit_matches_source/scope_consistent_with_body/verdict/note，字段不得省略）；输出模板补字段示例；落盘自检清单增第 9 项（无条件强制）；审校流程小节标题「6 维度」→「多维核对」（Step 5.11 后已远超 6 项）。
+3. **`validate_review.py` v1.1 → v1.2**：① `title_checks` 键必须存在（10-23 起强制，历史仅警告——REQUIRED_ARRAYS 增加效日豁免机制，顺带修掉 term_checks 自 09-05 起无豁免的同类瑕疵）；② 条件非空——文章 H1 或表格「话题」字段含消亡类断言时 `title_checks` ≥1 条，空数组即 FAIL（标题来源优先 `--article` 正文，缺失退回 review JSON 内记录，两者皆无 fail-open 仅警告）；③ verdict 枚举 pass/fail + 与顶层 p0/p1 计数的矛盾警告。**8 个测试用例全过**：历史 10-22 仅警告、今日 review 缺键 FAIL、合规样本 PASS、verdict=fail 计数矛盾警告、字段缺失 FAIL、空数组+坏标题 FAIL、空数组无文章路径 fail-open、终版好标题 PASS。
+4. **CHECKLIST.md 新增 §128**（活跃区）：标题主体口径须与正文事实范围一致——两类错判定级别、单位纪律、三项核对、机械防线索引、10-23 案例全文、自检问题。
+
+**版本三口径对齐**：reviewer_prompt.md 头部 v3.0 + version.json（daily-why-reviewer-prompt v2.10→v3.0 + _note + _updated 2026-10-23）+ CHANGELOG 本条目。`deliverables/L2后检查-提示词.md` 版本表同步 v2.10→v3.0。deliverables 下 15 份历史发布报告按「历史不回改」保留 v2.10 记录。
+
+**沉淀**：defects.md #66（全文）、lessons.md 10-23 条、MEMORY.md §6 索引行（精简两行腾预算，2980/3000）。网上经验已调研并吸收：科普中国「九题法则」之甩题（悬念须与核心内容有直接科学关联）、腾讯「先成文后定题、题文互应」、KSJ 手册「标题必须与正文能支撑的范围一致」（vagus nerve 案例：标题过度承诺而正文逐段拆台，正确做法是换标题）、Duke「pique interest without lying」。
+
+---
+
 ## v5.2 — 2026-10-20 IMA 备份落位改造 + #60 知识库上传长期静默失败根治（L3 v3.25）
 
 **来源**：Master 指定——「dailywhy 的备份到 IMA 上要放进《workbuddy自动化备份》这个知识库首页，并且还要放到《history-today》这个笔记本里」。勘察中顺带挖出隐藏缺陷 #60。
