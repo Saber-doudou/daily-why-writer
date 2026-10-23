@@ -333,6 +333,34 @@ def validate_content_quality(content: str, result: ValidationResult):
                 f"第二个可改为「又如」「再如」或删除")
             break
 
+    # ── P2：标题消亡断言的主体口径 Tripwire（2026-10-23 介形虫 P0 后新增，defects #66）──
+    # 背景：v1 标题「为什么有的生物……灭绝了」被读成介形虫类群灭绝（P0，人工终审抓出）；
+    # v2 改「有的物种……绝了后」后主体仍无限定，读成「所有物种里的某些」，与论文仅研究
+    # 介形虫、正文自书「别急着套到孔雀或海象头上」矛盾（过度外推，Master 指出）。
+    # 两条病根共享同一机械特征：消亡断言挂在无限定泛称主体上。
+    # 本检查只做机械召回（P2 不阻断）：命中即提示三项人工核对，判定交给人/审校。
+    # 关键词硬编码于此（同 ANECDOTE_KWS 先例），不进 writing_rules.json 以免波及 skill 同源规则。
+    title_line = ""
+    for line in content.split("\n"):
+        stripped = line.strip()
+        if stripped.startswith("#"):
+            title_line = stripped.lstrip("#").strip()
+            break
+    TITLE_EXTINCTION_KWS = ["灭绝", "绝迹", "消失", "绝了后", "消亡", "灭亡", "绝种"]
+    # 「有的/某些/一些 + 至多2字修饰 + 泛称主体」；2 字类群名（鸟类/昆虫/鱼类）视为已圈定不命中
+    TITLE_GENERIC_SUBJECT_RE = r"(?:有的|某些|一些)[\u4e00-\u9fff]{0,2}(?:物种|生物|动物|族群|类群)"
+    if title_line and any(kw in title_line for kw in TITLE_EXTINCTION_KWS) \
+            and re.search(TITLE_GENERIC_SUBJECT_RE, title_line):
+        result.p2_error(
+            "标题消亡断言的主体是无限定泛称（如「有的物种」）——若正文研究对象是"
+            "特定类群，属过度外推；泛称主体也无法让读者预期文章讲什么。核对三项："
+            "①主体圈定到具体类群（如「有的介形虫」）②单位与研究论文一致"
+            "（物种≠分支≠类群≠个体）③正文该主体现状表述不与标题矛盾")
+        result.add_fix("P2", "标题主体未圈定",
+                       "把标题主体从无限定泛称改为正文研究的具体类群名，"
+                       "使消亡断言只覆盖该类群中的相关对象",
+                       "H1 标题")
+
 
 def validate_file(filepath: Path, strict: bool = False) -> ValidationResult:
     """验证单篇文章"""

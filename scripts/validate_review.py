@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-"""review.json schema 机械校验器 —— 补上「强制输出物」缺失的执行校验（v1.1, 2026-09-18）
+"""review.json schema 机械校验器 —— 补上「强制输出物」缺失的执行校验（v1.2, 2026-10-23）
 
 背景（常驻缺陷 40 / SOP Step 8.5「09-04 头号结论」）：
     reviewer_prompt v2.6 把 Step 5/5.5/5.6/5.7 的「自查法」软指令改成了强制输出物
@@ -12,13 +12,17 @@
     橙皮书 EXP-004「约束优于指令」：prompt 写得再准，Reviewer 不执行也无人知晓。
     本脚本把「是否执行」变成可机械判定的事实。
 
-v1.1 2026-09-18  新增第 8 项校验「二轮 issue 闭环回应」（缺陷 P2-a，09-18 L2 后检查实证）：
-    校验对象为 *_v2_review.json 且同日 *_review.json 存在时，必须含 issue_responses 数组，
-    逐条回应 v1 issues（条数覆盖全部下标 + 每条含 issue_index/status/evidence，
-    status 枚举 resolved/partial/unresolved）。根因：L2 spawn 审校子 agent 的任务清单
-    从未传入 v1 review.json（输入链断裂，与缺陷 #59「工具有效但流程不调用」同构），
-    二轮审校拿不到一轮 issues 自然无从回应。生效日 2026-09-18（历史 v2 review 仅警告）；
-    同日 v1 review 不存在时 fail-open 跳过（仅警告，不阻断）。
+v1.2 2026-10-23  新增第 9 项校验「标题主体口径核对」（缺陷 #66，Master 人工终审抓出的 P0）：
+     ① `title_checks` 键必须存在（10-23 起强制，历史 review 仅警告），每条必填
+     subject_scoped/unit_matches_source/scope_consistent_with_body/verdict 四字段；
+     ② 条件非空——文章 H1 或结尾表格「话题」字段含消亡类断言（灭绝/绝迹/消失/消亡/
+     绝了后/灭亡/绝种）时，`title_checks` 至少 1 条，空数组即 FAIL；
+     ③ verdict 枚举 pass/fail。根因：10-23 介形虫稿件标题「为什么有的生物……反而
+     灭绝了？」被读成类群灭绝（正文「现生约1.3万种」），v1/v2/四家AI/三轮审校全链
+     漏判——6 维度审校核「数字与来源」，无一项核「标题主体与正文事实范围」。
+     配套：reviewer_prompt v3.0 Step 5.11 + validate_article.py 标题 tripwire。
+     标题来源：优先 --article 文章正文（H1 + 话题行），缺失时退回 review json 的
+     title_checks[].title；两者皆无 → fail-open 仅警告不阻断。
 
 用法：
     python validate_review.py review/2026-09-07_review.json
@@ -39,7 +43,20 @@ import re
 import sys
 from pathlib import Path
 
-VERSION = "v1.1"
+VERSION = "v1.2"
+
+# v1.2（10-23）新增：标题主体口径核对（title_checks）强制起始日
+TITLE_CHECK_ENFORCE_SINCE = "2026-10-23"
+
+# 消亡类断言关键词（命中即要求 title_checks 非空）——与 validate_article.py tripwire 同口径
+TITLE_EXT_KWS = ("灭绝", "绝迹", "消失", "绝了后", "消亡", "灭亡", "绝种")
+
+# title_checks 每条必填字段（reviewer_prompt v3.0 Step 5.11 强制留痕）
+TITLE_CHECK_FIELDS = ("subject_scoped", "unit_matches_source",
+                      "scope_consistent_with_body", "verdict")
+
+# title_checks.verdict 合法枚举
+TITLE_VERDICT_ENUM = ("pass", "fail")
 
 # v2.8（09-07 A 方案）新增：历史差距对照清单
 GAP_PATTERNS_FILE = Path(
@@ -53,13 +70,17 @@ ISSUE_RESPONSE_ENFORCE_SINCE = "2026-09-18"
 # issue_responses.status 合法枚举（wontfix 归 unresolved + evidence 说明）
 ISSUE_STATUS_ENUM = ("resolved", "partial", "unresolved")
 
-# v2.6 起要求的强制留痕数组
+# v2.6 起要求的强制留痕数组：键 -> (必填字段列表, 强制起始日)
+# 起始日之前的 review 缺失该键仅警告（历史文件不回改、不误杀）：
+# fact/mechanism/attribution/quote 自 v2.6（09-04）起、term_checks 自 v2.7（09-05）起、
+# title_checks 自 v1.2（10-23，缺陷 #66）起强制。
 REQUIRED_ARRAYS = {
-    "fact_checks": ["detail_verified"],
-    "mechanism_checks": ["direction_ok", "elements_complete"],
-    "attribution_checks": ["is_primary_cause"],
-    "quote_checks": ["verbatim_match"],
-    "term_checks": [],          # v2.7：无医学术语时允许空数组
+    "fact_checks": (["detail_verified"], "2026-09-04"),
+    "mechanism_checks": (["direction_ok", "elements_complete"], "2026-09-04"),
+    "attribution_checks": (["is_primary_cause"], "2026-09-04"),
+    "quote_checks": (["verbatim_match"], "2026-09-04"),
+    "term_checks": ([], "2026-09-05"),
+    "title_checks": (list(TITLE_CHECK_FIELDS), "2026-10-23"),
 }
 
 # 顶层必需字段（两种 schema 至少命中其一：v1 用 p0_count，v2 两者都有）
@@ -138,10 +159,16 @@ def validate(path: Path, article_path: Path | None = None) -> dict:
     else:
         stats["char_count"] = sr["char_count"]
 
-    # 3. 强制留痕数组：键必须存在
-    for arr, fields in REQUIRED_ARRAYS.items():
+    # 3. 强制留痕数组：键必须存在（各数组有强制起始日，之前缺失仅警告，历史不回改）
+    m_arr = re.search(r"(\d{4}-\d{2}-\d{2})", path.name)
+    date_in_name = m_arr.group(1) if m_arr else ""
+    for arr, (fields, since) in REQUIRED_ARRAYS.items():
         if arr not in data:
-            errors.append(f"缺少强制输出物 `{arr}`（键名不得省略）")
+            msg = f"缺少强制输出物 `{arr}`（键名不得省略）"
+            if date_in_name and date_in_name >= since:
+                errors.append(msg)
+            else:
+                warnings.append(f"{msg}（{arr} 强制起始日 {since}，本文件日期 {date_in_name or '未知'} 之前，仅警告）")
             continue
         val = data[arr]
         if not isinstance(val, list):
@@ -297,8 +324,77 @@ def validate(path: Path, article_path: Path | None = None) -> dict:
                                f"（共 {len(v1_issues)} 条，必须逐条回应，一条不能少）")
                         (errors if enforce_ir else warnings).append(msg)
 
+    # 9. 标题主体口径核对（v1.2，缺陷 #66）
+    #    键存在性已由 REQUIRED_ARRAYS 覆盖；此处补两项：
+    #    ① 条件非空——标题含消亡类断言时 title_checks 至少 1 条（空数组=没核对=FAIL）
+    #    ② verdict 枚举 pass/fail + 与顶层计数的矛盾提示
+    m_tc = re.search(r"(\d{4}-\d{2}-\d{2})", path.name)
+    enforce_tc = bool(m_tc and m_tc.group(1) >= TITLE_CHECK_ENFORCE_SINCE)
+    title_blob, title_src = _extract_title_blob(article_path, data)
+    has_ext_claim = bool(title_blob) and any(k in title_blob for k in TITLE_EXT_KWS)
+    tc = data.get("title_checks")
+    if isinstance(tc, list):
+        stats["title_checks"] = len(tc)
+        for i, item in enumerate(tc):
+            if not isinstance(item, dict):
+                continue
+            v = item.get("verdict")
+            if v not in TITLE_VERDICT_ENUM:
+                errors.append(
+                    f"`title_checks[{i}]` 的 `verdict` 非法（{v!r}），"
+                    f"须为 {'/'.join(TITLE_VERDICT_ENUM)}")
+        if has_ext_claim and not tc:
+            msg = (
+                f"标题含消亡类断言（{title_src}：{title_blob[:60]}…）但 `title_checks` 为空数组 "
+                "—— 按 reviewer_prompt v3.0 Step 5.11 必须逐项核对主体圈定/单位与信源一致/"
+                "断言强度≤正文可支撑范围并留痕（机械门禁，EXP-004 约束优于指令）"
+            )
+            (errors if enforce_tc else warnings).append(msg)
+            if enforce_tc:
+                blocking.append(msg)
+        if tc and any(
+            isinstance(it, dict) and it.get("verdict") == "fail" for it in tc
+        ) and data.get("p0_count", 0) == 0 and data.get("p1_count", 0) == 0:
+            warnings.append(
+                "`title_checks` 存在 verdict=fail 的条目，但顶层 p0_count/p1_count 均为 0 "
+                "—— 标题主体口径问题应计入 issues（方向一 P0 / 方向二 P1），请核对计数一致性"
+            )
+    elif has_ext_claim:
+        msg = (f"标题含消亡类断言（{title_src}）但 `title_checks` 缺失或非数组 "
+               "—— 按 reviewer_prompt v3.0 Step 5.11 必须留痕")
+        (errors if enforce_tc else warnings).append(msg)
+
     ok = not errors and not warnings
     return {"ok": ok, "errors": errors, "warnings": warnings, "stats": stats, "blocking": blocking}
+
+
+def _extract_title_blob(article_path: Path | None, data: dict) -> tuple[str, str]:
+    """提取标题文本用于消亡类断言检测。
+
+    来源优先级：① --article 文章正文的 H1（首个 # 开头的行）+ 结尾表格「话题」行；
+    ② review json 的 title_checks[].title。两者皆无返回 ("", "无")。
+    只取标题与话题字段，不扫正文——正文讲灭绝研究必然含「灭绝」二字，会误杀。
+    """
+    blob_parts = []
+    if article_path and Path(article_path).exists():
+        try:
+            for line in Path(article_path).read_text(encoding="utf-8").split("\n"):
+                s = line.strip()
+                if s.startswith("#") and not blob_parts:
+                    blob_parts.append(s.lstrip("#").strip())
+                elif s.startswith("|") and "话题" in s:
+                    blob_parts.append(s)
+        except OSError:
+            pass
+        if blob_parts:
+            return " ".join(blob_parts), "文章标题/话题字段"
+    tc = data.get("title_checks")
+    if isinstance(tc, list):
+        titles = [it.get("title", "") for it in tc
+                  if isinstance(it, dict) and it.get("title")]
+        if titles:
+            return " ".join(titles), "review title_checks[].title"
+    return "", "无"
 
 
 def count_gap_patterns() -> int:
