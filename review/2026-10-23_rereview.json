@@ -1,0 +1,145 @@
+{
+  "article_id": "2026-10-23",
+  "review_timestamp": "2026-10-23T10:10:24+0800",
+  "pass": true,
+  "p0_count": 0,
+  "p1_count": 0,
+  "p2_count": 2,
+  "score": 98,
+  "script_result": {
+    "exit_code": 0,
+    "score": 98,
+    "char_count": 583,
+    "p0_count": 0,
+    "p1_count": 0,
+    "p2_count": 1
+  },
+  "issues": [
+    {
+      "level": "P2",
+      "category": "FORBIDDEN-FP-06/脚本P2",
+      "description": "段落长度过于均匀：Q1/Q2/Q3 三问正文（不含 Q 标题）字数偏差小于 19 字，呈现 AI 排版均匀感（脚本已标记 P2）。",
+      "location": "Q1/Q2/Q3 段",
+      "suggestion": "适度拉开三问长度或句式差异（如某一问拆成两短句或补一句具象例子），弱化机械感。"
+    },
+    {
+      "level": "P2",
+      "category": "CHECKLIST-§17/FP-05",
+      "description": "F段冷知识反转与 Q3 在『短期利好个体、长期拖垮适应力』上表述重叠：F段『性选择让雄性介形虫长出夸张的生殖器，短期利好个体，长期拖垮了整个物种的适应力』基本是 Q3『短期看……环境一变……扛不住』的换述。反转角度（繁衍的武器也能变成灭绝的推手）成立，但信息增量偏弱。",
+      "location": "F段",
+      "suggestion": "F段补入 Q3 未覆盖的新信息，如『精子竞争/繁衍军备竞赛』框架，或该研究的保护生物学启示（保护风险评估应将性选择纳入考量），拉开与 Q3 的区分度。"
+    }
+  ],
+  "fact_checks": [
+    {
+      "claim": "史密森尼学会 Hunt 与 Martins 团队 Nature 2018 介形虫性选择导致灭绝研究（93 种 / 6000 多枚化石 / 白垩纪晚期约 6500 万到 8500 万年前 / 约 10 倍灭绝速率）",
+      "source_verified": true,
+      "detail_verified": true,
+      "omission_severity": "minor",
+      "verdict": "verified",
+      "note": "史密森尼官方通稿（2018-04-11）与 Nature 论文『High male sexual investment as a driver of extinction in fossil ostracods』（Martins, Puckett, Lockwood, Swaddle, Hunt；Nature；DOI 10.1038/s41586-018-0020-7；PMID 29643505）一致：93 种、6000 多枚个体、白垩纪晚期约 8500 万至 6500 万年前、性别差异最大者灭绝率约为最小者的 10 倍。"
+    },
+    {
+      "claim": "介形虫已在地球活近 5 亿年、现存约 7 万种、雄性生殖器占壳约 1/3、精子展开约 6 倍体长",
+      "source_verified": true,
+      "detail_verified": true,
+      "omission_severity": "minor",
+      "verdict": "verified",
+      "note": "史密森尼通稿『nearly 500 million years』对应『近 5 亿年』；The Atlantic（Ed Yong）及 DailyPress 等多源确认现存约 7 万种、部分物种生殖装备占壳约 1/3、精子展开约 6 倍体长。这些为同种生物学事实，非 Hunt 2018 灭绝研究本身，文中未将其误归因给该研究。"
+    },
+    {
+      "claim": "性别差异最大的物种平均存活约 160 万年，最小的约 1550 万年，差出近 10 倍",
+      "source_verified": true,
+      "detail_verified": true,
+      "omission_severity": "minor",
+      "verdict": "verified",
+      "note": "该寿命数值见于对 Hunt 与 Martins 2018 研究的科普二级转述，与『约 10 倍灭绝速率』结论自洽；属研究衍生数据，科普转述可接受，未发现事实性错误。"
+    }
+  ],
+  "quote_checks": [
+    {
+      "claim": "文中对研究的转述：『史密森尼学会的亨特与马丁斯团队，翻检白垩纪晚期约 6500 万到 8500 万年前 93 种介形虫、6000 多枚化石个体……灭绝速度快了约 10 倍』",
+      "verbatim_match": true,
+      "source": "Smithsonian newsdesk (2018-04-11) + Nature 2018 DOI 10.1038/s41586-018-0020-7",
+      "note": "研究者姓名（Gene Hunt / Maria João Fernandes Martins）、机构（Smithsonian NMNH）、年份（2018）、期刊（Nature）、样本数（93 种 / 6000 多枚个体）、时段（白垩纪晚期约 8500 万至 6500 万年前）、结论（约 10 倍灭绝速率）均与原文一致，逐字/逐数核对无误。"
+    }
+  ],
+  "mechanism_checks": [
+    {
+      "claim": "Q3 能量分配机制：大生殖器 / 多精子 → 精力投入繁衍军备 → 环境变化 → 可调动生存资源变少 → 最先扛不住",
+      "direction_ok": true,
+      "elements_complete": true,
+      "note": "因果方向自洽；性选择 → 生殖高投入 → 生存资源被挤占 → 环境变化时适应力下降 → 灭绝风险升高，链条完整，与该研究提出的能量权衡假说一致，无方向矛盾或环节缺失。"
+    }
+  ],
+  "attribution_checks": [
+    {
+      "claim": "Q3 将灭绝风险归因于『繁衍军备挤占应对环境变化的能量』（性选择导致的雄性生殖高投入）",
+      "is_primary_cause": true,
+      "note": "与该研究核心结论一致（高雄性生殖投入为灭绝风险的主要驱动）；文中已用『这只是一项研究，别直接套到海象或孔雀身上』做了限定，未过度外推至其他物种。"
+    }
+  ],
+  "term_checks": [
+    {
+      "term": "介形虫",
+      "used": "介形虫",
+      "correct": "介形虫",
+      "exact": true,
+      "note": "『介形虫』为该类甲壳动物的标准中文名（亦称种子虾），文中使用正确，无错字或错称。"
+    },
+    {
+      "term": "甲壳动物",
+      "used": "甲壳动物",
+      "correct": "甲壳动物",
+      "exact": true,
+      "note": "介形虫属甲壳动物纲，归类与用字均正确。"
+    }
+  ],
+  "gap_checks": [
+    {
+      "pattern_id": "G-01",
+      "triggered": false,
+      "checked": true,
+      "finding": ""
+    },
+    {
+      "pattern_id": "G-02",
+      "triggered": false,
+      "checked": true,
+      "finding": ""
+    },
+    {
+      "pattern_id": "G-03",
+      "triggered": true,
+      "checked": true,
+      "finding": "触发（生物定性描述）：经 WebSearch 核实介形虫各关键断言（近 5 亿年 / 约 7 万种 / 生殖器占壳约 1/3 / 精子展开约 6 倍体长 / 约 10 倍灭绝速率 / 约 160 万年 vs 1550 万年）均与史密森尼官方通稿及 Nature 论文（10.1038/s41586-018-0020-7）一致，无看似合理实则有误的表述，未标记 P1。"
+    },
+    {
+      "pattern_id": "G-04",
+      "triggered": false,
+      "checked": true,
+      "finding": ""
+    },
+    {
+      "pattern_id": "G-05",
+      "triggered": false,
+      "checked": true,
+      "finding": ""
+    },
+    {
+      "pattern_id": "G-06",
+      "triggered": true,
+      "checked": true,
+      "finding": "引用 Hunt 与 Martins 团队研究（93 种 / 6000 多枚化石 / 白垩纪晚期约 6500 万到 8500 万年前 / 约 10 倍灭绝速率）：经 WebSearch 核实来源（史密森尼官方通稿 + Nature 论文 PMID 29643505）存在且细节（研究者、机构、年份、期刊、样本数、时段、结论）逐字一致，未标记 P1。"
+    },
+    {
+      "pattern_id": "G-07",
+      "triggered": false,
+      "checked": true,
+      "finding": ""
+    }
+  ],
+  "issue_responses": [],
+  "forbidden_violations": [],
+  "overall_comment": "全文事实断言经 WebSearch 与史密森尼官方通稿及 Nature 论文（PMID 29643505）逐项核实一致，无事实错误。结构四要素齐备：A 段引用块（> 开头）、C 段 Q 格式（**Q1/Q2/Q3：**）、F 段引用块含『冷知识反转』标签、结尾风格表格为 2 行乘以 4 列（符合 CHECKLIST §124 的 L1 标准，分类『动物世界』属 6 选 1 枚举）。无禁止字符（~ 与 —— 经 Grep 回读确认零命中），无 AI 味连接词堆砌（首先/其次/然后等经 Grep 零命中），无绝对化表述（不可能/全看/永远等经 Grep 零命中），字数 583 未超 690。P2 两项为排版均匀与 F 段/Q3 区分度，均不影响通过。注：步骤 Step 6 所述『结尾风格表格（四行）』与权威 CHECKLIST §124 的『2 行乘以 4 列』表述不一致，以 CHECKLIST §124 的 2 乘以 4 为准，文章已满足，故不判 P0。"
+}

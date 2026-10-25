@@ -5,6 +5,7 @@
 > 交接对象：接手 dailywhy 优化实施的工程师
 > 决策人：Master（内容口味、发布授权、决策变更）
 > 执行人：接手工程师（按达尔文循环实施、验收、回滚）
+> 执行裁决：`deliverables/2026-10-23-dailywhy优化执行-裁决书.md`（22 条问题与修订口径；与本文冲突时以裁决书为准）
 > 先读本文，再按第 1 节「文档地图」顺序读
 
 ---
@@ -181,6 +182,9 @@ C:/Users/admin/.workbuddy/binaries/python/versions/3.13.12/python.exe scripts/va
 6. **版本号多口径漂移**。改版本号必须三处对齐：`config/version.json`、SKILL 标题/页脚、脚本 `VERSION`。
 7. **文风标签不要用单一 AI 偏好当标准**。以人工 A/B 为准；AI 只做辅助，不做 ground truth。
 8. **规则越加越多不等于越好**。新规则必须有历史反例 + 正确写法 + 可脚本判定的触发条件；否则不进规则库。
+9. **主工作区就是生产**：09:40 直接读工作区，分支不隔离；R2 起用 `git worktree` 影子工作区 `F:/WorkBuddy/daily-why-opt`。
+10. **技能目录 git 历史停在 08-04**：SKILL/references 回滚用文件级快照，不用 `git revert`。
+11. **manifest 零存量、历史 review 字段有缺口**：按裁决书 A1/A2 版本分流处理，不改历史文件。
 
 ---
 

@@ -1,0 +1,208 @@
+{
+  "article": "F:/WorkBuddy/daily-why/articles/2026-10/2026-10-23-优化版-每日冷知识-介形虫灭绝.md",
+  "article_id": "2026-10-23",
+  "review_timestamp": "2026-10-23T11:30:11+0800",
+  "pass": true,
+  "passed": true,
+  "p0_count": 0,
+  "p1_count": 1,
+  "p2_count": 1,
+  "score": 96,
+  "script_result": {
+    "exit_code": 0,
+    "score": 100,
+    "char_count": 585,
+    "p0": 0,
+    "p1": 0,
+    "p2": 0,
+    "p0_count": 0,
+    "p1_count": 0,
+    "p2_count": 0,
+    "passed": true
+  },
+  "p0_issues": [],
+  "p1_issues": [
+    {
+      "level": "P1",
+      "category": "FORBIDDEN-FP-25",
+      "description": "Q3 段（第 11 行）使用双破折号'——'做转折：'个体赢在当下，物种可能输掉未来——把资源都押给繁衍'。FORBIDDEN FP-25 明确禁止'——'（某些 Markdown 渲染器会将其解析为删除线，要求转折用逗号或句号）。经 Grep 回读确认全文'——'仅此 1 处；一轮审校报告记载 v1 初版该字符零命中，系 v2 优化时新引入，发布前必须清除。",
+      "location": "Q3 段（第 11 行）",
+      "suggestion": "将'——'改为逗号或句号，例如'个体赢在当下，物种可能输掉未来。把资源都押给繁衍，应对环境变化的余量就薄了'。"
+    }
+  ],
+  "p2_issues": [
+    {
+      "level": "P2",
+      "category": "CHECKLIST-§17/FP-05",
+      "description": "F 段冷知识反转三句（'求偶场上无往不利的大可能是整个物种的定时炸弹''繁衍的武器也可能是灭绝的推手''太会生有时也是一种负担'）均为 Q3'个体赢在当下，物种可能输掉未来'的同义换述，未补入一轮审校建议的新信息（精子竞争/繁衍军备竞赛框架或保护生物学启示），信息增量仍偏弱。v2 已将 F 段重写为金句式收束，字面重复度较 v1 下降，故维持 P2 不升级。",
+      "location": "F 段（第 15 行）",
+      "suggestion": "后续版本可补一句 Q3 未覆盖的新角度，如该研究对保护生物学的启示（评估物种灭绝风险时将性选择程度纳入考量），进一步拉开与 Q3 的区分度。"
+    }
+  ],
+  "issues": [
+    {
+      "level": "P1",
+      "category": "FORBIDDEN-FP-25",
+      "description": "Q3 段（第 11 行）使用双破折号'——'做转折：'个体赢在当下，物种可能输掉未来——把资源都押给繁衍'。FORBIDDEN FP-25 明确禁止'——'（某些 Markdown 渲染器会将其解析为删除线，要求转折用逗号或句号）。经 Grep 回读确认全文'——'仅此 1 处；一轮审校报告记载 v1 初版该字符零命中，系 v2 优化时新引入，发布前必须清除。",
+      "location": "Q3 段（第 11 行）",
+      "suggestion": "将'——'改为逗号或句号，例如'个体赢在当下，物种可能输掉未来。把资源都押给繁衍，应对环境变化的余量就薄了'。"
+    },
+    {
+      "level": "P2",
+      "category": "CHECKLIST-§17/FP-05",
+      "description": "F 段冷知识反转三句均为 Q3'个体赢在当下，物种可能输掉未来'的同义换述，未补入一轮审校建议的新信息（精子竞争/繁衍军备竞赛框架或保护生物学启示），信息增量仍偏弱；v2 已重写为金句式收束，字面重复度较 v1 下降，维持 P2 不升级。",
+      "location": "F 段（第 15 行）",
+      "suggestion": "后续版本可补一句 Q3 未覆盖的新角度，如该研究对保护生物学的启示（评估物种灭绝风险时将性选择程度纳入考量）。"
+    }
+  ],
+  "fact_checks": [
+    {
+      "claim": "2018 年 4 月《自然》史密森尼学会亨特与马丁斯团队研究：北美晚白垩世（约 6600 万至 8400 万年前）93 种介形虫、6000 多枚化石，两性差异最大的物种灭绝率最高可达差异最小物种的约 10 倍，前者平均约 160 万年、后者约 1550 万年",
+      "source_verified": true,
+      "detail_verified": true,
+      "omission_severity": "minor",
+      "verdict": "verified",
+      "note": "史密森尼官方通稿（newsdesk.si.edu，2018-04-11，SI-252-2018）与 Nature 论文『High male sexual investment as a driver of extinction in fossil ostracods』（Martins, Puckett, Lockwood, Swaddle, Hunt；DOI 10.1038/s41586-018-0020-7；PMID 29643505）确认：团队为 NMNH 古生物学家 Gene Hunt 与博士后 M. João Fernandes Martins 及 William & Mary、南密西西比大学合作者；2018 年 4 月 11 日发表于 Nature；93 种、测量逾 6000 个体；官方英文口径为 late Cretaceous『between about 85 and 65 million years ago』，文章的『约 6600 万至 8400 万年前』与新疆科技厅转述《自然》研究的中文权威口径一致（两端各差约 100 万年，有『约』字兜底，属约数差异，不构成事实错误）。10 倍口径见 William & Mary 官方新闻稿原文『went extinct at rates 10 times the species with the least investment in genital apparatus』；160 万年 vs 1550 万年见科普中国对同一研究的转述原文（『平均幸存时间只有 160 万年……平均时间有 1550 万年——近乎前者的 10 倍』）。"
+    },
+    {
+      "claim": "介形虫已描述的约 7 万种，现生的只有约 1.3 万种",
+      "source_verified": true,
+      "detail_verified": true,
+      "omission_severity": "minor",
+      "verdict": "verified",
+      "note": "英文 Wikipedia 主条目口径『Some 70,000 species (only 13,000 of which are extant) have been identified』，EOL 与 Mindat（引自 Wikipedia）同口径。文章的『已描述约 7 万种里现生约 1.3 万种』与权威口径一致。"
+    },
+    {
+      "claim": "某些种类雄性生殖装备最多占去壳体空间约三分之一，精子展开后最可达体长约 6 倍",
+      "source_verified": true,
+      "detail_verified": true,
+      "omission_severity": "minor",
+      "verdict": "verified",
+      "note": "William & Mary 新闻稿引 Rowan Lockwood 原话『If you were to take the sperm out of their sperm sack and line it up, it would be six times the length of the animal — a single sperm』；科普中国转述『精子展开后的长度，相当于自身体长的 6 倍。其中一些物种壳内三分之一的空间，都被生殖器官所占据』。文章对两个极值均加上限限定（『最多占去三分之一』『最可达约 6 倍』），比源头更保守，且符合 FP-50 极限值须标注前提的要求。"
+    },
+    {
+      "claim": "介形虫是活了近 5 亿年的微小甲壳动物类群；雄性壳通常更狭长以给生殖装备让位",
+      "source_verified": true,
+      "detail_verified": true,
+      "omission_severity": "minor",
+      "verdict": "verified",
+      "note": "史密森尼官方通稿原文『tiny crustaceans that have been on the planet for nearly 500 million years』；『An elongated shell shape accommodates the male's large sex organs——with larger organs presumably producing more sperm and improving individuals' opportunities for reproductive success』。A 段『像只缩成一团的小虾米』与通稿『shrimp-like creatures』及『种子虾』通称吻合；『罂粟籽那么大』与通稿『shells smaller than a poppy seed』一致。"
+    }
+  ],
+  "mechanism_checks": [
+    {
+      "claim": "Q3 能量分配机制：性选择使雄性个体把大量资源投入生殖装备（个体赢在当下），挤占了应对环境变化的资源余量，环境剧变时物种整体适应力不足、最先出局（物种输掉未来）",
+      "direction_ok": true,
+      "elements_complete": true,
+      "note": "因果方向自洽且链条完整：性选择（个体层面选择压力）→ 生殖高投入 → 生存资源被挤占 → 环境变化时适应力下降 → 灭绝风险升高。与 Nature 2018 论文标题结论（high male sexual investment as a driver of extinction）及亨特『energy animals devote to developing these traits may limit the resources they have available for survival』的表述一致；且 Q3 用『研究者推测』标注假说性质，无定论化问题。"
+    },
+    {
+      "claim": "Q1 机制：介形虫壳的两性差异保存在化石记录中，科学家能从化石反推几千万年前的繁衍投入",
+      "direction_ok": true,
+      "elements_complete": true,
+      "note": "史密森尼通稿确认：ostracods 是少数能从化石判定性别的类群（雄性壳形狭长、雌性壳形短宽），雄性壳形可直接反映生殖器官大小与生殖投入。文中无反推跳步。"
+    }
+  ],
+  "attribution_checks": [
+    {
+      "claim": "Q3 将灭绝风险归因于性选择导致的雄性生殖高投入挤占生存资源（能量分配账本）",
+      "is_primary_cause": true,
+      "note": "该归因即 Nature 2018 论文的核心结论（论文标题级论断），为主因而非配角；论文同时指出这是统计学关联而非唯一机制，文章已用『研究者推测』保留假说空间，并以『这只是一项针对介形虫的研究，别急着套到孔雀或海象头上』明确限定适用范围，未过度外推，无归因偏漏。"
+    }
+  ],
+  "quote_checks": [
+    {
+      "claim": "文中对 Nature 2018 研究的转述：『史密森尼学会的亨特与马丁斯团队翻检了北美晚白垩世（约 6600 万至 8400 万年前）的 93 种介形虫、6000 多枚化石：两性差异最大的物种，灭绝率最高可达差异最小物种的约 10 倍；前者平均只撑约 160 万年，后者活了约 1550 万年』",
+      "verbatim_match": true,
+      "source": "Smithsonian newsdesk SI-252-2018（2018-04-11）+ Nature 2018 DOI 10.1038/s41586-018-0020-7 + William & Mary 新闻稿 + 科普中国转述",
+      "note": "研究者姓名（Gene Hunt / M. João Fernandes Martins，中文译名亨特/马丁斯）、机构（史密森尼学会 NMNH）、年份（2018 年 4 月）、期刊（《自然》）、样本数（93 种 / 6000 多枚）、灭绝率口径（最大约为最小 10 倍）、寿命数据（约 160 万年 vs 约 1550 万年）均与原始通稿逐项一致。唯一细微差异为年代区间：官方英文 85 到 65 Ma，文章约 84 到 66 Ma，中文权威转述（新疆科技厅）与文章同口径，且有『约』字，不判引用失准。"
+    }
+  ],
+  "term_checks": [
+    {
+      "term": "介形虫",
+      "used": "介形虫",
+      "correct": "介形虫",
+      "exact": true,
+      "note": "ostracod 的标准中文名（又称种子虾），文中使用正确。"
+    },
+    {
+      "term": "甲壳动物",
+      "used": "甲壳动物",
+      "correct": "甲壳动物",
+      "exact": true,
+      "note": "介形虫属甲壳动物纲，归类与用字均正确（Q1『这种小甲壳动物』）。"
+    },
+    {
+      "term": "晚白垩世",
+      "used": "晚白垩世",
+      "correct": "晚白垩世",
+      "exact": true,
+      "note": "地质年代术语使用正确，85 到 65 Ma 属晚白垩世范围。"
+    }
+  ],
+  "gap_checks": [
+    {
+      "pattern_id": "G-01",
+      "triggered": false,
+      "checked": true,
+      "finding": ""
+    },
+    {
+      "pattern_id": "G-02",
+      "triggered": false,
+      "checked": true,
+      "finding": ""
+    },
+    {
+      "pattern_id": "G-03",
+      "triggered": true,
+      "checked": true,
+      "finding": "触发（生物定性描述与可核验量）：对近 5 亿年、已描述约 7 万种、现生约 1.3 万种、生殖装备占壳约三分之一、精子展开约 6 倍体长、灭绝率约 10 倍、约 160 万年 vs 约 1550 万年、93 种、6000 多枚化石逐项 WebSearch 回权威源（史密森尼官方通稿、Nature 论文、William & Mary 新闻稿、Wikipedia）核实，均一致，无看似合理实则有误的表述，未标记 P1。"
+    },
+    {
+      "pattern_id": "G-04",
+      "triggered": false,
+      "checked": true,
+      "finding": ""
+    },
+    {
+      "pattern_id": "G-05",
+      "triggered": true,
+      "checked": true,
+      "finding": "触发（论文转述 + 生物术语）：研究转述已按原始通稿逐项核对（见 quote_checks），语义无漂移；术语用字（介形虫/甲壳动物/晚白垩世）全部正确（见 term_checks），未标记 P1。"
+    },
+    {
+      "pattern_id": "G-06",
+      "triggered": true,
+      "checked": true,
+      "finding": "触发（引用具体研究）：已按本条核验要求核对受试对象（ostracods 化石）、样本规模（93 种 / 逾 6000 个体）、时段条件（晚白垩世 85 到 65 Ma 官方口径）、精确数值（约 10 倍灭绝率、约 160 万年 vs 约 1550 万年）与场景限定（仅适用于介形虫，不可外推孔雀/海象），来源存在且细节逐字一致，未标记 P1。"
+    },
+    {
+      "pattern_id": "G-07",
+      "triggered": false,
+      "checked": true,
+      "finding": ""
+    }
+  ],
+  "issue_responses": [
+    {
+      "issue_index": 0,
+      "status": "resolved",
+      "evidence": "v2 三问正文长度已拉开：实测 Q1 约 100 字、Q2 约 104 字、Q3 约 139 字，最大偏差约 39 字（一轮时偏差小于 19 字），AI 排版均匀感消除；validate_article.py v2 运行结果 p2 为空数组，脚本『段落长度过于均匀』P2 已清零。"
+    },
+    {
+      "issue_index": 1,
+      "status": "partial",
+      "evidence": "F 段已由机制陈述重写为金句式收束（第 15 行『繁衍的武器，也可能是灭绝的推手』），与 Q3 的字面重复度较一轮时下降；但一轮建议补入的新信息（精子竞争/繁衍军备竞赛框架、保护生物学启示）未采纳，『短期利好个体、长期拖累物种』的语义重叠仍在，v2 审校维持 P2（见 p2_issues），建议下一版处理。"
+    }
+  ],
+  "forbidden_violations": [
+    {
+      "pattern": "FP-25",
+      "detail": "第 11 行 Q3 段 1 处双破折号'——'做转折（Grep 回读确认全文仅此 1 处；单波形符、连接词首先/其次/然后/最后/此外/另外、绝对化词、HTML 实体均零命中）"
+    }
+  ],
+  "summary": "v2 优化版通过审校（P0=0，P1=1 不超过 2）。脚本校验满分（score=100，char_count=585，未超 690 全文口径硬上限），结构四要素齐备（A 段引用块、Q1/Q2/Q3 问答格式、F 段含冷知识反转标签的引用块、2 行乘 4 列结尾表格，分类『动物世界』在 6 选 1 枚举内），分隔线 2 处合规。全部关键事实断言经 WebSearch 独立核验与史密森尼官方通稿、Nature 2018 论文（DOI 10.1038/s41586-018-0020-7）、William & Mary 新闻稿及 Wikipedia 一致，无事实错误（P0=0）。发现 1 项 P1：Q3 段（第 11 行）使用 FORBIDDEN FP-25 禁止的双破折号'——'做转折，系 v2 优化新引入（v1 零命中），发布前须改为逗号或句号。1 项 P2：F 段与 Q3 信息重叠问题仅部分修复（措辞已重写、未补新信息）。一轮审校 2 条 issue：第 0 条（段落均匀）已解决，第 1 条（F 段/Q3 区分度）部分修复。",
+  "overall_comment": "事实层与结构层质量高：Nature 2018 研究的团队、年份、期刊、样本、时段、10 倍灭绝率、160 万年 vs 1550 万年，以及物种数（约 7 万已描述 / 约 1.3 万现生）、生殖装备占壳约三分之一、精子展开约 6 倍体长、近 5 亿年等断言均经多源独立核实无误；机制链（性选择→生殖高投入→资源挤占→环境剧变时适应力下降）方向自洽、要素完整，且以『研究者推测』和『别急着套到孔雀或海象头上』做了恰当的假说与适用范围限定。唯一 P1 为格式安全问题（第 11 行 1 处'——'，命中 FORBIDDEN FP-25），修改成本极低但不改不得发布；P2 为 F 段信息增量，可留待下一版。按通过条件 P0=0 且 P1 不超过 2，判定通过。"
+}
