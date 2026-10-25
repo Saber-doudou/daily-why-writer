@@ -1,0 +1,63 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "dailywhy/review.schema.json",
+  "title": "dailywhy review contract v1",
+  "description": "L1 Reviewer 的输出契约。19 个顶层字段全必填；数组内部结构不在此约束（只要求对象），避免把内部粒度写死。",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "article_id",
+    "review_timestamp",
+    "pass",
+    "p0_count",
+    "p1_count",
+    "p2_count",
+    "score",
+    "script_result",
+    "fact_checks",
+    "quote_checks",
+    "mechanism_checks",
+    "attribution_checks",
+    "term_checks",
+    "gap_checks",
+    "issues",
+    "issue_responses",
+    "forbidden_violations",
+    "overall_comment"
+  ],
+  "properties": {
+    "schema_version": { "type": "string", "enum": ["v1"] },
+    "article_id": { "type": "string", "minLength": 1 },
+    "review_timestamp": { "type": "string", "minLength": 10 },
+    "pass": { "type": "boolean" },
+    "p0_count": { "type": "integer", "minimum": 0 },
+    "p1_count": { "type": "integer", "minimum": 0 },
+    "p2_count": { "type": "integer", "minimum": 0 },
+    "score": { "type": "integer", "minimum": 0, "maximum": 100 },
+    "script_result": {
+      "type": "object",
+      "required": ["exit_code", "char_count"],
+      "properties": {
+        "exit_code": { "type": "integer" },
+        "char_count": { "type": "integer", "minimum": 0 },
+        "score": { "type": "integer" },
+        "p0_count": { "type": "integer" },
+        "p1_count": { "type": "integer" },
+        "p2_count": { "type": "integer" },
+        "errors": { "type": "array" },
+        "warnings": { "type": "array" },
+        "fix_suggestions": { "type": "array" }
+      }
+    },
+    "fact_checks": { "type": "array", "items": { "type": "object" } },
+    "quote_checks": { "type": "array", "items": { "type": "object" } },
+    "mechanism_checks": { "type": "array", "items": { "type": "object" } },
+    "attribution_checks": { "type": "array", "items": { "type": "object" } },
+    "term_checks": { "type": "array", "items": { "type": "object" } },
+    "gap_checks": { "type": "array", "items": { "type": "object" } },
+    "issues": { "type": "array", "items": { "type": "object" } },
+    "issue_responses": { "type": "array", "items": { "type": "object" } },
+    "forbidden_violations": { "type": "array", "items": { "type": "object" } },
+    "overall_comment": { "type": "string" }
+  }
+}

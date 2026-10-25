@@ -1,0 +1,43 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "dailywhy/evidence_card.schema.json",
+  "title": "dailywhy evidence card contract v1",
+  "description": "R3 证据卡的契约。机制 / 数字 / 归因三类 claim 必须有 url 与不少于 15 字的逐字引文，tertiary 来源不得单独支撑。",
+  "type": "object",
+  "required": ["schema_version", "topic", "claims", "banned_claims"],
+  "properties": {
+    "schema_version": { "type": "string", "enum": ["v1"] },
+    "topic": { "type": "string", "minLength": 1 },
+    "angle": { "type": "string" },
+    "claims": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["id", "text", "type", "source", "quote", "verified_by", "confidence"],
+        "properties": {
+          "id": { "type": "string", "pattern": "^C\\d+$" },
+          "text": { "type": "string", "minLength": 1 },
+          "type": { "type": "string", "enum": ["mechanism", "number", "attribution", "quote", "wording"] },
+          "source": {
+            "type": "object",
+            "required": ["title", "url", "source_level"],
+            "properties": {
+              "title": { "type": "string", "minLength": 1 },
+              "publisher": { "type": "string" },
+              "year": { "type": "string" },
+              "url": { "type": "string", "minLength": 8 },
+              "source_level": { "type": "string", "enum": ["primary", "secondary", "tertiary"] }
+            }
+          },
+          "quote": { "type": "string", "minLength": 15 },
+          "verified_by": { "type": "string", "enum": ["fetch", "snippet", "none"] },
+          "confidence": { "type": "string", "enum": ["high", "medium", "low", "unverified"] },
+          "counter_evidence": { "type": "array", "items": { "type": "string" } }
+        }
+      }
+    },
+    "open_questions": { "type": "array", "items": { "type": "string" } },
+    "banned_claims": { "type": "array", "items": { "type": "string" } }
+  }
+}
