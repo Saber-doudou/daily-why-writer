@@ -2,3 +2,4 @@
 2026-10-23T01:02	2332a8d	-	19/24	19/24	baseline	全盘自检	开工前现场快照：version.json JSON 非法 / 话题库 full40-compact50 漂移 / 素材池 6 条缺字段 / SKILL 含 FP-XX~XX / memory 提取 33<70	script_selfcheck
 2026-10-23T01:06	255983b	config/version.json	19/24	20/24	keep	全盘自检	baseline_repair：2026-10-22 引入的 6 处未转义英文引号致 JSON 非法，版本门禁静默失效（l3_publish:1623 仅 warn）。只加 6 个反斜杠，+6 字符，版本值与行尾未变	script_selfcheck_no_independent_review
 2026-10-23T01:12	2fdc384	scripts/prepare_topics.py	20/24	21/24	keep	双文件SSOT	--compact 写完即 return 致 full 冻结在 09-15（40条）而 compact 已 50 条；改为两模式同源写 full+compact，写后回读断言三项一致且顺序敏感（不一致 exit 1）。check_topic 命中来源已变 [topic_summaries]；dedup_selftest 21/21	independent_subagent
+2026-10-26T01:40	6648f6c	contracts/+validate_contract.py+l3_publish.py	21/24	21/24	keep	结构化契约	裁决书A1版本分流：review 77份100%分类(0 violation/9缺口只记)、学习总结90份(ok20/缺口70)、v1夹具11/11、负向5例全拦、review/零修改；新增publish_manifest与真实报告逐项对齐(note_id/commit/589字/10条，fixture=true留痕)；L3改进点JSON优先+回退warn。审校两轮keep，2个P0(键名/写入异常)已修	independent_subagent
