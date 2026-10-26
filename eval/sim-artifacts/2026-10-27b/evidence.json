@@ -1,0 +1,119 @@
+{
+  "schema_version": "v1",
+  "topic": "为什么猫喜欢钻进纸箱？",
+  "angle": "不是纸箱舒服，是猫要的是「有边界的一小块地方」——所以地上一圈胶带、四个吃豆人拼的错觉方块都能让它坐进去；纸箱只是顺手同时满足了减压、掩体和保暖三件事。",
+  "claims": [
+    {
+      "id": "C1",
+      "text": "乌得勒支大学 Vinke 团队把收容所新到的 19 只猫随机分成两组（10 只有藏身纸箱、9 只没有），按 Kessler-Turner 猫压力评分观察 14 天；第 3、4 天有箱组分数显著更低（p<0.01），第 14 天两组持平，但箱组第 3 天就已降到该水平",
+      "type": "number",
+      "source": {
+        "title": "Will a hiding box provide stress reduction for shelter cats?",
+        "publisher": "Applied Animal Behaviour Science 160: 86-93（AGRIS/FAO 书目记录，含作者原始摘要）",
+        "year": "2014",
+        "url": "https://agris.fao.org/search/en/providers/122535/records/65df369f4c5aef494fe0e1bc",
+        "source_level": "primary"
+      },
+      "quote": "Therefore, 19 newly arrived shelter cats were randomly divided into two groups, with (N=10) and without a hiding box (N=9). To determine the stress levels of recently admitted cats, behavioural observations were done during a 14-day period according to the Kessler and Turner Cat-Stress-Score (CSS).The main results of this study are, that: (1) a significant difference was found between groups in the mean CSS on observation day 3 and 4, whereby the hiding box group had a lower mean CSS (p<0.01); (2) the mean CSS of the hiding box group showed minimal variance, meaning that the hiding box had its effect on most experimental cats, whereas, high variance could be seen in the group without hiding boxes; (3) the mean CSS for both groups was equal at day 14, but this level of recovery was already reached around day 3 in the hiding box group.",
+      "verified_by": "fetch",
+      "confidence": "high",
+      "counter_evidence": []
+    },
+    {
+      "id": "C2",
+      "text": "该研究的结论是有藏身纸箱的猫在新环境里恢复更快，而非「纸箱让猫不紧张」这种一劳永逸的说法",
+      "type": "mechanism",
+      "source": {
+        "title": "Will a hiding box provide stress reduction for shelter cats?",
+        "publisher": "Applied Animal Behaviour Science 160: 86-93（AGRIS/FAO 书目记录）",
+        "year": "2014",
+        "url": "https://agris.fao.org/search/en/providers/122535/records/65df369f4c5aef494fe0e1bc",
+        "source_level": "primary"
+      },
+      "quote": "These findings suggest that cats provided with a hiding box were able to recover faster in their new environment compared to cats without a hiding box, as measured by the CCS.",
+      "verified_by": "fetch",
+      "confidence": "high",
+      "counter_evidence": [
+        "样本仅 19 只收容所猫、14 天，作者自己写明需要进一步研究家猫与长期效果"
+      ]
+    },
+    {
+      "id": "C3",
+      "text": "猫爱钻狭小空间有两个非正式解释：喜欢身体两侧被压住（像幼猫挤在同窝兄弟姐妹中间），以及作为伏击型捕食者天生想找能藏身的地方",
+      "type": "mechanism",
+      "source": {
+        "title": "Cats Take 'If I Fits I Sits' Seriously, Even If The Space Is Just An Illusion",
+        "publisher": "NPR（Nell Greenfieldboyce 报道，引研究者 Gabriella Smith）",
+        "year": "2021",
+        "url": "https://text.npr.org/994262792",
+        "source_level": "secondary"
+      },
+      "quote": "One is that cats crave a comforting pressure on their bodies that reminds them of when they were kittens, surrounded by their littermates. Another is that cats have an attraction to potential hiding spots because of the way they ambush prey while hunting.",
+      "verified_by": "fetch",
+      "confidence": "medium",
+      "counter_evidence": [
+        "报道原文明确称这两种是 non-formal theories（非正式理论），不是已证实的机制"
+      ]
+    },
+    {
+      "id": "C4",
+      "text": "家猫的热中性区是 30 到 38 摄氏度，远高于人觉得舒适的室温",
+      "type": "number",
+      "source": {
+        "title": "Environmental Aspects of Domestic Cat Care and Management: Implications for Cat Welfare",
+        "publisher": "The Scientific World Journal（Stella & Croney，综述，PMC5059607）",
+        "year": "2016",
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5059607/",
+        "source_level": "secondary"
+      },
+      "quote": "the thermoneutral zone for domestic cats is 30–38°C",
+      "verified_by": "fetch",
+      "confidence": "high",
+      "counter_evidence": [
+        "原文数值引自 NRC 2006，为综述转引，未直接核对 NRC 原始报告"
+      ]
+    },
+    {
+      "id": "C5",
+      "text": "家庭与实验室的猫舍温度通常维持在 22 摄氏度上下（±2），对猫来说偏冷",
+      "type": "number",
+      "source": {
+        "title": "Environmental Aspects of Domestic Cat Care and Management: Implications for Cat Welfare",
+        "publisher": "The Scientific World Journal（Stella & Croney，综述，PMC5059607）",
+        "year": "2016",
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5059607/",
+        "source_level": "secondary"
+      },
+      "quote": "Yet most cat housing areas in homes and laboratories are maintained closer to 22 ± 2°C",
+      "verified_by": "fetch",
+      "confidence": "high",
+      "counter_evidence": []
+    },
+    {
+      "id": "C6",
+      "text": "2021 年 Smith 等人的公民科学实验最终只有 30 只猫完成全部试次，它们坐进卡尼萨错觉方块的次数与真方块相当，都多于缺口朝外对照组",
+      "type": "number",
+      "source": {
+        "title": "Cats Take 'If I Fits I Sits' Seriously, Even If The Space Is Just An Illusion",
+        "publisher": "NPR（报道 Smith, Chouinard & Byosiere 2021, Applied Animal Behaviour Science 240: 105338）",
+        "year": "2021",
+        "url": "https://text.npr.org/994262792",
+        "source_level": "secondary"
+      },
+      "quote": "While hundreds of people signed up for the experiment, in the end the researchers got complete data on only 30 cats. Their results? That the cats chose to sit in the illusory square as often as they did the actual outline of a square — and more than the non-square arrangement.",
+      "verified_by": "fetch",
+      "confidence": "medium",
+      "counter_evidence": [
+        "样本仅 30 只、公民科学自报数据，作者与评论者均提示需在受控环境复现"
+      ]
+    }
+  ],
+  "open_questions": [
+    "二维边界为何能替代三维箱壁，目前只有「视觉边界感知」的推测，没有定论",
+    "「幼猫挤同窝」的侧压记忆是否真有因果作用，尚无实验拆解"
+  ],
+  "banned_claims": [
+    "2019年发表在《科学公共图书馆·综合》",
+    "纸箱能隔绝声音"
+  ]
+}
