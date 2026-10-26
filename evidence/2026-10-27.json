@@ -1,0 +1,60 @@
+{
+  "schema_version": "v1",
+  "topic": "为什么朝两张纸中间吹气，纸反而贴得更紧？",
+  "angle": "从吹纸实验讲伯努利：风不是把纸吹开，是先把中间的压强抽走",
+  "claims": [
+    {
+      "id": "C1",
+      "text": "同一股气流里，流速快的地方压强低，流速慢的地方压强高；中间被吹快后压强降低，外侧静止空气的高压把两张纸推向中间",
+      "type": "mechanism",
+      "source": {
+        "title": "朝两张纸中间吹气，纸不分开反倒贴得更紧——是风在帮你按",
+        "publisher": "科普中国",
+        "url": "https://www.kepuchina.cn/article/articleinfo?ar_id=743226&business_type=100&classify=0",
+        "source_level": "secondary"
+      },
+      "quote": "在一条流动的空气里,流速快的地方压强低,流速慢的地方压强高",
+      "verified_by": "snippet",
+      "confidence": "high",
+      "counter_evidence": []
+    },
+    {
+      "id": "C2",
+      "text": "这个关系由丹尼尔·伯努利在 1726 年总结提出，后人称为伯努利原理",
+      "type": "attribution",
+      "source": {
+        "title": "2张A4纸教会孩子为什么要在黄线外等地铁",
+        "publisher": "科普中国",
+        "url": "https://www.kepuchina.cn/article/articleinfo?business_type=1&classify=0&ar_id=AR202002011954322955",
+        "source_level": "secondary"
+      },
+      "quote": "在1726年,丹尼尔·伯努利总结小实验中这种现象,提出了“在水流或气流里,如果速度小,压强就大;如果速度大,压强则小”的观点",
+      "verified_by": "snippet",
+      "confidence": "high",
+      "counter_evidence": []
+    },
+    {
+      "id": "C3",
+      "text": "列车以每小时 50 公里驶过时，站得离车太近，相当于约 8 公斤的力从身后把人推向列车",
+      "type": "number",
+      "source": {
+        "title": "2张A4纸教会孩子为什么要在黄线外等地铁",
+        "publisher": "科普中国",
+        "url": "https://www.kepuchina.cn/article/articleinfo?business_type=1&classify=0&ar_id=AR202002011954322955",
+        "source_level": "secondary"
+      },
+      "quote": "在列车以每小时50公里的速度前进时靠近列车,相当于8公斤左右的力从身后把人推向火车",
+      "verified_by": "snippet",
+      "confidence": "medium",
+      "counter_evidence": []
+    }
+  ],
+  "open_questions": [
+    "机翼升力的完整解释还包含迎角与环流（牛顿第三定律视角），伯努利只是其中一条，不宜写成唯一原因"
+  ],
+  "banned_claims": [
+    "朝两张纸中间吹气会把纸吹开",
+    "流速越快压强越大",
+    "飞机能飞起来全靠伯努利原理"
+  ]
+}

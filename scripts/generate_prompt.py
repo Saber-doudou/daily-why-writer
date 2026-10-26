@@ -237,7 +237,7 @@ def generate_multi_agent_prompt(rules: dict, recent_topics: list = None) -> str:
     SKILL_DIR = "C:/Users/admin/.workbuddy/skills/daily-why-writer"
     fp_range = get_fp_range()
 
-    prompt = f"""每日冷知识自动化：Orchestrator 写作 + 独立 Reviewer 审校模式（v2.0，spawn 独立审校子 agent，自审仅作熔断降级）。
+    prompt = f"""每日冷知识自动化：Orchestrator 写作 + 独立 Reviewer 审校模式（v2.1，spawn 独立审校子 agent，自审仅作熔断降级）。
 
 前置：用 glob `F:/WorkBuddy/daily-why/articles/**/{{今天日期}}-每日冷知识*.md` 检查，已存在则跳过。{{今天日期}}截取自系统 current_time。失败处理：任意步骤出错立即停止并报告。
 历史读取约束（08-31 分片后）：memory.md 为**倒序**（新记录在前），读取自动化执行历史 `.workbuddy/automations/automation-1778312519754/memory.md` 时，必须用 Bash `head -n 150` 只读**头部**最近记录（约 08-20 以来），**禁止全文读取**；确需查更早历史时再读同目录归档 `memory_archive_2026H1.md`。
@@ -304,7 +304,7 @@ def generate_multi_agent_prompt(rules: dict, recent_topics: list = None) -> str:
   6. **事实断言独立核验**：对文中人物/机构/亲缘关系/年份/数据类断言，用 WebSearch 独立核实至少 2 处关键断言，发现事实错误标记 P0
   7. 最小结构验证（不依赖 SKILL.md 写作规则）：A段引用块（>开头）、C段Q格式（**Q1/Q2/Q3：**）、F段引用块含"冷知识反转"标签、结尾风格表格（四行）。任一缺失即 P0 结构缺失
   8. **强制输出物（v2.8 无条件强制，缺一即判审校无效）**：写入的 review.json 必须包含以下 7 个键（10-27 R2 契约起新增 `schema_version`）：
-     - `schema_version` **必须逐字为 `"v1"` 且是 JSON 的第一个键**（R2 契约：`validate_contract.py` 靠它分流 v1 与 legacy，缺了会被判 legacy，新契约永远不生效；`validate_review.py` v1.3 起对 10-27 之后的文件缺此字段判 FAIL）
+     - `schema_version` **必须逐字为 `"v1"` 且是 JSON 的第一个键**（R2 契约：`validate_contract.py` 靠它分流 v1 与 legacy，缺了会被判 legacy，新契约永远不生效；`validate_review.py` v1.3 起对 10-29 之后的文件缺此字段判 FAIL，10-27 至 10-28 仅警告）
      - `fact_checks` ≥2 条，每条含 `detail_verified` 字段
      - `quote_checks` / `mechanism_checks` / `attribution_checks` 三个键**必须存在**（可为空数组，键名不得省略）
      - `term_checks`：文中含医学或解剖学术语时 ≥1 条（含 `term`/`used`/`correct`/`exact`）

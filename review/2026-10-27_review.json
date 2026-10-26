@@ -1,0 +1,276 @@
+{
+  "schema_version": "v1",
+  "article_id": "2026-10-27",
+  "review_timestamp": "2026-10-27T01:10:40+0800",
+  "pass": true,
+  "p0_count": 0,
+  "p1_count": 2,
+  "p2_count": 5,
+  "score": 89,
+  "script_result": {
+    "exit_code": 0,
+    "score": 100,
+    "char_count": 619,
+    "p0_count": 0,
+    "p1_count": 0,
+    "p2_count": 0,
+    "note": "revised_after_review 后重跑 validate_article.py 实测值"
+  },
+  "revised_after_review": true,
+  "revision": {
+    "revised_at": "2026-10-27T01:20:00+0800",
+    "revised_by": "Orchestrator",
+    "reviewer_verdict_untouched": true,
+    "adopted": [
+      {
+        "issue_index": 0,
+        "level": "P1",
+        "action": "Q1 补射流卷吸环节；Q2 改为“把这条关系写进论文”，并补“比的是同一股气流的上下游，不能硬套两股不同气流”，使卷吸与伯努利不再混为一谈"
+      },
+      {
+        "issue_index": 1,
+        "level": "P1",
+        "action": "“黄线就是它画的”改为“一部分道理在这儿”；补黄线并列功能（站台限界/防跌落/司机瞭望/防倚靠）与行为指引“候车请站在黄线外”；50 公里补“左右”并加“车速越快这股力越大”"
+      },
+      {
+        "issue_index": 2,
+        "level": "P2",
+        "action": "“身后的大气压相当于8公斤的力”改为“身前身后约8公斤的压力差”，不再把压差等效力挂到大气压上；去掉精确值口径，恢复约数"
+      },
+      {
+        "issue_index": 3,
+        "level": "P2",
+        "action": "“把这个现象收成一句话”改为“把这条关系写进论文”，不再把吹纸演示归到伯努利名下"
+      },
+      {
+        "issue_index": 4,
+        "level": "P2",
+        "action": "F段换角度，改为“风腾地方、旁边空气补位”，并举纸/雾/灰尘三例，消除与Q1的同义重复；表格反转栏同步改写"
+      },
+      {
+        "issue_index": 5,
+        "level": "P2",
+        "action": "“迎角”补通俗解释“机翼与迎面气流的夹角”"
+      },
+      {
+        "issue_index": 6,
+        "level": "P2",
+        "action": "结尾表格补 Markdown 分隔行 | --- | --- | --- | --- |"
+      }
+    ],
+    "not_adopted": [],
+    "post_revision_check": {
+      "validate_article": "score 100 / p0 0 / p1 0 / p2 0 / char_count 619 / passed true",
+      "evidence_gate": "P0=0 / P1=3（三条均为 snippet_only，观察期仅记录）",
+      "score_regression": false
+    }
+  },
+  "issues": [
+    {
+      "level": "P1",
+      "category": "机制归属 / CHECKLIST-§122 / G-04 / G-05 / G-07",
+      "description": "Q1 用“把中间的气压抽低了”描述压降，方向对；但 Q2、F 段与结尾表格把整套机制归为“伯努利原理”。流体力学科普（普朗特《伯努利定律常见误区》）与 Wikipedia 均指出：从嘴里吹出的射流静压与外界大气压相差极小，纸张靠拢的主因是射流对周围空气的卷吸（entrainment），伯努利定律不能拿射流与周围静止空气跨流场比较。现文两套解释并存，读者会把“流速大压强小”当成完整主因。",
+      "location": "Q1（第6行）、Q2（第8行）、F段（第13行）、结尾表格（第16行）",
+      "suggestion": "保留“伯努利”作为课堂惯用名，但在 Q1 补一句卷吸：“吹出的气流会把缝里的空气一起带走，中间空气变稀，压强才降下来”；Q2 改为“后人把这条流速与压强的关系叫伯努利原理”，避免把演示主因整体归给定律。"
+    },
+    {
+      "level": "P1",
+      "category": "G-02 绝对化 / G-07 归因偏漏",
+      "description": "“地铁站台的黄线就是它画的”把黄线成因绝对化为伯努利效应。深圳地铁官方科普列出的黄线功能还包括：站台限界与防越线坠落、先下后上的秩序、司机瞭望、站台门防倚靠与防夹；伯努利只是其中一条物理原因。另“每小时50公里”是铁路列车口径，地铁进站速度通常更低，场景口径不严。",
+      "location": "Q3（第10行）",
+      "suggestion": "改“黄线的道理里就有它”或“黄线的一部分道理，就是它”；补“列车高速驶过时”而非直接绑定地铁50公里；并补一句行为指引“候车请站在黄线外”。"
+    },
+    {
+      "level": "P2",
+      "category": "CHECKLIST-§3 数据出处 / 用词精度",
+      "description": "“身后的大气压相当于 8 公斤的力”把前后压差产生的净推力写成“大气压”本身；大气压作用于人体的总力远大于8公斤，8公斤是压差等效力。原文来源为“8公斤左右”，文中去掉“左右”变成精确值，且未给距车距离与受力面积。量级估算：50 km/h 动压约116 Pa，乘0.6到0.8平方米约7到9公斤力，量级合理。",
+      "location": "Q3（第10行）",
+      "suggestion": "改“身前身后约8公斤左右的压力差，把人往车边推”，并补“越靠近列车越明显”；不要把8公斤挂到“大气压”上。"
+    },
+    {
+      "level": "P2",
+      "category": "CHECKLIST-§91 / §122 人物与年份口径",
+      "description": "1726 年有据：《大英百科全书》第11版记伯努利《Theoria nova de motu aquarum》1726年提交圣彼得堡科学院，是原理雏形；1738年《Hydrodynamica》正式发表。文章用“提出”而非“发表著作”，口径可立。但“把这个现象收成一句话”把吹纸演示说成伯努利本人总结的对象，未见原始文献支持他描述过该演示，属转述层表述。",
+      "location": "Q2（第8行）",
+      "suggestion": "改“1726年，丹尼尔·伯努利把这条流速与压强的关系写进论文；1738年《Hydrodynamica》正式发表”，或至少删去“这个现象”，避免把课堂演示归到他名下。"
+    },
+    {
+      "level": "P2",
+      "category": "CHECKLIST-§17 / §62 F段信息增量",
+      "description": "F段“风不是总把东西吹散……让周围更安静的空气替你动手”与 Q1 末句“真正推纸的，是外面这层安静空气”同义；结尾表格“冷知识反转”栏又重复同一句，F段与表格均无新增角度。",
+      "location": "F段（第13行）、表格（第16行）",
+      "suggestion": "F段换角度：可讲这类“低压抽吸”在生活里的另一面（如两船并行、站台黄线），或补一句“真正动手的往往不是风，是风留下的低压”的递进；表格反转栏改写成一句提炼，避免与F段逐字重复。"
+    },
+    {
+      "level": "P2",
+      "category": "CHECKLIST-§1 / FP-17 术语解释",
+      "description": "“迎角”首次出现未解释，非航空背景读者不知其指“机翼弦线与来流方向的夹角”。",
+      "location": "Q3（第10行）",
+      "suggestion": "改“机翼升力还牵扯迎角（机翼与迎面气流的夹角）与气流绕行”，或直接删去“迎角”二字，保留“气流绕行”。"
+    },
+    {
+      "level": "P2",
+      "category": "格式 / 表格渲染",
+      "description": "结尾表格只有表头行与数据行，缺 Markdown 分隔行（| --- | --- | --- | --- |），部分渲染器不会把它识别为表格。",
+      "location": "结尾表格（第15至16行）",
+      "suggestion": "在表头行与数据行之间补一行“| --- | --- | --- | --- |”。"
+    }
+  ],
+  "fact_checks": [
+    {
+      "claim": "1726年，丹尼尔·伯努利提出“流速小的地方压强大，流速大的地方压强小”的关系，后人称伯努利原理",
+      "source_verified": true,
+      "detail_verified": true,
+      "omission_severity": "none",
+      "verdict": "correct",
+      "note": "《大英百科全书》第11版：伯努利《Theoria nova de motu aquarum per canales quocunque fluentes》于1726年提交圣彼得堡科学院，是其流体运动理论的雏形；1738年《Hydrodynamica》正式发表并引入伯努利原理。文章用“提出”而非“发表著作”，与1726年口径相容；人物为丹尼尔（非约翰·伯努利或尼古拉·伯努利），归属无误。Wikipedia 另记：通常形式的伯努利方程由欧拉1752年导出，文章未提欧拉，不影响“伯努利提出关系”的表述。"
+    },
+    {
+      "claim": "丹尼尔·伯努利“把这个现象（吹纸演示）收成一句话”",
+      "source_verified": false,
+      "detail_verified": false,
+      "omission_severity": "minor",
+      "verdict": "mismatch",
+      "note": "未找到伯努利本人描述吹纸演示的原始文献；他研究的是管流与孔口出流。该说法来自科普中国转述（evidence C2，snippet级）。因年份、人物、定律归属均成立，按表述精度记 P2，不升 P0。"
+    },
+    {
+      "claim": "列车以每小时50公里驶过时，站得太近相当于约8公斤的力从身后把人推向列车",
+      "source_verified": true,
+      "detail_verified": false,
+      "omission_severity": "minor",
+      "verdict": "partial",
+      "note": "科普中国与澎湃等均转述“有人测定过……8公斤左右”，但未给原始测量、距车距离、受力面积；evidence C3 为 snippet级、confidence=medium，evidence gate 亦标 snippet_only。量级自算：50 km/h 动压约116 Pa，乘0.6到0.8平方米约7到9公斤力，量级合理。文章去掉“左右”并写成“大气压”，属表述精度问题，记 P2。"
+    }
+  ],
+  "quote_checks": [
+    {
+      "claim": "“流速小的地方压强大，流速大的地方压强小”作为伯努利原理的中文概括",
+      "verbatim_match": true,
+      "source": "科普中国《2张A4纸教会孩子为什么要在黄线外等地铁》等中文科普通行表述",
+      "note": "与中文科普通行表述逐字一致；伯努利原文为拉丁文，文中未加引号，不构成逐字引文错误。"
+    },
+    {
+      "claim": "“8公斤的力”",
+      "verbatim_match": false,
+      "source": "科普中国原文作“8公斤左右的力”",
+      "note": "文章删去“左右”，把约数写成精确值；属 P2 精度问题，已计入 issues[2]。"
+    }
+  ],
+  "mechanism_checks": [
+    {
+      "claim": "Q1：吹气使缝隙内空气流速加快，压强降低，外侧静止空气把纸压向中间",
+      "direction_ok": true,
+      "elements_complete": false,
+      "note": "方向自洽（外高内低，向内压），但缺“射流卷吸带走缝内空气”这一关键环节；伯努利定律不能跨流场比较射流与周围静止空气。判 P1，见 issues[0]。"
+    },
+    {
+      "claim": "Q3：列车驶过带动邻近空气加速，压强降低，人体前后压差把人推向列车",
+      "direction_ok": true,
+      "elements_complete": true,
+      "note": "方向与要素完整；但把黄线整体归因伯努利属归因偏漏（见 attribution_checks），且50 km/h为铁路列车口径。"
+    },
+    {
+      "claim": "F段与表格：推纸的不是迎面的风，是背后安静空气的高压",
+      "direction_ok": true,
+      "elements_complete": false,
+      "note": "与Q1同源，仍缺卷吸环节；且F段与表格同义重复，见 issues[4]。"
+    }
+  ],
+  "attribution_checks": [
+    {
+      "claim": "吹纸贴紧归因于伯努利原理",
+      "is_primary_cause": false,
+      "note": "主因是射流卷吸造成的缝内压降；伯努利是可命名的流速与压强关系，但不能跨流场解释射流与静止空气。判 P1，见 issues[0]。"
+    },
+    {
+      "claim": "地铁黄线归因于伯努利效应",
+      "is_primary_cause": false,
+      "note": "伯努利是官方科普列出的物理原因之一；黄线还承担站台限界与防坠落、先下后上秩序、司机瞭望、站台门防倚靠与防夹等功能。写“就是它画的”属绝对化。判 P1，见 issues[1]。"
+    },
+    {
+      "claim": "机翼升力归因于伯努利，并注明只是其中一条",
+      "is_primary_cause": true,
+      "note": "文中已加“还牵扯迎角与气流绕行，伯努利只是其中一条，别当成唯一答案”，主次与限定到位，不计问题。"
+    }
+  ],
+  "term_checks": [
+    {
+      "term": "迎角",
+      "used": "迎角",
+      "correct": "迎角（机翼弦线与来流方向的夹角）",
+      "exact": true,
+      "note": "术语用字正确，但首次出现未解释，属 CHECKLIST-§1 与 FP-17，记 P2，见 issues[5]。"
+    },
+    {
+      "term": "压强",
+      "used": "压强",
+      "correct": "压强",
+      "exact": true,
+      "note": "全篇“压强”与“压力”区分基本正确；Q3“身后的大气压相当于8公斤的力”把压差等效力写成大气压本身，已计入 issues[2]。"
+    }
+  ],
+  "gap_checks": [
+    {
+      "pattern_id": "G-01",
+      "triggered": true,
+      "checked": true,
+      "finding": "A段未立健康或安全恐惧；Q3涉及站台安全，已交代黄线成因，但未给“站在黄线外、勿越线”的行动指引，也未提儿童或身形较小者风险更高。闭环偏弱，已并入 issues[1] 的 P1 建议，不另计 P1。"
+    },
+    {
+      "pattern_id": "G-02",
+      "triggered": true,
+      "checked": true,
+      "finding": "“地铁站台的黄线就是它画的”为绝对化因果，判 P1（issues[1]）；“你越用力，它们贴得越紧”为趋势描述，“都在这条线上”为松散列举，均有语境限定或后文“别当成唯一答案”部分抵消，记 P2 或不计。"
+    },
+    {
+      "pattern_id": "G-03",
+      "triggered": true,
+      "checked": true,
+      "finding": "“1726年”经《大英百科全书》第11版核实成立（1726年提交圣彼得堡科学院的论文为原理雏形，1738年《Hydrodynamica》正式发表）；“把这个现象”把吹纸演示归伯努利，属转述层不精确，记 P2（issues[3]）。8公斤量级合理但无原始测量，记 P2（issues[2]）。"
+    },
+    {
+      "pattern_id": "G-04",
+      "triggered": true,
+      "checked": true,
+      "finding": "Q1从“气流快”直接到“压强被抽低”，缺“射流卷吸把缝内空气带走”这一环；伯努利不能跨流场比较，判 P1（issues[0]）。"
+    },
+    {
+      "pattern_id": "G-05",
+      "triggered": true,
+      "checked": true,
+      "finding": "“伯努利原理”归属不精确（吹纸演示主因是卷吸），判 P1（issues[0]）；“迎角”未解释，记 P2（issues[5]）；“压强/压力/大气压”用词见 term_checks。"
+    },
+    {
+      "pattern_id": "G-06",
+      "triggered": true,
+      "checked": true,
+      "finding": "三条 claim 均为 snippet 级转述（evidence gate 亦标 3 条 snippet_only）：C2 的 1726 有原始论文提交记录支撑；C3 的 8 公斤无原始测量出处、无条件；C1 的科普中国表述本身即通行简化。分别记 P2、P2、P1。"
+    },
+    {
+      "pattern_id": "G-07",
+      "triggered": true,
+      "checked": true,
+      "finding": "黄线归因单一化（伯努利），遗漏站台限界、秩序、站台门防夹等并列功能，判 P1（issues[1]）；纸贴紧归因遗漏卷吸主因，判 P1（issues[0]）。"
+    }
+  ],
+  "issue_responses": [],
+  "title_checks": [
+    {
+      "title": "为什么朝两张纸中间吹气，纸反而贴得更紧？",
+      "subject_scoped": true,
+      "unit_matches_source": true,
+      "scope_consistent_with_body": true,
+      "verdict": "pass",
+      "note": "标题为具体实验疑问，主体圈定“朝两张纸中间吹气”，非无限定泛称；不含灭绝、消失类断言，单位不适用；正文Q1到Q3均围绕该现象，范围一致。"
+    }
+  ],
+  "forbidden_violations": [
+    {
+      "pattern_id": "FP-17",
+      "level": "P2",
+      "location": "Q3（第10行）",
+      "note": "“迎角”首次出现未做通俗解释，已计入 issues[5]。"
+    }
+  ],
+  "overall_comment": "结构与脚本层面均通过：A段引用块、Q1到Q3格式、F段“冷知识反转”引用块、结尾2行×4列风格表格齐备，脚本 score 100、char_count 493、P0/P1/P2 均为 0，全文 689 字符未超 690。人工复核判 P0=0、P1=2、P2=5，按项目计分口径 100-3×2-1×5=89，满足 P0=0 且 P1≤2 的通过条件。两条 P1 分别是：① 吹纸演示的压降主因是射流卷吸，伯努利定律不能跨流场比较，文中Q1的“抽低”已接近卷吸，却由Q2、F段与表格整体归为伯努利，属机制归属与要素缺失；② “地铁站台的黄线就是它画的”把多因一果的站台安全线绝对化为伯努利单因，且50 km/h为铁路列车口径。事实核验方面：1726年与丹尼尔·伯努利的组合经《大英百科全书》第11版核实成立（1726年论文为雏形，1738年《Hydrodynamica》正式发表），文章用“提出”口径无误；但“把这个现象”把吹纸演示归到他名下缺原始文献，记 P2。8公斤一组数字只有科普中国等转述链，无原始测量出处，文章又删去“左右”并写成“大气压”，记 P2；按50 km/h动压约116 Pa、人体迎风面积0.6到0.8平方米估算约7到9公斤力，量级合理。黄线部分，深圳地铁官方科普明确其功能还包括站台限界、秩序、司机瞭望与站台门防夹，伯努利只是其中一条。其余 P2 为F段与表格同义重复、“迎角”未解释、表格缺Markdown分隔行。本次仅审校，未修改初稿。"
+}

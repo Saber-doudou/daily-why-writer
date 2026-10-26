@@ -69,14 +69,33 @@ except Exception as e:
     check("话题库", False, str(e))
 
 # ── 5. 素材池结构 ──
+# 10-27 修复：原判据要求「全部条目含 topic/category/why_hot/evidence 五字段」且「总数 ≤80」，
+# 两处都与设计自相矛盾——文件 purpose 明确写「理论上只增不减」，实测 216 条恒超上限，
+# 检查长期恒红（告警疲劳，EXP-014 反例）；而 rejected 是「查证后放弃的候选」，
+# 天然不会带 category/evidence（历史 210/211 即为该形态）。
+# 现改为按 source 分层的契约：身份字段(topic+source)恒必填；rejected 只需 angle 或 why_hot；
+# 其余类别需 category+why_hot。上限取消，仅保留下限防止空池。
 try:
     tc = json.loads((WS/"config/topic_candidates.json").read_text(encoding="utf-8"))
     cands = tc.get("candidates", [])
     enums = {"initial", "external", "l2", "rejected"}
     badsrc = [c.get("source") for c in cands if c.get("source") not in enums]
-    missfield = [i for i, c in enumerate(cands) if not all(k in c for k in ("topic", "category", "why_hot", "evidence", "source"))]
-    check("素材池结构", not badsrc and not missfield and 15 <= len(cands) <= 80,
-          f"{len(cands)} 条, 非法source={badsrc}, 缺字段索引={missfield}")
+    missfield = []
+    for i, c in enumerate(cands):
+        if not all(k in c for k in ("topic", "source")):
+            missfield.append(i)
+        elif c.get("source") == "rejected":
+            if not ("angle" in c or "why_hot" in c):
+                missfield.append(i)
+        elif not all(k in c for k in ("category", "why_hot")):
+            missfield.append(i)
+    # evidence 为质量字段而非结构字段：缺失不改判失败，但必须在报告里点名，
+    # 避免「放宽判据 = 信息消失」。历史 65/116/117/155 四条无原始证据不可回填。
+    no_ev = [i for i, c in enumerate(cands)
+             if c.get("source") != "rejected" and "evidence" not in c]
+    check("素材池结构", not badsrc and not missfield and len(cands) >= 15,
+          f"{len(cands)} 条, 非法source={badsrc}, 缺字段索引={missfield}, "
+          f"缺 evidence 字段 {len(no_ev)} 条{no_ev if no_ev else ''}")
 except Exception as e:
     check("素材池", False, str(e))
 
@@ -123,6 +142,29 @@ check("generate_prompt.py 含独立 Reviewer 审校", "独立 Reviewer" in gp)
 check("generate_prompt.py 阶段2 熔断链", "熔断" in gp and "spawn" in gp)
 check("generate_prompt.py 无 re-spawn 执行指令", not re.search(r"(?<!不)(?<!禁止)(?<!绝不)re-spawn", gp))
 
+# ── 10.5 automation prompt 关键标记（10-27 新增） ──
+# 背景：10-27 推平台时直接手改文本（v2.0→v2.1；schema_version 宽限窗口改到 10-29 硬失败），
+# 但没有回写 generate_prompt.py —— 结果「生成器产出」与「线上 prompt」分叉，下次任何人
+# 跑 --update-automation 都会把线上覆盖回旧版。此类漂移肉眼看不出来，只能靠标记守门。
+_marks = {
+    "v2.1 版本头": "（v2.1，spawn",
+    "证据卡步骤 4.5": "4.5 **证据卡 + 门禁",
+    "成稿证据核对 9.5": "9.5 **成稿证据核对",
+    "schema_version 宽限 10-29": "10-29 之后的文件缺此字段判 FAIL，10-27 至 10-28 仅警告",
+    "GAP_PATTERNS 路径": "references/GAP_PATTERNS.md",
+}
+_pf = WS/"config/automation-prompt-latest.txt"
+if _pf.exists():
+    _pt = _pf.read_text(encoding="utf-8")
+    _bad = [k for k, v in _marks.items() if v not in _pt]
+    check("automation prompt 标记齐备", not _bad, f"缺失={_bad}" if _bad else f"{len(_marks)}/{len(_marks)} 项齐备")
+    # 同一批标记必须同时出现在生成器里，否则下次重生成即回退
+    _gbad = [k for k, v in _marks.items() if v not in gp]
+    check("generate_prompt 已回写同批标记", not _gbad, f"生成器缺失={_gbad}" if _gbad else f"{len(_marks)}/{len(_marks)} 项齐备")
+else:
+    check("automation prompt 标记齐备", False, "config/automation-prompt-latest.txt 不存在")
+    check("generate_prompt 已回写同批标记", False, "无法校验")
+
 # ── 11. 运行 generate_prompt.py --check ──
 r = subprocess.run([PY, str(WS/"scripts/generate_prompt.py"), "--check"], capture_output=True, text=True, encoding="utf-8", errors="replace")
 check("generate_prompt.py --check 0 警告", r.returncode == 0 and "警告" not in r.stdout and "warning" not in r.stdout.lower(),
@@ -141,10 +183,19 @@ rc3, _ = run_ct("为什么香蕉是弯的？", "--angle")
 check("check_topic 三态正确", rc1 == 0 and rc2 == 1 and rc3 == 0, f"全新={rc1} 重复={rc2} 角度+--angle={rc3}")
 
 # ── 13. memory 提取验证（专项） ──
+# 10-27 修复：原为绝对阈值 ≥70 条，但 08-31 及更早记录已按零损失切割归档到
+# archive/自动化执行记忆归档-*.md，主文件只剩 09-01 起的 35 个唯一日期，阈值恒不可达
+# （与提取器能力无关，实测提取器对唯一日期覆盖率 100%）。改为覆盖率判据，
+# 这样测的是「提取器能不能吃下这个文件」而不是「文件刚好有多长」。
 sys.path.insert(0, str(WS/"scripts"))
 from topic_utils import extract_topics_from_memory
-mem = extract_topics_from_memory(Path(r"F:\WorkBuddy\daily-why\.workbuddy\automations\automation-1778312519754\memory.md"))
-check("memory 新格式提取 ≥70", len(mem) >= 70, f"提取 {len(mem)} 条")
+_mem_path = Path(r"F:\WorkBuddy\daily-why\.workbuddy\automations\automation-1778312519754\memory.md")
+mem = extract_topics_from_memory(_mem_path)
+_hd = re.findall(r"^## (\d{4}-\d{2}-\d{2})", _mem_path.read_text(encoding="utf-8"), re.MULTILINE)
+_uniq = len(set(_hd))
+_cov = (len(mem) / _uniq) if _uniq else 0.0
+check("memory 新格式提取覆盖率 ≥90%", _cov >= 0.9,
+      f"提取 {len(mem)} 条 / 唯一日期 {_uniq} 个 = {_cov:.0%}")
 
 # 输出报告
 print("=" * 70)

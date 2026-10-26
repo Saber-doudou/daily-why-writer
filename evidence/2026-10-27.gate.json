@@ -1,0 +1,29 @@
+{
+  "generated_at": "2026-10-27T01:13:24",
+  "mode": "warn",
+  "card": "evidence/2026-10-27.json",
+  "article": "articles/2026-10/2026-10-27-每日冷知识-吹纸实验.md",
+  "p0_count": 0,
+  "p1_count": 3,
+  "blocked": false,
+  "findings": [
+    {
+      "severity": "P1",
+      "code": "snippet_only",
+      "where": "claim C1",
+      "message": "仅 snippet 级核实，高风险 claim 建议 fetch 原文"
+    },
+    {
+      "severity": "P1",
+      "code": "snippet_only",
+      "where": "claim C2",
+      "message": "仅 snippet 级核实，高风险 claim 建议 fetch 原文"
+    },
+    {
+      "severity": "P1",
+      "code": "snippet_only",
+      "where": "claim C3",
+      "message": "仅 snippet 级核实，高风险 claim 建议 fetch 原文"
+    }
+  ]
+}
