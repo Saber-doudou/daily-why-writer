@@ -303,13 +303,14 @@ def generate_multi_agent_prompt(rules: dict, recent_topics: list = None) -> str:
   5. Read 加载 `{SKILL_DIR}/reviewer_prompt.md`，**严格执行其中的 P0/P1/P2 分级标准**：P0=事实错误/逻辑矛盾/结构缺失；P1=AI味/连接词≥3、字数>690、类比失准、**绝对化**；P2=措辞微调。凡命中「绝对化/类比失准/字数>690」至少标 P1，**禁止降为 P2**
   6. **事实断言独立核验**：对文中人物/机构/亲缘关系/年份/数据类断言，用 WebSearch 独立核实至少 2 处关键断言，发现事实错误标记 P0
   7. 最小结构验证（不依赖 SKILL.md 写作规则）：A段引用块（>开头）、C段Q格式（**Q1/Q2/Q3：**）、F段引用块含"冷知识反转"标签、结尾风格表格（四行）。任一缺失即 P0 结构缺失
-  8. **强制输出物（v2.8 无条件强制，缺一即判审校无效）**：写入的 review.json 必须包含以下 6 个键：
+  8. **强制输出物（v2.8 无条件强制，缺一即判审校无效）**：写入的 review.json 必须包含以下 7 个键（10-27 R2 契约起新增 `schema_version`）：
+     - `schema_version` **必须逐字为 `"v1"` 且是 JSON 的第一个键**（R2 契约：`validate_contract.py` 靠它分流 v1 与 legacy，缺了会被判 legacy，新契约永远不生效；`validate_review.py` v1.3 起对 10-27 之后的文件缺此字段判 FAIL）
      - `fact_checks` ≥2 条，每条含 `detail_verified` 字段
      - `quote_checks` / `mechanism_checks` / `attribution_checks` 三个键**必须存在**（可为空数组，键名不得省略）
      - `term_checks`：文中含医学或解剖学术语时 ≥1 条（含 `term`/`used`/`correct`/`exact`）
      - `gap_checks`：**必须 7 条**（G-01 至 G-07；条数以 `{SKILL_DIR}/references/GAP_PATTERNS.md` 实际类型总数为准，不要写死），每条含 `pattern_id`/`triggered`/`checked`/`finding`，**且全部 `checked=true`**
      判定方式：上述任一缺失 → 本次审校无效，要求 Reviewer 补写后重新判定，**不得据此放行**。G-01（安全性闭环）与 G-02（绝对化）为当前最高发漏判类型，重点核查
-  9. 输出审核报告**写入文件** `F:/WorkBuddy/daily-why/review/{{今天日期}}_review.json`（含 pass/p0_count/p1_count/p2_count/score/review_timestamp/issues 数组，每项含 level/category/description/suggestion）。**`review_timestamp` 必须先用 Bash 执行 `date +%Y-%m-%dT%H:%M:%S%z` 取系统真实时间写入，禁止自行推断或编造时间**。并在最终回复文本中回报审校结论（SendMessage 在本地 automation 环境不可用，以文本回报兜底）
+  9. 输出审核报告**写入文件** `F:/WorkBuddy/daily-why/review/{{今天日期}}_review.json`（含 schema_version="v1"、pass/p0_count/p1_count/p2_count/score/review_timestamp/issues 数组，每项含 level/category/description/suggestion）。**`review_timestamp` 必须先用 Bash 执行 `date +%Y-%m-%dT%H:%M:%S%z` 取系统真实时间写入，禁止自行推断或编造时间**。并在最终回复文本中回报审校结论（SendMessage 在本地 automation 环境不可用，以文本回报兜底）
   10. 通过条件：P0=0 且 P1≤2（且第 8 条的强制输出物齐备）
 
 **等待策略（文件检测优先）**：

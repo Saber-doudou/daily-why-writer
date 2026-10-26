@@ -107,9 +107,13 @@ def check_article(text, card):
 
     for lineno, line in enumerate(text.splitlines(), 1):
         body = re.sub(r"^\s*(>\s*)?([-*+]\s+|\d+\.\s+)?", "", line).strip()
-        # 2026-10-27 模拟运行 S1 抓到的误杀：SKILL 强制的 `**Q1：...**` 标题，
-        # 序号 1/2/3 被 FACT_PAT 当成数字，整句被判「事实句无映射」。
-        # Q 标签是格式，不是事实断言，判前先剥离。
+        # 2026-10-27 审校 R3 抓到的必然误判：F 段结尾的标准四行表格，
+        # 「核心机制」行常含数字（TRPV1、占壳约 1/3），但表格是渲染层、无句末可分，
+        # 事实本身来自正文 claim。表格行不参与事实句判定，改由审校 fact_checks 覆盖。
+        if body.startswith("|"):
+            continue
+        # 同期误杀回归：SKILL 强制的 `**Q1：...**` 标题，序号 1/2/3 被 FACT_PAT
+        # 当成数字，整句被判「事实句无映射」。Q 标签是格式，不是事实断言，判前先剥离。
         body = re.sub(r"^\*{0,2}\s*Q\d+\s*[：:]\s*", "", body)
         if not body:
             continue
@@ -238,6 +242,13 @@ SELFTEST = {
         "card": {"schema_version": "v1", "topic": "测试", "claims": [], "banned_claims": []},
         "article": "上世纪五十年代，喷气客机接连出事。",
         "expect_p0": 1,
+    },
+    # 审校 R3 抓到的必然误判：F 段表格行含数字（TRPV1、1/3），但表格是渲染层无句末，
+    # 事实来自正文 claim，不应判无映射。
+    "table_row_no_false_positive": {
+        "card": {"schema_version": "v1", "topic": "测试", "claims": [], "banned_claims": []},
+        "article": "| 话题 | 猫钻纸箱 | 分类 | 动物世界 |\n| 核心机制 | TRPV1 与热中性区 30 到 38 摄氏度 | 冷知识反转 | 纸箱是减压舱 |",
+        "expect_p0": 0,
     },
 }
 
