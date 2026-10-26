@@ -268,6 +268,7 @@ def generate_multi_agent_prompt(rules: dict, recent_topics: list = None) -> str:
    - 退出码 2 → 参数错误，修正话题文本后重试
    - **shell 传参纪律（10-13 审查补充）**：候选话题一律用单引号包裹，防止 $、反引号、反斜杠被 shell 解释；候选自身含单引号时改用双引号，并确认其中不含 $、反引号、反斜杠
 4. **选中后查证**：用 WebSearch 查证 1 到 2 个关键词：关键数字、研究者引用完整性（机构+年份+期刊）、引用准确性
+4.5 **证据卡 + 门禁（2026-10-27 R3 新增，观察期 warn）**：把步骤4的查证结果写成 `F:/WorkBuddy/daily-why/evidence/{{今天日期}}.json`，字段按 `F:/WorkBuddy/daily-why/contracts/evidence_card.schema.json`。硬要求：机制、数字、归因三类 claim 必须带 url 与不少于 15 字的原文引文；tertiary 来源不得单独支撑；已证伪说法写进 `banned_claims`。写完运行 `{PYTHON} F:/WorkBuddy/daily-why/scripts/evidence_gate.py --card F:/WorkBuddy/daily-why/evidence/{{今天日期}}.json --mode warn`，把 P0 明细原样记录（观察期内不阻断，但必须写进发布报告）。
 5. **落选话题回写素材池**：本轮拉取/筛选过程中未采用的候选（含查证后放弃的），用 Bash 追加/更新到 `F:/WorkBuddy/daily-why/config/topic_candidates.json` 的 candidates 数组（source 字段标记 `external` 或 `rejected`；已有则跳过），保持 JSON 合法
 6. **降级链**（外部源拉取失败或无可用候选时按序降级）：
    - 降级① 脑洞选题：读 `F:/WorkBuddy/daily-why/config/topics_context_compact.json` 的 topic_summaries，自己想一个新话题，运行 `{PYTHON} F:/WorkBuddy/daily-why/scripts/check_topic.py --angle '话题'` 校验（退出码 0 → 继续；1 → 重选，最多 3 轮；2 → 参数错误）
@@ -280,6 +281,10 @@ def generate_multi_agent_prompt(rules: dict, recent_topics: list = None) -> str:
    - 退出码 0 且含「⚠️ 角度相关」→ 输出会列出全部候选，逐个确认角度不同后才放行
    - 退出码 0 且无提示 → 进入阶段2
    背景：10-13 牛排稿成稿标题与 09-07 文章字符包含率 66.7%，原流程只在选题时查候选话题串、写文后无人复查成稿标题，该缺口由本步闭环（L3 严格模式本可拦，但不应把希望寄托在最后一环）。
+
+9.5 **成稿证据核对（2026-10-27 R3 新增，观察期 warn）**：运行 `{PYTHON} F:/WorkBuddy/daily-why/scripts/evidence_gate.py --card F:/WorkBuddy/daily-why/evidence/{{今天日期}}.json --article F:/WorkBuddy/daily-why/articles/{{年月}}/{{今天日期}}-每日冷知识-{{关键词}}.md --mode warn`。正文中每个含数字的事实句（包括「上世纪五十年代」这类中文数字带单位的表达，不含 `Q1：` 这类格式标签）句末加 `<!-- claim:C1 -->` 映射注释；Q 标题本身不挂映射。P0/P1 明细原样写进发布报告的「证据核对」小节。
+
+> **观察期与切换**：2026-10-27 至 10-31 用 `--mode warn` 只记录不阻断，先看真实文章上的误杀率；11-01 起若无误杀，把上面两处的 `--mode warn` 改成 `--mode block`，并接 4 级日更兜底（删 claim / 定向补证 / 换角度 / 安全池 `config/safe_topics.json`）。切换前必须先看 `eval/sim-runs.tsv` 与当周发布报告里的 P0 明细。
 
 【硬约束】选题失败上报：若外部源拉取、脑洞选题、素材池兜底全部失败（候选均被 check_topic.py 判重复），必须输出"⚠️ 今日选题失败：失败候选列表 + 3 个建议新方向"，不得静默终止。
 
