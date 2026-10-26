@@ -1,0 +1,25 @@
+{
+  "schema_version": "v1",
+  "topic": "为什么飞机的舷窗是圆角的？",
+  "claims": [
+    {
+      "id": "C1",
+      "text": "方形开口的直角处会发生应力集中，圆角把应力分散开",
+      "type": "mechanism",
+      "source": {
+        "title": "是什么磨平了窗户的棱角",
+        "publisher": "中国军网",
+        "url": "https://www.81.cn/yw_208727/16420262.html",
+        "source_level": "secondary"
+      },
+      "quote": "圆角设计能把应力散开,从而大幅降低产生裂纹的风险",
+      "verified_by": "snippet",
+      "confidence": "high",
+      "counter_evidence": []
+    }
+  ],
+  "banned_claims": [
+    "舷窗做成圆角是为了美观",
+    "彗星号事故是发动机故障导致的"
+  ]
+}

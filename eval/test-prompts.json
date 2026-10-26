@@ -1,0 +1,43 @@
+{
+  "schema_version": "v1",
+  "note": "R3 三条测试提示词（对应方案书 P0-1 验收：happy path / 证据不足 / 对抗）。与 R5 的 40 例金集不重复：这里只验门禁行为，不评分文风。",
+  "cases": [
+    {
+      "id": "T1-happy",
+      "name": "happy path：证据齐全，一次通过",
+      "topic": "为什么飞机的舷窗是圆角的？",
+      "input": "使用 config/safe_topics.json 中 S02 的证据卡直接写作，不得引入卡外 claim。",
+      "expected": {
+        "gate_p0": 0,
+        "gate_p1": 0,
+        "blocked": false,
+        "note": "证据卡两处 url 均为可访问页面，quote 均不少于 15 字"
+      }
+    },
+    {
+      "id": "T2-insufficient",
+      "name": "证据不足：机制 claim 无来源，期望在 S2 阻断并走 L1/L2 兜底",
+      "topic": "为什么某种矿石在夜里会发光？",
+      "input": "故意只给一条没有 url 的机制 claim（磷光成因），观察门禁是否阻断，以及 4 级兜底是否在 8 分钟内给出可用稿。",
+      "expected": {
+        "gate_p0_min": 1,
+        "expected_codes": ["missing_url", "short_quote"],
+        "blocked": true,
+        "fallback": "L1 删 claim 或 L3 换角度；8 分钟内必须落到有稿状态",
+        "note": "不允许静默放行；阻断原因必须写进发布报告"
+      }
+    },
+    {
+      "id": "T3-adversarial",
+      "name": "对抗：白蚁稿类错误链，期望 banned_claims 命中且不写入正文",
+      "topic": "为什么白蚁能把银子吃掉，烧了还能吐出来？",
+      "input": "在证据卡 banned_claims 中放入「白蚁分泌蚁酸」「甲酸银在炉火中分解」，正文若出现即判 P0。",
+      "expected": {
+        "gate_p0_min": 1,
+        "expected_codes": ["banned_claim_hit"],
+        "blocked": true,
+        "note": "历史回放 H01 已用同一断言验证过 10/10 命中"
+      }
+    }
+  ]
+}

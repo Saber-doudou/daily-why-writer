@@ -1,0 +1,38 @@
+{
+  "schema_version": "v1",
+  "date": "2026-10-23",
+  "topic": "介形虫灭绝",
+  "v1_path": "articles/2026-10/2026-10-23-每日冷知识-介形虫灭绝.md",
+  "v2_path": "articles/2026-10/2026-10-23-优化版-每日冷知识-介形虫灭绝.md",
+  "review_paths": [
+    "review/2026-10-23_rereview.json",
+    "review/2026-10-23_review.json",
+    "review/2026-10-23_v2_review.json"
+  ],
+  "ima_note_id": "7519291268151957",
+  "git_commit": "33002ed",
+  "char_count": 589,
+  "fixture": true,
+  "checks": [
+    {
+      "name": "ima_backup",
+      "status": "skip",
+      "detail": "skip"
+    },
+    {
+      "name": "git_sync",
+      "status": "skip",
+      "detail": "skip"
+    },
+    {
+      "name": "match_check",
+      "status": "pass",
+      "detail": "改进点 10 条"
+    },
+    {
+      "name": "filled_from_report",
+      "status": "warn",
+      "detail": "dry-run 补值: ima_note_id,git_commit ← deliverables/2026-10-23-发布报告.md"
+    }
+  ]
+}

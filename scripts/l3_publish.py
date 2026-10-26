@@ -61,6 +61,9 @@ def load_config():
 
 CFG = load_config()
 
+# 2026-10-26 R2：跨阶段传值（manifest 需要 IMA note_id，而 phase2_ima 只返回状态串）
+_PUBLISH_STATE = {"ima_note_id": None}
+
 
 class Result:
     """收集各 Phase 的执行结果（v3.5 起同时写入 l3_run.log）"""
@@ -312,6 +315,8 @@ def parse_args():
     p.add_argument("--verify-report", action="store_true",
                    help="仅校验发布报告的人工补验是否真的落盘（09-17 v3.23 新增，#58 兜底；"
                         "判 FAIL 的报告须有声明 + ≥3 行判定表格，否则 exit 1）")
+    p.add_argument("--log-path", default=None,
+                   help="覆盖 l3_run.log 路径（影子工作区测试隔离用，默认写生产日志）")
     return p.parse_args()
 
 
@@ -633,8 +638,30 @@ def phase1_match_check(v1_path, v2_path, summary_path, dry_run, res):
     BULLET_RE = r"(?:^[-*]\s+|^\d+[.、]\s+)(.+)"
     if summary_path:
         summary_text = summary_path.read_text(encoding="utf-8")
-        improvements, src_heading = _extract_improvements(
-            summary_text, IMPROVEMENT_HEADING_PATTERNS, BULLET_RE)
+        # 2026-10-26 R2（P0-4）：JSON 优先。L2 若已落盘 learning_summary.json（v1 契约），
+        # 直接读结构化改进点，不再从 Markdown 正则提取；文件不存在才回退旧正则并留痕。
+        # 回退不是失败（当前 L2 尚未产出 JSON），但必须在报告里看得到用的是哪条路径。
+        json_summary = summary_path.parent / "learning_summary.json"
+        json_used = False
+        json_note = ""
+        if json_summary.exists():
+            try:
+                js = json.loads(json_summary.read_text(encoding="utf-8"))
+                improvements = [it.get("text", "") for it in (js.get("improvements") or []) if isinstance(it, dict)]
+                improvements = [t for t in improvements if t]
+                if improvements:
+                    src_heading = "learning_summary.json"
+                    json_used = True
+                else:
+                    json_note = "learning_summary.json 存在但 improvements 为空"
+            except Exception as e:
+                json_note = f"learning_summary.json 读取失败: {e}"
+
+        if not json_used:
+            improvements, src_heading = _extract_improvements(
+                summary_text, IMPROVEMENT_HEADING_PATTERNS, BULLET_RE)
+            res.warn(1, (json_note + "，" if json_note else "学习总结 JSON 未产出，")
+                        + "改进点走 Markdown 正则回退（L2 接入契约后自动切换为零正则）")
         check_count = min(len(improvements), MAX_IMPROVEMENTS_CHECK)
         # 只做存在性检查（有改进点列表即可），语义验证交给 AI
         report["content"] = {
@@ -643,6 +670,7 @@ def phase1_match_check(v1_path, v2_path, summary_path, dry_run, res):
             "improvements": improvements[:MAX_IMPROVEMENTS_CHECK],
             "total": check_count,
             "source": src_heading,
+            "transport": "json" if json_used else "regex",
             "ai_required": True,
         }
     else:
@@ -947,6 +975,7 @@ def phase2_ima(date_str, dry_run, force, res):
         m = re.search(r"note_id[:\s]+(\d+)", output)
         if m:
             note_id = m.group(1)
+            _PUBLISH_STATE["ima_note_id"] = note_id
 
         # 2026-10-20 v3.25/v3.26：解析知识库关联结果（RESULT_KB=ok/fail）。
         # 旧实现只解析 note_id，知识库上传失败静默不可见（09-30 起备份实际
@@ -1371,6 +1400,96 @@ def check_report_tampered(report_path, res):
                     f"本次将重写脚本区、保留 AI 补充区{note}")
 
 
+def _rel_to_base(p):
+    """转成相对 base_dir 的 posix 路径，避免 manifest 里出现本机绝对路径。"""
+    try:
+        return str(Path(p).resolve().relative_to(Path(CFG["base_dir"]).resolve())).replace("\\", "/")
+    except Exception:
+        return str(p).replace("\\", "/")
+
+
+def write_publish_manifest(date_str, v1_path, v2_path, v1_meta, v2_meta,
+                           ima_result, git_result, match_report, res, dry_run):
+    """R2 / P0-4：每次发布写一份 publish_manifest.json（机器交接契约）。
+
+    - 报告是给人看的渲染层，这里是给机器读的契约层。
+    - 不伪造：dry-run 拿不到真实 note_id / commit 时写 null，并标 fixture=true。
+    - 校验失败只 warn，不阻断发布：发布是主链路，契约是旁路。
+    """
+    review_dir = Path(CFG["base_dir"]) / "review"
+    review_paths = sorted(_rel_to_base(p) for p in review_dir.glob(f"{date_str}*.json"))
+    git_commit = git_result if isinstance(git_result, str) and re.fullmatch(r"[0-9a-f]{7,40}", git_result) else None
+    status_map = {"ok": "pass", "fail": "fail", "skip": "skip", "push_fail": "fail"}
+    checks = [
+        {"name": "ima_backup", "status": status_map.get(ima_result, "warn"), "detail": str(ima_result)},
+        {"name": "git_sync", "status": status_map.get(git_result, "warn"), "detail": str(git_result)},
+    ]
+    if match_report is not None:
+        content = match_report.get("content") or {}
+        count = content.get("total", len(content.get("improvements") or []))
+        checks.append({
+            "name": "match_check",
+            "status": "pass" if match_report.get("ok") else "fail",
+            "detail": f"改进点 {count} 条",
+        })
+
+    primary_meta = v2_meta or v1_meta or {}
+    doc = {
+        "schema_version": "v1",
+        "date": date_str,
+        "topic": primary_meta.get("topic") or (v1_meta or {}).get("topic") or "未知",
+        "v1_path": _rel_to_base(v1_path),
+        "v2_path": _rel_to_base(v2_path) if v2_path else None,
+        "review_paths": review_paths,
+        "ima_note_id": _PUBLISH_STATE.get("ima_note_id"),
+        "git_commit": git_commit,
+        "char_count": primary_meta.get("chinese_chars"),
+        "fixture": bool(dry_run),
+        "checks": checks,
+    }
+
+    # 裁决书 A2：dry-run 无法拿到真实 note_id / commit 时，允许用当日真实发布报告补值，
+    # 必须标 fixture=true 并在 checks 里留痕「filled_from_report」，不伪装成实时采集。
+    if dry_run and (doc["ima_note_id"] is None or doc["git_commit"] is None):
+        report = Path(CFG["base_dir"]) / "deliverables" / f"{date_str}-发布报告.md"
+        if report.exists():
+            text = report.read_text(encoding="utf-8")
+            filled = []
+            if doc["ima_note_id"] is None:
+                m = re.search(r"note_id[=:]\s*(\d+)", text)
+                if m:
+                    doc["ima_note_id"] = m.group(1)
+                    filled.append("ima_note_id")
+            if doc["git_commit"] is None:
+                m = re.search(r"commit=([0-9a-f]{7,40})", text)
+                if m:
+                    doc["git_commit"] = m.group(1)
+                    filled.append("git_commit")
+            if filled:
+                doc["checks"].append({
+                    "name": "filled_from_report",
+                    "status": "warn",
+                    "detail": "dry-run 补值: " + ",".join(filled) + f" ← deliverables/{date_str}-发布报告.md",
+                })
+    out = Path(CFG["base_dir"]) / "deliverables" / f"{date_str}-publish_manifest.json"
+    out.parent.mkdir(parents=True, exist_ok=True)
+    out.write_text(json.dumps(doc, ensure_ascii=False, indent=2), encoding="utf-8")
+
+    try:
+        sys.path.insert(0, str(Path(__file__).resolve().parent))
+        import validate_contract
+        status, _version, errors, _gaps = validate_contract.check_file(
+            "publish_manifest", out, require_v1=True)
+        if status == "ok":
+            res.ok(4, f"publish_manifest 已写出并通过 v1 schema: {out.name}")
+        else:
+            res.warn(4, "publish_manifest 校验未过(%s): %s" % (
+                status, "; ".join(f"{p}:{m}" for p, m in errors[:3])))
+    except Exception as e:
+        res.warn(4, f"publish_manifest 校验异常: {e}")
+    return out
+
+
 def render_report(date_str, v1_meta, v2_meta, ima_result, git_result, res, match_report=None):
     """渲染发布报告到 deliverables/{date}-发布报告.md（08-31 起替代 AI 手写，
     杜绝字数/得分/commit 失真。骨架全部由脚本数据生成，语义验证表留 AI 补充区；
@@ -1711,7 +1830,7 @@ def main():
     sys.stderr.reconfigure(encoding="utf-8")
 
     args = parse_args()
-    res = Result()
+    res = Result(args.log_path) if args.log_path else Result()
 
     # --verify-report 模式（09-17 v3.23 新增，#58 兜底）：
     # Phase 1 判 FAIL 的报告必须真的有 AI 人工补验落盘。SOP Step 2.5 完成后必跑本命令，
@@ -1874,6 +1993,14 @@ def main():
         report_path = render_report(date_str, v1_meta, v2_meta, ima_result, git_result, res, match_report=match_report)
         if report_path:
             res.ok(4, f"发布报告已渲染: {report_path}")
+
+    # R2 契约层：机器交接 manifest（dry-run 也写，标 fixture=true，供 R2 验收）
+    # 旁路不得阻断主链路：写入或校验任何异常都只 warn（审校 R2-2）
+    try:
+        write_publish_manifest(date_str, articles["v1"], articles["v2"], v1_meta, v2_meta,
+                               ima_result, git_result, match_report, res, args.dry_run)
+    except Exception as e:
+        res.warn(4, f"publish_manifest 写入异常（不阻断发布）: {e}")
 
     res.summary()
     if res.errors:
