@@ -1,0 +1,155 @@
+{
+  "article_id": "2026-10-26",
+  "review_timestamp": "2026-10-26T10:03:57+0800",
+  "pass": true,
+  "p0_count": 0,
+  "p1_count": 0,
+  "p2_count": 2,
+  "score": 98,
+  "script_result": {
+    "exit_code": 0,
+    "score": 98,
+    "char_count": 389,
+    "p0_count": 0,
+    "p1_count": 0,
+    "p2_count": 1
+  },
+  "issues": [
+    {
+      "level": "P2",
+      "category": "表达润色/AI排版特征",
+      "description": "Q1/Q2/Q3 三段字数过于均匀（偏差 < 15 字），呈现 AI 排版典型特征，略缺自然节奏变化。",
+      "location": "C段 Q1/Q2/Q3",
+      "suggestion": "适度拉开三段字数差（如 Q3 略长展开类比、Q1 略短开门见山），降低机械感。"
+    },
+    {
+      "level": "P2",
+      "category": "格式/结构-表格渲染",
+      "description": "结尾风格表格缺少 markdown 分隔行（| --- | --- | --- | --- |），部分渲染器可能无法将其识别为表格，导致样式丢失。",
+      "location": "结尾风格表格（L17-18）",
+      "suggestion": "在表头行与数据行之间补一行分隔符 `| --- | --- | --- | --- |`。"
+    }
+  ],
+  "fact_checks": [
+    {
+      "claim": "辣不是味觉，是痛觉；辣椒素激活舌头上的 TRPV1 痛觉感受器，骗大脑以为被烫伤。",
+      "source_verified": true,
+      "detail_verified": true,
+      "omission_severity": "none",
+      "verdict": "correct",
+      "note": "Wikipedia / 科普中国 / 人民日报均确认：capsaicin 结合 TRPV1（瞬态受体电位香草酸亚型1，痛觉/热感受器），辣在科学上被定义为痛觉而非五种基本味觉之一。细节与权威源一致。"
+    },
+    {
+      "claim": "辣椒素是'怕油不怕水'的分子，只溶于油脂和酒精，不溶于水；水冲不动它，反而把它抹得到处都是、辣上加辣。",
+      "source_verified": true,
+      "detail_verified": true,
+      "omission_severity": "none",
+      "verdict": "correct",
+      "note": "RSC / 科普中国确认 capsaicin 为疏水分子，不溶于水，溶于油脂与酒精；用水漱口会将辣椒素扩散到更广口腔区域。表述与权威源逐字一致。"
+    },
+    {
+      "claim": "牛奶中的酪蛋白是亲油的非极性分子，像洗洁精裹油渍那样把辣椒素包起来、从感受器上剥下来冲走；全脂冰牛奶脂肪更多效果更好。",
+      "source_verified": true,
+      "detail_verified": true,
+      "omission_severity": "none",
+      "verdict": "correct",
+      "note": "科普中国'酪蛋白是非极性分子，可与辣椒素结合'；RSC'casein acts like a detergent, binding to the capsaicin'；中国新闻网'低温全脂牛奶效果最好' + IOP 研究（2019）确认 cold fullcream milk 最有效。机制与'全脂冰牛奶更好'均属实。"
+    }
+  ],
+  "quote_checks": [],
+  "mechanism_checks": [
+    {
+      "claim": "Q2：辣椒素不溶于水、水冲不动，反而把它抹得到处都是，痛觉感受器被撒得更广 → 辣上加辣。",
+      "direction_ok": true,
+      "elements_complete": true,
+      "note": "因果方向自洽：水不溶辣椒素 → 冲散扩散 → 痛觉感受器被撒更广 → 更辣。无方向矛盾，环节完整。"
+    },
+    {
+      "claim": "Q3：酪蛋白亲油包裹辣椒素，从 TRPV1 感受器剥落，再被奶液冲走。",
+      "direction_ok": true,
+      "elements_complete": true,
+      "note": "通俗机制完整，'洗洁精裹油渍'类比准确（RSC 亦用 detergent 类比）；非极性/亲油表述与科普中国一致。未跳至不可理解之步。"
+    }
+  ],
+  "attribution_checks": [
+    {
+      "claim": "牛奶解辣主因为酪蛋白（蛋白），脂肪为辅助（全脂牛奶脂肪更多效果更好）。",
+      "is_primary_cause": true,
+      "note": "文献支持酪蛋白为去除辣椒素之主力（RSC：casein acts like a detergent）；文中明言'全脂冰牛奶里脂肪更多，效果更好'已含脂肪辅助因素，归因主次完整，未遗漏主因。"
+    }
+  ],
+  "term_checks": [
+    {
+      "term": "TRPV1",
+      "used": "TRPV1 痛觉感受器",
+      "correct": "TRPV1（瞬时受体电位香草酸亚型1）痛觉/热感受器",
+      "exact": true,
+      "note": "文中称 TRPV1 为痛觉感受器，与 Wikipedia / 科普中国 / 人民日报一致，用字精确，无形近/音近误用。"
+    },
+    {
+      "term": "酪蛋白",
+      "used": "酪蛋白……亲油的非极性分子",
+      "correct": "酪蛋白（casein），具两亲性（亲水区+疏水区）的磷蛋白",
+      "exact": false,
+      "note": "科普中国亦称'非极性分子'，通俗可接受；严格说酪蛋白为两亲性（amphipathic）而非纯非极性分子，属通俗简化而非事实错误，不降级为 P0/P1。"
+    }
+  ],
+  "gap_checks": [
+    {
+      "pattern_id": "G-01",
+      "triggered": false,
+      "checked": true,
+      "finding": ""
+    },
+    {
+      "pattern_id": "G-02",
+      "triggered": false,
+      "checked": true,
+      "finding": "扫描「不可能/全看/全都/一定/绝对/必然/永远/无非/彻底/完全/再也/保证」等绝对词，均未命中错误绝对化：'辣不是味觉是痛觉''解辣靠的不是冲是洗'为科学准确表述；'只溶于油脂和酒精不溶于水''效果更好'为准确/比较级，无夸大说满。"
+    },
+    {
+      "pattern_id": "G-03",
+      "triggered": false,
+      "checked": true,
+      "finding": "关键机制断言（TRPV1 痛觉非味觉 / 辣椒素脂溶水不溶 / 酪蛋白结合剥离 / 全脂冰牛奶更好）经 WebSearch 独立核实，均与权威源一致，无看似合理的事实性错误。"
+    },
+    {
+      "pattern_id": "G-04",
+      "triggered": false,
+      "checked": true,
+      "finding": ""
+    },
+    {
+      "pattern_id": "G-05",
+      "triggered": false,
+      "checked": true,
+      "finding": "文无古文/论文原文引述；生化术语 TRPV1/辣椒素/酪蛋白用字精确，无上颚/上腭类形近误用。"
+    },
+    {
+      "pattern_id": "G-06",
+      "triggered": false,
+      "checked": true,
+      "finding": "文未引用'研究表明/XX大学/发表于XX年'等具体研究标记，机制为通用科普共识，无待逐字核对的具体研究细节。"
+    },
+    {
+      "pattern_id": "G-07",
+      "triggered": false,
+      "checked": true,
+      "finding": "解辣归因主因为酪蛋白（文献支持为去辣椒素主力），并明言'全脂冰牛奶脂肪更多效果更好'已含脂肪辅助，未只给次要原因而遗漏主因。"
+    }
+  ],
+  "issue_responses": [],
+  "title_checks": [
+    {
+      "title": "为什么牛奶能解辣，水却不行？",
+      "subject_scoped": true,
+      "unit_matches_source": true,
+      "scope_consistent_with_body": true,
+      "verdict": "pass",
+      "note": "标题为机制疑问（牛奶解辣/水不解），不含消亡类断言（灭绝/绝迹/消失/消亡/绝了后）；主体'牛奶解辣'与正文机制一致，无范围矛盾，不触发 Step 5.11 方向一/二。"
+    }
+  ],
+  "forbidden_violations": [],
+  "overall_comment": "全文事实准确、机制自洽、结构齐备（A段引用块、C段Q格式、F段'冷知识反转'引用块、结尾2行×4列风格表格均到位，与 CHECKLIST §124 一致）。脚本校验得分 98、P0/P1 为空，本次独立核验四大关键机制断言（TRPV1 痛觉非味觉 / 辣椒素脂溶水不溶 / 酪蛋白结合剥离 / 全脂冰牛奶更优）均经 WebSearch 与权威源（科普中国、人民日报、Wikipedia、RSC、中国新闻网、IOP 2019）逐一印证无误，无事实错误、无逻辑矛盾、无结构缺失。仅余两处 P2 级微调：① Q段字数过于均匀（AI 排版特征）；② 结尾表格缺 markdown 分隔行。F段'解辣靠洗不靠冲'与 Q3 机制存在合理重叠，但其本职即交付'反转'论点，可接受。通过条件（P0=0 且 P1≤2）满足。",
+  "revised_after_review": true
+}

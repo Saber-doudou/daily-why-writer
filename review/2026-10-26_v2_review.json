@@ -1,0 +1,106 @@
+{
+  "article_id": "2026-10-26",
+  "review_timestamp": "2026-10-26T11:59:49+0800",
+  "pass": true,
+  "p0_count": 0,
+  "p1_count": 0,
+  "p2_count": 0,
+  "score": 100,
+  "script_result": {
+    "exit_code": 0,
+    "score": 100,
+    "char_count": 619,
+    "p0_count": 0,
+    "p1_count": 0,
+    "p2_count": 0
+  },
+  "issues": [],
+  "fact_checks": [
+    {
+      "claim": "辣椒素疏水脂溶：微溶于水，易溶于油脂、酒精和多种有机溶剂；水冲不走它，反而把它在口腔里摊开、让更多感受器被刺激，常常越喝越辣。",
+      "source_verified": true,
+      "detail_verified": true,
+      "omission_severity": "none",
+      "verdict": "correct",
+      "note": "PubMed PMC6639979 与 PMC6273101 确认 capsaicin 不溶于水（not water soluble），可溶于 ethanol、acetone、fatty oils；Biology Insights 与百度健康均确认其 hydrophobic/lipophilic、水会把它在口腔表面摊开并加剧灼烧。文中『怕油不怕水』『微溶/易溶于油脂酒精』『水帮着铺开』逐字与权威源一致，无细节偏差。"
+    },
+    {
+      "claim": "辣不是味觉，是痛觉；辣椒素结合并激活舌头上的 TRPV1 痛觉/热感受器，骗大脑以为正被烫伤（TRPV1 本是温度报警器，被约 43℃ 伤害性热激活）。",
+      "source_verified": true,
+      "detail_verified": true,
+      "omission_severity": "none",
+      "verdict": "correct",
+      "note": "科普中国（2021 诺奖解读）明确『辣觉被科学定义为痛觉』，TRPV1 由疼痛、热（≥42℃ 伤害性热）激活；PubMed PMC2852643 确认 TRPV1 热激活阈值约 43℃、辣椒素激活它产生与高热相同的电信号。文中『不是味觉是痛觉』『温度报警器』『骗大脑以为被烫伤』均与权威源细节一致。"
+    },
+    {
+      "claim": "牛奶靠『脂肪溶解 + 酪蛋白包裹』双管齐下：酪蛋白是两亲分子，靠疏水区域把辣椒素包进胶束、从 TRPV1 上剥下来；脂肪直接溶掉一部分；全脂冰牛奶效果最好（脂肪多、酪蛋白足，低温还降温压一压痛觉信号）。",
+      "source_verified": true,
+      "detail_verified": true,
+      "omission_severity": "none",
+      "verdict": "correct",
+      "note": "biobright.blog 确认 casein 为 amphiphilic（两亲），疏水端将 capsaicin 包入 micelle 并从其与 TRPV1 的结合中剥离；cleaneat.blog 称 casein 为去辣椒素主力、脂肪为关键辅助；theworkoutmag 确认全脂奶优于脱脂、低温通过 TRPM8 冷感受器部分抵消 TRPV1 痛觉信号。文中『两亲分子』较 v1『非极性分子』更精确，机制与『全脂冰牛奶更好』均属实。"
+    }
+  ],
+  "quote_checks": [],
+  "mechanism_checks": [
+    {
+      "claim": "Q2：辣椒素不溶于水、水冲不动，反把它摊开扩散到更广口腔区域，更多痛觉感受器被刺激 → 越喝越辣。",
+      "direction_ok": true,
+      "elements_complete": true,
+      "note": "因果方向自洽：水不溶辣椒素 → 冲散扩散 → 感受器被撒更广 → 更辣。且文末保留『水有短暂冲洗稀释、松绑有限』的中间态（未一刀切否定），环节完整，无方向矛盾。"
+    },
+    {
+      "claim": "Q3：酪蛋白疏水区把辣椒素包进胶束、从 TRPV1 上剥落，牛奶脂肪再溶掉一部分 → 解辣。",
+      "direction_ok": true,
+      "elements_complete": true,
+      "note": "通俗机制完整：两亲性酪蛋白靠疏水区结合辣椒素成胶束、剥离受体；脂肪直接溶解（like dissolves like）。与权威源『casein acts like detergent, fat dissolves capsaicin』机制一致，未跳步、未矛盾。"
+    }
+  ],
+  "attribution_checks": [
+    {
+      "claim": "牛奶解辣主因为酪蛋白（去辣椒素主力，类洗涤剂作用），脂肪为辅助溶解；全脂冰牛奶因脂肪多、酪蛋白足且低温降温而效果最好。",
+      "is_primary_cause": true,
+      "note": "文献支持酪蛋白为去除辣椒素之主力（biobright/cleaneat 均称 casein 为 primary actor、fat 为 secondary），文中『脂肪溶解 + 酪蛋白包裹双管齐下』且明示『全脂冰牛奶脂肪更多效果更好』已含主次，未只给次要原因而遗漏主因，归因完整。"
+    }
+  ],
+  "term_checks": [
+    {
+      "term": "TRPV1",
+      "used": "TRPV1 痛觉感受器",
+      "correct": "TRPV1（瞬时受体电位香草酸亚型1）痛觉/热感受器",
+      "exact": true,
+      "note": "文中称 TRPV1 为痛觉感受器，与科普中国、PubMed 一致；并准确补充『本是温度报警器』（热敏通道），用字与事实精确，无形近/音近误用。"
+    },
+    {
+      "term": "酪蛋白",
+      "used": "酪蛋白是一种两亲分子，既有亲水端也有疏水端",
+      "correct": "酪蛋白（casein）两亲性（amphipathic）磷蛋白，疏水区结合辣椒素成胶束",
+      "exact": true,
+      "note": "v2 已将 v1 的『非极性分子』修正为更准确的『两亲分子』，与 biobright.blog『amphiphilic, parts attracted to water and parts to fats』一致，术语精度达标。"
+    }
+  ],
+  "gap_checks": [
+    { "pattern_id": "G-01", "triggered": false, "checked": true, "finding": "" },
+    { "pattern_id": "G-02", "triggered": false, "checked": true, "finding": "" },
+    { "pattern_id": "G-03", "triggered": false, "checked": true, "finding": "" },
+    { "pattern_id": "G-04", "triggered": false, "checked": true, "finding": "" },
+    { "pattern_id": "G-05", "triggered": false, "checked": true, "finding": "" },
+    { "pattern_id": "G-06", "triggered": false, "checked": true, "finding": "" },
+    { "pattern_id": "G-07", "triggered": false, "checked": true, "finding": "" }
+  ],
+  "issue_responses": [
+    {
+      "issue_index": 0,
+      "status": "resolved",
+      "evidence": "v2 已新增 Q4，并将四段字数明显拉开：Q1 最短（开门见山，约78字）、Q3 最长（展开『脂肪溶解+酪蛋白包裹』双机制＋全脂冰牛奶，约115字）、Q2/Q4 居中（约95/90字），偏差远超 v1 所指『<15字』，AI 排版机械感已消除，恰对应 v1 建议『Q3略长展开、Q1略短』。"
+    },
+    {
+      "issue_index": 1,
+      "status": "resolved",
+      "evidence": "v2 结尾风格表格已补 markdown 分隔行『| --- | --- | --- | --- |』（第20行），前后均有表头行与数据行，可被渲染器正确识别为 2行×4列 表格，v1 所指分隔行缺失已修复。"
+    }
+  ],
+  "title_checks": [],
+  "forbidden_violations": [],
+  "overall_comment": "客观脚本（validate_article.py）得分 100、P0/P1/P2 全空、char_count=619。独立 WebSearch 核验三处核心机制断言（辣椒素疏水脂溶/水扩散、TRPV1 热敏痛觉受体、酪蛋白两亲胶束剥离+脂肪辅助+全脂冰牛奶最优）均经 PubMed、科普中国、Biology Insights 等权威源逐字印证，无事实错误、无逻辑矛盾、结构齐备（A段引用块、C段Q格式、F段『冷知识反转』引用块、2行×4列结尾表格均到位）。Step 5.9 对照 GAP_PATTERNS 七条均未命中。一轮 v1 两条 P2（Q段字数均匀、表格缺分隔行）在 v2 均已修复。审校后 Orchestrator 已修复 Q1 双破折号（FP-25，改逗号），最终 v2 文章 P0/P1/P2=0、validate_article.py 得分 100，pass=true。"
+}
