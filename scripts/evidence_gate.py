@@ -22,6 +22,7 @@ import argparse
 import json
 import re
 import sys
+from datetime import datetime
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -288,6 +289,51 @@ def run_replay(tsv_path):
     return 0 if hit == total else 1
 
 
+def _resolve(p):
+    """--card / --article 路径解析：先按 cwd，再按仓库根。"""
+    path = Path(p)
+    if path.exists():
+        return path
+    alt = ROOT / p
+    return alt if alt.exists() else path
+
+
+def _schema_findings(card_path):
+    """用 validate_contract 做 schema 校验，避免「字段写错也能 0 分通过」。"""
+    try:
+        sys.path.insert(0, str(Path(__file__).resolve().parent))
+        import validate_contract
+        status, _ver, errors, _gaps = validate_contract.check_file(
+            "evidence_card", card_path, require_v1=True)
+        if status == "ok":
+            return []
+        detail = "; ".join(f"{p}: {m}" for p, m in errors[:3]) or status
+        return [("P0", "schema_invalid", "证据卡", detail)]
+    except Exception as e:
+        return [("P1", "schema_unchecked", "证据卡", f"schema 校验未能执行: {e}")]
+
+
+def write_report(card_path, article, findings, mode):
+    """warn 模式下退出码恒为 0，P0 必须落盘，否则会静默丢失（模拟 S2 指出的硬伤）。"""
+    p0 = [f for f in findings if f[0] == "P0"]
+    p1 = [f for f in findings if f[0] == "P1"]
+    out = Path(card_path).with_suffix(".gate.json")
+    out.parent.mkdir(parents=True, exist_ok=True)
+    payload = {
+        "generated_at": datetime.now().isoformat(timespec="seconds"),
+        "mode": mode,
+        "card": str(card_path).replace("\\", "/"),
+        "article": str(article).replace("\\", "/") if article else None,
+        "p0_count": len(p0),
+        "p1_count": len(p1),
+        "blocked": bool(p0) and mode == "block",
+        "findings": [{"severity": s, "code": c, "where": w, "message": m}
+                     for s, c, w, m in findings],
+    }
+    out.write_text(json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8")
+    return out
+
+
 def main():
     ap = argparse.ArgumentParser(description="dailywhy 证据门禁（R3/P0-1）")
     ap.add_argument("--card", help="证据卡 JSON")
@@ -296,6 +342,7 @@ def main():
     ap.add_argument("--selftest", action="store_true")
     ap.add_argument("--replay", help="历史错误 claim 回放集（TSV）")
     ap.add_argument("--json", action="store_true")
+    ap.add_argument("--no-report", action="store_true", help="不写 .gate.json 报告")
     args = ap.parse_args()
 
     if args.selftest:
@@ -305,17 +352,18 @@ def main():
     if not args.card:
         ap.error("需要 --card（或用 --selftest）")
 
-    card_path = Path(args.card)
+    card_path = _resolve(args.card)
     try:
         card = json.loads(card_path.read_text(encoding="utf-8"))
     except Exception as e:
         print(f"[evidence_gate] 读取证据卡失败: {e}", file=sys.stderr)
         return 2
 
-    findings = check_card(card)
+    findings = _schema_findings(card_path) + check_card(card)
     if args.article:
+        article_path = _resolve(args.article)
         try:
-            text = Path(args.article).read_text(encoding="utf-8")
+            text = article_path.read_text(encoding="utf-8")
         except Exception as e:
             print(f"[evidence_gate] 读取文章失败: {e}", file=sys.stderr)
             return 2
@@ -337,6 +385,10 @@ def main():
         for s, c, w, m in findings:
             print(f"[{s}] {c} @ {w}: {m}")
         print(f"\n证据门禁：P0={len(p0)} P1={len(p1)}（模式={args.mode}）")
+
+    if not args.no_report:
+        rp = write_report(card_path, args.article, findings, args.mode)
+        print(f"[evidence_gate] 报告已落盘: {rp.name}（warn 模式下 P0 不会静默丢失）")
 
     if p0 and args.mode == "block":
         print("[evidence_gate] ❌ 阻断：存在 P0 未核实 claim", file=sys.stderr)
