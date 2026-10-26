@@ -160,8 +160,10 @@ def validate(path: Path, article_path: Path | None = None) -> dict:
         stats["schema_version"] = "v1"
     elif sv:
         errors.append(f"`schema_version` 只接受 \"v1\"，实际 {sv!r}（不接受猜测）")
+    elif file_date and file_date >= "2026-10-29":
+        errors.append("缺少 `schema_version: \"v1\"`（10-29 起强制；缺了会被判 legacy，新契约永远不生效）")
     elif file_date and file_date >= "2026-10-27":
-        errors.append("缺少 `schema_version: \"v1\"`（10-27 起强制；缺了会被判 legacy，新契约永远不生效）")
+        warnings.append("缺少 `schema_version: \"v1\"`（10-27 至 10-28 为观察期，仅警告；10-29 起判 FAIL）")
     else:
         warnings.append("缺少 `schema_version`（10-27 前历史文件，仅警告不回改）")
 
