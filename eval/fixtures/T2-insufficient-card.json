@@ -1,0 +1,20 @@
+{
+  "schema_version": "v1",
+  "topic": "为什么某种矿石在夜里会发光？",
+  "claims": [
+    {
+      "id": "C1",
+      "text": "矿石夜间发光是因为缓慢氧化放能",
+      "type": "mechanism",
+      "source": {
+        "title": "某科普文章",
+        "url": "",
+        "source_level": "secondary"
+      },
+      "quote": "会发光",
+      "verified_by": "snippet",
+      "confidence": "low"
+    }
+  ],
+  "banned_claims": []
+}

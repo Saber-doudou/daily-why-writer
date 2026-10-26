@@ -1,0 +1,3 @@
+run_id	date	topic	s2_seconds	gate_p0	gate_p1	article_chars	note
+S1	2026-10-27	为什么飞机的舷窗是圆角的？	21.1	0	1	524	第1轮 P0=3 全为 Q1/Q2/Q3 标签数字被判事实句（误杀，正文无未映射事实句）；第2轮给三个 Q 标题句内嵌 <!-- claim:C1 --> 后 P0=0、P1=1（C1 snippet_only）；validate_article 100 分
+S1b	2026-10-27	为什么飞机的舷窗是圆角的？	n/a	0	1	524	修复Q标签误杀后：删掉3处错误映射，只在「五十年代…高空解体」事实句保留1处映射即P0=0；新增自检 q_label_false_positive 与 cn_numeral_fact 两条回归

@@ -28,9 +28,14 @@ ROOT = Path(__file__).resolve().parent.parent
 HIGH_RISK = {"mechanism", "number", "attribution"}
 MIN_QUOTE = 15
 
-# 高风险事实句特征：只认数字类表达（阿拉伯数字、倍数、百分比、分数）。
-# 机构名/人名不做正则命中——误报率过高，交给审校的 fact_checks 覆盖（已在证据卡记录该边界）。
-FACT_PAT = re.compile(r"\d|倍|百分之|[一二三四五六七八九十]+分之[一二三四五六七八九十]+")
+# 高风险事实句特征：数字类表达。
+# 阿拉伯数字 + 倍数/百分比/分数，外加带计量单位的中文数字（「五十年代」「三倍」这类
+# 同样是可核事实，不能被漏掉——模拟运行 S1 就漏了「上世纪五十年代」）。
+# 不带单位的中文数字（三张表、两步走）不触发，避免误杀。
+FACT_PAT = re.compile(
+    r"\d|倍|百分之|[一二三四五六七八九十百千万]+分之[一二三四五六七八九十]+"
+    r"|[一二三四五六七八九十百千万]+(?:年|倍|米|毫米|厘米|吨|公斤|克|摄氏度|度|分钟|小时)"
+)
 
 
 # ───────────────────────── 卡片检查 ─────────────────────────
@@ -101,6 +106,10 @@ def check_article(text, card):
 
     for lineno, line in enumerate(text.splitlines(), 1):
         body = re.sub(r"^\s*(>\s*)?([-*+]\s+|\d+\.\s+)?", "", line).strip()
+        # 2026-10-27 模拟运行 S1 抓到的误杀：SKILL 强制的 `**Q1：...**` 标题，
+        # 序号 1/2/3 被 FACT_PAT 当成数字，整句被判「事实句无映射」。
+        # Q 标签是格式，不是事实断言，判前先剥离。
+        body = re.sub(r"^\*{0,2}\s*Q\d+\s*[：:]\s*", "", body)
         if not body:
             continue
         markers = []
@@ -205,8 +214,7 @@ SELFTEST = {
         "article": "这项研究覆盖了 93 个物种、6000 多枚标本。",
         "expect_p0": 1,
     },
-    "banned": {
-        "card": {
+    "banned": {        "card": {
             "schema_version": "v1", "topic": "测试",
             "claims": [{"id": "C1", "text": "x", "type": "mechanism",
                         "source": {"title": "t", "url": "https://a.b", "source_level": "primary"},
@@ -215,6 +223,19 @@ SELFTEST = {
             "banned_claims": ["白蚁分泌蚁酸"],
         },
         "article": "据说白蚁分泌蚁酸，能腐蚀白银。",
+        "expect_p0": 1,
+    },
+    # 2026-10-27 模拟运行 S1 的误杀回归：SKILL 强制的 `**Q1：...**` 标题，
+    # 序号被当成数字导致整句判「事实句无映射」。剥离 Q 标签后应为 0。
+    "q_label_false_positive": {
+        "card": {"schema_version": "v1", "topic": "测试", "claims": [], "banned_claims": []},
+        "article": "**Q1：这东西为什么这么重？** → 因为它很密。\n**Q2：真的吗？** → 真的。",
+        "expect_p0": 0,
+    },
+    # 中文数字带计量单位属于可核事实，必须要求映射（S1 漏过「上世纪五十年代」）
+    "cn_numeral_fact": {
+        "card": {"schema_version": "v1", "topic": "测试", "claims": [], "banned_claims": []},
+        "article": "上世纪五十年代，喷气客机接连出事。",
         "expect_p0": 1,
     },
 }

@@ -1,0 +1,23 @@
+{
+  "schema_version": "v1",
+  "topic": "为什么白蚁能把银子吃掉？",
+  "claims": [
+    {
+      "id": "C1",
+      "text": "白蚁额腺分泌萜类",
+      "type": "mechanism",
+      "source": {
+        "title": "原始论文",
+        "url": "https://example.org/p",
+        "source_level": "primary"
+      },
+      "quote": "这是一段不少于十五个字的原文逐字引文示例",
+      "verified_by": "fetch",
+      "confidence": "high"
+    }
+  ],
+  "banned_claims": [
+    "白蚁分泌蚁酸",
+    "甲酸银在炉火中分解"
+  ]
+}
