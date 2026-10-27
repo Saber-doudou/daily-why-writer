@@ -4,6 +4,32 @@
 
 ---
 
+## v5.4 — 2026-10-27 R2/R3 交付物首次真正进入 GitHub + 素材池自动回捞（L3 v3.27，缺陷 #67）
+
+**来源**：Master 问「再补推一次 GitHub」。核验时发现远端 sha 本身已是最新（`3b62eed` 已在 `refs/heads/main`），但顺手对目录树时发现更严重的问题：**R2 的契约层与 R3 的全部产物，从来没有进过 GitHub 仓库**。
+
+**实证（远端 `ls-tree` 与镜像 `scripts/` 逐项比对）**：`validate_contract.py`、`contracts/` 四份 schema、`evidence_gate.py`、`safe_pool.py`、`safe_topics.json`、`eval/historical_claims.tsv` 全部缺失。R3 曾宣告「合并到 main」，但那只是本地工作区仓库；镜像仓库的同步白名单里根本没有这些条目。
+
+**根因（与 #59 同源，属同一类结构性盲区）**：Phase 3 的双向自检有两个方向——「`git_add_files` 的每一项有没有复制源」和「repo 里已跟踪的文件在不在白名单」。**两个方向都不检查「当期交付物有没有进清单」**。加之外层 `full_selfcheck` 只扫本地脚本与配置，从不读镜像内容，于是脚本自检、发布报告、manifest 三者同时报绿。**缺的是「交付物 → 发布物」这一跳的反向核对**，正是死文件判据的反面。
+
+**修复（两份清单必须同改，只改一份会触发「无复制源」告警）**：
+1. `l3_publish.py` 的 `extra_sync` 与 `config.json` 的 `git_add_files` 同步补 10 项：`validate_contract.py`、`evidence_gate.py`、`safe_pool.py`、`topic_candidates.py`、`contracts/` 四份 schema、`safe_topics.json`、`eval/historical_claims.tsv`。每一项都答得出「谁读、哪步读」——contracts 由 `validate_contract` 分流读取；`validate_contract` 由 `evidence_gate` 与 L3 读；`evidence_gate` 由 L1 步骤 4.5/9.5 读；`safe_topics` 由 `safe_pool` 读，是 11-01 切 block 后的降级兜底；`topic_candidates` 由 `update_history` 末尾调用；`historical_claims` 是门禁回放样本。
+2. 镜像 `.gitignore` 补 `runtime 产物`（`.workbuddy/`、`__pycache__/`、`*.pyc`）——此前这两个未跟踪目录让 `git status` 永远非空，每次 Phase 3 都要走一遍空提交判断。
+
+**顺带落地：素材池自动回捞（替代 L1 步骤 5 的人工手改）**。步骤 5 原文「用 Bash 追加/更新，保持 JSON 合法」是纯手工、无脚本、无校验，10-27 生产实跑整步漏做且外部不可见（EXP-004 反例）。改为从既有副作用派生：每个候选在步骤 3 都要过 `check_topic`，而它本来就会写决策日志，因此「今天探测过哪些候选」早已被记录。新增 `scripts/topic_candidates.py --harvest`：读日志 → 筛（当日 + `mode=angle` + 无 `exclude_date` + `verdict=pass`）→ 减去证据卡里的成稿主题 → 去重 → 追加为 `rejected`（带 `provenance` 追溯）。挂到 `update_history.py` 末尾（L1 阶段 3 既有硬步骤），**L1 提示词一个字不改**，失败只警告不阻断。配套 `check_topic --no-log`，`dedup_selftest` / `full_selfcheck` / `safe_pool` 三处测试调用全部传上，否则日志被 20 多条测试话题污染（实测 10-27 日志 30 条里只有 3 条真实候选）。自测 14/14。
+
+**契约数据化**：素材池每类 source 的必填字段从自检代码搬进 `topic_candidates.json` 的 `field_spec`，`topic_candidates.py` 与 `full_selfcheck.py` 共读同一份，杜绝「代码一套、文档一套」。219 条全部合规；5 条缺 `evidence` 继续在自检里点名，不塞占位假数据。
+
+**门禁自测强化**：`evidence_gate` 自测支持 `expect_codes`。原来只比 P0 数量，**别的原因凑够条数也会 PASS**，被测规则可能压根没被触发。已有 7 个夹具全部补上理由断言；新增 3 个压力夹具覆盖已知弱点——中文数字带单位（`stress_cn_numeral_dense`）、表格行与 Q 标签双误杀（`stress_table_and_qlabel_clean`）、tertiary 与 banned 双触发（`stress_tertiary_and_banned`）。自测 8/8 → 11/11。夹具记入 `eval/sim-runs.tsv` 的 F1/F2/F3，明确标注**不计入 C4 的 5 次模拟**。
+
+**版本对齐**：`l3_publish.py` VERSION v3.26 → v3.27 + `daily-why-publish/SKILL.md` frontmatter/标题/末条 `*Version:` 三处 + `version.json`（daily-why-publish v3.26→v3.27 + `_note` + `_updated`）。fail-closed 版本门禁实测 5 个技能全部一致、0 FAIL。
+
+**验收**：`full_selfcheck` 26/26 → 27/27；门禁自测 11/11；素材池自测 14/14；8 项验收批次全绿。推送后 `ls-remote` 权威核验远端 `f5e728e` 与本地一致，远端目录树确认上述 10 项均已落地。
+
+**沉淀**：defects.md #67；教训——新增交付物必须同改两份清单，且**验收要看 repo 实际内容，不能只看脚本自检结论**（自检通过与交付完成是两件事）。
+
+---
+
 ## v5.3 — 2026-10-23 标题主体口径核对全链防线落地（reviewer_prompt v3.0 + CHECKLIST §128 + validate_review v1.2，缺陷 #66）
 
 **来源**：Master 人工终审抓出 P0——10-23 介形虫稿件标题「为什么有的生物，把繁衍技能点满，反而灭绝了？」被读成「介形虫类群灭绝了」，与正文「现生的只有约 1.3 万种」正面矛盾。v1、v2 两版稿件、四家 AI 投喂、三轮独立审校**全链漏判**（均盯着「因果软化」，无人核对「谁灭绝了」）。Master 二轮反馈「物种也不对吧 应该是某些分支吧」「标题一直都是一种痛 我想修无从下手」→ 授权系统性修复。
