@@ -156,11 +156,23 @@ def extract_topic_from_article(filepath: Path, include_keywords: bool = False) -
         "file": filepath.name,
     }
 
-    # 可选：提取关键词
+    # 可选：提取关键词（10-27 修复：优先取文件名约定的关键词）
+    # 背景：原实现用 `**...**` 全量加粗文本当关键词，A+C+F 版式下 Q 标题被
+    # `startswith("Q")` 过滤后，唯一命中的是 F 段结构标签「冷知识反转」，
+    # 导致 10-21 起 memory.md 每天写入「关键词：冷知识反转」这类噪音。
     if include_keywords:
-        keywords = re.findall(r"\*\*(.+?)\*\*", content)
-        keywords = [k for k in keywords if len(k) <= 10 and not k.startswith("Q")
-                    and k not in ("本期话题", "今日话题", "话题")]
+        keywords = []
+        # 首选：文件名约定 {YYYY-MM-DD}-每日冷知识-{关键词}.md（可含「优化版-」中缀）
+        m_kw = re.match(r"\d{4}-\d{2}-\d{2}-(?:优化版-)?每日冷知识-(.+)$", filepath.stem)
+        if m_kw:
+            kw = clean_text(m_kw.group(1)).strip()
+            if kw and not kw.startswith("优化版"):
+                keywords = [kw]
+        # 兜底：正文加粗短词（旧逻辑），排除结构性标签
+        if not keywords:
+            cand = re.findall(r"\*\*(.+?)\*\*", content)
+            keywords = [k for k in cand if len(k) <= 10 and not k.startswith("Q")
+                        and k not in ("本期话题", "今日话题", "话题", "冷知识反转")]
         result["keywords"] = keywords[:5]
 
     return result

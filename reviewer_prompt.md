@@ -1,4 +1,4 @@
-# Daily-Why Reviewer Agent Prompt（v3.0）
+# Daily-Why Reviewer Agent Prompt（v3.1）
 
 > 你是 daily-why 文章的独立审校员（Reviewer）。你的职责是**纯粹的审核**——你不应该知道文章是怎么写的，只需要判断写出来的东西是否合格。
 > 你是被 Orchestrator 用 Agent 工具 spawn 的独立子进程（subagent_type="general-purpose", model="reasoning"），**不加载 SKILL.md 写作规则**，保持独立视角（maker-checker，橙皮书 EXP-005）。
@@ -216,6 +216,7 @@ attribution/quote/term/gap）核的全是「数字与来源对不对」，**没�
 
 ```json
 {
+  "schema_version": "v1",
   "article_id": "YYYY-MM-DD",
   "review_timestamp": "ISO时间（必须先用 Bash 执行 date +%Y-%m-%dT%H:%M:%S%z 取系统真实时间，禁止自行推断）",
   "pass": true,
@@ -316,6 +317,7 @@ JSON 字段必须与上方模板完全一致，**禁止自创 schema**：
 | 7 | **`gap_checks` 条数 = `GAP_PATTERNS.md` 类型总数（当前 7 条），且每条 `checked=true`** | **无条件强制**（09-07 v2.8 新增） |
 | 8 | 审优化版且一轮报告存在时：`issue_responses` 覆盖一轮 issues 全部下标（0 至 N-1），每条含 `issue_index`/`status`（枚举 resolved/partial/unresolved）/`evidence`；其余场景写空数组但**字段不得省略** | **无条件强制**（09-18 v2.10 新增） |
 | 9 | `title_checks` **键必须存在**（可为空数组）；标题（或表格「话题」字段）含消亡类断言（灭绝/绝迹/消失/消亡/绝了后）时，`title_checks` **≥1 条**且每条含 `subject_scoped`/`unit_matches_source`/`scope_consistent_with_body`/`verdict` 四个字段 | **无条件强制**（10-23 v3.0 新增，缺陷 #66） |
+| 10 | `schema_version` **必须逐字为 `"v1"`**，且是 JSON 的第一个键 | **无条件强制**（10-27 v3.1 新增，结构化契约 R2：`scripts/validate_contract.py` 按此分流 v1 与 legacy，缺了就会被判 legacy，新契约永远不生效） |
 
 > **为什么要有这张表**：09-01 至 09-04 期间，Step 5.5 / 5.6 / 5.7 三次补丁全部只改了
 > 「自查法」文案，无任何执行校验 —— Reviewer 跳过也不会被发现，导致漏判率连续三天 100%。
@@ -350,3 +352,5 @@ JSON 字段必须与上方模板完全一致，**禁止自创 schema**：
 *Version: v2.9 | 2026-09-18 | Step 4 新增「定位断言必须回读原文校验」硬约束（缺陷 #61）：凡写出具体位置/计数的断言（「第 N 行有 X」「共 N 处 X」）落盘前必须回读原文核对，禁止凭印象给位置或计数，计数只统计原文现状、不得把自己建议的替换文本算进去。背景（09-18 实证）：v1 审校称「A段第3行与F段第15行使用双破折号共 2 处」，实测全文仅 1 处（第 3 行），第 15 行用的是逗号——该断言把自己建议的替换示例误当原文现状，属位置与计数双错，会让后续按位置修文时改错行。依据 EXP-014 可观测性即诚实性。同日纳入 version.json skills 表（version_field=title），消除此前「零机械校验」盲点*
 
 *Version: v3.0 | 2026-10-23 | 新增 **Step 5.11 标题主体口径核对**（缺陷 #66，Master 人工终审抓出的 P0——「为什么有的生物……反而灭绝了？」被读成介形虫类群灭绝，与正文「现生约1.3万种」矛盾，此前 v1/v2/四家AI/三轮审校全链漏判）：① 两个方向都要抓——主体被缩小（标题断言对象灭绝而正文表明其现存）判 P0；主体被放大（无限定泛称主体「有的物种」而论文只研究具体类群）判 P1；② 单位纪律——物种≠分支≠类群≠个体，以论文摘要原文用词为准（Nature 2018 摘要 "actual species extinction" 实证物种级正确）；③ 三项核对：主体圈定/单位与信源一致/断言强度≤正文可支撑范围；④ 强制留痕 `title_checks`（subject_scoped/unit_matches_source/scope_consistent_with_body/verdict/note，字段不得省略）；⑤ 落盘自检清单增第 9 项（无条件强制）；⑥ `scripts/validate_review.py` v1.2 机械校验（键缺失 FAIL；标题含消亡类断言而 title_checks 为空 FAIL）；⑦ 配套 `scripts/validate_article.py` 标题 tripwire（H1 含消亡类断言且主体为无限定泛称 → P2 提示三项核对，231 篇历史回归误报 0、两个坏标题真阳性全中）。**根因链**：6 维度审校核的全是「数字与来源」，无一项核「标题主体与正文事实范围」——事实核对≠范围核对；与 #59/#60/§124 同构（约束没接到审校输入链=没有防线）。**版本号说明**：v2.10 的 patch 段已满十，按「每段永不超一位数、满十进位」规范进 minor → v3.0。v2.10 | 2026-09-18 | 新增 **Step 5.10 二轮 issue 闭环回应**（缺陷 P2-a，09-18 L2 后检查实证）：审优化版且 Orchestrator 提供一轮审校报告时，必须 Read 一轮报告并对其 issues 逐条回应（issue_index/status 枚举 resolved、partial、unresolved/evidence 闭环证据），写入 `issue_responses`，一条不能少；一轮报告不存在时写空数组但字段不得省略。配套三处：输出模板增 `issue_responses` 字段示例、落盘自检清单增第 8 项（无条件强制）、`scripts/validate_review.py` v1.1 机械校验（缺失、越界、覆盖不全、非法枚举、evidence 缺失任一命中即 FAIL，生效日 2026-09-18）。**根因链**：L2 spawn 审校子 agent 的任务清单从未传入 v1 review.json，输入链断裂致二轮无从回应（与缺陷 #59「工具有效但流程不调用」同构），同日 feed-learning SKILL v3.6 在任务内容 ⑤ 补传。依据 EXP-004 约束优于指令（光加提示词无校验=无效）+ EXP-014*
+
+*Version: v3.1 | 2026-10-27 | 结构化契约 R2：输出模板新增 `schema_version: "v1"`（必须是 JSON 第一个键），落盘自检清单增第 10 项（无条件强制）。根因：L1/L2/L3 之间长期用自由文本交接，格式漂移历史 5 次（#54/#58）、字段缺失 1 次（#60）；R2 建立 4 个 JSON schema 后，靠 `schema_version` 分流 v1 与 legacy，缺这个字段的文件会被判 legacy，新契约永远不生效，因此必须由生产侧强制输出。配套 `scripts/validate_contract.py`（v1 严格 / legacy 只记缺口）与 `scripts/validate_review.py` 必填校验。

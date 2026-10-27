@@ -43,7 +43,7 @@ import re
 import sys
 from pathlib import Path
 
-VERSION = "v1.2"
+VERSION = "v1.3"
 
 # v1.2（10-23）新增：标题主体口径核对（title_checks）强制起始日
 TITLE_CHECK_ENFORCE_SINCE = "2026-10-23"
@@ -149,6 +149,23 @@ def validate(path: Path, article_path: Path | None = None) -> dict:
     for key, alt in REQUIRED_TOP_ANY.items():
         if key not in data and not any(a in data for a in alt):
             errors.append(f"缺少计数字段 `{key}`（也未找到兼容字段 {'/'.join(alt)}）")
+
+    # 1.5 结构化契约版本（R2，10-27 起强制）
+    # validate_contract.py 靠 schema_version 分流 v1 / legacy；缺字段的新文件会被判 legacy，
+    # 新契约永远不会生效，所以这里必须把「漏输出」变成可机械判定的事实。
+    m_sv = re.search(r"(\d{4}-\d{2}-\d{2})", path.name)
+    file_date = m_sv.group(1) if m_sv else ""
+    sv = data.get("schema_version")
+    if sv == "v1":
+        stats["schema_version"] = "v1"
+    elif sv:
+        errors.append(f"`schema_version` 只接受 \"v1\"，实际 {sv!r}（不接受猜测）")
+    elif file_date and file_date >= "2026-10-29":
+        errors.append("缺少 `schema_version: \"v1\"`（10-29 起强制；缺了会被判 legacy，新契约永远不生效）")
+    elif file_date and file_date >= "2026-10-27":
+        warnings.append("缺少 `schema_version: \"v1\"`（10-27 至 10-28 为观察期，仅警告；10-29 起判 FAIL）")
+    else:
+        warnings.append("缺少 `schema_version`（10-27 前历史文件，仅警告不回改）")
 
     # 2. script_result.char_count（maker-checker 闭环复核锚点 H2）
     sr = data.get("script_result")
