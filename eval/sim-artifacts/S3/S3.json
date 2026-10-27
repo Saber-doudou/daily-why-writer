@@ -1,0 +1,23 @@
+{
+  "schema_version": "v1",
+  "topic": "为什么微波炉不能放金属？",
+  "angle": "金属把微波弹回去，电子被挤到尖角和窄缝处堆积，把中间那层空气击穿，打出一串电弧",
+  "claims": [
+    {
+      "id": "C1",
+      "text": "金属在微波场里感应出高频电流，电荷在尖角和窄缝这类曲率突变处堆积，形成局部强电场并击穿空气；家用微波炉频率 2.45 千兆赫对应波长约十二厘米，与餐具尺寸接近时更易在该尺度上集中",
+      "type": "mechanism",
+      "source": {
+        "title": "（故意留空，制造无来源 claim）",
+        "publisher": "",
+        "source_level": "secondary"
+      },
+      "quote": "这是一段不少于十五个字的引文占位，用于满足最小长度校验",
+      "verified_by": "snippet",
+      "confidence": "medium",
+      "counter_evidence": []
+    }
+  ],
+  "open_questions": [],
+  "banned_claims": []
+}

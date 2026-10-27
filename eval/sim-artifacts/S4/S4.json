@@ -1,0 +1,25 @@
+{
+  "schema_version": "v1",
+  "topic": "为什么冰面那么滑？",
+  "angle": "冰面自带一层准液态润滑膜，压力与摩擦热都不是从零造出水，而是给本来就有的膜添力",
+  "claims": [
+    {
+      "id": "C1",
+      "text": "冰的表层存在一层极薄的准液态水膜，脚底的重量与相对滑动产生的摩擦热都会让它增厚，从而充当润滑层",
+      "type": "mechanism",
+      "source": {
+        "title": "（模拟占位来源 S4，故意标注 verified_by=none 与 confidence=unverified）",
+        "publisher": "SIM-ONLY PLACEHOLDER",
+        "year": "",
+        "url": "https://example.org/placeholder-s4-sim-only",
+        "source_level": "secondary"
+      },
+      "quote": "这是一段不少于十五个字的引文占位，模拟专用不代表任何真实来源内容",
+      "verified_by": "none",
+      "confidence": "unverified",
+      "counter_evidence": []
+    }
+  ],
+  "open_questions": [],
+  "banned_claims": []
+}

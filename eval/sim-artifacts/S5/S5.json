@@ -1,0 +1,27 @@
+{
+  "schema_version": "v1",
+  "topic": "为什么鸽子走路时头一点一点？",
+  "angle": "不是走路带出点头，是为了让头在空间里不动、稳住画面，身体才配合出一探一停的节奏",
+  "claims": [
+    {
+      "id": "C1",
+      "text": "鸽子走路的头部动作由推进相与保持相两个阶段交替组成：推进时头相对身体快速前伸，保持时头在空间中几乎完全静止；这种稳定受视觉控制，作用是在保持相稳定视网膜上的成像",
+      "type": "mechanism",
+      "source": {
+        "title": "Head-bobbing in pigeons: how stable is the hold phase?",
+        "publisher": "Journal of Experimental Biology 203(5): 935-940（Troje & Frost, 2000，PubMed 10667977）",
+        "year": "2000",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/10667977/",
+        "source_level": "primary"
+      },
+      "quote": "The head movement of a walking pigeon Columba livia is characterized by two alternating phases, a thrust phase and a hold phase. While the head is rapidly thrust forward during the thrust phase, it has been shown repeatedly that it remains virtually motionless with respect to translation along a horizontal axis (roll axis) during the hold phase.",
+      "verified_by": "fetch",
+      "confidence": "high",
+      "counter_evidence": [
+        "摘要原文同时指出存在一个很小但系统性的滑差 slip，作者推测它充当视网膜稳定化的误差信号，因此头部并非绝对零位移"
+      ]
+    }
+  ],
+  "open_questions": [],
+  "banned_claims": []
+}

@@ -5,3 +5,6 @@ S2	2026-10-27	为什么猫喜欢钻进纸箱？	26.3	0	0	616	卡片仅模式 P0=
 F1	2026-10-27	stress_cn_numeral_dense	n/a	2	0	0	门禁级压力夹具（永久回归，非全链模拟）：中文数字带单位两句均被 unmapped_fact 抓到，codes 断言 [unmapped_fact]。不计入 C4 的 5 次模拟
 F2	2026-10-27	stress_table_and_qlabel_clean	n/a	0	0	0	门禁级压力夹具：表格行数字 + Q 标签数字两类必然误杀同时出现，实测 0 命中；与 F1 互为反向，防一修就松。不计入 C4
 F3	2026-10-27	stress_tertiary_and_banned	n/a	2	0	0	门禁级压力夹具：tertiary 单独支撑 + 命中已证伪断言同时触发，codes 断言 [banned_claim_hit, tertiary_only]。不计入 C4
+S3	2026-10-28	为什么微波炉不能放金属？	111.0	2	1	482	C1 故意不写 url（source 只留 title/publisher/source_level），正文「微波的波长大约十二厘米」句挂 C1 映射；门禁报 missing_url + schema_invalid（schema 层 url 必填同触发，两道防线同时生效），P1 为 snippet_only
+S4	2026-10-28	为什么冰面那么滑？	146.0	2	0	420	C1 给占位 url 但 verified_by=none 且 confidence=unverified，正文 Q1 末尾照写并挂 C1 映射；门禁报 unverified×2（两字段各触发一次）。正文该句无数字特征故未额外触发 unverified_mapping，诊断版 S4b 加「零下二十度」后 P0=3（+unverified_mapping）
+S5	2026-10-28	为什么鸽子走路时头一点一点？	205.0	0	0	485	卡完全合规（PubMed 10667977 摘要逐字引文，primary/fetch/high）；三类数字埋点齐备：Q 标签序号、表格行「推进与保持 2 拍」、正文「整套动作只有 2 拍」句挂 C1 映射；门禁 P0=0 P1=0，未误杀

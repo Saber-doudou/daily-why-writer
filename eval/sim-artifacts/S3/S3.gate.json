@@ -1,0 +1,29 @@
+{
+  "generated_at": "2026-10-28T00:57:06",
+  "mode": "warn",
+  "card": "eval/sim-artifacts/S3/S3.json",
+  "article": "eval/sim-artifacts/S3/article.md",
+  "p0_count": 2,
+  "p1_count": 1,
+  "blocked": false,
+  "findings": [
+    {
+      "severity": "P0",
+      "code": "schema_invalid",
+      "where": "证据卡",
+      "message": "$.claims[0].source: 缺少必填字段 url"
+    },
+    {
+      "severity": "P0",
+      "code": "missing_url",
+      "where": "claim C1",
+      "message": "mechanism claim 没有 url"
+    },
+    {
+      "severity": "P1",
+      "code": "snippet_only",
+      "where": "claim C1",
+      "message": "仅 snippet 级核实，高风险 claim 建议 fetch 原文"
+    }
+  ]
+}

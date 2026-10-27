@@ -1,0 +1,23 @@
+{
+  "generated_at": "2026-10-28T00:53:20",
+  "mode": "warn",
+  "card": "eval/sim-artifacts/S4/S4.json",
+  "article": "eval/sim-artifacts/S4/article.md",
+  "p0_count": 2,
+  "p1_count": 0,
+  "blocked": false,
+  "findings": [
+    {
+      "severity": "P0",
+      "code": "unverified",
+      "where": "claim C1",
+      "message": "verified_by=none，未核实不许写"
+    },
+    {
+      "severity": "P0",
+      "code": "unverified",
+      "where": "claim C1",
+      "message": "confidence=unverified，未核实不许写"
+    }
+  ]
+}
