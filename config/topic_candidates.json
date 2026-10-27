@@ -7,6 +7,41 @@
     "l2": "L2 投喂反哺（四AI讨论中的相邻话题）",
     "rejected": "落选回收（查证后放弃的候选）"
   },
+  "field_spec": {
+    "note": "每类 source 的必填字段内嵌在此，scripts/topic_candidates.py 与 full_selfcheck.py 共读同一份，避免代码与文档两套。a|b|c 表示至少其一。",
+    "common": [
+      "topic",
+      "source"
+    ],
+    "by_source": {
+      "initial": [
+        "category",
+        "why_hot"
+      ],
+      "external": [
+        "category",
+        "why_hot"
+      ],
+      "l2": [
+        "category",
+        "why_hot"
+      ],
+      "rejected": [
+        "angle|why_hot|provenance"
+      ]
+    },
+    "optional": [
+      "evidence",
+      "added",
+      "provenance"
+    ],
+    "semantics": {
+      "why_hot": "为何值得写，可含来源线索，不要求已核验",
+      "evidence": "已核验证据链；用到该候选时在 L1 步骤4 重查后补，非必填",
+      "angle": "写作角度（旧字段，与 why_hot 或 provenance 三选一即可）",
+      "provenance": "来源追溯 {kind: l1_probe|l2_backfeed|manual, date, verdict, note}"
+    }
+  },
   "candidates": [
     {
       "topic": "为什么极地冰晶会产生日晕般的彩虹？",
@@ -1559,6 +1594,27 @@
       "topic": "为什么越焦虑越想吃高热量食物？",
       "source": "rejected",
       "angle": "焦虑激活下丘脑-垂体-肾上腺轴，皮质醇驱动对高糖高脂的偏好（脑肠轴/血清素路径）"
+    },
+    {
+      "topic": "为什么吹风机朝上吹，乒乓球会悬在半空不跑？",
+      "category": "物理化学",
+      "why_hot": "吹纸·伯努利（10-27）千问独家延伸实验，附壁效应/科恩达效应让射流稳定包裹球，读者可立即上手，记忆点强",
+      "evidence": "10-27 吹纸投喂，千问给出「开吹风机朝上吹乒乓球，球悬在半空晃而不跑」延伸；球一歪哪边气流快压强低，旁边空气推回，与吹纸同一机制",
+      "source": "l2"
+    },
+    {
+      "topic": "为什么不停站通过的列车，比进站的慢车更危险？",
+      "category": "物理化学",
+      "why_hot": "吹纸·伯努利（10-27）千问「平方关系」强记忆点迁移：动压 ½ρv²，车速翻倍力翻四倍，通勤安全可感",
+      "evidence": "10-27 吹纸投喂，千问补 ½ρv² 动压估算（50km/h≈14m/s→约80牛≈8公斤力，100km/h 则 30 多公斤），不停站快车远比进站慢车危险",
+      "source": "l2"
+    },
+    {
+      "topic": "为什么「上下气流同时到达机翼后缘」的教科书说法是错的？",
+      "category": "物理化学",
+      "why_hot": "吹纸·伯努利（10-27）千问独家点破：等时到达后缘是流传的伪解释，真正升力还牵扯迎角/环流/下洗",
+      "evidence": "10-27 吹纸投喂，千问优化版明言「教科书里上下气流必须同时到达后缘的说法是错的，别信」，机翼升力还涉及迎角、环流、下洗",
+      "source": "l2"
     }
   ]
 }

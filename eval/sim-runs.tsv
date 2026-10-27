@@ -2,3 +2,6 @@ run_id	date	topic	s2_seconds	gate_p0	gate_p1	article_chars	note
 S1	2026-10-27	为什么飞机的舷窗是圆角的？	21.1	0	1	524	第1轮 P0=3 全为 Q1/Q2/Q3 标签数字被判事实句（误杀，正文无未映射事实句）；第2轮给三个 Q 标题句内嵌 <!-- claim:C1 --> 后 P0=0、P1=1（C1 snippet_only）；validate_article 100 分
 S1b	2026-10-27	为什么飞机的舷窗是圆角的？	n/a	0	1	524	修复Q标签误杀后：删掉3处错误映射，只在「五十年代…高空解体」事实句保留1处映射即P0=0；新增自检 q_label_false_positive 与 cn_numeral_fact 两条回归
 S2	2026-10-27	为什么猫喜欢钻进纸箱？	26.3	0	0	616	卡片仅模式 P0=0 P1=0；带正文复跑仍 P0=0 P1=0（无 code 命中）；validate_article 100 分；6 条 claim 全部 fetch 级核实（Vinke2014 原始摘要 / NPR2021 / PMC5059607）
+F1	2026-10-27	stress_cn_numeral_dense	n/a	2	0	0	门禁级压力夹具（永久回归，非全链模拟）：中文数字带单位两句均被 unmapped_fact 抓到，codes 断言 [unmapped_fact]。不计入 C4 的 5 次模拟
+F2	2026-10-27	stress_table_and_qlabel_clean	n/a	0	0	0	门禁级压力夹具：表格行数字 + Q 标签数字两类必然误杀同时出现，实测 0 命中；与 F1 互为反向，防一修就松。不计入 C4
+F3	2026-10-27	stress_tertiary_and_banned	n/a	2	0	0	门禁级压力夹具：tertiary 单独支撑 + 命中已证伪断言同时触发，codes 断言 [banned_claim_hit, tertiary_only]。不计入 C4

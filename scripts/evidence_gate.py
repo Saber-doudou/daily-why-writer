@@ -182,7 +182,7 @@ SELFTEST = {
             "banned_claims": ["已证伪说法"],
         },
         "article": "这项研究覆盖了 93 个物种。<!-- claim:C1 -->\n普通叙述句，没有数字。",
-        "expect_p0": 0,
+        "expect_p0": 0, "expect_codes": [],
     },
     "short_quote": {
         "card": {
@@ -193,7 +193,7 @@ SELFTEST = {
             "banned_claims": [],
         },
         "article": "无事实句。",
-        "expect_p0": 1,
+        "expect_p0": 1, "expect_codes": ["short_quote"],
     },
     "tertiary": {
         "card": {
@@ -205,7 +205,7 @@ SELFTEST = {
             "banned_claims": [],
         },
         "article": "无事实句。",
-        "expect_p0": 1,
+        "expect_p0": 1, "expect_codes": ["tertiary_only"],
     },
     "unmapped": {
         "card": {
@@ -217,7 +217,7 @@ SELFTEST = {
             "banned_claims": [],
         },
         "article": "这项研究覆盖了 93 个物种、6000 多枚标本。",
-        "expect_p0": 1,
+        "expect_p0": 1, "expect_codes": ["unmapped_fact"],
     },
     "banned": {        "card": {
             "schema_version": "v1", "topic": "测试",
@@ -228,20 +228,20 @@ SELFTEST = {
             "banned_claims": ["白蚁分泌蚁酸"],
         },
         "article": "据说白蚁分泌蚁酸，能腐蚀白银。",
-        "expect_p0": 1,
+        "expect_p0": 1, "expect_codes": ["banned_claim_hit"],
     },
     # 2026-10-27 模拟运行 S1 的误杀回归：SKILL 强制的 `**Q1：...**` 标题，
     # 序号被当成数字导致整句判「事实句无映射」。剥离 Q 标签后应为 0。
     "q_label_false_positive": {
         "card": {"schema_version": "v1", "topic": "测试", "claims": [], "banned_claims": []},
         "article": "**Q1：这东西为什么这么重？** → 因为它很密。\n**Q2：真的吗？** → 真的。",
-        "expect_p0": 0,
+        "expect_p0": 0, "expect_codes": [],
     },
     # 中文数字带计量单位属于可核事实，必须要求映射（S1 漏过「上世纪五十年代」）
     "cn_numeral_fact": {
         "card": {"schema_version": "v1", "topic": "测试", "claims": [], "banned_claims": []},
         "article": "上世纪五十年代，喷气客机接连出事。",
-        "expect_p0": 1,
+        "expect_p0": 1, "expect_codes": ["unmapped_fact"],
     },
     # 审校 R3 抓到的必然误判：F 段表格行含数字（TRPV1、1/3），但表格是渲染层无句末，
     # 事实来自正文 claim，不应判无映射。
@@ -249,18 +249,71 @@ SELFTEST = {
         "card": {"schema_version": "v1", "topic": "测试", "claims": [], "banned_claims": []},
         "article": "| 话题 | 猫钻纸箱 | 分类 | 动物世界 |\n| 核心机制 | TRPV1 与热中性区 30 到 38 摄氏度 | 冷知识反转 | 纸箱是减压舱 |",
         "expect_p0": 0,
+        "expect_codes": [],
+    },
+
+    # ── 10-27 新增：3 个针对已知弱点的压力夹具 ──
+    # 用途：11-01 把门禁从 warn 切 block 之前，需要「误杀率」样本。真实文章偏「顺手」，
+    # 撞不到边角，所以用夹具专门顶三类已知失效模式，且固化为回归，不像一次性模拟会烂掉。
+    "stress_cn_numeral_dense": {
+        # 弱点：中文数字带单位。10-27 前 FACT_PAT 漏掉「上世纪五十年代」，
+        # 修完后仍须防回归；这条同时断言「必须是 unmapped_fact 抓到的」而非别的规则凑数。
+        "card": {"schema_version": "v1", "topic": "测试", "claims": [], "banned_claims": []},
+        "article": "上世纪五十年代，喷气客机接连出事。三十倍的压力差把人推向车边。",
+        "expect_p0": 2,
+        "expect_codes": ["unmapped_fact"],
+    },
+    "stress_table_and_qlabel_clean": {
+        # 弱点：两类必然误杀同时出现——表格行里的数字、Q 标签里的数字。
+        # 两者都不是事实句，必须 0 命中；与上一条互为反向，防「一修就松」。
+        "card": {"schema_version": "v1", "topic": "测试", "claims": [], "banned_claims": []},
+        "article": ("**Q1：为什么会往里贴？** → 因为压差。\n"
+                    "| 话题 | 测试 | 分类 | 物理化学 |\n"
+                    "| 核心机制 | 约 1/3 的水，三倍差距 | 冷知识反转 | 五十年代 |"),
+        "expect_p0": 0,
+        "expect_codes": [],
+    },
+    "stress_tertiary_and_banned": {
+        # 弱点：两条最重的 P0 家族（tertiary 单独支撑 / 命中已证伪断言）从未在
+        # 贴近真实文章的输入上被触发过，只在最小样例上验过。这条同时打两枪。
+        "card": {
+            "schema_version": "v1", "topic": "测试",
+            "claims": [{"id": "C1", "text": "某归因", "type": "attribution",
+                        "source": {"title": "转述源", "url": "https://a.b",
+                                   "source_level": "tertiary"},
+                        "quote": "这是一段不少于十五个字的第三方转述引文示例",
+                        "verified_by": "fetch", "confidence": "high"}],
+            "banned_claims": ["风总把东西吹散"],
+        },
+        "article": "风总把东西吹散。",
+        "expect_p0": 2,
+        "expect_codes": ["banned_claim_hit", "tertiary_only"],
     },
 }
 
 
 def run_selftest():
+    """夹具自测。
+
+    10-27 强化：除 P0 数量外，可选断言 expect_codes（命中的代码集合）。
+    只比数量有个盲区——「因为别的原因误打正着凑够条数」也会 PASS。
+    例如某夹具期望 1 条 P0，实际因 short_quote 命中而不是预期的 tertary_only，
+    数量对上了但被测的规则根本没被触发。
+    """
     ok = 0
     for name, case in SELFTEST.items():
         findings = check_card(case["card"]) + check_article(case["article"], case["card"])
         p0 = [f for f in findings if f[0] == "P0"]
+        codes = {f[1] for f in p0}
         good = len(p0) == case["expect_p0"]
+        want = case.get("expect_codes")
+        if want is not None:
+            good = good and codes == set(want)
         ok += good
-        print(f"[{'PASS' if good else 'FAIL'}] {name}: P0={len(p0)} 期望={case['expect_p0']}")
+        line = f"[{'PASS' if good else 'FAIL'}] {name}: P0={len(p0)} 期望={case['expect_p0']}"
+        if want is not None:
+            line += f"｜codes={sorted(codes)} 期望={sorted(want)}"
+        print(line)
         for f in p0:
             print(f"        {f[1]}: {f[3]}")
     print(f"\n自检 {ok}/{len(SELFTEST)} 通过")

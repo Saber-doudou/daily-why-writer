@@ -38,7 +38,8 @@ def save_pool(pool):
 def is_used(topic, python_exe):
     """复用 check_topic 的严格模式：退出码 1 = 已被写过，0 = 没用过，2 = 参数错。"""
     try:
-        r = subprocess.run([python_exe, str(CHECK_TOPIC), topic],
+        # --no-log：状态巡检不是选题探测，不写决策日志（10-27）
+        r = subprocess.run([python_exe, str(CHECK_TOPIC), topic, "--no-log"],
                            capture_output=True, text=True, timeout=60)
         return r.returncode == 1
     except Exception:

@@ -223,6 +223,21 @@ def main():
     result = update_memory(filepath, dry_run=args.dry_run, validation=validation)
     print(f"\n[update_history] 结果: {result['status']}")
 
+    # 10-27 新增：素材池自动回捞（替代 L1 步骤5 的人工手改）
+    # 这里是 L1 阶段3 既有的最后一步，挂在此处意味着提示词一个字都不用改，
+    # 模型也不需要「记得」去回写素材池。任何失败只警告，不阻断当日文章。
+    if not args.dry_run:
+        try:
+            sys.path.insert(0, str(Path(__file__).resolve().parent))
+            from topic_candidates import harvest
+            date_str = result.get("date") or datetime.now().strftime("%Y-%m-%d")
+            print(f"\n[update_history] 素材池回捞（{date_str}）")
+            rc = harvest(date_str)
+            if rc != 0:
+                print(f"[update_history] ⚠️  素材池回捞退出码 {rc}（不阻断）")
+        except Exception as e:
+            print(f"[update_history] ⚠️  素材池回捞异常（不阻断）: {type(e).__name__}: {e}")
+
 
 if __name__ == "__main__":
     main()
