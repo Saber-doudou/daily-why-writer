@@ -21,7 +21,7 @@ from pathlib import Path
 
 # ── 常量 ──────────────────────────────────────────────
 
-# 10-27 v3.27（修复 #61）：R2/R3 交付物从未进 GitHub repo。
+# 10-27 v3.27（修复 #67）：R2/R3 交付物从未进 GitHub repo。
 #   审计实证：evidence_gate.py / safe_pool.py / validate_contract.py / contracts/*.json /
 #   safe_topics.json / eval/historical_claims.tsv 全部不在镜像，而发布报告与脚本自检一路报绿。
 #   根因：Phase 3 双向自检的两个方向——「清单项有没有复制源」与「已跟踪文件在不在清单」——
