@@ -149,15 +149,26 @@ def check_article(text, card):
                 for cid, frag in frags:
                     if frag in sent:
                         ids.append(cid)
-            if not FACT_PAT.search(sent):
-                continue
+
+            # ── 两道独立检查，刻意不串成一个门（10-28 修复 #68）──
+            # ①「事实句必须有映射」：只对含数字特征的句子生效。不能要求每句叙述都
+            #   挂映射，那会把整篇文变成注释灾难，所以这条受 FACT_PAT 限制是对的。
+            # ②「映射本身必须有效」：与句子有没有数字**无关**。悬空引用（指向不存在的
+            #   claim）和挂到未核实 claim 上，在任何句子上都是错的。
+            # 原实现把 ② 也放在 `if not FACT_PAT: continue` 之后，于是无数字的句子
+            # 挂错 claim 时完全静默：标记指向空处，门禁却以为「已映射」放行。
+            # 证据：eval/sim-artifacts/S4/article.md 与 article-with-fact.md 只差一句
+            # 带中文数字的插入语，P0 就从 2 变 3，差额正是 unverified_mapping。
             if not ids:
-                out.append(("P0", "unmapped_fact", f"L{lineno}", f"事实句无证据映射: {sent[:40]}"))
+                if FACT_PAT.search(sent):
+                    out.append(("P0", "unmapped_fact", f"L{lineno}",
+                                f"事实句无证据映射: {sent[:40]}"))
                 continue
             for cid in ids:
                 c = claims.get(cid)
                 if c is None:
-                    out.append(("P0", "unknown_claim", f"L{lineno}", f"映射到不存在的 claim {cid}"))
+                    out.append(("P0", "unknown_claim", f"L{lineno}",
+                                f"映射到不存在的 claim {cid}"))
                     continue
                 if c.get("verified_by") == "none" or c.get("confidence") == "unverified":
                     out.append(("P0", "unverified_mapping", f"L{lineno}",
@@ -288,6 +299,31 @@ SELFTEST = {
         "article": "风总把东西吹散。",
         "expect_p0": 2,
         "expect_codes": ["banned_claim_hit", "tertiary_only"],
+    },
+
+    # ── 10-28 新增：守住 #68 的修复 ──
+    # 两条都刻意用「没有数字特征的句子 + 一个映射标记」。修复前这两条全静默，
+    # 修复后必须报出来。用它们锁住「映射有效性检查不受 FACT_PAT 限制」这个不变量，
+    # 防止将来有人图省事又把检查串回数字判断后面。
+    "stress_unknown_claim_plain_sentence": {
+        "card": {"schema_version": "v1", "topic": "测试", "claims": [], "banned_claims": []},
+        "article": "这是一句完全没有数字的叙述。<!-- claim:C99 -->",
+        "expect_p0": 1,
+        "expect_codes": ["unknown_claim"],
+    },
+    "stress_unverified_mapping_plain_sentence": {
+        "card": {
+            "schema_version": "v1", "topic": "测试",
+            "claims": [{"id": "C1", "text": "某机制", "type": "mechanism",
+                        "source": {"title": "某来源", "url": "https://a.b",
+                                   "source_level": "secondary"},
+                        "quote": "这是一段不少于十五个字的引文占位用于长度校验",
+                        "verified_by": "none", "confidence": "medium"}],
+            "banned_claims": [],
+        },
+        "article": "这是一句完全没有数字的机制叙述。<!-- claim:C1 -->",
+        "expect_p0": 2,
+        "expect_codes": ["unverified", "unverified_mapping"],
     },
 }
 
