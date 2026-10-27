@@ -190,6 +190,24 @@ def find_latest_article(workspace: Path) -> Path:
     raise FileNotFoundError("未找到任何每日冷知识 md 文件")
 
 
+def harvest_after_update(date_str: str) -> None:
+    """素材池自动回捞（10-27 新增，替代 L1 步骤5 的人工手改）。
+
+    抽成独立函数是为了可测：main() 里那段埋在流程中间，只能靠「真跑一次」验证，
+    而真跑会写生产素材池。抽出来后可以用临时目录 + 打补丁的模块全局变量做端到端测试。
+
+    设计约束：任何失败只警告，绝不抛出——回捞是锦上添花，不能拖垮当日文章。
+    """
+    try:
+        from topic_candidates import harvest
+        print(f"\n[update_history] 素材池回捞（{date_str}）")
+        rc = harvest(date_str)
+        if rc != 0:
+            print(f"[update_history] ⚠️  素材池回捞退出码 {rc}（不阻断）")
+    except Exception as e:
+        print(f"[update_history] ⚠️  素材池回捞异常（不阻断）: {type(e).__name__}: {e}")
+
+
 def main():
     parser = argparse.ArgumentParser(description="从文章提取话题并更新 memory.md")
     parser.add_argument("file", nargs="?", help="文章文件路径（可选，默认最新）")
@@ -197,6 +215,8 @@ def main():
                         help="工作目录")
     parser.add_argument("--dry-run", action="store_true",
                         help="预览模式，不实际写入")
+    parser.add_argument("--no-harvest", action="store_true",
+                        help="跳过素材池回捞（回捞本身有异常时会自动降级，此开关用于人工排障）")
     parser.add_argument("--validation-json", dest="validation_json",
                         help="审核结果 JSON 字符串（由 validate_article.py --json 输出的 info 字段）")
     args = parser.parse_args()
@@ -226,17 +246,9 @@ def main():
     # 10-27 新增：素材池自动回捞（替代 L1 步骤5 的人工手改）
     # 这里是 L1 阶段3 既有的最后一步，挂在此处意味着提示词一个字都不用改，
     # 模型也不需要「记得」去回写素材池。任何失败只警告，不阻断当日文章。
-    if not args.dry_run:
-        try:
-            sys.path.insert(0, str(Path(__file__).resolve().parent))
-            from topic_candidates import harvest
-            date_str = result.get("date") or datetime.now().strftime("%Y-%m-%d")
-            print(f"\n[update_history] 素材池回捞（{date_str}）")
-            rc = harvest(date_str)
-            if rc != 0:
-                print(f"[update_history] ⚠️  素材池回捞退出码 {rc}（不阻断）")
-        except Exception as e:
-            print(f"[update_history] ⚠️  素材池回捞异常（不阻断）: {type(e).__name__}: {e}")
+    if not args.dry_run and not args.no_harvest:
+        date_str = result.get("date") or datetime.now().strftime("%Y-%m-%d")
+        harvest_after_update(date_str)
 
 
 if __name__ == "__main__":
