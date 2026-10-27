@@ -375,7 +375,8 @@ def extract_topic_from_article(filepath: Path) -> str | None:
 
 def check_topic(topic: str, workspace: Path, threshold: float = OVERLAP_THRESHOLD,
                 angle_mode: bool = False,
-                exclude_date: str | None = None) -> tuple[bool, str]:
+                exclude_date: str | None = None,
+                log: bool = True) -> tuple[bool, str]:
     """
     检查话题是否已使用过（四层检测：精确匹配 + 语义相似 + 概念重叠）。
 
@@ -403,8 +404,12 @@ def check_topic(topic: str, workspace: Path, threshold: float = OVERLAP_THRESHOL
     evaluated = []  # [(source, topic, meta, score)] 已评估候选（T4 决策日志用）
 
     def _finish(is_dup: bool, detail: str) -> tuple[bool, str]:
-        log_decision(topic, mode, threshold, exclude_date,
-                     "duplicate" if is_dup else "pass", evaluated, workspace)
+        # log=False：测试/自检调用不打决策日志（10-27 新增）。
+        # 背景：素材池回捞以决策日志为唯一数据源，若 --selftest 与 dedup_selftest
+        # 的 20+ 条测试话题也写进来，回捞出的候选 90% 是测试噪声（10-27 实测 30 条里只有 3 条真实候选）。
+        if log:
+            log_decision(topic, mode, threshold, exclude_date,
+                         "duplicate" if is_dup else "pass", evaluated, workspace)
         return is_dup, detail
 
     all_existing = []  # 收集所有已有话题用于语义/概念检测
@@ -507,6 +512,8 @@ def main():
                         help="工作目录路径")
     parser.add_argument("--exclude-date", default=None,
                         help="排除该日期(YYYY-MM-DD)的自身记录，避免自匹配（L3 去重卡点必传）")
+    parser.add_argument("--no-log", action="store_true",
+                        help="不写决策日志（测试/自检调用专用：避免测试话题污染素材池回捞数据源）")
     args = parser.parse_args()
 
     if args.threshold <= 0 or args.threshold > 1:
@@ -532,7 +539,8 @@ def main():
     workspace = Path(args.workspace)
     is_dup, detail = check_topic(topic, workspace,
                                  threshold=args.threshold, angle_mode=args.angle,
-                                 exclude_date=args.exclude_date)
+                                 exclude_date=args.exclude_date,
+                                 log=not args.no_log)
 
     if is_dup:
         print(f"[check_topic] ❌ 重复: {detail}")

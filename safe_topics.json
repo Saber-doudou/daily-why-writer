@@ -1,0 +1,344 @@
+{
+  "schema_version": "v1",
+  "note": "L4 安全池：仅在证据门禁走到最后一级兜底时使用，不得当常规选题。每题附现成证据卡，已逐题跑 check_topic 确认为未使用话题（2026-10-27）。用掉一个 7 天内补一个；池空则暂停 L4 并报告。",
+  "last_reviewed": "2026-10-27",
+  "topics": [
+    {
+      "id": "S01",
+      "topic": "为什么猫喜欢钻进纸箱？",
+      "angle": "安全感、保温与伏击本能三件事同时成立，不是单纯的怪癖",
+      "intended_reversal": "纸箱不是猫的玩具，是它的减压舱和保温层",
+      "status": "unused",
+      "last_verified": "2026-10-27",
+      "used_date": null,
+      "evidence_card": {
+        "schema_version": "v1",
+        "topic": "为什么猫喜欢钻进纸箱？",
+        "claims": [
+          {
+            "id": "C1",
+            "text": "收容所实验里，有箱子的猫适应新环境更快、紧张消除更早",
+            "type": "mechanism",
+            "source": {
+              "title": "猫为什么喜欢钻箱子",
+              "publisher": "光明数字报（转载《大科技》）",
+              "year": "2024",
+              "url": "https://epaper.gmw.cn/wzb/html/2024-01/06/nw.D110000wzb_20240106_8-06.htm",
+              "source_level": "secondary"
+            },
+            "quote": "有箱子的猫能够更快地适应新环境,更早地消除紧张,并更喜欢与人类交流",
+            "verified_by": "snippet",
+            "confidence": "medium",
+            "counter_evidence": []
+          },
+          {
+            "id": "C2",
+            "text": "猫的热中性区高于人，纸箱是低耗能的保温方式",
+            "type": "number",
+            "source": {
+              "title": "猫为什么喜欢钻盒子 不只是因为舒服",
+              "publisher": "科普中国",
+              "url": "https://cloud.kepuchina.cn/newSearch/imgText?id=7496820005627142144",
+              "source_level": "secondary"
+            },
+            "quote": "猫的热中性区大约在30到38摄氏度之间",
+            "verified_by": "snippet",
+            "confidence": "medium",
+            "counter_evidence": []
+          }
+        ],
+        "banned_claims": [
+          "猫钻纸箱只是因为盒子舒服",
+          "猫的体温比人低所以怕冷"
+        ]
+      }
+    },
+    {
+      "id": "S02",
+      "topic": "为什么飞机的舷窗是圆角的？",
+      "angle": "一次空难换来的应力集中教训",
+      "intended_reversal": "圆角不是为了好看，是为了不让裂纹从窗角开始",
+      "status": "unused",
+      "last_verified": "2026-10-27",
+      "used_date": null,
+      "evidence_card": {
+        "schema_version": "v1",
+        "topic": "为什么飞机的舷窗是圆角的？",
+        "claims": [
+          {
+            "id": "C1",
+            "text": "方形开口的直角处会发生应力集中，圆角把应力分散开",
+            "type": "mechanism",
+            "source": {
+              "title": "是什么磨平了窗户的棱角",
+              "publisher": "中国军网",
+              "url": "https://www.81.cn/yw_208727/16420262.html",
+              "source_level": "secondary"
+            },
+            "quote": "圆角设计能把应力散开,从而大幅降低产生裂纹的风险",
+            "verified_by": "snippet",
+            "confidence": "high",
+            "counter_evidence": []
+          }
+        ],
+        "banned_claims": [
+          "舷窗做成圆角是为了美观",
+          "彗星号事故是发动机故障导致的"
+        ]
+      }
+    },
+    {
+      "id": "S03",
+      "topic": "为什么冰面那么滑？",
+      "angle": "吵了 170 年的摩擦之谜，答案不是简单的压力融解",
+      "intended_reversal": "冰滑不是因为压力把冰压化了，而是表面那层特殊的准液体",
+      "status": "unused",
+      "last_verified": "2026-10-27",
+      "used_date": null,
+      "evidence_card": {
+        "schema_version": "v1",
+        "topic": "为什么冰面那么滑？",
+        "claims": [
+          {
+            "id": "C1",
+            "text": "摩擦系数随温度变化，在零下 7 摄氏度附近最低，与速滑冰面温度一致",
+            "type": "number",
+            "source": {
+              "title": "冰为什么是滑的，这事科学界居然吵了170年",
+              "publisher": "环球科学",
+              "url": "https://www.huanqiukexue.com/?p=3558",
+              "source_level": "secondary"
+            },
+            "quote": "随着温度升高至零下70摄氏度,冰面的摩擦系数开始降低,并在零下7摄氏度达到最小值",
+            "verified_by": "snippet",
+            "confidence": "medium",
+            "counter_evidence": []
+          },
+          {
+            "id": "C2",
+            "text": "压力融解说无法解释零下二十度仍能滑冰",
+            "type": "mechanism",
+            "source": {
+              "title": "冰为什么那么滑？",
+              "publisher": "上海市科学技术协会",
+              "url": "https://www.sast.gov.cn/content.html?id=kjb220551",
+              "source_level": "secondary"
+            },
+            "quote": "并不存在所谓的液体水膜,哪怕是几十个纳米的液体水膜也是不存在的",
+            "verified_by": "snippet",
+            "confidence": "medium",
+            "counter_evidence": ["部分教科书仍采用压力融解说，需注明这是历史解释"]
+          }
+        ],
+        "banned_claims": [
+          "冰面滑是因为冰刀的压力把冰压化了",
+          "冰面滑是因为摩擦生热融出了一层水"
+        ]
+      }
+    },
+    {
+      "id": "S04",
+      "topic": "为什么坐车看手机容易晕车？",
+      "angle": "感官打架：眼睛说没动，身体说在动",
+      "intended_reversal": "晕车不是因为车晃，是因为两套传感器给出的答案不一致",
+      "status": "unused",
+      "last_verified": "2026-10-27",
+      "used_date": null,
+      "evidence_card": {
+        "schema_version": "v1",
+        "topic": "为什么坐车看手机容易晕车？",
+        "claims": [
+          {
+            "id": "C1",
+            "text": "看手机时视觉信号与内耳前庭的运动信号冲突，触发晕车",
+            "type": "mechanism",
+            "source": {
+              "title": "转移视线就能缓解晕车症状？真相比你想的更有趣",
+              "publisher": "央视网",
+              "year": "2026",
+              "url": "https://news.cctv.com/2026/05/01/ARTIpErI0SzcTDM2X88LNU5C260501.shtml",
+              "source_level": "secondary"
+            },
+            "quote": "眼睛看到的是“我没动”,而身体感受到的却是“我在动”",
+            "verified_by": "snippet",
+            "confidence": "high",
+            "counter_evidence": []
+          }
+        ],
+        "banned_claims": [
+          "晕车是胃不好引起的",
+          "晕车的人平衡感更差"
+        ]
+      }
+    },
+    {
+      "id": "S05",
+      "topic": "为什么微波炉不能放金属？",
+      "angle": "金属反射微波，尖端还会把空气电离出火花",
+      "intended_reversal": "不是金属有毒，是它把微波挡在食物外面还顺手打火",
+      "status": "unused",
+      "last_verified": "2026-10-27",
+      "used_date": null,
+      "evidence_card": {
+        "schema_version": "v1",
+        "topic": "为什么微波炉不能放金属？",
+        "claims": [
+          {
+            "id": "C1",
+            "text": "金属中的自由电子在微波作用下振动并辐射同频电磁波，表现为反射",
+            "type": "mechanism",
+            "source": {
+              "title": "金属真的不能进微波炉吗",
+              "publisher": "光明数字报（转载《科学之谜》）",
+              "year": "2022",
+              "url": "https://epaper.gmw.cn/wzb/html/2022-05/21/nw.D110000wzb_20220521_7-06.htm",
+              "source_level": "secondary"
+            },
+            "quote": "当微波入射向金属时,金属内的电子在电磁波的作用下做振动,并辐射出同频电磁波",
+            "verified_by": "snippet",
+            "confidence": "high",
+            "counter_evidence": []
+          },
+          {
+            "id": "C2",
+            "text": "金属曲率大或有尖端时，电场聚集会把空气电离，产生火花",
+            "type": "mechanism",
+            "source": {
+              "title": "金属真的不能进微波炉吗",
+              "publisher": "光明数字报（转载《科学之谜》）",
+              "year": "2022",
+              "url": "https://epaper.gmw.cn/wzb/html/2022-05/21/nw.D110000wzb_20220521_7-06.htm",
+              "source_level": "secondary"
+            },
+            "quote": "如果置入微波炉中的金属曲率较大或带有尖端",
+            "verified_by": "snippet",
+            "confidence": "medium",
+            "counter_evidence": ["专门设计的金属烤架可用，但不得接触炉壁"]
+          }
+        ],
+        "banned_claims": [
+          "金属会让微波炉里的食物被辐射污染",
+          "任何金属都绝对不能进微波炉"
+        ]
+      }
+    },
+    {
+      "id": "S06",
+      "topic": "为什么盐能化冰？",
+      "angle": "盐不是发热化冰，而是降低冰点并顺手吸走热量",
+      "intended_reversal": "撒盐之后冰化了，但温度反而更低",
+      "status": "unused",
+      "last_verified": "2026-10-27",
+      "used_date": null,
+      "evidence_card": {
+        "schema_version": "v1",
+        "topic": "为什么盐能化冰？",
+        "claims": [
+          {
+            "id": "C1",
+            "text": "食盐溶液浓度越高冰点越低，15% 时约零下 11 摄氏度",
+            "type": "number",
+            "source": {
+              "title": "当心，它是隐形的植物杀手，出没于大雪之后",
+              "publisher": "经济日报",
+              "url": "https://rss.jingjiribao.cn/static/detail.jsp?id=389843",
+              "source_level": "secondary"
+            },
+            "quote": "当氯化钠溶液浓度达到15%时,冰点就降到了-11℃左右",
+            "verified_by": "snippet",
+            "confidence": "medium",
+            "counter_evidence": []
+          },
+          {
+            "id": "C2",
+            "text": "融化吸热使冰盐混合物温度更低",
+            "type": "mechanism",
+            "source": {
+              "title": "往冰上撒一把盐，冰不是化得更快——是变得更冷了",
+              "publisher": "科普中国",
+              "url": "https://www.kepuchina.cn/article/articleinfo?ar_id=743062&business_type=100&classify=0",
+              "source_level": "secondary"
+            },
+            "quote": "冰融化成水需要吸收热量,这部分热量不会凭空产生,只能从周围夺取",
+            "verified_by": "snippet",
+            "confidence": "high",
+            "counter_evidence": []
+          }
+        ],
+        "banned_claims": [
+          "盐会发热所以把冰化开",
+          "撒盐化雪后地面温度会升高"
+        ]
+      }
+    },
+    {
+      "id": "S07",
+      "topic": "为什么鸽子走路时头一点一点？",
+      "angle": "头不是上下点，是在推进和保持之间切换",
+      "intended_reversal": "看起来在点头，其实是在给眼睛争取静止时间",
+      "status": "unused",
+      "last_verified": "2026-10-27",
+      "used_date": null,
+      "evidence_card": {
+        "schema_version": "v1",
+        "topic": "为什么鸽子走路时头一点一点？",
+        "claims": [
+          {
+            "id": "C1",
+            "text": "头部运动分推进与保持两阶段，保持阶段头部相对静止、身体前移",
+            "type": "mechanism",
+            "source": {
+              "title": "为啥鸽子走起路来总是“一步一叩头”？",
+              "publisher": "科普中国资源服务",
+              "url": "https://cloud.kepuchina.cn/newSearch/imgText?from=1&id=7151364617819021312&is_self=2",
+              "source_level": "secondary"
+            },
+            "quote": "鸽子头部相对于身体向前推进大约5厘米,然后进入保持阶段,头部保持不动,身体继续向前移动",
+            "verified_by": "snippet",
+            "confidence": "high",
+            "counter_evidence": []
+          }
+        ],
+        "banned_claims": [
+          "鸽子点头是为了啄食",
+          "鸽子脖子上下晃动所以看起来在点头"
+        ]
+      }
+    },
+    {
+      "id": "S08",
+      "topic": "为什么螃蟹要横着走？",
+      "angle": "关节只许左右弯，方向被结构锁死",
+      "intended_reversal": "不是霸道，是它的腿根本没法往前迈",
+      "status": "unused",
+      "last_verified": "2026-10-27",
+      "used_date": null,
+      "evidence_card": {
+        "schema_version": "v1",
+        "topic": "为什么螃蟹要横着走？",
+        "claims": [
+          {
+            "id": "C1",
+            "text": "螃蟹步足关节只能左右弯曲，不能前后弯曲，因此只能横向移动",
+            "type": "mechanism",
+            "source": {
+              "title": "螃蟹为什么横行霸道（科技苑，上海海洋大学王武教授采访）",
+              "publisher": "央视网",
+              "year": "2014",
+              "url": "https://tv.cctv.cn/2014/08/27/VIDE1409105311306338.shtml",
+              "source_level": "secondary"
+            },
+            "quote": "螃蟹的关节是左右弯曲的,我们人包括所有动物是前后弯曲的",
+            "verified_by": "snippet",
+            "confidence": "high",
+            "counter_evidence": []
+          }
+        ],
+        "banned_claims": [
+          "螃蟹横着走是因为左右腿长短不一样",
+          "螃蟹横着走是因为身体太宽转不了身"
+        ]
+      }
+    }
+  ]
+}

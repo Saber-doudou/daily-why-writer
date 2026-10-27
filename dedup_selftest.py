@@ -57,7 +57,8 @@ def record(name, ok, detail=""):
 
 
 def run_cli(topic, workspace, extra=None):
-    cmd = [PY, str(CHECK_TOPIC), topic, "--workspace", str(workspace)]
+    # --no-log：自测话题不写决策日志，避免污染素材池回捞的数据源（10-27）
+    cmd = [PY, str(CHECK_TOPIC), topic, "--workspace", str(workspace), "--no-log"]
     if extra:
         cmd += extra
     r = subprocess.run(cmd, capture_output=True, text=True, encoding="utf-8", timeout=60)

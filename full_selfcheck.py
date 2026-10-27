@@ -69,35 +69,37 @@ except Exception as e:
     check("话题库", False, str(e))
 
 # ── 5. 素材池结构 ──
-# 10-27 修复：原判据要求「全部条目含 topic/category/why_hot/evidence 五字段」且「总数 ≤80」，
-# 两处都与设计自相矛盾——文件 purpose 明确写「理论上只增不减」，实测 216 条恒超上限，
-# 检查长期恒红（告警疲劳，EXP-014 反例）；而 rejected 是「查证后放弃的候选」，
-# 天然不会带 category/evidence（历史 210/211 即为该形态）。
-# 现改为按 source 分层的契约：身份字段(topic+source)恒必填；rejected 只需 angle 或 why_hot；
-# 其余类别需 category+why_hot。上限取消，仅保留下限防止空池。
+# 10-27 二次改造：判据不再硬编码在自检里，改为读 topic_candidates.json 的 field_spec，
+# 与 scripts/topic_candidates.py 共用同一份规则（避免「代码一套、数据一套」再分叉）。
+# 背景：原判据要求全部条目含 5 字段且总数 ≤80，与文件 purpose「理论上只增不减」矛盾，
+# 且 rejected 天然不带 category/evidence；现按 source 分层，由数据文件自己声明。
 try:
-    tc = json.loads((WS/"config/topic_candidates.json").read_text(encoding="utf-8"))
-    cands = tc.get("candidates", [])
-    enums = {"initial", "external", "l2", "rejected"}
-    badsrc = [c.get("source") for c in cands if c.get("source") not in enums]
-    missfield = []
-    for i, c in enumerate(cands):
-        if not all(k in c for k in ("topic", "source")):
-            missfield.append(i)
-        elif c.get("source") == "rejected":
-            if not ("angle" in c or "why_hot" in c):
-                missfield.append(i)
-        elif not all(k in c for k in ("category", "why_hot")):
-            missfield.append(i)
+    sys.path.insert(0, str(WS/"scripts"))
+    import topic_candidates as _TCD
+    _tc = json.loads((WS/"config/topic_candidates.json").read_text(encoding="utf-8"))
+    _cands = _tc.get("candidates", [])
+    _miss = _TCD.validate_pool(_tc)
     # evidence 为质量字段而非结构字段：缺失不改判失败，但必须在报告里点名，
-    # 避免「放宽判据 = 信息消失」。历史 65/116/117/155 四条无原始证据不可回填。
-    no_ev = [i for i, c in enumerate(cands)
-             if c.get("source") != "rejected" and "evidence" not in c]
-    check("素材池结构", not badsrc and not missfield and len(cands) >= 15,
-          f"{len(cands)} 条, 非法source={badsrc}, 缺字段索引={missfield}, "
-          f"缺 evidence 字段 {len(no_ev)} 条{no_ev if no_ev else ''}")
+    # 避免「放宽判据 = 信息消失」。历史 5 条无原始证据不可回填。
+    _no_ev = [i for i, c in enumerate(_cands)
+              if c.get("source") != "rejected" and "evidence" not in c]
+    _spec_src = "数据文件 field_spec" if "field_spec" in _tc else "内置默认（数据文件缺 field_spec）"
+    check("素材池结构", not _miss and len(_cands) >= 15,
+          f"{len(_cands)} 条, 不合规 {len(_miss)} 条{_miss[:6] if _miss else ''}, "
+          f"缺 evidence {len(_no_ev)} 条{_no_ev if _no_ev else ''}｜规则来源={_spec_src}")
 except Exception as e:
     check("素材池", False, str(e))
+
+# ── 5b. 素材池回捞工具自测（10-27 新增） ──
+# 回捞的数据源是决策日志，日志里混着标题复查、严格模式、判重复、往日期和截断标记行。
+# 过滤条件写错的后果是把成稿主题或重复话题回灌进池子，下游兜底取到就是废票。
+try:
+    _r = subprocess.run([PY, str(WS/"scripts/topic_candidates.py"), "--selftest"],
+                        capture_output=True, text=True, encoding="utf-8", errors="replace")
+    _tail = [l for l in (_r.stdout or "").splitlines() if "自检" in l]
+    check("topic_candidates 自测", _r.returncode == 0, _tail[-1] if _tail else f"exit={_r.returncode}")
+except Exception as e:
+    check("topic_candidates 自测", False, str(e))
 
 # ── 6. 文章数据完整性 ──
 arts = sorted(WS.glob("articles/**/*-每日冷知识*.md"))
@@ -172,7 +174,8 @@ check("generate_prompt.py --check 0 警告", r.returncode == 0 and "警告" not 
 
 # ── 12. check_topic.py 抽查 ──
 def run_ct(topic, *args):
-    r = subprocess.run([PY, str(WS/"scripts/check_topic.py"), *args, topic], capture_output=True, text=True, encoding="utf-8", errors="replace")
+    # --no-log：自检话题不写决策日志，避免污染素材池回捞的数据源（10-27）
+    r = subprocess.run([PY, str(WS/"scripts/check_topic.py"), *args, topic, "--no-log"], capture_output=True, text=True, encoding="utf-8", errors="replace")
     return r.returncode, r.stdout.strip().splitlines()[-1] if r.stdout.strip() else ""
 # 2026-10-13 修复（T5 配套）：rc1 原用「为什么蛇没有脚还能爬行？」，随话题库增长
 # 与「蛇没有脚还能爬得飞快」字符包含率达 75% ≥70% 阈值，基线即误判重复（实测 FAIL）。

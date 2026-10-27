@@ -7,6 +7,41 @@
     "l2": "L2 投喂反哺（四AI讨论中的相邻话题）",
     "rejected": "落选回收（查证后放弃的候选）"
   },
+  "field_spec": {
+    "note": "每类 source 的必填字段内嵌在此，scripts/topic_candidates.py 与 full_selfcheck.py 共读同一份，避免代码与文档两套。a|b|c 表示至少其一。",
+    "common": [
+      "topic",
+      "source"
+    ],
+    "by_source": {
+      "initial": [
+        "category",
+        "why_hot"
+      ],
+      "external": [
+        "category",
+        "why_hot"
+      ],
+      "l2": [
+        "category",
+        "why_hot"
+      ],
+      "rejected": [
+        "angle|why_hot|provenance"
+      ]
+    },
+    "optional": [
+      "evidence",
+      "added",
+      "provenance"
+    ],
+    "semantics": {
+      "why_hot": "为何值得写，可含来源线索，不要求已核验",
+      "evidence": "已核验证据链；用到该候选时在 L1 步骤4 重查后补，非必填",
+      "angle": "写作角度（旧字段，与 why_hot 或 provenance 三选一即可）",
+      "provenance": "来源追溯 {kind: l1_probe|l2_backfeed|manual, date, verdict, note}"
+    }
+  },
   "candidates": [
     {
       "topic": "为什么极地冰晶会产生日晕般的彩虹？",
