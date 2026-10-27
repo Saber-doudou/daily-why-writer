@@ -1,0 +1,32 @@
+{
+  "schema_version": "v1",
+  "date": "2026-10-27",
+  "topic": "吹纸实验",
+  "v1_path": "articles/2026-10/2026-10-27-每日冷知识-吹纸实验.md",
+  "v2_path": "articles/2026-10/2026-10-27-优化版-每日冷知识-吹纸实验.md",
+  "review_paths": [
+    "review/2026-10-27_review.json",
+    "review/2026-10-27_v2_review.json"
+  ],
+  "ima_note_id": "7520757588442583",
+  "git_commit": null,
+  "char_count": 659,
+  "fixture": false,
+  "checks": [
+    {
+      "name": "ima_backup",
+      "status": "warn",
+      "detail": "7520757588442583"
+    },
+    {
+      "name": "git_sync",
+      "status": "fail",
+      "detail": "push_fail"
+    },
+    {
+      "name": "match_check",
+      "status": "pass",
+      "detail": "改进点 6 条"
+    }
+  ]
+}

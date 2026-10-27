@@ -3,3 +3,4 @@
 - `orchestrator.py`：09-01 删（多Agent残留，架构已内化进 SKILL），副本 `archive/orchestrator.py`，勿重建同名
 - `orchestrator-state.json`：09-03 已归档删除（`archive/orchestrator-state-2026-09-03-归档.json`）；`config/messages` 空目录同日清理（message_handler.py 会自动 mkdir）
 - `备份/` 下 writing_rules 旧版为有意历史快照，勿删
+- 2026-10-27：9-27 及之前的 116 个每日日志移入 `memory/archive/daily-logs/`（30天蒸馏，可逆移动未删除）；9-28 起仍在 memory/ 根目录

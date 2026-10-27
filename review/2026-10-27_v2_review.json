@@ -1,0 +1,188 @@
+{
+  "schema_version": "v1",
+  "article_id": "2026-10-27",
+  "review_timestamp": "2026-10-27T14:18:08+0800",
+  "pass": true,
+  "p0_count": 0,
+  "p1_count": 0,
+  "p2_count": 2,
+  "score": 98,
+  "script_result": {
+    "exit_code": 0,
+    "score": 100,
+    "char_count": 659,
+    "p0_count": 0,
+    "p1_count": 0,
+    "p2_count": 0,
+    "note": "validate_article.py 实测：score 100 / P0 0 / P1 0 / P2 0 / char_count 659（全文口径含结尾表格，<690 上限，未触发字数 P1）/ passed true"
+  },
+  "issues": [
+    {
+      "level": "P2",
+      "category": "CHECKLIST-§1 / FP-17 术语未解释（承接一轮 issues[5] 未修）",
+      "description": "Q3「机翼升力还牵扯迎角」中「迎角」首次出现仍无通俗解释，也未删除；非航空背景读者不知其指机翼与迎面气流的夹角。一轮 issues[5] 与 revision.log 均记「已补通俗解释」，但 v2 正文实际未落该解释，属「记录已采纳、正文未落地」的闭环缺口。",
+      "location": "Q3（第10行）",
+      "suggestion": "改「机翼升力还牵扯迎角（机翼与迎面气流的夹角）」，或删去「迎角」保留「气流绕行」。"
+    },
+    {
+      "level": "P2",
+      "category": "表达润色 / 结尾表格话题字段",
+      "description": "结尾表格「话题」字段「朝两张纸中间吹气纸反而贴紧」在「吹气」与「纸」之间缺分隔（标题原句为「吹气，纸反而贴得更紧」），单元格连读为「吹气纸反而贴紧」略涩，属字级表达瑕疵。",
+      "location": "结尾表格（第15行）",
+      "suggestion": "话题字段改「朝两张纸中间吹气，纸反而贴紧」补一逗号。"
+    }
+  ],
+  "fact_checks": [
+    {
+      "claim": "1738 年，丹尼尔·伯努利在《流体动力学》里写下「流速大的地方压强小」的关系，后人叫它伯努利原理",
+      "source_verified": true,
+      "detail_verified": true,
+      "omission_severity": "none",
+      "verdict": "correct",
+      "note": "WebSearch 独立核实（Wikipedia Hydrodynamica / Total head）：Daniel Bernoulli 1738 年出版《Hydrodynamica》（拉丁全名即「流体动力学」），首次引入伯努利原理。v2 已将一轮的 1726 口径改为 1738 著作年、并删去「把这个现象收成一句话」的转述层表述，人物/年份/书名三要素准确。"
+    },
+    {
+      "claim": "列车以每小时 50 公里左右驶过时，据测算约 8 公斤的力从背后把人往车边推，车速翻倍这股力能翻到四倍",
+      "source_verified": true,
+      "detail_verified": true,
+      "omission_severity": "minor",
+      "verdict": "correct",
+      "note": "WebSearch 独立核实（科普中国《2张A4纸教会孩子为什么要在黄线外等地铁》等）：原文口径为「8公斤左右的力从身后把人推向火车」，v2 保留「约」与「左右」、改挂「据测算」，未再写成精确值、未把压差等效力错挂到「大气压」上。车速翻倍→力翻四倍与动压正比于 v² 的物理关系一致，倍数推算成立。缺距车距离/受力面积细节属科普合理省略（minor）。"
+    },
+    {
+      "claim": "「比的是同一股气流的上下游，不能拿去硬套两股不一样的气流」（伯努利原理的适用边界）",
+      "source_verified": true,
+      "detail_verified": true,
+      "omission_severity": "none",
+      "verdict": "correct",
+      "note": "WebSearch 独立核实（Wikipedia Total head / Bernoulli's principle）：原文明言「It cannot be used to compare different flow fields, for example comparing a plume or jet of air with the surrounding stationary air」。v2 Q1「夹带才是主因」与 Q2「不能硬套两股不一样气流」与权威口径一致，正是一轮 issues[0] 所指机制归属的修正方向。"
+    }
+  ],
+  "quote_checks": [
+    {
+      "claim": "《流体动力学》（Hydrodynamica）1738 年，丹尼尔·伯努利著",
+      "verbatim_match": true,
+      "source": "Wikipedia: Hydrodynamica — a book published by Daniel Bernoulli in 1738",
+      "note": "书名/年份/作者与权威源逐项一致；「《流体动力学》」为《Hydrodynamica》通行中译名，不构成引文逐字错误。"
+    },
+    {
+      "claim": "「流速大的地方压强小」作为伯努利原理的中文概括",
+      "verbatim_match": true,
+      "source": "科普中国《2张A4纸教会孩子为什么要在黄线外等地铁》等中文科普通行表述",
+      "note": "与中文科普通行表述逐字一致；伯努利原文为拉丁文，文中未加引号，不构成逐字引文错误。"
+    }
+  ],
+  "mechanism_checks": [
+    {
+      "claim": "Q1：射流夹带（卷吸）走缝内空气→缝内空气变稀、压强降→外侧几乎静止空气压强更大→从两边把纸压向中间",
+      "direction_ok": true,
+      "elements_complete": true,
+      "note": "v2 已补齐一轮缺失的「射流卷吸/夹带」关键环节，且明言「夹带才是主因」「比压强是个近似」，方向与要素齐备，与 Wikipedia「jet 不能与周围静止空气跨流场比压」口径一致。"
+    },
+    {
+      "claim": "Q3：列车高速驶过带动邻近空气加速→压强变小→人前后出现压强差→把人往车边推",
+      "direction_ok": true,
+      "elements_complete": true,
+      "note": "方向与要素完整；并补「列车以每小时50公里左右」「据测算约8公斤」「黄线不只为这一件事画，还防跌落、划限界」「候车请站在黄线外」，归因不再绝对化。"
+    },
+    {
+      "claim": "Q3：车速翻倍，这股力翻到四倍",
+      "direction_ok": true,
+      "elements_complete": true,
+      "note": "动态压力正比于流速平方，速度翻倍→压差/推力翻四倍，物理关系成立。"
+    }
+  ],
+  "attribution_checks": [
+    {
+      "claim": "吹纸贴紧的主因 = 射流卷吸造成缝内压降，而非伯努利定律跨流场直接比压",
+      "is_primary_cause": true,
+      "note": "v2 Q1「夹带才是主因」与 Q2「不能拿去硬套两股不一样的气流」已把主因正确归到卷吸、把伯努利限定为同一股气流上下游的命名关系，归因主次与权威源一致，一轮 issues[0] 的偏漏已补正。"
+    },
+    {
+      "claim": "地铁黄线的成因 = 伯努利效应之一（并列含防跌落、划限界等）",
+      "is_primary_cause": true,
+      "note": "v2 Q3「一部分道理在这儿……不过黄线不只为这一件事画，还防跌落、划限界」已把伯努利降为并列原因之一，不再绝对化为单因，一轮 issues[1] 的绝对化已软化。"
+    }
+  ],
+  "term_checks": [
+    {
+      "term": "迎角",
+      "used": "迎角",
+      "correct": "迎角（机翼与迎面气流的夹角）",
+      "exact": true,
+      "note": "术语用字正确（airfoil 迎角 angle of attack），但 Q3 首次出现未做通俗解释也未删去，属 FP-17/CHECKLIST-§1，记 P2（issues[0]，承接一轮 issues[5] 未修）。"
+    }
+  ],
+  "gap_checks": [
+    {
+      "pattern_id": "G-01",
+      "triggered": true,
+      "checked": true,
+      "finding": "话题涉站台安全（物理化学类），Q3 已补行为闭环「候车请站在黄线外」并明「黄线还防跌落、划限界」，安全闭环已建立，不计 P1。"
+    },
+    {
+      "pattern_id": "G-02",
+      "triggered": false,
+      "checked": true,
+      "finding": "「风最擅长的，可能不是推，而是腾地方」带「可能」限定；「夹带才是主因」「伯努利只是其中一条，别当成全部」均为限定/并列表述，未见「不可能/全看/彻底」类无例外绝对词，命中=否。"
+    },
+    {
+      "pattern_id": "G-03",
+      "triggered": true,
+      "checked": true,
+      "finding": "「1738年《流体动力学》」「约8公斤」「车速翻倍四倍」均回权威源核实无误，无「听起来对但细节错」的常识陷阱。"
+    },
+    {
+      "pattern_id": "G-04",
+      "triggered": true,
+      "checked": true,
+      "finding": "吹纸机制一轮缺失的「射流卷吸/夹带」环节 v2 已补齐（「顺着缝跑动时会夹带缝里的空气一起卷走」），要素完整，无跳步。"
+    },
+    {
+      "pattern_id": "G-05",
+      "triggered": true,
+      "checked": true,
+      "finding": "「迎角」首次出现未解释，记 P2（issues[0]）；《流体动力学》书名/年份/作者引文逐字核实一致。"
+    },
+    {
+      "pattern_id": "G-06",
+      "triggered": true,
+      "checked": true,
+      "finding": "三条关键断言（1738 著作、约8公斤、伯努利适用边界）均已逐条回 Wikipedia/科普中国核到细节，非仅「来源存在」，无 snippet 级留白。"
+    },
+    {
+      "pattern_id": "G-07",
+      "triggered": true,
+      "checked": true,
+      "finding": "吹纸已归卷吸主因（非伯努利跨流场单因），黄线已列防跌落/划限界等并列功能，归因无偏漏，一轮两条 P1 归因缺口已补。"
+    }
+  ],
+  "issue_responses": [
+    { "issue_index": 0, "status": "resolved", "evidence": "v2 Q1 补「射流夹带缝里空气一起卷走」「夹带才是主因」，Q2 补「不能拿去硬套两股不一样的气流」，机制归属已从「整体归伯努利」改为「卷吸为主、伯努利仅限同一股气流上下游」" },
+    { "issue_index": 1, "status": "resolved", "evidence": "v2 Q3 改「一部分道理在这儿」，补黄线并列功能「还防跌落、划限界」、50公里加「左右」、并加行为指引「候车请站在黄线外」，绝对化与归因偏漏均已软化" },
+    { "issue_index": 2, "status": "resolved", "evidence": "v2 Q3 改「据测算约 8 公斤的力从背后把人往车边推」，删除「身后的大气压」的错误归属、恢复「约」数，并新增「车速翻倍这股力翻四倍」" },
+    { "issue_index": 3, "status": "resolved", "evidence": "v2 Q2 改「1738 年，丹尼尔·伯努利在《流体动力学》里写下这条关系」，把一轮的 1726 口径纠正为著作年 1738，并删去「把这个现象收成一句话」的转述层表述" },
+    { "issue_index": 4, "status": "resolved", "evidence": "v2 F段换「风腾地方、旁边空气补位」新角度并举纸/雾两例，表格反转栏改写为「推纸的不是迎面的风，是风腾出低压后过来补位的空气」，与 Q1 不再逐字同义重复" },
+    { "issue_index": 5, "status": "unresolved", "evidence": "v2 Q3 仍写「机翼升力还牵扯迎角」，未补「机翼与迎面气流的夹角」通俗解释，也未删除「迎角」二字；revision.log 记「已补通俗解释」但正文实际未落地，此 P2 缺口仍在（计入 issues[0]）" },
+    { "issue_index": 6, "status": "resolved", "evidence": "v2 结尾表格已在表头行与数据行之间补 Markdown 分隔行「| --- | --- | --- | --- |」（第16行），可被识别为表格" }
+  ],
+  "title_checks": [
+    {
+      "title": "为什么朝两张纸中间吹气，纸反而贴得更紧？",
+      "subject_scoped": true,
+      "unit_matches_source": true,
+      "scope_consistent_with_body": true,
+      "verdict": "pass",
+      "note": "标题为具体实验疑问，主体圈定「朝两张纸中间吹气」现象，非无限定泛称；不含灭绝/消失类断言，单位不适用；正文 Q1 到 Q3 均围绕该现象，范围一致。"
+    }
+  ],
+  "forbidden_violations": [
+    {
+      "pattern_id": "FP-17",
+      "level": "P2",
+      "location": "Q3（第10行）",
+      "note": "「迎角」首次出现未做通俗解释，已计入 issues[0]（承接一轮 issues[5] 未修）。"
+    }
+  ],
+  "overall_comment": "脚本层面：score 100、P0/P1/P2 均 0、char_count 659（全文口径，含结尾表格，<690 上限，未触发字数 P1），passed true。人工独立复核判 P0=0、P1=0、P2=2，按 100-3×P1-1×P2=98。一轮 7 条 issues 中 6 条已闭环（0/1/2/3/4/6 均 resolved），第 5 条「迎角未解释」未落地、仍存 P2，另有 1 处表格话题字段字级表达瑕疵，合计 P2=2。两条 P1（吹纸机制归属、黄线绝对化）v2 均已修正：Q1 补射流卷吸并明「夹带才是主因」、Q3 软化黄线归因并补安全行为指引。事实核验（WebSearch 独立 2 处）：① 1738 年《流体动力学》丹尼尔·伯努利经 Wikipedia（Hydrodynamica 1738）核实正确，一轮 1726 误口径已纠正；② 「约8公斤力/车速翻倍力翻四倍」经科普中国「8公斤左右」及动压正比于 v² 的物理关系核实成立。满足通过条件 P0=0 且 P1≤2。"
+}
