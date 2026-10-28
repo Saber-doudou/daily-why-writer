@@ -8,8 +8,8 @@ description: >
   路由排除：输入含「学习/投喂/总结/发布/推送/审计/备份」等动作词时，
   即使包含 dailywhy 前缀，也不属于本技能（分别属于 L2 学习 / L3 发布），勿触发。
 agent_created: true
-version: v4.3
-last_updated: 2026-10-27
+version: v4.4
+last_updated: 2026-10-28
 ---
 
 # daily-why-writer
@@ -25,7 +25,7 @@ last_updated: 2026-10-27
 ## 元规则
 
 1. **教训没有不可泛化的** — 每次出错分析根因，提炼为可复用规则，记录到 FEEDBACK_LOG
-2. **三层分离，按需加载**：本文件 = 核心法典（Always Load）；`references/CHECKLIST.md` = 科学准确性自检（写后加载）；`references/FORBIDDEN.md` = 黑名单 FP-01 至 86（含 FP-58 空缺，实际 85 条，写后加载）；`references/FEEDBACK_LOG.md` = 活跃教训（30天内，审校时按需检索）；`references/FEEDBACK_ARCHIVE.md` = 休眠教训（30天未再犯，手动查阅）；`references/EXAMPLES.md` = 好/坏案例（写作时按需查阅）
+2. **三层分离，按需加载**：本文件 = 核心法典（Always Load）；`references/CHECKLIST.md` = 科学准确性自检（写后加载）；`references/FORBIDDEN.md` = 黑名单 FP-01 至 87（含 FP-58 空缺，实际 86 条，写后加载）；`references/FEEDBACK_LOG.md` = 活跃教训（30天内，审校时按需检索）；`references/FEEDBACK_ARCHIVE.md` = 休眠教训（30天未再犯，手动查阅）；`references/EXAMPLES.md` = 好/坏案例（写作时按需查阅）
 3. **数值规则内联**：本文已内联所有关键阈值，`writing_rules.json` 仅供 `validate_article.py` 程序化验证
 
 ---
@@ -126,7 +126,7 @@ C:/Users/admin/.workbuddy/binaries/python/versions/3.13.12/python.exe F:/WorkBud
    - **🔥 活跃区（必查）**：近30天被教训引用，当前高发问题，逐条核对
    - 🛡️ 预防区（按需）：有教训但近期零触发，规则有效，抽查即可
    - 🔬 待验证区（手动）：从未被引用，新规则，写作时主动对照
-2. 加载 `references/FORBIDDEN.md` 扫描 FP-01 至 86（以文件实际为准，含 FP-58 空缺，实际 85 条）
+2. 加载 `references/FORBIDDEN.md` 扫描 FP-01 至 87（以文件实际为准，含 FP-58 空缺，实际 86 条）
 3. **标点自查**（5 项高频陷阱，GB/T 15834-2011）：
 
 | # | 陷阱 | 错误 → 正确 |
@@ -267,7 +267,7 @@ Phase 5: 【Orchestrator】输出全文 + update_history.py + 记忆更新
 | 文件 | 用途 | 加载时机 |
 |------|------|---------|
 | `references/CHECKLIST.md` | 100 项自检（活跃区46必查 + 预防区35 + 待验证区19） | Phase 3 |
-| `references/FORBIDDEN.md` | 85 条禁止模式 FP-01 至 86（含 FP-58 空缺） | Phase 3 |
+| `references/FORBIDDEN.md` | 86 条禁止模式 FP-01 至 87（含 FP-58 空缺） | Phase 3 |
 | `references/FEEDBACK_LOG.md` | 教训→规则转化记录（30天内活跃） | 按需检索 |
 | `references/FEEDBACK_ARCHIVE.md` | 休眠教训库（30天未再犯） | 手动查阅 |
 | `references/EXAMPLES.md` | A段/F段/Q格式好/坏案例 | 写作时查阅 |
@@ -350,3 +350,4 @@ Phase 5: 【Orchestrator】输出全文 + update_history.py + 记忆更新
 *Version: v4.1 | 2026-10-22 | + CHECKLIST §125（感受器/感知参数禁把"峰值位置"与"响应强弱"混为一谈：S视锥峰值约420nm在紫蓝区，"视锥对紫光响应很弱"是把峰值区说成低响应区，真正机制看数量占比约2-5%+整体明视觉峰值555nm；天空蓝投喂学习，ds/千问/豆包3家指出且v1独立审校据科普中国/腾讯新闻转述源误判correct——转述源沿袭不精确流行说法，审校侧也须回原始数据源）+ §101 案例补充（信源甄别：两家AI数字冲突按公式+标准波长实算裁决，ds「6倍」=700/450深红极值口径、千问「3.5倍」保守，权威口径约4倍）+ FEEDBACK_LOG 2条；无新 FP，FP 总数维持 82（含 FP-58 空缺，实际 82 条）（天空为什么是蓝的 投喂学习）*
 *Version: v4.2 | 2026-10-23 | + FORBIDDEN FP-84（同值不同义数据近距离并列：灭绝率约10倍与化石存续时间之比两个"10倍"同段并列必混淆，第二个对比改用具体年限承载；与 FP-73 单句省略维度、FP-75 开头口径分界）+ CHECKLIST §126（物种数量须区分"已描述总数/现生种/化石种"：约7万种含5万多化石种、现生仅约1.3万，初版"今天还有约7万种"硬伤，维基/EOL/澳科学院三源证实）/§127（论文实测指标与科普转述指标之间须点明推断链：壳形两性异形是代理指标，"正好能反推生殖器大小"过强，禁把间接测量写成直接测量）+ §62 案例补充（F段除表格差海外还须避免与Q3正文语义重叠）+ §124 次数更新（豆包表格建议连续第10次）+ FEEDBACK_LOG 1 条 + FP 总数 82→83（含 FP-58 空缺，实际 83 条）（介形虫灭绝 投喂学习）*
 *Version: v4.3 | 2026-10-27 | + FORBIDDEN FP-85（力与压强两个量纲混写："8公斤的压力差"应为"8公斤的力"，量纲错配懂行读者当场出戏；与 FP-07 数值倍数口径、FP-84 同值不同义并列分界）+ FP-86（正文机制用法与自身限定语自相矛盾：Q1 拿两股流直接比压强 vs Q2 自警"不能硬套两股流"，须就地坦白是近似；与 FP-03 Q段表层矛盾分界，属"口径自洽"维度）+ CHECKLIST §129（史实定年须落"正式发表/出版年"，禁用"最早手札/研究起点年"冒充：伯努利 1726 手札 vs 1738《流体动力学》）+ FEEDBACK_LOG 1 条 + FP 总数 83→85（含 FP-58 空缺，实际 85 条）（吹纸·伯努利 投喂学习）*
+*Version: v4.4 | 2026-10-28 | + FORBIDDEN FP-87（盲信 AI 的"否定性事实指控"：数据被 AI 说"查不到/无出处"就删除，负向指控须与正向事实指控对称地回权威源独立核实——本次 648Hz/15dB 被 IMA/千问误判"查不到"，实为 ABC Dr Karl 2012 可溯源，照删反把正确数据删掉；与"多数 AI 一致≠正确"同族，补"多家一致说查不到也≠查不到"一面向）+ CHECKLIST §130（AI 否定性数据指控的回源核实 + 海螺螺旋腔多次谐振 vs 直筒杯无叠加的机制区分）+ FEEDBACK_LOG 1 条 + FP 总数 85→86（含 FP-58 空缺，实际 86 条）（空杯嗡嗡声 投喂学习）*
