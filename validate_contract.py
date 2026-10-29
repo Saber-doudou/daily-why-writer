@@ -254,8 +254,19 @@ def iter_targets(kind, args):
             yield p
     elif kind == "learning_summary":
         base = ROOT / "投喂素材"
-        for p in sorted(base.glob("*/学习总结*.md")):
-            yield p
+        # 2026-10-29：L2 v3.7 起机器交接件为 learning_summary.json（v1 契约）。
+        # 批量扫描优先取 JSON（权威），无 JSON 的日期目录才回退 Markdown（legacy）。
+        # 保持「每个日期目录至多一条」，避免同一天被重复计数。
+        for d in sorted(p for p in base.iterdir() if p.is_dir()):
+            js = d / "learning_summary.json"
+            if js.exists():
+                # 有机器契约件时，Markdown 只是渲染视图，不再重复计入
+                yield js
+                continue
+            # 无 JSON：保留原有「一个目录多份 md 各计一份」的语义
+            # （20260623 的 学习总结_v2.md、20260811 的第二份均属此类，取首份会丢覆盖）
+            for p in sorted(d.glob("学习总结*.md")):
+                yield p
     else:
         raise SystemExit(f"{kind} 必须显式给 --file")
 

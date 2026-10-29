@@ -173,6 +173,48 @@ def check_article(text, card):
                 if c.get("verified_by") == "none" or c.get("confidence") == "unverified":
                     out.append(("P0", "unverified_mapping", f"L{lineno}",
                                 f"映射到未核实的 claim {cid}"))
+
+    # ── 第五类检查：机制覆盖（10-29 新增，审校意见 2.4）──
+    out += check_mechanism_coverage(text, card)
+    return out
+
+
+def check_mechanism_coverage(text, card):
+    """机制覆盖：卡片声明的机制证据，正文必须至少用上一次（P1 warn，不阻断）。
+
+    为什么需要这一类：
+    既有四类检查管的是「卡片里不能有未核实的机制 claim」（卡片层），
+    但「正文那套机制说法是不是照着卡片写的」（正文层）门禁完全不管，全靠 Reviewer。
+    10-27 的 Q1 就是纯机制句、无数字、无映射，门禁 P0=0，
+    靠 Reviewer 的 elements_complete=False 才抓出来 —— Reviewer 一漏，机制错误就能发。
+
+    判据（刻意选 claim 级而不是 Q 段级）：
+    卡片里每条 type=mechanism 的 claim，正文必须至少引用一次。
+    - 10-27 实证：C1（伯努利/压强，正是 Q1 讲的机制）全文一次未引用，只引了 C2/C3 → 命中
+    - S5 鸽子文实证：C1 在 Q2、Q3 各引用一次 → 干净，不误报
+    段级语义匹配（关键词/句向量）评估后未采用：10-27 Q1 与 S5 Q1 的内容与各自
+    mechanism claim 的重合度大致相当，无法把两者分开，只会引入噪声（见交付说明）。
+    """
+    out = []
+    mech = [c for c in (card.get("claims") or []) if c.get("type") == "mechanism"]
+    if not mech:
+        return out
+
+    used = set()
+    for m in re.finditer(r"<!--\s*claim:\s*([A-Za-z0-9,\s]+?)\s*-->", text):
+        used |= {x.strip() for x in m.group(1).split(",") if x.strip()}
+    for cid, frag in resolve_mapping(card):
+        if frag and frag in text:
+            used.add(cid)
+
+    for c in mech:
+        cid = c.get("id")
+        if cid in used:
+            continue
+        snippet = (c.get("text") or "").strip()[:40]
+        out.append(("P1", "mechanism_uncovered", f"claim {cid}",
+                    f"卡片声明了这条机制证据，正文一次都没引用"
+                    f"（正文的机制说法无法回溯到证据，只能靠审校兜）: {snippet}"))
     return out
 
 
@@ -325,6 +367,61 @@ SELFTEST = {
         "expect_p0": 2,
         "expect_codes": ["unverified", "unverified_mapping"],
     },
+
+    # ── 10-29 新增：第五类检查「机制覆盖」的正反夹具 ──
+    # 全部断言 expect_p1_codes（代码集合）而非条数：条数对上但规则没被触发，
+    # 是 #68 已经栽过一次的坑（「因为别的原因误打正着凑够条数」也会 PASS）。
+    # 三条互为反向：① 未引用须命中 ② 行内注释引用须干净 ③ mapping.fragments 引用须干净。
+    "stress_mechanism_uncovered": {
+        # 正例，复刻 10-27 的现场：卡片声明了机制 claim，正文通篇没引用。
+        # 卡片侧刻意做到 P0/P1 全清（fetch + secondary + 引文够长），
+        # 确保唯一命中的就是 mechanism_uncovered，不被别的规则污染。
+        "card": {
+            "schema_version": "v1", "topic": "测试",
+            "claims": [{"id": "C1", "text": "压强差把两张纸推向中间", "type": "mechanism",
+                        "source": {"title": "某来源", "url": "https://a.b",
+                                   "source_level": "secondary"},
+                        "quote": "这是一段不少于十五个字的引文占位用于长度校验",
+                        "verified_by": "fetch", "confidence": "high"}],
+            "banned_claims": [],
+        },
+        "article": "**Q1：纸怎么会往里贴？** → 中间空气被吹快，压强就降下来了。",
+        "expect_p0": 0, "expect_codes": [],
+        "expect_p1_codes": ["mechanism_uncovered"],
+    },
+    "stress_mechanism_covered_inline": {
+        # 反例一：同一张卡，正文用行内注释引用了 C1 → 必须干净。
+        # 复刻 S5 鸽子文的形态（C1 在正文中被引用）。
+        "card": {
+            "schema_version": "v1", "topic": "测试",
+            "claims": [{"id": "C1", "text": "压强差把两张纸推向中间", "type": "mechanism",
+                        "source": {"title": "某来源", "url": "https://a.b",
+                                   "source_level": "secondary"},
+                        "quote": "这是一段不少于十五个字的引文占位用于长度校验",
+                        "verified_by": "fetch", "confidence": "high"}],
+            "banned_claims": [],
+        },
+        "article": "**Q1：纸怎么会往里贴？** → 压强差把两张纸推向中间。<!-- claim:C1 -->",
+        "expect_p0": 0, "expect_codes": [],
+        "expect_p1_codes": [],
+    },
+    "stress_mechanism_covered_via_fragments": {
+        # 反例二：走 mapping.fragments 文本命中路径（无行内注释）也必须算已引用，
+        # 否则只认注释标记会对「用片段映射的老卡片」全量误报。
+        "card": {
+            "schema_version": "v1", "topic": "测试",
+            "claims": [{"id": "C1", "text": "压强差把两张纸推向中间", "type": "mechanism",
+                        "source": {"title": "某来源", "url": "https://a.b",
+                                   "source_level": "secondary"},
+                        "quote": "这是一段不少于十五个字的引文占位用于长度校验",
+                        "verified_by": "fetch", "confidence": "high"}],
+            "mapping": [{"claim_id": "C1", "text": "压强差把纸推向中间"}],
+            "banned_claims": [],
+        },
+        "article": "**Q1：纸怎么会往里贴？** → 压强差把纸推向中间。",
+        "expect_p0": 0, "expect_codes": [],
+        "expect_p1_codes": [],
+    },
 }
 
 
@@ -345,10 +442,18 @@ def run_selftest():
         want = case.get("expect_codes")
         if want is not None:
             good = good and codes == set(want)
+        # 10-29：P1 代码集合断言（第五类机制覆盖是 warn 级，只能靠 P1 断言防空转）。
+        # 仅在夹具显式声明 expect_p1_codes 时校验，历史夹具不受影响。
+        p1 = [f for f in findings if f[0] == "P1"]
+        want_p1 = case.get("expect_p1_codes")
+        if want_p1 is not None:
+            good = good and {f[1] for f in p1} == set(want_p1)
         ok += good
         line = f"[{'PASS' if good else 'FAIL'}] {name}: P0={len(p0)} 期望={case['expect_p0']}"
         if want is not None:
             line += f"｜codes={sorted(codes)} 期望={sorted(want)}"
+        if want_p1 is not None:
+            line += f"｜P1={sorted({f[1] for f in p1})} 期望={sorted(want_p1)}"
         print(line)
         for f in p0:
             print(f"        {f[1]}: {f[3]}")
