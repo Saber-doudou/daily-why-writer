@@ -7,11 +7,11 @@ description: >
   路由规则：凡输入含「发布/推送/审计/备份」动作词（如 dailywhy发布），本技能优先于
   其他 dailywhy 系列技能触发（动作词优先），触发即执行 L3 发布流程。
 agent_created: true
-version: v3.28
+version: v3.29
 last_updated: 2026-10-29
 ---
 
-# daily-why-publish v3.28
+# daily-why-publish v3.29
 
 AI 语义验证 + 脚本执行，各司其职。
 
@@ -351,3 +351,4 @@ L3 daily-why-publish（手动触发）← 本 Skill
 *Version: v3.26 | 2026-10-20 | 同日修正 v3.25 笔记本 ID 误配：daily-why 备份笔记改归《daily-why》笔记本（foldercf745788b7fb2800，112 篇存量历史备份的家；v3.25 误入《history-today》属回归错误，v7.0/v7.1 两条无法自动迁移，v7.2 起新备份归位）+ 教训沉淀「配置类落位改动前先勘察存量位置」（EXP-014）；v3.25 | 2026-10-20 | IMA 备份落位改造（Master 指定《workbuddy自动化备份》知识库首页 + 笔记本双落位）+ #60 知识库上传长期静默失败根治（ima_archive 重写为官方 add_knowledge API、config.json 修正 kb_id 并参数化两个 folder_id、RESULT_KB 结构化输出三态解析，EXP-014）+ 补录 v3.24 变更日志遗漏行；v3.24 | 2026-09-24 | GitHub 推送代理 fallback（直连失败自动尝试 http://127.0.0.1:2704，两处均失败才报人工介入）+ version 三处对齐（2026-09-27 版本门禁升级为 FAIL-closed 硬阻断：任一口径不一致即 exit 1，禁止带着漂移版本发布）；v3.23 | 2026-09-17 | #58 改进点提取器双断裂根治（闸门①标题锚点由「须以关键词开头」放宽为「任意位置含关键词」并纳入「改写要点」；闸门②抽 _extract_improvements 用 re.finditer 遍历全部命中章节取首个非空列表，修掉「首个命中是表格章节即空手而归」；闸门③新增最高优先契约锚点 `## 改进点`，L2 SKILL v3.4 强制，在生产侧终结 L2/L3 格式漂移）+ `--verify-report` 子模式（判 FAIL 的报告须有「人工补验」声明 + ≥3 行判定表格，否则 exit 1；Step 2.5 硬约束补验后必跑）+ #59 修复（scripts/config.json 被 .gitignore 有意忽略却留在 git_add_files/复制清单 → git add 静默失败 + 双向自检假绿；现从两份清单移除 + git add 逐项回读校验）+ 70 份全量双向回归（零命中 5→0，条数零下降）+ CHANGELOG v4.13*
 *Version: v3.27 | 2026-10-27 | 修复 #67：R2/R3 交付物从未进 GitHub repo。审计实证 evidence_gate.py / safe_pool.py / validate_contract.py / contracts 四份 schema / config/safe_topics.json / eval/historical_claims.tsv 全部不在镜像，而发布报告与脚本自检一路报绿。根因：Phase 3 双向自检的两个方向（清单项有无复制源、已跟踪文件在不在清单）都不覆盖「当期交付物有没有进清单」，与 #59 同源。现 extra_sync 与 git_add_files 同步补 10 项，每项均答得出「谁读、哪步读」；教训：新增交付物必须同改两份清单，验收要看 repo 实际内容而非脚本自检结论。对照 v3.26 末条记录，本条为末条，版本门禁按末条取值。
 *Version: v3.28 | 2026-10-29 | R3.9 交付链路四方一致自检落地：新建 scripts/delivery_check.py，查「四方一致」——① 本轮交付物（工作区改动 + 最近 N 次提交，按范围过滤）② config.json 的 git_add_files ③ l3_publish 的同步清单 ④ 镜像仓库 HEAD 树实际存在；缺一 exit 1 并指名。补的正是 #67 缺的那两问：「该进清单的有没有进」「清单里的有没有真送到镜像」——此前三道检查全在清单内部打转，full_selfcheck 只扫本地不读镜像。设计要点：清单用 AST 从 l3_publish.py 原样提取（不 import 触发发布副作用、不复制第二份清单以免再次漂移，与 #58 回归验证同手法）；远端校验默认关闭需显式 --remote，网络不通不得判红（10-28 D1 教训：单次探活失败被当成「不可重试」）；每日刷新的派生数据（topics_context*.json）排除出交付范围，否则每天必红会诱发告警疲劳。该脚本自身同步补入 extra_sync 与 git_add_files——检查别人的东西，自己先被检查。本条为末条。
+*Version: v3.29 | 2026-10-29 | R3.8 推送门修正：① D1——github_reachable 原为单次 curl，一次抖动就让整条重试链作废还嘴硬「不可重试」，现改为探活自身重试 3 次（间隔 2s/5s）、且探活失败**不当裁判**仍尝试真实 pull/push（curl 不通≠git 不通，10-28 实测教训）；② D2——classify_git_error 新增 dirty 类（unstaged changes / your local changes / cannot pull with rebase 等），工作区脏不再被误报成「rebase 冲突」、不再白跑一次 rebase --abort；③ 配套 scripts/git_push_selftest.py（14 条纯 mock 夹具）接入 full_selfcheck 第 5c 项，git_push_selftest.py 自身同步补入 extra_sync 与 git_add_files；④ delivery_check 缺口 4 区分「在途」（本轮新增、有复制源、待下次 L3 送达，不判红但显式列出）与「历史遗漏」（清单写了却送不到，判红），并加 --selftest 反向夹具锁死这个区分，接入 full_selfcheck 第 5d/5e 项。**版本号读法归正（Master 10-29 裁定）**：本链一直是省略第二个点的三段式——v3.9=v3.0.9、v3.10=v3.1.0（patch 满十进 minor 实证）…v3.28=v3.2.8、本版 v3.29=v3.2.9，每段个位数，十进制进位一直正确，禁止读成「major=3、minor=28/29 两位数」而误判需跳 v4.0；v3.29 之后 patch 满十进位到 v3.3(v3.3.0)，禁写 v3.30。本条为末条。

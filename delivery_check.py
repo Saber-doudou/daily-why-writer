@@ -301,17 +301,37 @@ def run_checks(commits, with_remote):
         ))
 
     # ── 缺口 4：清单里有，镜像 HEAD 树里却没有（从来没人查的一层）──
+    # 10-29 修正：区分「在途」与「历史遗漏」，否则每新增一个清单项、到下一次 L3
+    # 送达之间都会判红一次，混进高频自检就是告警疲劳（与 10-28 D1 同源）。
+    #   - 在途 = 缺项能反查到 src→rel 映射，且该 src 同时出现在本轮 changed 集里
+    #     （本轮刚进清单、有复制源，只是还没跑 L3），不判红但必须显式列出；
+    #   - 历史遗漏 = 缺项反查不到映射、或映射源不在本轮改动里（清单里写了个
+    #     根本送不到的名字，才是 #67 那类真缺陷），判红。
     if not (repo / ".git").exists():
         problems.append(("mirror_missing_repo", f"镜像仓库不存在: {repo}", [str(repo)]))
         miss = []
     else:
         miss = mirror_missing(repo, whitelist)
-    if miss:
+
+    changed_abs = {_norm(ROOT / f) for f in changed}
+    rel_to_srcs = {}
+    for src, rel in pairs:
+        rel_to_srcs.setdefault(rel, []).append(src)
+
+    in_transit, truly_missing = [], []
+    for m in miss:
+        srcs = rel_to_srcs.get(m, [])
+        if any(s in changed_abs for s in srcs):
+            in_transit.append(m)
+        else:
+            truly_missing.append(m)
+
+    if truly_missing:
         problems.append((
             "not_in_mirror",
-            f"git_add_files 里 {len(miss)} 项在镜像仓库 HEAD 树中不存在"
-            f"（清单写了但从未送达）",
-            miss,
+            f"git_add_files 里 {len(truly_missing)} 项在镜像仓库 HEAD 树中不存在，"
+            f"且反查不到本轮复制源（清单写了却送不到，#67 类历史遗漏）",
+            truly_missing,
         ))
 
     # ── 可选：远端比对（网络不通不得判红，需显式 --remote）──
@@ -332,9 +352,41 @@ def run_checks(commits, with_remote):
         "whitelist_count": len(whitelist),
         "sync_count": len(pairs),
         "changed_deliverables": sorted(changed),
+        "in_transit": in_transit,
         "remote": remote_note,
         "problems": [{"code": c, "message": m, "items": it} for c, m, it in problems],
     }
+
+
+def selftest():
+    """固化「在途 vs 历史遗漏」的反向夹具，防『一修就松』把 #67 检查修没了。
+
+    用 mock 造三类场景，不碰真实 git/镜像：
+      1. 本轮新增、有复制源、还没送达 → 在途，不判红但单列
+      2. 清单有、复制源不在本轮改动集 → 历史遗漏，判红且 items 精确
+      3. 真冲突无关这里（git_push_selftest.py 覆盖）
+    """
+    from unittest import mock
+    fake_pairs = [
+        ("F:/WorkBuddy/daily-why/scripts/some_old_asset.py", "some_old_asset.py"),
+        ("F:/WorkBuddy/daily-why/scripts/git_push_selftest.py", "git_push_selftest.py"),
+    ]
+    with mock.patch.object(sys.modules[__name__], "extract_sync_map", lambda *a, **k: fake_pairs), \
+         mock.patch.object(sys.modules[__name__], "changed_files",
+                           lambda *a, **k: {"scripts/git_push_selftest.py"}), \
+         mock.patch.object(sys.modules[__name__], "mirror_missing",
+                           lambda repo, wl: ["some_old_asset.py", "git_push_selftest.py"]):
+        r = run_checks(1, False)
+    codes = [p["code"] for p in r["problems"]]
+    nm = next((p for p in r["problems"] if p["code"] == "not_in_mirror"), None)
+    ok = ("not_in_mirror" in codes and nm is not None
+          and nm["items"] == ["some_old_asset.py"]
+          and r["in_transit"] == ["git_push_selftest.py"])
+    print(f"[{'PASS' if ok else 'FAIL'}] 在途不判红单列、历史遗漏仍判红且 items 精确")
+    if not ok:
+        print(f"       codes={codes} in_transit={r['in_transit']} "
+              f"nm_items={nm['items'] if nm else None}")
+    return 0 if ok else 1
 
 
 def main():
@@ -344,7 +396,11 @@ def main():
     ap.add_argument("--remote", action="store_true",
                     help="额外比对远端 main（默认不查，网络不通不得判红）")
     ap.add_argument("--json", action="store_true", help="机器可读输出")
+    ap.add_argument("--selftest", action="store_true", help="跑内置反向夹具并退出")
     args = ap.parse_args()
+
+    if args.selftest:
+        return selftest()
 
     result = run_checks(args.commits, args.remote)
     problems = result["problems"]
@@ -360,11 +416,21 @@ def main():
         print(f"  ① 本轮交付物（范围过滤后）: {len(result['changed_deliverables'])} 项")
         for f in result["changed_deliverables"]:
             print(f"       - {f}")
-        print(f"  ④ 镜像仓库             : {'齐全' if not any(p['code']=='not_in_mirror' for p in problems) else '有缺失'}")
+        _has_hist_miss = any(p["code"] == "not_in_mirror" for p in problems)
+        if _has_hist_miss:
+            _mirror_state = "有历史遗漏（见下）"
+        elif result["in_transit"]:
+            _mirror_state = f"齐全（{len(result['in_transit'])} 项在途，待下次 L3 送达）"
+        else:
+            _mirror_state = "齐全"
+        print(f"  ④ 镜像仓库             : {_mirror_state}")
+        if result["in_transit"]:
+            for it in result["in_transit"]:
+                print(f"       ⏳ 在途: {it}（本轮新增，已有复制源，下次 L3 自动送达）")
         print(f"  远端                   : {result['remote']}")
         print("-" * 70)
         if not problems:
-            print("✅ 四方一致，无缺口")
+            print("✅ 四方一致，无缺口（在途项非缺陷，已显式列出）")
         else:
             for p in problems:
                 print(f"❌ [{p['code']}] {p['message']}")
