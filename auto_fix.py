@@ -362,7 +362,8 @@ def verify_fix(filepath: Path):
             p0 = len(data.get("p0", []))
             p1 = len(data.get("p1", []))
             p0p1_ok = data.get("p0p1_passed", False)
-            print(f"\n✅ 验证通过：P0={p0}, P1={p1}, 得分={data.get('score', '?')}")
+            print(f"\n✅ 验证通过：P0={p0}, P1={p1}, "
+                  f"结构分={data.get('structure_score', data.get('score', '?'))}（机械口径）")
         except json.JSONDecodeError:
             print(f"\n[auto_fix] 验证输出解析失败")
             print(result.stdout[:500])

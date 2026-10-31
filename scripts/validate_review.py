@@ -24,6 +24,15 @@ v1.2 2026-10-23  新增第 9 项校验「标题主体口径核对」（缺陷 #6
      标题来源：优先 --article 文章正文（H1 + 话题行），缺失时退回 review json 的
      title_checks[].title；两者皆无 → fail-open 仅警告不阻断。
 
+v1.4 2026-11-01  新增第 10 项校验「分值口径」（C 方案落地，10-30 审查报告决策 2）：
+     ① 规范名 `structure_score`（0 至 100 整数），`score` 降级为兼容别名；
+     ② 11-01 起 `structure_score` 必填，只写 `score` 判 FAIL；两者同时存在时必须同值；
+     ③ 语义边界写进契约：该分只反映机械规则（字数/格式/FORBIDDEN/结构），
+        不含事实与机制判断 —— 后者归 L2（daily-why-feed-learning）与 evidence_gate.py。
+     根因：09-08 至 10-30 共 6 次抽检漏判率 6/6，v1 对含 4 处 P0 硬伤的初稿给出
+     score=100 / issues=0。100 分被下游读成「内容没问题」比不给分更危险（主动发绿灯）。
+     性质定性：属「裁定未落地」——Master 09-07 已预先裁定 C 方案触发条件，条件早已满足。
+
 用法：
     python validate_review.py review/2026-09-07_review.json
     python validate_review.py review/2026-09-07_review.json --json     # 机器可读
@@ -43,10 +52,16 @@ import re
 import sys
 from pathlib import Path
 
-VERSION = "v1.3"
+VERSION = "v1.4"
 
 # v1.2（10-23）新增：标题主体口径核对（title_checks）强制起始日
 TITLE_CHECK_ENFORCE_SINCE = "2026-10-23"
+
+# v1.4（11-01）新增：分值口径改写（structure_score）强制起始日 —— C 方案落地
+# 背景：10-30 审查报告实测 Reviewer 漏判率 6/6，v1 对含 4 处 P0 硬伤的初稿给出
+# score=100 / issues=0。100 分只代表「无机械规则违规」，被下游读成「内容没问题」是最
+# 实际的危险点。C 方案把 Reviewer 降为形式门禁，分值改名为 structure_score 并注明作用域。
+STRUCTURE_SCORE_ENFORCE_SINCE = "2026-11-01"
 
 # 消亡类断言关键词（命中即要求 title_checks 非空）——与 validate_article.py tripwire 同口径
 TITLE_EXT_KWS = ("灭绝", "绝迹", "消失", "绝了后", "消亡", "灭亡", "绝种")
@@ -175,6 +190,24 @@ def validate(path: Path, article_path: Path | None = None) -> dict:
         errors.append("`script_result` 缺少 `char_count`（无法做 maker-checker 闭环复核）")
     else:
         stats["char_count"] = sr["char_count"]
+
+    # 2.5 分值口径（C 方案，2026-11-01 起强制）
+    # structure_score 是规范名；score 降级为兼容别名（两者若同时存在必须同值）。
+    # 只写 score 不再算合规 —— 否则「改名」只是换了行字，下游照旧读 100。
+    ss = data.get("structure_score")
+    legacy_score = data.get("score")
+    if ss is not None:
+        if not isinstance(ss, int) or isinstance(ss, bool) or not (0 <= ss <= 100):
+            errors.append(f"`structure_score` 应为 0 至 100 的整数，实际 {ss!r}")
+        else:
+            stats["structure_score"] = ss
+        if legacy_score is not None and legacy_score != ss:
+            errors.append(
+                f"`structure_score`({ss}) 与兼容别名 `score`({legacy_score}) 不一致，两者必须同值")
+    elif file_date and file_date >= STRUCTURE_SCORE_ENFORCE_SINCE:
+        errors.append(
+            f"缺少 `structure_score`（{STRUCTURE_SCORE_ENFORCE_SINCE} 起强制）。"
+            f"`score` 已被 C 方案降级为兼容别名，只写 score 不再算合规")
 
     # 3. 强制留痕数组：键必须存在（各数组有强制起始日，之前缺失仅警告，历史不回改）
     m_arr = re.search(r"(\d{4}-\d{2}-\d{2})", path.name)

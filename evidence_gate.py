@@ -20,6 +20,7 @@
 
 import argparse
 import json
+import os
 import re
 import sys
 from datetime import datetime
@@ -34,7 +35,12 @@ MIN_QUOTE = 15
 # 同样是可核事实，不能被漏掉——模拟运行 S1 就漏了「上世纪五十年代」）。
 # 不带单位的中文数字（三张表、两步走）不触发，避免误杀。
 FACT_PAT = re.compile(
-    r"\d|倍|百分之|[一二三四五六七八九十百千万]+分之[一二三四五六七八九十]+"
+    # 10-31 收窄（审查报告 P1-4，经实测修正）：
+    # 删掉裸「倍」。原写法 `倍` 无前置要求，导致「倍感亲切」「事半功倍」被判成事实句。
+    # 「倍」现在必须前置中文数字（走下面的「三倍」分支）或阿拉伯数字（走 \d，如「3倍」）。
+    # 注：报告称「度」也是裸字符会误杀「态度/角度/程度」——**实测不成立**，
+    #     「度」早已要求前置中文数字，那些词本就不命中，故本次不改动「度」。
+    r"\d|百分之|[一二三四五六七八九十百千万]+分之[一二三四五六七八九十]+"
     r"|[一二三四五六七八九十百千万]+(?:年|倍|米|毫米|厘米|吨|公斤|克|摄氏度|度|分钟|小时)"
 )
 
@@ -422,7 +428,52 @@ SELFTEST = {
         "expect_p0": 0, "expect_codes": [],
         "expect_p1_codes": [],
     },
+    # ── 10-31 新增：FACT_PAT「倍」收窄的正反夹具（审查报告 P1-4，经实测修正）──
+    # 互为反向，锁死「裸倍不再命中、真倍数仍命中」，防一修就松。
+    "stress_bei_bare_word_not_fact": {
+        # 正例（修复前会误杀）：裸「倍」——倍感亲切，不得被判为事实句。
+        "card": {"schema_version": "v1", "topic": "测试", "claims": [], "banned_claims": []},
+        "article": "他倍感亲切地打着招呼，态度也很认真，这个角度很刁钻。",
+        "expect_p0": 0, "expect_codes": [],
+    },
+    "stress_bei_real_multiple_still_fact": {
+        # 反例（防一修就松）：「三倍」是真倍数，仍必须被 unmapped_fact 抓到。
+        "card": {"schema_version": "v1", "topic": "测试", "claims": [], "banned_claims": []},
+        "article": "这个数量是去年的三倍。",
+        "expect_p0": 1, "expect_codes": ["unmapped_fact"],
+    },
+    "stress_bei_arabic_multiple_still_fact": {
+        # 反例二：阿拉伯数字+倍（3倍）走 \d 分支，也必须仍命中。
+        "card": {"schema_version": "v1", "topic": "测试", "claims": [], "banned_claims": []},
+        "article": "产量提高了 3 倍。",
+        "expect_p0": 1, "expect_codes": ["unmapped_fact"],
+    },
 }
+
+
+def _cli_exit_code(card, mode, relax=None, article=None):
+    """用真实 CLI 跑一遍门禁，返回退出码。
+
+    测的是 main() 的退出码分支（run_selftest 内部的 check_* 调用覆盖不到）。
+    卡片/正文写入临时目录，自包含，不依赖任何当日产物或外部文件。
+    article 非空时才传 --article（否则只查卡片，正文层判据不会触发）。
+    """
+    import subprocess
+    import tempfile
+    env = None
+    if relax is not None:
+        env = dict(os.environ, DAILY_WHY_GATE_RELAX=relax)
+    with tempfile.TemporaryDirectory() as td:
+        cp = Path(td) / "card.json"
+        cp.write_text(json.dumps(card, ensure_ascii=False), encoding="utf-8")
+        cmd = [sys.executable, str(Path(__file__).resolve()),
+               "--card", str(cp), "--mode", mode, "--no-report"]
+        if article is not None:
+            ap = Path(td) / "article.md"
+            ap.write_text(article, encoding="utf-8")
+            cmd += ["--article", str(ap)]
+        r = subprocess.run(cmd, capture_output=True, text=True, encoding="utf-8", env=env)
+        return r.returncode
 
 
 def run_selftest():
@@ -432,8 +483,12 @@ def run_selftest():
     只比数量有个盲区——「因为别的原因误打正着凑够条数」也会 PASS。
     例如某夹具期望 1 条 P0，实际因 short_quote 命中而不是预期的 tertary_only，
     数量对上了但被测的规则根本没被触发。
+
+    10-31 强化：末尾追加 block 模式退出码夹具（审查报告 P1-2）。
+    此前 run_selftest 从不调用 main()，切 block 后真正生效的退出码路径零覆盖。
     """
     ok = 0
+    total = len(SELFTEST)
     for name, case in SELFTEST.items():
         findings = check_card(case["card"]) + check_article(case["article"], case["card"])
         p0 = [f for f in findings if f[0] == "P0"]
@@ -457,8 +512,34 @@ def run_selftest():
         print(line)
         for f in p0:
             print(f"        {f[1]}: {f[3]}")
-    print(f"\n自检 {ok}/{len(SELFTEST)} 通过")
-    return 0 if ok == len(SELFTEST) else 1
+    # ── block 模式退出码夹具（10-31 补，审查报告 P1-2）──
+    # run_selftest 只测 findings（check_card/check_article），**从不调用 main()**，
+    # 因此 main() 里 `if p0 and mode == "block": return 1` 这条真正会阻断的路径
+    # 此前零测试覆盖。切 block 后生效的正是退出码，必须用真实 CLI 断言。
+    # 四条互为反向：阻断 / 放行 / warn 恒放行 / kill switch 降级。
+    _block_cases = [
+        # (标签, 夹具名, mode, relax, 期望退出码, 是否带正文)
+        ("block+卡片层P0 → 阻断", "short_quote", "block", None, 1, False),
+        ("block+无P0 → 放行", "good", "block", None, 0, False),
+        ("warn+有P0 → 恒放行", "short_quote", "warn", None, 0, False),
+        ("block+有P0+kill switch → 降级放行", "short_quote", "block", "1", 0, False),
+        # 分级阻断（10-31）：unmapped_fact 属正文层 WARN_ONLY_P0_CODES，
+        # 卡片合规时不得阻断——这是「先切高置信子集」的核心不变量。
+        ("block+仅正文层P0 → 分级不阻断", "unmapped", "block", None, 0, True),
+        # 反向：正文层 P0 在 kill switch 关闭 + 卡片层无 P0 时也不阻断，
+        # 但 kill switch 打开时更不能阻断（幂等，防分级逻辑被开关绕过）。
+        ("block+仅正文层P0+kill switch → 仍不阻断", "unmapped", "block", "1", 0, True),
+    ]
+    for _label, _case, _mode, _relax, _want, _use_art in _block_cases:
+        _art = SELFTEST[_case]["article"] if _use_art else None
+        _rc = _cli_exit_code(SELFTEST[_case]["card"], _mode, _relax, _art)
+        _good = _rc == _want
+        ok += _good
+        total += 1
+        print(f"[{'PASS' if _good else 'FAIL'}] 退出码 {_label}: 实际={_rc} 期望={_want}")
+
+    print(f"\n自检 {ok}/{total} 通过")
+    return 0 if ok == total else 1
 
 
 # ───────────────────────── CLI ─────────────────────────
@@ -518,8 +599,34 @@ def _schema_findings(card_path):
         return [("P1", "schema_unchecked", "证据卡", f"schema 校验未能执行: {e}")]
 
 
-def write_report(card_path, article, findings, mode):
-    """warn 模式下退出码恒为 0，P0 必须落盘，否则会静默丢失（模拟 S2 指出的硬伤）。"""
+# 10-31 分级阻断（审查报告决策 1「先切高置信子集」）：
+# block 模式下，**正文层**判据降级为 warn 不阻断——它们依赖 FACT_PAT 与句末映射，
+# 误杀面宽（4 天样本 P0=0 只说明样本没触发，不等于判据安全）；
+# **卡片层**判据（url/引文长度/tertiary/未核实/schema/命中已证伪/悬空引用）
+# 是确定性检查，误杀面窄，才真正阻断。
+# 命名从「阻断什么」改为「不阻断什么」，新增 P0 code 默认阻断，避免漏放。
+WARN_ONLY_P0_CODES = {"unmapped_fact", "unverified_mapping"}
+
+
+def gate_relaxed():
+    """kill switch：DAILY_WHY_GATE_RELAX=1 时把 block 降级为 warn（不阻断、退出码 0）。
+
+    为什么必须是环境变量而不是改 --mode：
+    现行 `--mode` 写在 automation prompt 里，改它要 改 prompt → --update-automation
+    → 写库 → **次日才生效**。按 Fowler 的 toggle 分类，这等于「关掉它需要一次发布」
+    = 开关失职。环境变量开关出事时当次即可降级，且可从**不依赖门禁服务**的本地读取。
+    与项目既有 `DAILY_WHY_DEDUP_RELAX=1` 同型，零学习成本。
+    """
+    v = (os.environ.get("DAILY_WHY_GATE_RELAX") or "").strip().lower()
+    return v in ("1", "true", "yes", "on")
+
+
+def write_report(card_path, article, findings, mode, relaxed=False):
+    """warn 模式下退出码恒为 0，P0 必须落盘，否则会静默丢失（模拟 S2 指出的硬伤）。
+
+    relaxed=True 时把 block 降级记录进报告（EXP-014 可观测性：降级不能静默，
+    否则「今天没阻断」会被误读成「今天没有 P0」）。
+    """
     p0 = [f for f in findings if f[0] == "P0"]
     p1 = [f for f in findings if f[0] == "P1"]
     out = Path(card_path).with_suffix(".gate.json")
@@ -527,11 +634,12 @@ def write_report(card_path, article, findings, mode):
     payload = {
         "generated_at": datetime.now().isoformat(timespec="seconds"),
         "mode": mode,
+        "relaxed": relaxed,
         "card": str(card_path).replace("\\", "/"),
         "article": str(article).replace("\\", "/") if article else None,
         "p0_count": len(p0),
         "p1_count": len(p1),
-        "blocked": bool(p0) and mode == "block",
+        "blocked": bool(p0) and mode == "block" and not relaxed,
         "findings": [{"severity": s, "code": c, "where": w, "message": m}
                      for s, c, w, m in findings],
     }
@@ -591,12 +699,28 @@ def main():
             print(f"[{s}] {c} @ {w}: {m}")
         print(f"\n证据门禁：P0={len(p0)} P1={len(p1)}（模式={args.mode}）")
 
+    relaxed = gate_relaxed()
+    # 分级阻断：只有「会阻断的 P0」参与判定，正文层两类（WARN_ONLY_P0_CODES）降为 warn
+    blocking = [f for f in p0 if f[1] not in WARN_ONLY_P0_CODES]
+    soft = [f for f in p0 if f[1] in WARN_ONLY_P0_CODES]
+    if soft:
+        print(f"[evidence_gate] ⚠️ {len(soft)} 条正文层 P0 按分级策略降级为 warn（不阻断）: "
+              f"{sorted({f[1] for f in soft})}", file=sys.stderr)
+
     if not args.no_report:
-        rp = write_report(card_path, args.article, findings, args.mode)
+        rp = write_report(card_path, args.article, findings, args.mode, relaxed)
         print(f"[evidence_gate] 报告已落盘: {rp.name}（warn 模式下 P0 不会静默丢失）")
 
-    if p0 and args.mode == "block":
-        print("[evidence_gate] ❌ 阻断：存在 P0 未核实 claim", file=sys.stderr)
+    if blocking and args.mode == "block" and relaxed:
+        # kill switch 生效：阻断被显式降级，必须留下痕迹，不能被读成「今天没有 P0」
+        print(f"[evidence_gate] ⚠️ kill switch 生效（DAILY_WHY_GATE_RELAX）："
+              f"会阻断的 P0={len(blocking)} 但降级为 warn，不阻断（请尽快修复后关闭开关）",
+              file=sys.stderr)
+        return 0
+    if blocking and args.mode == "block":
+        print(f"[evidence_gate] ❌ 阻断：{len(blocking)} 条高置信 P0"
+              f"（{', '.join(sorted({f[1] for f in blocking}))}）"
+              "（如需紧急放行：设置 DAILY_WHY_GATE_RELAX=1 降级为 warn）", file=sys.stderr)
         return 1
     return 0
 

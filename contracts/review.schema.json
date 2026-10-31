@@ -2,7 +2,7 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "$id": "dailywhy/review.schema.json",
   "title": "dailywhy review contract v1",
-  "description": "L1 Reviewer 的输出契约。19 个顶层字段全必填；数组内部结构不在此约束（只要求对象），避免把内部粒度写死。",
+  "description": "L1 Reviewer 的输出契约。19 个顶层字段全必填；数组内部结构不在此约束（只要求对象），避免把内部粒度写死。C 方案（2026-11-01）：分值规范名为 structure_score，只反映机械规则（字数/格式/FORBIDDEN/结构），不含事实与机制判断；score 降级为兼容别名。",
   "type": "object",
   "required": [
     "schema_version",
@@ -33,7 +33,18 @@
     "p0_count": { "type": "integer", "minimum": 0 },
     "p1_count": { "type": "integer", "minimum": 0 },
     "p2_count": { "type": "integer", "minimum": 0 },
-    "score": { "type": "integer", "minimum": 0, "maximum": 100 },
+    "score": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 100,
+      "description": "【兼容别名，已降级】请读 structure_score。两者若同时存在必须同值；2026-11-01 起只写 score 不再算合规（由 validate_review.py 强制）。"
+    },
+    "structure_score": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 100,
+      "description": "机械结构分（规范名）。只反映字数/格式/FORBIDDEN/结构等确定性规则，不含事实与机制判断 —— 事实归 L2 与 evidence_gate.py，不要把这个分数读成「内容没问题」。2026-11-01 起由 validate_review.py 按文件名日期强制必填。"
+    },
     "script_result": {
       "type": "object",
       "required": ["exit_code", "char_count"],

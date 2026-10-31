@@ -40,7 +40,7 @@ KINDS = {
 LEGACY_REVIEW_REQUIRED = [
     "article_id", "review_timestamp", "p0_count", "p1_count", "p2_count", "issues",
 ]
-LEGACY_REVIEW_ONE_OF = [("score", "pass")]
+LEGACY_REVIEW_ONE_OF = [("score", "structure_score", "pass")]
 
 LEGACY_LEARNING_REQUIRED = ["improvements"]
 

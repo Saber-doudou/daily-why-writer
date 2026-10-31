@@ -58,6 +58,11 @@ DELIVERABLE_EXCLUDE = (
 AUTO_DERIVED = (
     "config/topics_context.json",
     "config/topics_context_compact.json",
+    # 11-01 补入：generate_prompt.py --update-automation 的确定性产物，
+    # 用途是「供写库步骤读取」的一次性交接件（见该脚本注释），可由一条命令重建。
+    # 归属派生类而非交付物，与 topics_context 同性质；不是为了让自检变绿而消警：
+    # 真正需要进镜像的是它的生产者 generate_prompt.py，那个在同步清单里。
+    "config/automation-prompt-latest.txt",
 )
 
 
@@ -239,6 +244,12 @@ def changed_files(commits):
 def in_deliverable_scope(rel):
     r = rel.replace("\\", "/")
     if r in AUTO_DERIVED:
+        return False
+    # 11-01 补入：点开头的是临时/工具产物（.tmp_fsc.txt、.DS_Store、编辑器锁文件等），
+    # 不是交付物，真交付物不会以点开头。加这条是因为实测踩到：把 full_selfcheck 的输出
+    # 重定向到工作区根的 .tmp_xxx.txt，本函数会把它当成「改了但不在同步清单」，
+    # 于是自检 30 项稳定红一项，而红的原因就是自检自己的输出文件。
+    if r.rsplit("/", 1)[-1].startswith("."):
         return False
     if any(r.startswith(x) for x in DELIVERABLE_EXCLUDE):
         return False
