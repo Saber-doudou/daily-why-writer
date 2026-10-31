@@ -1,0 +1,79 @@
+{
+  "schema_version": "v1",
+  "topic": "你吃的水果大多不是'果肉'（桃子吃中果皮、苹果吃花托、草莓吃花托、西瓜吃胎座）",
+  "angle": "从植物学结构揭示日常水果可食部分的真实来源",
+  "claims": [
+    {
+      "id": "C1",
+      "text": "桃子的可食部分在植物学上称为中果皮，由子房壁中间层组织发育而成；内果皮石化成桃核，外果皮为薄皮。",
+      "type": "mechanism",
+      "source": {
+        "title": "你了解果实的结构吗？",
+        "publisher": "科普中国",
+        "url": "https://www.kepuchina.cn/article/articleinfo?business_type=100&ar_id=177187",
+        "source_level": "secondary"
+      },
+      "quote": "在桃的果实中，桃的中果皮是我们食用的主要部分。我们把桃的果皮分为三个部分：最外面是外果皮，紧接着是中果皮，非常发达，内果皮就是桃核外面坚硬的壳。",
+      "verified_by": "snippet",
+      "confidence": "high"
+    },
+    {
+      "id": "C2",
+      "text": "苹果属于假果（附果），可食的肥厚部分主要由花托发育而来，子房仅缩在中心形成果核。",
+      "type": "mechanism",
+      "source": {
+        "title": "你了解果实的结构吗？",
+        "publisher": "科普中国",
+        "url": "https://www.kepuchina.cn/article/articleinfo?business_type=100&ar_id=177187",
+        "source_level": "secondary"
+      },
+      "quote": "苹果在形成果实时，子房参与形成了果实的一小部分，花托也参与形成了果实，而且占据了果实的大部分。这样的果实除了种子、果皮还包括了花托形成的部分。",
+      "verified_by": "snippet",
+      "confidence": "high"
+    },
+    {
+      "id": "C3",
+      "text": "草莓的红色多汁部分是膨大的肉质花托，表面一颗颗小颗粒（瘦果）才是真正的果实（聚合果）。",
+      "type": "mechanism",
+      "source": {
+        "title": "我们吃的水果不一定都是'果肉'？其实是这些'部位'",
+        "publisher": "人民日报",
+        "url": "https://www.peopleapp.com/rmharticle/30029097646",
+        "source_level": "secondary"
+      },
+      "quote": "分布在草莓表面上的一个个小点才是真正的果实，这一个个小瘦果们聚在一起，在植物学上，我们称它为'聚合果'。而我们食用的红色部分则是它膨大的肉质花托。",
+      "verified_by": "snippet",
+      "confidence": "high"
+    },
+    {
+      "id": "C4",
+      "text": "西瓜的瓜瓤（可食部分）是肉质化的胎座组织，西瓜皮才是由子房壁发育的果皮。",
+      "type": "mechanism",
+      "source": {
+        "title": "吃水果其实多是在吃'皮'",
+        "publisher": "人民网",
+        "url": "https://www.people.com.cn/24hour/n/2013/0615/c25408-21850086.html",
+        "source_level": "secondary"
+      },
+      "quote": "西瓜就是胎座发育的一个极致——最重要的瓜瓤并不是果皮长成的，而是包裹种子的组织胎座发育而成。除了西瓜，火龙果的食用部分也是肉质化的胎座。",
+      "verified_by": "snippet",
+      "confidence": "high"
+    },
+    {
+      "id": "C5",
+      "text": "植物学里并没有'果肉'这一正式概念，日常所说的果肉只是泛指多汁可食部分。",
+      "type": "attribution",
+      "source": {
+        "title": "我们吃的水果不一定都是'果肉'？其实是这些'部位'",
+        "publisher": "人民日报",
+        "url": "https://www.peopleapp.com/rmharticle/30029097646",
+        "source_level": "secondary"
+      },
+      "quote": "人们习惯地认为，食用水果时肉质多汁的部分就是它们的果肉，其实，植物学里并没有'果肉'这一概念。",
+      "verified_by": "snippet",
+      "confidence": "high"
+    }
+  ],
+  "open_questions": [],
+  "banned_claims": []
+}

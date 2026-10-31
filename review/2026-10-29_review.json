@@ -1,0 +1,177 @@
+{
+  "schema_version": "v1",
+  "article_id": "2026-10-29",
+  "review_timestamp": "2026-10-29T10:24:25+0800",
+  "pass": true,
+  "p0_count": 0,
+  "p1_count": 0,
+  "p2_count": 2,
+  "score": 100,
+  "script_result": {
+    "exit_code": 0,
+    "score": 100,
+    "char_count": 610,
+    "p0_count": 0,
+    "p1_count": 0,
+    "p2_count": 0
+  },
+  "issues": [
+    {
+      "level": "P2",
+      "category": "CHECKLIST-§25/术语精度",
+      "description": "Q2 称苹果子房「缩在中心成了那个硬核」。苹果果心（子房）的内果皮为革质膜壁，并非如桃那般木质石化的硬核（石细胞），「硬核」形容略有夸大，易与核果的石核混淆。",
+      "location": "Q2",
+      "suggestion": "改为「缩在中心成了那个果心」或「成了包着籽的革质核心」，以区别于桃、杏的硬核。"
+    },
+    {
+      "level": "P2",
+      "category": "CHECKLIST-§18/FP-21",
+      "description": "F 段「植物用各种器官伪装成果肉，只为骗你帮它传播种子」为拟人化、目的论收束。其内核（果实是吸引动物取食以传播种子的诱饵）属演化生物学主流观点，但「骗你」「伪装」拟人动词易让读者误读植物有主观意图。",
+      "location": "F段",
+      "suggestion": "保留传播种子主旨，将「骗你」「伪装」改为中性表述（如「吸引动物取食以传播种子」），或明确标注为演化视角，避免拟人化色彩。"
+    }
+  ],
+  "fact_checks": [
+    {
+      "claim": "西瓜可食瓜瓤为胎座组织，西瓜皮为子房壁发育的果皮",
+      "source_verified": true,
+      "detail_verified": true,
+      "verdict": "verified",
+      "note": "国家林草局、人民网、科普中国均明确「西瓜所食用的部位是原来的胎座」，瓠果的果皮（子房壁加花托）发育为硬皮。与文一致。"
+    },
+    {
+      "claim": "草莓红色肉质部分为膨大花托，表面瘦果为独立真果",
+      "source_verified": true,
+      "detail_verified": true,
+      "verdict": "verified",
+      "note": "UC Davis、Encyclopedia.com、LibreTexts 均确认草莓可食部为 receptacle（花托/花筒）发育，表面 achenes（瘦果）为独立真果。与文一致。"
+    },
+    {
+      "claim": "桃可食部为中果皮（mesocarp），内果皮石化成核，桃杏李樱桃统称核果（drupe）",
+      "source_verified": true,
+      "detail_verified": true,
+      "verdict": "verified",
+      "note": "UMD、LibreTexts 确认 drupe 中果皮为肉质可食部、内果皮木质化为核。与文一致。"
+    },
+    {
+      "claim": "苹果为假果（梨果），肥厚多汁部分主要由花托/花筒发育，子房缩为果心；梨、山楂、枇杷同理",
+      "source_verified": true,
+      "detail_verified": true,
+      "verdict": "verified",
+      "note": "LibreTexts、UniversityAgro 确认苹果可食部主要由 receptacle/hypanthium 发育，子房为果心。与文一致（「硬核」措辞见 P2 issues）。"
+    },
+    {
+      "claim": "荔枝晶莹肉质为假种皮（aril），连果皮都不是",
+      "source_verified": true,
+      "detail_verified": true,
+      "verdict": "verified",
+      "note": "荔枝 edible part 为假种皮为植物学共识（aril 为种子外珠被发育的肉质结构），非果皮。与文一致。"
+    }
+  ],
+  "quote_checks": [],
+  "mechanism_checks": [
+    {
+      "claim": "Q1 桃子可食部等于中果皮的机制：子房壁分外、中、内三层，中层肉质化",
+      "direction_ok": true,
+      "elements_complete": true,
+      "note": "分类性机制说明完整，三层对应关系清晰，无方向矛盾或跳步。"
+    },
+    {
+      "claim": "Q2 苹果假果机制：花托膨大肉质化、子房缩为果心",
+      "direction_ok": true,
+      "elements_complete": true,
+      "note": "因果方向自洽，花托与子房分工明确。"
+    }
+  ],
+  "attribution_checks": [
+    {
+      "claim": "草莓可食部归因花托（accessory fruit）",
+      "is_primary_cause": true,
+      "note": "草莓可食部确为 receptacle（accessory tissue），主因正确。"
+    },
+    {
+      "claim": "荔枝可食部归因假种皮",
+      "is_primary_cause": true,
+      "note": "荔枝可食部确为假种皮，主因正确。"
+    }
+  ],
+  "term_checks": [
+    {
+      "term": "中果皮",
+      "used": "中果皮",
+      "correct": "中果皮",
+      "exact": true,
+      "note": "mesocarp，桃可食部，规范术语，使用准确。"
+    },
+    {
+      "term": "花托",
+      "used": "花托",
+      "correct": "花托/花筒(hypanthium)",
+      "exact": true,
+      "note": "草莓可食部为 receptacle，中文科普通用「花托」，规范；英文源多称 hypanthium（花筒），语义一致。"
+    },
+    {
+      "term": "胎座",
+      "used": "胎座",
+      "correct": "胎座",
+      "exact": true,
+      "note": "placenta，西瓜可食部，规范术语，准确。"
+    },
+    {
+      "term": "假种皮",
+      "used": "假种皮",
+      "correct": "假种皮",
+      "exact": true,
+      "note": "aril，荔枝可食部，规范术语，准确。"
+    }
+  ],
+  "gap_checks": [
+    {
+      "pattern_id": "G-01",
+      "triggered": false,
+      "checked": true,
+      "finding": "饮食类话题，但全文只破「果肉」误区，未立「能不能吃/有毒吗/会不会伤」类安全或食用顾虑，无安全闭环缺口，不触发。"
+    },
+    {
+      "pattern_id": "G-02",
+      "triggered": false,
+      "checked": true,
+      "finding": "存在「根本」「压根」强调词，但均指向事实准确的表述（植物学确无「果肉」正式术语；可食部来源各异为客观事实），非虚假绝对化，不标 P1。"
+    },
+    {
+      "pattern_id": "G-03",
+      "triggered": false,
+      "checked": true,
+      "finding": "全部植物学定性断言经 WebSearch 独立核实与权威源（国家林草局/人民网/科普中国/UC Davis/UMD/LibreTexts）一致，无看似合理实为错的事实性错误；「苹果硬核」为措辞欠准（见 P2 issues），非事实错误。"
+    },
+    {
+      "pattern_id": "G-04",
+      "triggered": false,
+      "checked": true,
+      "finding": "各 Q 段机制解释（果皮三层/花托/胎座/假种皮）为分类性说明，步骤完整无跳步，不触发。"
+    },
+    {
+      "pattern_id": "G-05",
+      "triggered": false,
+      "checked": true,
+      "finding": "全文无古籍/论文原文引述；植物学术语（中果皮/花托/胎座/假种皮等）用字经核对均为规范术语（见 term_checks），不触发。"
+    },
+    {
+      "pattern_id": "G-06",
+      "triggered": false,
+      "checked": true,
+      "finding": "全文无「研究表明/某大学/发表于某年」类引用标记，无需细节核对，不触发。"
+    },
+    {
+      "pattern_id": "G-07",
+      "triggered": false,
+      "checked": true,
+      "finding": "各现象（可食部来源）为单一植物学事实，无多因归因偏漏；苹果/草莓/西瓜/荔枝分别归其对应器官，归因主因正确，不触发。"
+    }
+  ],
+  "issue_responses": [],
+  "title_checks": [],
+  "forbidden_violations": [],
+  "revised_after_review": true,
+  "overall_comment": "文章植物学事实准确，结构齐全（A段引用块 / C段 Q1 至 Q4 / F段「冷知识反转」标签 / 两行四列结尾风格表格），字数 610 未超 690，无 AI 味排比、无虚假绝对化、无 ~ 与 ——。仅 2 处 P2 措辞微调建议（苹果「硬核」形容、F段拟人化收束）。5 处关键植物学断言经 WebSearch 独立核实均与权威源一致。综合判定通过。"
+}

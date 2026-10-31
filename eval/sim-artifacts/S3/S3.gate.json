@@ -1,8 +1,9 @@
 {
-  "generated_at": "2026-10-28T00:57:06",
-  "mode": "warn",
+  "generated_at": "2026-10-31T23:46:53",
+  "mode": "block",
+  "relaxed": true,
   "card": "eval/sim-artifacts/S3/S3.json",
-  "article": "eval/sim-artifacts/S3/article.md",
+  "article": null,
   "p0_count": 2,
   "p1_count": 1,
   "blocked": false,

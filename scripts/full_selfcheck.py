@@ -101,6 +101,37 @@ try:
 except Exception as e:
     check("topic_candidates 自测", False, str(e))
 
+# ── 5c. R3.8 推送门回归夹具（10-29 新增）──
+# D1 探活重试/不当裁判 + D2 dirty 类不谎报冲突不 abort，纯 mock 无副作用。
+# 把「防复发」钉进高频自检（EXP-004 约束优于指令）。
+try:
+    _r = subprocess.run([PY, str(WS/"scripts/git_push_selftest.py")],
+                        capture_output=True, text=True, encoding="utf-8", errors="replace")
+    _tail = [l for l in (_r.stdout or "").splitlines() if "自检" in l]
+    check("git_push_selftest R3.8 推送门", _r.returncode == 0, _tail[-1] if _tail else f"exit={_r.returncode}")
+except Exception as e:
+    check("git_push_selftest R3.8 推送门", False, str(e))
+
+# ── 5d. 交付链路四方一致（10-29 新增，防 #67 复发）──
+# 把「该进清单的有没有进 / 清单里的有没有真送到镜像」变成高频自检能抓到的问题。
+# 默认只查本地镜像，不查远端（网络不通不得判红，10-28 D1 教训）。
+try:
+    _r = subprocess.run([PY, str(WS/"scripts/delivery_check.py")],
+                        capture_output=True, text=True, encoding="utf-8", errors="replace")
+    _tail = [l for l in (_r.stdout or "").splitlines() if "四方一致" in l or "❌" in l]
+    check("delivery_check 四方一致", _r.returncode == 0, _tail[-1] if _tail else f"exit={_r.returncode}")
+except Exception as e:
+    check("delivery_check 四方一致", False, str(e))
+
+# ── 5e. delivery_check 反向夹具（防「一修就松」把 #67 检查放宽没了）──
+try:
+    _r = subprocess.run([PY, str(WS/"scripts/delivery_check.py"), "--selftest"],
+                        capture_output=True, text=True, encoding="utf-8", errors="replace")
+    _tail = [l for l in (_r.stdout or "").splitlines() if "PASS" in l or "FAIL" in l]
+    check("delivery_check 反向夹具", _r.returncode == 0, _tail[-1] if _tail else f"exit={_r.returncode}")
+except Exception as e:
+    check("delivery_check 反向夹具", False, str(e))
+
 # ── 6. 文章数据完整性 ──
 arts = sorted(WS.glob("articles/**/*-每日冷知识*.md"))
 arts_md = sorted(WS.glob("articles/**/*.md"))

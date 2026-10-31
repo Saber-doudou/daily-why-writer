@@ -1,0 +1,124 @@
+{
+  "schema_version": "v1",
+  "article": "articles/2026-10/2026-10-30-优化版-每日冷知识-螺旋桨反转.md",
+  "review_timestamp": "2026-10-30T11:56:54+0800",
+  "pass": true,
+  "passed": true,
+  "score": 100,
+  "p0_count": 0,
+  "p1_count": 0,
+  "p2_count": 0,
+  "p0_issues": [],
+  "p1_issues": [],
+  "p2_issues": [],
+  "script_result": {
+    "char_count": 687,
+    "score": 100,
+    "p0": 0,
+    "p1": 0,
+    "p2": 0,
+    "p0_count": 0,
+    "p1_count": 0,
+    "p2_count": 0
+  },
+  "issues": [],
+  "fact_checks": [
+    {
+      "claim": "丁阳团队（北邮）2025 年 10 月 PNAS 论文发现：雷诺数掉到 1.3 到 150 之间时推力反转，且低于 1.3 出现第二次反转（顺时针又慢慢前进）。",
+      "source_verified": true,
+      "detail_verified": true,
+      "omission_severity": "minor",
+      "verdict": "verified",
+      "note": "PNAS 原文（DOI:10.1073/pnas.2504153122，accepted 2025-09-01，published 2025-10-02，Vol.122 No.40）摘要与北邮官网一致：thrust reversal 在 1.3≲Re≲150，且 Re<1.3 时 CW 再次转为前进（第二次反转）。文章『2025年10月 PNAS』与发表月吻合；1.3 与 150 边界、<1.3 二次反转均与原文逐字对应。150–175 不稳定带文章未提，但属 minor 省略、非错误。"
+    },
+    {
+      "claim": "往硅油增大粘性让雷诺数骤降约一万倍，因雷诺数与线尺寸是平方关系，约等于同转速下把潜艇缩到百分之一（0.75 毫米）。",
+      "source_verified": true,
+      "detail_verified": true,
+      "omission_severity": "minor",
+      "verdict": "verified",
+      "note": "雷诺数 Re = ρuL/μ；在文章明确给出的『同转速』（角速度 ω 恒定）条件下，特征速度 u∝L，故 Re∝L²，平方关系成立。75mm 潜艇缩到 1/100 线性尺寸即 0.75mm，Re 降约 1/10000，与『约一万倍』量级自洽。北邮官网/人民日报引付蓉原话也支持『厘米级潜艇等比例缩到毫米级（血液/水）即可能触发反转』。注：一般公式 Re∝L 仅在速度 u 独立于尺寸时成立，文章已用『同转速』限定，无事实错误。"
+    }
+  ],
+  "quote_checks": [
+    {
+      "claim": "Q3『螺旋桨像微型离心水泵，把液体往外甩、中心吸出负压』对应论文机制表述。",
+      "verbatim_match": true,
+      "source": "PNAS 原文/北邮官网：低 Re 下螺旋桨『表现出类似离心水泵的工作特性，将周围流体向径向甩出，进而在螺旋桨中心区域形成负压吸力』；『centrifugal suction…dominates over fluid backward acceleration』。",
+      "note": "文章『微型离心水泵/往外甩/中心负压』为论文自身比喻（离心水泵的工作特性）的忠实转述，语义一致，无漂移。"
+    }
+  ],
+  "mechanism_checks": [
+    {
+      "claim": "推力反转机制：高 Re 轴向射流 → 低 Re 射流被偏折向四周、径向甩出 → 中心负压（轴向向内吸力）→ 向后离心吸力盖过前向『后向流体加速推力』→ 后退；吸力方向只取决于是否旋转、不取决于转向。",
+      "direction_ok": true,
+      "elements_complete": true,
+      "note": "方向自洽：与论文『centrifugal suction dominates over fluid backward acceleration』双力拔河框架完全一致；关键中间环节（射流偏折→径向甩出→中心负压→吸力>推力）齐备；『吸力方向不随转向』因径向外流对 CW/CCW 对称，与论文及多篇报道一致。"
+    }
+  ],
+  "attribution_checks": [
+    {
+      "claim": "将后退归因于『离心吸力（中心负压）盖过前向推力』，即 centrifugal suction 主导。",
+      "is_primary_cause": true,
+      "note": "论文明确该现象『arises when centrifugal suction … dominates over fluid backward acceleration』，文中归因即论文所述主因，无显著偏漏（另一力『后向流体加速推力』已在文中并列交代）。"
+    }
+  ],
+  "term_checks": [],
+  "gap_checks": [
+    {
+      "pattern_id": "G-01",
+      "triggered": false,
+      "checked": true,
+      "finding": "A段为玩具潜艇/硅油科普场景，无『不敢/怕/能吃/安全吗』等健康安全类顾虑，不触发安全性闭环。"
+    },
+    {
+      "pattern_id": "G-02",
+      "triggered": false,
+      "checked": true,
+      "finding": "扫描绝对词：『不管正转反转，它都往后退』『正转它向后拽，反转照样向后拽』均显式圈定于『中等雷诺数这个特殊窗口里 / 1.3 到 150 窗口』，与 PNAS 原文 1.3≲Re≲150 区间内『CW 后退且 CCW 也后退』的真实结论吻合，非无例外全称判断；无『不可能/永远/必然/绝对』类绝对化词。不触发。"
+    },
+    {
+      "pattern_id": "G-03",
+      "triggered": true,
+      "checked": true,
+      "finding": "『雷诺数与线尺寸是平方关系』属看似合理的物理定性陈述（易与 Re∝L 一般式混淆）。已回权威源核对：在文章明确限定的『同转速』条件下 u∝L，故 Re∝L² 成立，陈述正确，非事实错误；未放宽标准，已据物理公式逐字核。"
+    },
+    {
+      "pattern_id": "G-04",
+      "triggered": false,
+      "checked": true,
+      "finding": "机制解释含完整因果链：射流偏折→径向甩出→中心负压→向后吸力>前向推力，关键中间环节齐备，无跳步导致的要素缺失。"
+    },
+    {
+      "pattern_id": "G-05",
+      "triggered": true,
+      "checked": true,
+      "finding": "文中引用 PNAS/北邮/丁阳/2025，已逐字回查：DOI 10.1073/pnas.2504153122，通讯作者丁阳（北京邮电大学物理科学与技术学院），接收 2025-09-01、发表 2025-10-02（Vol.122 No.40），与『2025年10月 PNAS』逐字一致；『离心水泵』术语与论文『类似离心水泵的工作特性』一致，无张冠李戴。"
+    },
+    {
+      "pattern_id": "G-06",
+      "triggered": true,
+      "checked": true,
+      "finding": "研究引用细节已逐项核：机构（北邮）、年份（2025年10月）、期刊（PNAS）、Re 边界（1.3/150）、<1.3 二次反转、『约一万倍≈缩到百分之一（0.75mm）』缩放逻辑，均与 PNAS 原文及北邮官网/人民日报转述逐字对应，无『来源存在但细节未核』问题。"
+    },
+    {
+      "pattern_id": "G-07",
+      "triggered": false,
+      "checked": true,
+      "finding": "归因『离心吸力盖过前向推力』即论文所述 primary mechanism（centrifugal suction dominates over fluid backward acceleration），文中已并列交代另一力『后向流体加速推力』，无主次倒置或偏漏。"
+    }
+  ],
+  "issue_responses": [],
+  "title_checks": [
+    {
+      "title": "为什么毫米尺度的螺旋桨反而会把自己往后推？",
+      "subject_scoped": true,
+      "unit_matches_source": true,
+      "scope_consistent_with_body": true,
+      "verdict": "pass",
+      "note": "标题主体『毫米尺度的螺旋桨』已圈定到具体尺度/对象，非无限定泛称；无消亡类（灭绝/绝迹/消失/消亡/绝了后）断言，不触发范围核对红线；标题断言强度（毫米尺度下反向推进）与正文『1.3–150 区间推力反转』证据一致，未夸大一档。"
+    }
+  ],
+  "forbidden_violations": [],
+  "overall_comment": "全文事实经 PNAS 原文（DOI:10.1073/pnas.2504153122）与北邮官网/人民日报/科技日报/中国科学报多源独立核验全部成立：1.3–150 推力反转、<1.3 二次反转、Re∝线尺寸²（同转速下）均正确；结构四要素（A段引用块、C段Q格式、F段『冷知识反转』标签、两行四列结尾表格且分类=物理化学属6枚举）齐备；字数 687<690；无 AI 味排比/连接词≥3/绝对化/类比失准/不安全字符；F段提供血管微型机器人应用新角度未重复 Q3；FORBIDDEN 87 条扫描无命中。脚本评分 100、P0/P1/P2 全空，独立审校结论一致：pass=true，p0=0/p1=0/p2=0。"
+}

@@ -1,0 +1,57 @@
+{
+  "schema_version": "v1",
+  "topic": "空杯子贴近耳朵为什么有嗡嗡声",
+  "angle": "从家常空杯子切入，讲空腔共振（亥姆霍兹共振器）如何把环境白噪声变成海浪般的嗡嗡声，并证伪'大海声''血流声'两种流行误解",
+  "claims": [
+    {
+      "id": "C1",
+      "text": "空杯子贴近耳朵时，杯体与耳道间形成空腔（亥姆霍兹共振器），把环境中无处不在的白噪声里某些频率选择性放大，于是听到类似海浪的嗡嗡声。",
+      "type": "mechanism",
+      "source": {
+        "title": "贝壳里为什么会传出海洋的声音",
+        "publisher": "人民网·科普中国",
+        "url": "https://jysh.people.cn/BIG5/n1/2019/0708/c404390-31219403.html",
+        "source_level": "secondary"
+      },
+      "quote": "当把贝壳罩住耳朵后会形成一个共振腔，根据贝壳形状大小不同会放大某些特定频率的声音",
+      "verified_by": "snippet",
+      "confidence": "high"
+    },
+    {
+      "id": "C2",
+      "text": "在典型嘈杂房间里，把杯子贴近耳朵、麦克风贴近鼓膜，杯子在其共振频率约648赫兹处比不放杯子时响约15分贝，在1296赫兹处反而低约16分贝，说明空腔只放大特定频段。",
+      "type": "number",
+      "source": {
+        "title": "Why do you 'hear the ocean' in a seashell?",
+        "publisher": "ABC Science Online",
+        "url": "https://www.abc.net.au/science/articles/2012/05/15/3500938.htm?topic=enviro",
+        "source_level": "secondary"
+      },
+      "quote": "The microphone registered 15 decibels louder at the cup's resonant frequency of 648 hertz (as compared to not having the cup there at all).",
+      "verified_by": "snippet",
+      "confidence": "medium"
+    },
+    {
+      "id": "C3",
+      "text": "不少人以为嗡嗡声来自耳朵附近血管里血液流动，但实验表明：同一人在剧烈运动前后听海螺，声音响度与音调并无明显差异，说明并非血液流动被放大。",
+      "type": "attribution",
+      "source": {
+        "title": "海螺壳中真的有大海的声音吗",
+        "publisher": "中国数字科技馆",
+        "url": "https://cdstm.cn/xqq/kkxw/dyd/kxgs/art/2017/art_4580773f771044d59ac393cdf01d0b23.html",
+        "source_level": "secondary"
+      },
+      "quote": "如果是这样，当人运动之后血液循环会变快，那么声音也会有所不同，但实验结果却证明不是这样。",
+      "verified_by": "snippet",
+      "confidence": "high"
+    }
+  ],
+  "open_questions": [
+    "不同形状/大小的空腔对应的共振频率是否存在可查的标准公式量级",
+    "环境本底噪声极低（消音室）时是否真的听不到声音"
+  ],
+  "banned_claims": [
+    "空杯子贴近耳朵的嗡嗡声来自大海（或贝壳里藏着海的声音）",
+    "空杯子贴近耳朵的嗡嗡声来自耳朵附近血液流动被放大"
+  ]
+}

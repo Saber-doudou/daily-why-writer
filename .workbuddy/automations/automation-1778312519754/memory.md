@@ -1,6 +1,39 @@
 # 自动化执行记录 - automation-1778312519754
 > 📦 归档：2026-08-31 及更早记录已零损失切割至 archive/自动化执行记忆归档-2026-07-01至2026-08-31.md（2026-09-07 执行，sha256 逐字校验通过）
 
+## 2026-10-30
+- 话题：为什么毫米尺度的螺旋桨反而会把自己往后推？（物理化学）
+- 文件：2026-10-30-每日冷知识-螺旋桨反转.md
+- 更新时间：2026-10-30 10:03
+- 关键词：螺旋桨反转
+- 审核：P0=0, P1=0, P2=0, 得分 100 ✅（独立Reviewer审校 agent-65bc13f1；587字；强制键齐备 fact3/mech1/attr1/quote1/term0/title1/gap7；validate_review退出码0全绿）
+- 高层摘要：SOP(daily-why-writer v4.5)加载✅；prepare_topics刷新(63话题)；外部源WebSearch筛候选(螺旋桨反转/南洋杉叶片/鳄鱼血液)→check_topic全通过→选中"螺旋桨反转"；写前查证多源(北邮官网/PNAS/科技日报/人民日报：丁阳团队PNAS DOI10.1073/pnas.2504153122/Re 1.3 至 150推力反转/缩小一万倍/离心吸力大于前向推力)；证据卡evidence/2026-10-30.json+门禁.gate.json(warn P0=0/P1=6 snippet_only)；成稿标题复查--file退出码0无提示；成稿证据核对warn P0=0；spawn独立Reviewer(general-purpose+reasoning无name)PASS：事实核验3处全吻合、强制键齐备、validate_review退出码0全绿；初稿即P0=P1=P2=0免修复；记忆门禁通过(工作空间2098/3000,用户级3722/4000,自动化658/1000行)；投喂素材20261030已建；update_history自动回捞落选候选(南洋杉叶片/鳄鱼血液external)入池(现236条)
+- 备注：证据门禁10-27至10-31观察期warn，P1六条均snippet_only属预期不阻断；independent reviewer稳定无需熔断自审；memory_decay待下沉10条(§01/§02/§03/§07/§08/§09/§10/§11/§13/§14)本次不强制处理
+
+- **L2投喂**：2026-10-30 四AI学习完成（触发 dailywhy学习总结）。4家素材齐全（ds10.6K/ima4.9K/千问10.6K/豆包5.3K）。差额分析核心差距（P0）：①"缩小约一万倍"口径硬伤——混淆Re降幅与尺寸降幅（Re∝L²，实约100倍），千问/IMA 命中+WebSearch核实；②漏第二次反转窗口（Re<1.3 顺时针重新前进），4家全指出，过度概括为"越小越反转"；③缺"离心吸力方向只取决于转不转、不取决于往哪转"核心机制钥匙（IMA/DS）；④开头"纹丝不动"与"往后溜"自相矛盾（千问/IMA）+ F段复述Q3无增量（FP-05/IMA/DS）。v2 重写 687字 score100(P0=0/P1=0/P2=0)，独立审校 P0=0/P1=0/P2=0 score100（一轮 issues 空，跳过 issue_responses 覆盖校验；validate_review 退出码0）。新规则：无新增（4处硬伤均为本文事实特异性，已被 CHECKLIST §101「引用具体研究须独立核实」+信源甄别纪律覆盖，遵循"禁为小缺陷改规则"铁律不强行新增；writer 维持 v4.5，FP 维持87）。FEEDBACK_LOG 0条新增 + AI能力特点 10-30行 + topic_candidates(l2×2：斯托克斯流时间可逆/微型机器人低Re游动)。休眠检测263条无匹配激活；rule_lifecycle 三区重算（活跃23/预防87/待验证21/共131）。自动化 prompt 无规则变更跳过重生成。学习总结 投喂素材/20261030/学习总结.md（##改进点契约锚点自检 EXIT=0，6条目）+ learning_summary.json（v3.7 机器交接契约，validate_contract --kind learning_summary --require-v1 通过，v1）。信源甄别：豆包夸"一万倍类比巧妙"系事实误判（与权威Re∝L²矛盾）已排除；千问+IMA 口径修正经 PNAS/北邮官宣核实成立。
+
+## 2026-10-29
+- 话题：为什么你以为在吃果肉，其实大多不是果肉？（生活常识）
+- 文件：2026-10-29-每日冷知识-水果不是果肉.md
+- 更新时间：2026-10-29 10:31
+- 关键词：水果不是果肉
+- 审核：P0=0, P1=0, P2=2(采纳后重验0), 得分 100 ✅（独立Reviewer审校 agent-a979c835；初稿score100 610字，采纳2P2→苹果"硬核"改"果心"/F段拟人化改中性，复验100分617字；标 revised_after_review）
+- 高层摘要：SOP(daily-why-writer v4.4)加载✅；prepare_topics刷新(61话题)；外部源WebSearch筛候选(肥皂泡结冰/果肉是果皮/北极圆蛤)→check_topic：肥皂泡角度相关60%判重弃、果肉/圆蛤通过→选中"果肉是果皮"；写前查证多源(人民网/科普中国/人民日报：桃子中果皮/苹果花托假果/草莓花托/西瓜胎座/植物学无果肉概念)；证据卡evidence/2026-10-29.json+门禁.gate.json(warn P0=0/P1=9→正文加claim映射后降至5条snippet_only)；成稿标题复查--file退出码0无提示；成稿证据核对warn P0=0；spawn独立Reviewer(general-purpose+reasoning无name)PASS：事实核验5处全吻合、强制键齐备(fact5/mech2/attr2/term4/gap7)、validate_review退出码0全通过(仅2条mech/attr全true历史漏判黄警)；采纳2P2改后复验100分617字P0=P1=P2=0标revised_after_review；记忆门禁通过(工作空间2098/3000,用户级3722/4000,自动化645/1000行)；投喂素材20261029已建；update_history自动回捞落选候选(桃子果肉external)入池(现228条)
+- 备注：证据门禁10-27至10-31观察期warn，P1五条均为snippet_only属预期不阻断；素材池落选回收圆蛤/肥皂泡(external)2条；independent reviewer机制稳定运行，本轮无需熔断自审
+
+- **L2投喂**：2026-10-29 四AI学习完成（触发 dailywhy学习总结）。4家素材齐全（ds5.5K/ima5.0K/千问8.6K/豆包4.9K）。差额分析核心差距（P0）：①标题立论夸大——v1标题"其实大多不是果肉"比正文"来源各异（桃肉中果皮即真果肉）"夸大一档，IMA/千问/DS 三家命中；②苹果"绝大部分是花，不是果"绝对化（豆包：应"不是子房壁"）；③概念自指（DS：说"植物学没果肉"却反复判断"不是果肉"）；④开头草莓与Q3草莓重复（DS/千问/豆包）；⑤缺真果肉正例论证失衡（千问：补浆果葡萄/番茄）。v2 重写 555字 score100(P0=0/P1=0/P2=0)，独立审校 P0=0/P1=0/P2=0 score100（一轮2个P2：苹果"硬核"→"果心"、F段目的论拟人→中性表述，均 resolved；validate_review 退出码0）。新规则：FORBIDDEN FP-88（标题/反转结论的绝对度须≤正文证据强度，禁止为爽感夸大一档）+ CHECKLIST §131（对应 FP-88）；writer v4.4→v4.5，FP 总数 86→87（含 FP-58 空缺，实际 87 条）。FEEDBACK_LOG 1条 + AI能力特点 10-29行 + topic_candidates(l2×3：花生吃的是种子/腰果果外生/无花果隐头花序)。休眠检测262条无匹配激活；rule_lifecycle 三区重算（活跃26/预防84/待验证21/共131）；自动化 prompt 重生成并落库（automation-1778312519754 nextRunAt 正常）。学习总结 投喂素材/20261029/学习总结.md（##改进点契约锚点自检 EXIT=0，7条目）+ learning_summary.json（v3.7 机器交接契约，validate_contract --kind learning_summary --require-v1 通过，v1）。⚠️ 版本号既有漂移修复：version.json writer _note 此前停在 v4.3（缺 10-28 的 v4.4 条目），本次补 v4.4 + 加 v4.5，frontmatter/version.json/SKILL.md 变更日志三处对齐 v4.5。
+
+## 2026-10-28
+- 话题：为什么把空杯子贴到耳边，会听到嗡嗡声？（生活常识）
+- 文件：2026-10-28-每日冷知识-空杯嗡嗡声.md
+- 更新时间：2026-10-28 10:11
+- 关键词：空杯嗡嗡声
+- 审核：P0=0, P1=0(修订后), P2=0, 得分 100 ✅（独立Reviewer审校；初稿2P1全采纳，改后 validate 100分647字；标 revised_after_review）
+- 高层摘要：SOP(daily-why-writer v4.3)加载✅；prepare_topics刷新(60话题)；外部源WebSearch筛候选(灯泡/黑枸杞/空杯)→check_topic：灯泡判重(10-15已写)、黑枸杞误匹配夜空、空杯通过→选中"空杯嗡嗡声"；写前查证(人民网/ABC Science/中国数字科技馆：亥姆霍兹共振器+648Hz/15dB+运动前后听海螺证伪血流说)；证据卡evidence/2026-10-28.json+门禁.gate.json(warn P0=0/P1=3 snippet_only)；成稿标题复查--file退出码0且⚠️角度相关(命中10-03贝壳听海50%误匹配，确认角度不同放行)；成稿证据核对warn P0=0；spawn独立Reviewer(general-purpose+reasoning无name)PASS：事实核验3处全吻合、强制键齐备(fact3/mech1/attr1/quote1/term0/title1/gap7)、validate_review退出码0全通过；采纳2P1(白噪声→环境底噪/永远→平时)改后复验100分647字P0=P1=P2=0标revised_after_review；记忆门禁通过(工作空间2098/3000)；投喂素材20261028已建；update_history自动回捞落选候选(灯泡/黑枸杞)入池
+- 备注：证据门禁10-27至10-31观察期warn，P1三条均为snippet_only属预期不阻断；成稿标题与10-03贝壳听海机制同源(空腔共振放大环境白噪声)，已确认主角(空杯vs海螺)/现象(嗡嗡vs海浪)/辟谣点(新增血流声)/展开(杯子大小影响音高)角度不同后放行
+
+- **L2投喂**：2026-10-28 四AI学习完成（触发 dailywhy学习总结）。4家素材齐全（ds6.0K/ima6.3K/千问12.0K/豆包4.7K）。差额分析按信源甄别回归权威源核实两处关键分歧：①648Hz/15dB 数据被 IMA/千问判「检索不到出处」主张删——经 WebSearch 回权威源（ABC Science Dr Karl 2012-05-15：微型麦克风贴鼓膜、嘈杂房间、杯共振 648Hz 处响 15dB/1296Hz 低 16dB）证实**可溯源**，两家系否定性误判，数据保留并加「某只特定大小杯子」限定；②「亥姆霍兹共振器」标签中性化为「共振腔」（红酒瓶为细颈原型、杯子为简化版，不绝对否定，Naked Scientists 仍用 Helmholtz）。v2 重写 686字 score100(P0=0/P1=0/P2=0)，独立审校 P0=0/P1=0/P2=2 残留(一直都在/纯粹·现场直播边缘) score通过，validate_review 退出码0(issue_responses 覆盖一轮2条全 resolved)。新规则：FORBIDDEN FP-87（盲信AI否定性数据指控——「查不到」须回源核实，多家一致≠查不到）+ CHECKLIST §130（AI否定性数据指控回源核实 + 海螺螺旋腔多次谐振vs直筒杯无叠加机制区分）；writer v4.3→v4.4，FP 总数 85→86（含 FP-58 空缺，实际 86 条）。FEEDBACK_LOG 1条 + AI能力特点 10-28行 + topic_candidates(l2×2：暖水瓶瓶口嗡嗡声/入耳式耳机堵耳效应)。休眠检测261条无匹配激活；rule_lifecycle 三区重算（活跃26/预防83/待验证21/共130）；自动化 prompt 重生成并落库（automation-1778312519754 nextRunAt 正常）。学习总结 投喂素材/20261028/学习总结.md（##改进点契约锚点自检 EXIT=0，5条目）。
+
 ## 2026-10-27
 - 话题：为什么朝两张纸中间吹气，纸反而贴得更紧？（物理化学）
 - 文件：2026-10-27-每日冷知识-吹纸实验.md
@@ -623,3 +656,9 @@
 - IMA: note_id 7520757588442583
 - GitHub: commit db0b6f1
 - GitHub: commit 7625c32
+- GitHub: commit d5501ee
+- IMA: note_id 7521091970938812
+- IMA: note_id 7521451376655950
+- GitHub: commit 91a8746
+- IMA: note_id 7521813013749460
+- GitHub: commit 53675f1

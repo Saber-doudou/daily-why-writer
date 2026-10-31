@@ -4,6 +4,248 @@
 
 ---
 
+## v5.9 — 2026-11-01 切 block 上线 + 分级阻断 + FACT_PAT 收窄 + C 方案（Reviewer 形式门禁）（Reviewer v3.2 / L2 v3.8 / L3 v3.3.0）
+
+v5.8 当时列的「未执行（需 Master 授权）」两项，本轮拿到授权后全部执行完毕；
+另补记两项 10-31 已完成但 v5.8 漏记的事项。
+
+### 1. 证据门禁切 block + 4 级兜底接线 + 写库回读（报告决策 4/A 方案收尾）
+
+**问题**：观察期早就跑完（10-27 至 10-30 四个工作日真跑 P0 全 0），但 automation prompt 里
+两处门禁仍是 `--mode warn`，且第 4 级兜底「安全池」只有一句说明文字、没有可执行命令，
+等于**兜底链在纸上**。
+
+**改动**（`scripts/generate_prompt.py` 三处）：
+- 步骤 4.5、9.5 的 `--mode warn` 改 `--mode block`；
+- 4 级兜底写成可执行步骤：① 改 claim ② 定向补证 ③ 换角度 ④
+  `safe_pool.py --status` + `--consume S0X --date {今天日期} --reason l4`；
+- 写入切换记录与回退开关：`DAILY_WHY_GATE_RELAX=1` 当次降级（无需改 prompt / 写库 / 等次日），
+  并给出回退阈值（连续 2 个工作日卡片层 P0 阻断，或单日 ≥2 次阻断）。
+
+**验收**：`generate_prompt.py --check` exit 0；`config/automation-prompt-latest.txt`
+11588 字符 / 128 行 / sha256[:16] `1f71d85f63fa7335`；写库后从会话记录解析平台返回值
+**逐字节比对 EXACT MATCH**（DB 与文件两侧字符数、行数、sha 三项全等），
+而不是只看 `success: true`。**这是项目硬规矩：改 prompt 必须回读比对平台。**
+
+**时点提醒**：11-01 是周日、10-31 是周六，L1 的 rrule 是周一到周五 09:40，两天都不触发，
+**首次 block 真跑是 11-02 周一**。
+
+### 2. 分级阻断 `WARN_ONLY_P0_CODES`（10-31 完成，v5.8 漏记，此处补入）
+
+`evidence_gate.py` 新增 `WARN_ONLY_P0_CODES = {"unmapped_fact", "unverified_mapping"}`：
+只有**卡片层高置信** P0 返回 exit 1 阻断；**正文层**这两类依赖数字判据与句末映射、
+误杀面宽的，自动降为 warn 只记录进 `.gate.json`。
+
+**理由**：block 一旦误杀，当天就出不了稿。卡片层问题是「引文太短 / 缺 url / tertiary 单独支撑」
+这类确定性缺陷，判得准；正文层的映射判定依赖对句中数字的识别，误杀面明显更宽。
+分级不是放水，是把「判得准的」和「判不太准的」分开对待。
+
+### 3. `FACT_PAT` 收窄：删掉裸「倍」（报告决策 4，**经实测修正报告结论**）
+
+报告 P1-4 称 `度` 与 `倍` 都是裸字符，会误杀「态度/角度/程度/过度/知名度」与「倍感亲切」。
+**实测：`度` 那条不成立** —— 现行写法要求「度」前必须有中文数字，`FACT_PAT.search("态度")`
+返回 False，不会误杀。真正误杀的只有裸 `倍`（`倍感亲切`、`事半功倍`）。
+
+**所以只删 `倍`，没有按报告删 `度`。** 差一点就因为照抄报告而制造新的漏检
+（删了 `度` 会让「三度」「零下五度」这类真事实句不再被要求挂映射）。
+结论写进代码注释，避免下一个人重新踩。
+
+### 4. C 方案落地：Reviewer 正式降级为形式门禁（报告决策 2，Master 09-07 预先裁定）
+
+**定性**：这不是新决定，是**裁定未落地**。09-07 已定「连续 3 个工作日 gap_checks 执行完整
+且漏判率仍 ≥ 1/2 → 自动转 C 方案」，实际从 09-08 跑到 10-30，漏判率仍是 6/6 = 100%，
+A 方案却一直在打 prompt 补丁。
+
+**改动四处，全部同步**：
+
+| 位置 | 改动 |
+|---|---|
+| `reviewer_prompt.md` v3.1 → **v3.2** | 新增「本岗职责边界」+「分级口径对照表」；Step 5/5.5/5.6/5.7/5.8/5.9 六个判断类维度降为 `advisory_findings` 只留痕不定级；Step 8 的 P0 收窄为 6 类可机械复核项；落盘自检清单增第 11 项 |
+| `scripts/validate_article.py` | 输出新增 `structure_score` / `score_scope=mechanical_only` / `score_excludes`；文本改「结构分: N/100（仅机械规则，不含事实与机制判断）」，不再裸打印 `final_score: 100` |
+| `scripts/validate_review.py` v1.3 → **v1.4** | 新增第 10 项校验「分值口径」：`structure_score` 必填（11-01 起按文件名日期）、与 `score` 必须同值、越界报错 |
+| `contracts/review.schema.json` | 新增 `structure_score` 属性并写明语义边界；`score` 标注为已降级的兼容别名。required 仍 19 项不变（契约引擎不支持 anyOf，日期分流交给 validate_review 做，与 title_checks 同款方案） |
+
+**责任承接**：`daily-why-feed-learning` v3.7 → **v3.8**，新增「事实与机制责任（C 方案承接）」专章。
+三条硬约束：事实机制问题不得因「没把握」被过滤；四 AI 均无输入的维度必须显式写
+「本维度今日无输入」而**不得默认无问题**（默认无问题正是 Reviewer 过去 6 次的做法）；
+确认的问题须进 `learning_summary.json` 的 improvements。
+
+**代价**：失去一道名义上的独立复核。但 100% 漏判还主动发绿灯的复核会让下游降低警惕，
+比没有更危险。事实这一层现在有 `evidence_gate.py` 做确定性阻断，比 LLM 判断硬。
+
+**验收**：`full_selfcheck.py` **30/30**；版本一致性 5 技能全绿
+（writer v4.5 / reviewer-prompt v3.2 / publish v3.3.0 / feed-learning v3.8 / health-audit v1.6）；
+`validate_review.py` 四夹具按设计分流（新日期缺字段 exit 1、补齐 exit 0、两值不一致 exit 1、
+历史日期不受新规影响）；`l3_publish` 解析正则加 `structure_score/结构分` 分支后
+对真实输出实测命中 `结构分: 100`。
+
+### 5. `delivery_check.py` 派生件归类
+
+`config/automation-prompt-latest.txt` 被判「改了但不在同步清单」。它是
+`generate_prompt.py --update-automation` 的确定性产物、只作写库步骤的一次性交接件，
+归入 `AUTO_DERIVED` 派生类（与 topics_context 同性质）。理由写进代码注释，
+**不是为了让自检变绿而消警**：真正该进镜像的是它的生产者 `generate_prompt.py`，那个在清单里。
+
+---
+
+## v5.8 — 2026-10-31 审查报告整改：kill switch + sim-runs 补录 + block 退出码夹具 + 版本 v3.3.0（L3 v3.3.0）
+
+本轮依据 `deliverables/2026-10-30-最近优化代码与流程审查报告.md`，按其「建议的来」执行 4 项，
+全部**不改 prompt、不碰线上行为**。
+
+### 1. 装 `DAILY_WHY_GATE_RELAX=1` kill switch（报告决策 1，P0）
+
+**问题**：切 block 后 `evidence_gate` 真会阻断（11-01 起），但现行 `--mode` 写在 automation
+prompt 里——改它要 改 prompt → `--update-automation` → 写库 → **次日才生效**。
+按 Fowler 的 toggle 分类，这等于「关掉它需要一次发布」= 开关失职。
+
+**修复**：`evidence_gate.py` 新增 `gate_relaxed()`，读环境变量 `DAILY_WHY_GATE_RELAX`
+（1/true/yes/on 命中）。命中即把 block 降级为 warn、退出码 0，**但当次在 stderr 打印告警并把
+`relaxed=true` 写进 `.gate.json`**（EXP-014：降级不得静默，否则会被读成「今天没有 P0」）。
+与项目既有 `DAILY_WHY_DEDUP_RELAX=1` 同型，零学习成本。
+
+**实测四组合**：block+有P0+开关关 → **1（阻断）**｜block+有P0+开关开 → **0（降级）**｜
+block+无P0+开关关 → **0（放行）**｜报告字段 `relaxed=true blocked=false p0=2`（留痕）。
+
+### 2. 补录 `eval/sim-runs.tsv` 的 S6/S7（报告决策 5，P2 但优先级高于编号）
+
+该文件 mtime 停在 10-28 00:44，10-29/10-30 真实跑未录入，而它是切 block 前必须看的依据。
+字节级追加两行（混合行尾 CRLF/LF 混杂，用 Edit 会规范化行尾、篡改历史行）：
+- **S6** 10-29 水果不是果肉：初版 617 字→优化版 555 字，P0=0/P1=5（全 snippet_only），
+  D-09 首次真产出 learning_summary.json、transport 切 json
+- **S7** 10-30 螺旋桨反转：初版 587 字→优化版 687 字，P0=0/P1=6（全 snippet_only），
+  注记 v1 审校 score=100/issues=0、漏判率 6/6（报告 P0-2）
+
+**验收**：`git diff --numstat` = `2  0`（纯追加、0 删除）；12 行；行尾原样保留
+（前4行 CRLF / 5-7行 LF / 新增行 CRLF）。
+
+### 3. 补 block 模式退出码夹具（报告 P1-2）
+
+`run_selftest()` 只调 `check_card`+`check_article`，**从不调用 `main()`**，
+因此 `main()` 第 598 行 `if p0 and mode == "block": return 1` 这条真正阻断的路径**零测试覆盖**。
+新增 `_cli_exit_code()` 用真实 CLI 跑临时卡片（自包含、不依赖当日产物），断言 4 种组合：
+阻断 / 放行 / warn 恒放行 / kill switch 降级。**门禁自检 16/16 → 20/20**。
+
+### 4. 版本号 `v3.3` → `v3.3.0`（报告决策 3，P1-3）
+
+**这是上一轮我的疏漏**：按 Master「直接 3.3」进位时没查 SKILL 变更日志表，
+撞上 08-17 老条目 `| v3.3 |`（实为 v3.0.3）。字符串层面完全撞号，且 `"v3.3" < "v3.28"`，
+任何大小比较都会误判新版本更旧（版本门禁是等值比较才侥幸通过）。
+
+**修复**：写作完整三段式 **v3.3.0**，四处对齐（l3_publish VERSION / SKILL frontmatter+标题+末条 /
+version.json）+ CHANGELOG + 交接单；并在 08-17 老条目加注「此条为老编号，实为 v3.0.3」。
+同时把 `_updated` 从 2026-10-29 同步到 2026-10-31（报告 P2-4）。
+
+**回归全绿**：版本门禁 5/5（publish 四处全 v3.3.0）、全盘自检 **30/30**、
+门禁自检 **20/20**、回放 10/10 零误杀、delivery 四方一致无缺口。
+
+### 未执行（需 Master 授权，涉及改 prompt / SOP）
+
+- **决策 1 后半**：11-01 切 block（先切高置信子集 tertiary/banned/unknown_claim，
+  unmapped_fact/unverified_mapping 继续 warn）+ 4 级兜底写成 L1 可执行步骤（报告 P0-1）
+- **决策 2**：转 C 方案，Reviewer 降级形式门禁、`score` 改名（报告 P0-2）
+- **决策 4**：FACT_PAT 收窄——实测修正：报告称「度」是裸字符会误杀「态度/角度/程度」，
+  **实测不成立**（`度` 在正则里要求前置中文数字，态度/角度/温度/程度均不命中）；
+  真正裸的只有 `倍`（「倍感亲切」命中）。故只需修 `倍` + `\d`，无需动「度」
+- **safe_pool 接入 L1**（报告 P1-1）
+
+---
+
+## v5.7 — 2026-10-29 安全池升 fetch 级 + R3.8 推送门修正 + 交付自检防复发固化（L3 v3.3.0）
+
+本轮续接交接单，完成待办第 4、7 项，并兑现第 5 项遗留（接入 full_selfcheck）。
+
+### 1. 安全池 S02/S03/S05 升 fetch 级（R3 切 block 的最后硬前置）
+
+**空白**：8 题 12 条 claim 实测 **100% `source_level=secondary` + `verified_by=snippet`**，一条 fetch 都没有。门禁对 snippet 只给 P1 不阻断——切 block 后走到 L4 兜底，用的是一张门禁不会拦、但也没核到位的卡。
+
+**改动**：逐条打开 url 抓原文引文（≥15 字），S02 舷窗 / S03 冰面 / S05 微波炉共 **5 条 claim** 改 `verified_by=fetch`、`confidence=high`，quote 换成逐字原文。`source_level` 保持 `secondary` 不动——升 fetch 是「核实深度」维度，`secondary` 是「信源层级」维度（这些文章本身是二手转述科普，非一级论文），两者独立，不把转述源伪装成一级源。其余 5 题（S01/S04/S06/S07/S08）显式标注「P1 级兜底：仅 snippet 级，未 fetch 原文」。
+
+**核实证据（WebFetch 逐字回源）**：
+- S02 中国军网「是什么磨平了窗户的棱角」：原文「圆角设计能把应力散开，从而大幅降低产生裂纹的风险」✅
+- S03 环球科学「冰为什么是滑的」：原文「随着温度升高至零下70摄氏度，冰面的摩擦系数开始降低，并在零下7摄氏度达到最小值」✅；⚠️ 同文另有「预融化起始温度零下153摄氏度、而非此前认为的零下70左右」——两个「零下70」不同含义，已在 note 里标注勿混
+- S03 上海科协「冰为什么那么滑」：原文「并不存在所谓的液体水膜，哪怕是几十个纳米的液体水膜也是不存在的」✅
+- S05 文摘报「金属真的不能进微波炉吗」：原文「金属内的电子在电磁波的作用下做振动，并辐射出同频电磁波」+「金属曲率较大或带有尖端…将空气分子电离成带电粒子…直至产生电火花」✅
+
+**验收**：3 题 `check_card` 均 **P0=0 / P1=0**；未升级 5 题对照仍报 snippet_only P1（符合预期）；safe_pool 健康检查 8 题全可用。
+
+### 2. R3.8 推送门修正（L3 v3.28 → 进位 v3.3.0）
+
+**D1（探活误判）**：`git_pull_rebase_push` 重试循环里 `if not github_reachable(): return False "网络失败（不可重试）"`，而 `github_reachable()` 是单次 curl（实测每次 1.7 到 2.8 秒、会偶发失败）。一次抖动，整条重试链作废，还告诉你「不可重试」。10-29 晚 `ls-remote` 报 `Empty reply` 正是这种抖动（当天 14:03 的真实发布其实已成功 `91a8746`）。
+   - 修复：探活自身重试 3 次（间隔 2s / 5s），全失败才判不可达；**且探活失败不再 early-return，仍照常尝试真实 pull/push**，让 git 的真实 stderr 当裁判——curl 不通 ≠ git 不通。探活从「裁判」降级为「省时间」。
+
+**D2（错误归类）**：`classify_git_error` 只认 network / conflict，其余全归 other，落到 abort 分支后统一打印「rebase 冲突」。真实 stderr 是 `cannot pull with rebase: You have unstaged changes`——工作区脏，rebase 根本没开始，却白跑一次 `rebase --abort`。
+   - 修复：新增 `dirty` 类（`unstaged changes` / `your local changes` / `cannot pull with rebase` / `please commit or stash` 等），判 dirty 放在 conflict 之前（否则「cannot rebase」会被 conflict 分支误抓），dirty 不执行 --abort、不谎报冲突；`other` 类同样不再谎报冲突。
+
+**防复发**：新建 `scripts/git_push_selftest.py`，14 条纯 mock 夹具（无真实网络/git 副作用）覆盖四类分流、D1 探活失败仍尝试、探活自身重试、D2 不 abort 不谎报、真冲突仍 abort（防一修就松）、真实网络错耗尽重试后返回 network。接入 full_selfcheck 第 5c 项。
+
+### 3. 交付自检防复发固化（兑现第 5 项遗留）
+
+- `delivery_check.py` 缺口 4 `not_in_mirror` 原先把「本轮新增、有复制源、只是还没跑 L3 送达」的**在途**文件也判红。每新增一个清单项就红到下次 L3，混进高频自检会造成告警疲劳（10-28 已埋隐患）。
+   - 修复：区分**在途**（缺项能反查到 src→rel 映射、且 src 落在本轮 changed 集里 → 不判红但显式列出，诚实不静默）与**历史遗漏**（反查不到本轮复制源 → #67 类真缺陷，判红）。
+   - 加 `--selftest` 反向夹具锁死这个区分（防「一修就松」把 #67 检查放宽没了），接入 full_selfcheck 第 5e 项；四方一致接入第 5d 项。
+- 新增 `git_push_selftest.py`、`delivery_check.py` 均已同步进 `git_add_files` 与 `extra_sync` 两份清单（自身也被送达检查覆盖）。
+
+### 4. 版本号读法归正（Master 10-29 裁定）
+
+publish 链此前被误读。`v3.9 → v3.10 → … → v3.28` 实为**省略第二个点的三段式**：v3.9=v3.0.9、v3.10=v3.1.0（patch 满十进 minor 的实证）…v3.28=v3.2.8，每段个位数，十进制进位一直正确；误读成「major=3、minor=28 两位数」才会纠结要不要跳 v4.0。
+**Master 10-30 拍板：本次进位到 v3.3.0**（完整三段式；消除与 08-17 老 v3.3=v3.0.3 的字符串撞号），停止在 v3.2x 上继续累加（不再产出 v3.29 这类中间版本）。规则固化进 l3_publish.py 注释 / SKILL.md 末条 / version.json：**禁止今后写 v3.30 / v3.31 这类小数点后双位数的形式**。
+
+**回归**：版本门禁 5/5（publish 四处全 v3.3.0）、R3.8 夹具 14/14、反向夹具 PASS、全盘自检 **30/30**（从 27 项扩到 30 项）、3 篇真实文章 block 模式实跑 P0=0 / 退出码 0。
+
+### R3 切 block 状态（未执行，留 11-01）
+
+前置条件已全部满足：3 篇真实文章 gate P0=0（10-27/10-28/10-29）+ 安全池 3 题升 fetch。但 generate_prompt.py 第 287 行明确约定「观察期 10-27 至 10-31 用 warn，11-01 起切 block」，10-30/10-31 两天真跑还可积累误杀样本。**按既定约定与稳定优先，不擅自提前**，留到 11-01 由两处 `--mode warn` → `--mode block`（改 prompt 走 generate_prompt.py --update-automation 并回读比对平台）。
+
+---
+
+## v5.6 — 2026-10-29 L2 机器交接契约 + 门禁机制覆盖 + R3.9 交付链路自检（L2 v3.7 / L3 v3.28）
+
+本轮三项，均来自 10-28 交接单待办第 2、3、5 项。
+
+### 1. L2 Phase 5 产出 `learning_summary.json`（v3.6 → v3.7，D-09 硬条件）
+
+**空白**：`contracts/learning_summary.schema.json`（10-26）与 `l3_publish.py` 的「JSON 优先、缺失回退正则并 warn」分支（10-26）已双双就位，**唯独 L2 侧没有生产者**，半套契约空挂。v3.4 的「契约锚点」只锁了 Markdown 章节标题，L3 拿到后仍要靠正则**猜**标题、抽 bullet——本质是把自由文本当接口用，历史已 5 次分叉（#54/#58，v3.9/v3.21/v3.23 三次「已根治」均失准）。
+
+**改动**：Phase 5 新增第 5 步，落盘 `投喂素材/{YYYYMMDD}/learning_summary.json`，字段按 schema；Markdown 降级为渲染视图。落盘后强制 `validate_contract.py --kind learning_summary --require-v1`，rc≠0 禁止进入 Phase 6。
+
+**验收信号**：L3 发布报告的 `transport` 字段由 `regex` 变 `json`。这是「这一步到底做没做」的可观测证据（EXP-014）。
+
+**配套**：`validate_contract.py` 的 `--all` 由只 glob `学习总结*.md` 改为「有 JSON 取 JSON，无 JSON 保留原 glob 语义」。修正过程中发现 20260623 的 `学习总结_v2.md` 与 20260811 的第二份 md 会被「每目录取首份」静默丢掉，已改回全量枚举；新旧逻辑份数比对 93=93，零回归。
+
+### 2. 门禁第五类检查 `mechanism_uncovered`（evidence_gate）
+
+**空白**（审校 2.4）：既有四类检查管的是「卡片里不能有未核实的机制 claim」（卡片层），但「正文那套机制说法是不是照着卡片写的」（正文层）门禁完全不管，全靠 Reviewer。10-27 的 Q1 就是纯机制句、无数字、无映射，门禁 P0=0，靠 Reviewer 的 `elements_complete=False` 才抓出来。
+
+**判据**：卡片里每条 `type=mechanism` 的 claim，正文必须至少引用一次；未引用即 P1 点名（先 warn 不阻断）。
+
+**实测区分度**：
+- 10-27 吹纸实验：C1（伯努利/压强，正是 Q1 讲的机制）全文一次未引用，只引了 C2/C3 → 命中 ✅
+- 10-28 空杯嗡嗡声：C1（亥姆霍兹共振）未引用 → 命中 ✅
+- S5 鸽子文：C1 在 Q2、Q3 各引一次 → 干净，不误报 ✅
+
+**段级语义匹配评估后未采用**：交接单原始要求是「三个 Q 段各自的机制句至少匹配一条机制 claim（关键词或句向量均可）」。实测 10-27 Q1 与 S5 Q1 的内容与各自 mechanism claim 的重合度大致相当，关键词重叠无法把两者分开——采用只会引入噪声，与它自己的验收条件「S5 不误报」冲突。claim 级判据已能抓到同样的缺陷且零误杀，故不引入句向量依赖。
+
+**回归**：新增 3 条夹具（未引用须命中 / 行内注释引用须干净 / mapping.fragments 引用须干净），全部断言 `expect_p1_codes` 代码集合而非条数（#68 教训：条数对上但规则没被触发也会 PASS）；自测 13/13 → 16/16；历史回放仍 10/10 零误杀。
+
+### 3. R3.9 交付链路四方一致自检 `scripts/delivery_check.py`（L3 v3.27 → v3.28）
+
+**空白**（#67 根因）：现有三道检查全在「清单内部」打转——① 白名单每项有没有复制源 ② 已跟踪文件在不在白名单 ③ `full_selfcheck` 只扫本地不读镜像。**没有一道问「该进清单的有没有进」，也没有一道问「清单里的有没有真落到镜像里」。**
+
+**四方**：① 本轮交付物（工作区改动 + 未跟踪 + 最近 N 次提交，按范围过滤）② `git_add_files` ③ `l3_publish` 同步清单 ④ 镜像仓库 HEAD 树实际存在。缺一 exit 1 并指名。
+
+**设计要点**：
+- 清单用 **AST 从 `l3_publish.py` 原样提取**，不 import（避免触发发布路径副作用）、不复制第二份（避免再次漂移，与 #58 回归验证同手法）。踩到两个坑：一是 `Path(CFG["scripts_dir"]) / "x"` 写法原求值器不支持，二是**同一源文件会被复制到镜像两个位置**（`generate_prompt.py` 同时落根目录与 `scripts/`），用 `{src: rel}` 字典会让后一条静默覆盖前一条，凭空造出「无复制源」假缺口——已改为 (src, rel) 列表。
+- 远端校验**默认关闭**，需显式 `--remote`。网络不通不得判红，否则会变成新的假失败（10-28 D1 教训：单次探活失败被当成「不可重试」）。
+- 每日刷新的派生数据（`topics_context*.json`）排除出交付范围，否则每天必红会诱发告警疲劳（EXP-014）。
+- 脚本自身补入 `extra_sync` 与 `git_add_files`——检查别人的东西，自己先被检查。
+
+**当前状态**：`delivery_check.py` 已进两份清单，但尚未送达镜像（今日新建，需下一次 L3 发布才会复制+提交）。自检因此报 1 条 `not_in_mirror`，属**预期内正确告警**，非缺陷。
+
+**未接入 `full_selfcheck`**：同上原因，此刻接入会让 27/27 变红且红得让人困惑。待下一次 L3 发布确认该项转绿后立即接入，作为 R4 准入的常驻检查。
+
+---
+
 ## v5.5 — 2026-10-28 门禁映射有效性检查脱离数字门（evidence_gate，缺陷 #68）
 
 **来源**：C4 剩余 3 次模拟执行方在 S4 上发现——同一篇文，纯文字机制句 P0=2，只插入一句带「零下二十度」的插入语就变 P0=3，差额是 `unverified_mapping`。验收方复现确认。

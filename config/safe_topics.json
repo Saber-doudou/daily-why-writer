@@ -1,7 +1,7 @@
 {
   "schema_version": "v1",
-  "note": "L4 安全池：仅在证据门禁走到最后一级兜底时使用，不得当常规选题。每题附现成证据卡，已逐题跑 check_topic 确认为未使用话题（2026-10-27）。用掉一个 7 天内补一个；池空则暂停 L4 并报告。",
-  "last_reviewed": "2026-10-27",
+  "note": "安全池 8 题 12 条 claim。2026-10-29 升级 S02/S03/S05 共 5 条为 fetch 级（打开原文逐字核实，见 CHANGELOG v5.7）；其余 5 题（S01/S04/S06/S07/S08）仍为 snippet 级，标记 P1 级兜底。注意 S03-C1 原文含两个「零下70摄氏度」不同含义：摩擦系数句（-70 开始降低/-7 最低）与预融化温度句（-153 起始，旧说-70）勿混。",
+  "last_reviewed": "2026-10-29",
   "topics": [
     {
       "id": "S01",
@@ -51,7 +51,8 @@
           "猫钻纸箱只是因为盒子舒服",
           "猫的体温比人低所以怕冷"
         ]
-      }
+      },
+      "verification_note": "P1 级兜底：仅 snippet 级核实，未 fetch 原文；用作 L4 兜底时须回源"
     },
     {
       "id": "S02",
@@ -59,7 +60,7 @@
       "angle": "一次空难换来的应力集中教训",
       "intended_reversal": "圆角不是为了好看，是为了不让裂纹从窗角开始",
       "status": "unused",
-      "last_verified": "2026-10-27",
+      "last_verified": "2026-10-29",
       "used_date": null,
       "evidence_card": {
         "schema_version": "v1",
@@ -75,8 +76,8 @@
               "url": "https://www.81.cn/yw_208727/16420262.html",
               "source_level": "secondary"
             },
-            "quote": "圆角设计能把应力散开,从而大幅降低产生裂纹的风险",
-            "verified_by": "snippet",
+            "quote": "圆角设计能把应力散开，从而大幅降低产生裂纹的风险，提高飞机整体结构的安全性",
+            "verified_by": "fetch",
             "confidence": "high",
             "counter_evidence": []
           }
@@ -85,7 +86,8 @@
           "舷窗做成圆角是为了美观",
           "彗星号事故是发动机故障导致的"
         ]
-      }
+      },
+      "verification_note": "fetch 级：2026-10-29 打开原文逐字核实引文（见 CHANGELOG v5.7）"
     },
     {
       "id": "S03",
@@ -93,7 +95,7 @@
       "angle": "吵了 170 年的摩擦之谜，答案不是简单的压力融解",
       "intended_reversal": "冰滑不是因为压力把冰压化了，而是表面那层特殊的准液体",
       "status": "unused",
-      "last_verified": "2026-10-27",
+      "last_verified": "2026-10-29",
       "used_date": null,
       "evidence_card": {
         "schema_version": "v1",
@@ -109,9 +111,9 @@
               "url": "https://www.huanqiukexue.com/?p=3558",
               "source_level": "secondary"
             },
-            "quote": "随着温度升高至零下70摄氏度,冰面的摩擦系数开始降低,并在零下7摄氏度达到最小值",
-            "verified_by": "snippet",
-            "confidence": "medium",
+            "quote": "随着温度升高至零下70摄氏度，冰面的摩擦系数开始降低，并在零下7摄氏度达到最小值——而这正是短道速滑一般要求的冰面温度",
+            "verified_by": "fetch",
+            "confidence": "high",
             "counter_evidence": []
           },
           {
@@ -124,17 +126,20 @@
               "url": "https://www.sast.gov.cn/content.html?id=kjb220551",
               "source_level": "secondary"
             },
-            "quote": "并不存在所谓的液体水膜,哪怕是几十个纳米的液体水膜也是不存在的",
-            "verified_by": "snippet",
-            "confidence": "medium",
-            "counter_evidence": ["部分教科书仍采用压力融解说，需注明这是历史解释"]
+            "quote": "并不存在所谓的液体水膜，哪怕是几十个纳米的液体水膜也是不存在的",
+            "verified_by": "fetch",
+            "confidence": "high",
+            "counter_evidence": [
+              "部分教科书仍采用压力融解说，需注明这是历史解释"
+            ]
           }
         ],
         "banned_claims": [
           "冰面滑是因为冰刀的压力把冰压化了",
           "冰面滑是因为摩擦生热融出了一层水"
         ]
-      }
+      },
+      "verification_note": "fetch 级：2026-10-29 打开原文逐字核实引文（见 CHANGELOG v5.7）"
     },
     {
       "id": "S04",
@@ -169,7 +174,8 @@
           "晕车是胃不好引起的",
           "晕车的人平衡感更差"
         ]
-      }
+      },
+      "verification_note": "P1 级兜底：仅 snippet 级核实，未 fetch 原文；用作 L4 兜底时须回源"
     },
     {
       "id": "S05",
@@ -177,7 +183,7 @@
       "angle": "金属反射微波，尖端还会把空气电离出火花",
       "intended_reversal": "不是金属有毒，是它把微波挡在食物外面还顺手打火",
       "status": "unused",
-      "last_verified": "2026-10-27",
+      "last_verified": "2026-10-29",
       "used_date": null,
       "evidence_card": {
         "schema_version": "v1",
@@ -194,8 +200,8 @@
               "url": "https://epaper.gmw.cn/wzb/html/2022-05/21/nw.D110000wzb_20220521_7-06.htm",
               "source_level": "secondary"
             },
-            "quote": "当微波入射向金属时,金属内的电子在电磁波的作用下做振动,并辐射出同频电磁波",
-            "verified_by": "snippet",
+            "quote": "当微波入射向金属时，金属内的电子在电磁波的作用下做振动，并辐射出同频电磁波，表现出来就是微波最终被反射出去",
+            "verified_by": "fetch",
             "confidence": "high",
             "counter_evidence": []
           },
@@ -210,17 +216,20 @@
               "url": "https://epaper.gmw.cn/wzb/html/2022-05/21/nw.D110000wzb_20220521_7-06.htm",
               "source_level": "secondary"
             },
-            "quote": "如果置入微波炉中的金属曲率较大或带有尖端",
-            "verified_by": "snippet",
-            "confidence": "medium",
-            "counter_evidence": ["专门设计的金属烤架可用，但不得接触炉壁"]
+            "quote": "如果置入微波炉中的金属曲率较大或带有尖端，比如卷曲的铝箔或有尖齿的叉子，金属电子辐射出来的电磁波会聚积在一起，从而产生高压，并将空气分子电离成带电粒子",
+            "verified_by": "fetch",
+            "confidence": "high",
+            "counter_evidence": [
+              "专门设计的金属烤架可用，但不得接触炉壁"
+            ]
           }
         ],
         "banned_claims": [
           "金属会让微波炉里的食物被辐射污染",
           "任何金属都绝对不能进微波炉"
         ]
-      }
+      },
+      "verification_note": "fetch 级：2026-10-29 打开原文逐字核实引文（见 CHANGELOG v5.7）"
     },
     {
       "id": "S06",
@@ -269,7 +278,8 @@
           "盐会发热所以把冰化开",
           "撒盐化雪后地面温度会升高"
         ]
-      }
+      },
+      "verification_note": "P1 级兜底：仅 snippet 级核实，未 fetch 原文；用作 L4 兜底时须回源"
     },
     {
       "id": "S07",
@@ -303,7 +313,8 @@
           "鸽子点头是为了啄食",
           "鸽子脖子上下晃动所以看起来在点头"
         ]
-      }
+      },
+      "verification_note": "P1 级兜底：仅 snippet 级核实，未 fetch 原文；用作 L4 兜底时须回源"
     },
     {
       "id": "S08",
@@ -338,7 +349,8 @@
           "螃蟹横着走是因为左右腿长短不一样",
           "螃蟹横着走是因为身体太宽转不了身"
         ]
-      }
+      },
+      "verification_note": "P1 级兜底：仅 snippet 级核实，未 fetch 原文；用作 L4 兜底时须回源"
     }
   ]
 }

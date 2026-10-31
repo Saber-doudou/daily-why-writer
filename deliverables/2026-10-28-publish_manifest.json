@@ -1,0 +1,32 @@
+{
+  "schema_version": "v1",
+  "date": "2026-10-28",
+  "topic": "空杯嗡嗡声",
+  "v1_path": "articles/2026-10/2026-10-28-每日冷知识-空杯嗡嗡声.md",
+  "v2_path": "articles/2026-10/2026-10-28-优化版-每日冷知识-空杯嗡嗡声.md",
+  "review_paths": [
+    "review/2026-10-28_review.json",
+    "review/2026-10-28_v2_review.json"
+  ],
+  "ima_note_id": "7521091970938812",
+  "git_commit": null,
+  "char_count": 686,
+  "fixture": false,
+  "checks": [
+    {
+      "name": "ima_backup",
+      "status": "warn",
+      "detail": "7521091970938812"
+    },
+    {
+      "name": "git_sync",
+      "status": "fail",
+      "detail": "push_fail"
+    },
+    {
+      "name": "match_check",
+      "status": "pass",
+      "detail": "改进点 5 条"
+    }
+  ]
+}

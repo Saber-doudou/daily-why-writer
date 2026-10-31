@@ -1,0 +1,32 @@
+{
+  "schema_version": "v1",
+  "date": "2026-10-29",
+  "topic": "水果不是果肉",
+  "v1_path": "articles/2026-10/2026-10-29-每日冷知识-水果不是果肉.md",
+  "v2_path": "articles/2026-10/2026-10-29-优化版-每日冷知识-水果不是果肉.md",
+  "review_paths": [
+    "review/2026-10-29_review.json",
+    "review/2026-10-29_v2_review.json"
+  ],
+  "ima_note_id": "7521451376655950",
+  "git_commit": "91a8746",
+  "char_count": 555,
+  "fixture": false,
+  "checks": [
+    {
+      "name": "ima_backup",
+      "status": "warn",
+      "detail": "7521451376655950"
+    },
+    {
+      "name": "git_sync",
+      "status": "warn",
+      "detail": "91a8746"
+    },
+    {
+      "name": "match_check",
+      "status": "pass",
+      "detail": "改进点 7 条"
+    }
+  ]
+}

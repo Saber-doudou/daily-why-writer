@@ -84,12 +84,12 @@ def build_record(date_str: str, info: dict, filename: str, validation: dict = No
         p0 = validation.get("p0_count", "?")
         p1 = validation.get("p1_count", "?")
         p2 = validation.get("p2_count", "?")
-        score = validation.get("final_score", "?")
+        score = validation.get("structure_score", validation.get("final_score", "?"))
         char_count = validation.get("char_count", "?")
         passed = validation.get('p0p1_passed')
         lines.append(
             f"- 审核：P0={p0}, P1={p1}, P2={p2}, "
-            f"得分 {score}, 字数 {char_count} "
+            f"结构分 {score}（机械口径）, 字数 {char_count} "
             f"{'✅' if passed else '❌'}"
         )
     return "\n".join(lines) + "\n"
@@ -236,7 +236,8 @@ def main():
         try:
             validation = json.loads(args.validation_json)
             print(f"[update_history] 携带审核结果: P0={validation.get('p0_count')}, "
-                  f"P1={validation.get('p1_count')}, 得分={validation.get('final_score')}")
+                  f"P1={validation.get('p1_count')}, "
+                  f"结构分={validation.get('structure_score', validation.get('final_score'))}（机械口径）")
         except json.JSONDecodeError as e:
             print(f"[update_history] ⚠️  审核结果 JSON 解析失败: {e}")
 

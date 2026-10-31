@@ -17,7 +17,9 @@
 
 ## 1. 架构与自动化
 - L1 `daily-why-writer`（工作日09:40，波动至10:11）→ L2 `daily-why-feed-learning`（手动）→ L3 `daily-why-publish`（手动）
-- 自动化 ID `automation-1778312519754`；改 prompt 走 `generate_prompt.py --update-automation`，写库后须回读比对
+- 自动化 ID `automation-1778312519754`；改 prompt 走 `generate_prompt.py --update-automation`
+  写库后须**逐字节**回读（字符数+sha256，禁只看 success）
+- **C 方案（11-01 落地）**：Reviewer 降为形式门禁，分值名 `structure_score`（机械口径，不含事实/机制）；事实与机制归 L2 与 evidence_gate
 - 触发词唯一权威源 `config/skill-trigger-map.json`（明细 → topics/maker_checker.md）
 - 自动化只覆盖L1（设计如此非缺陷）；L1 不靠谱=不得已取舍，L2仅被迫补偿；**禁为小缺陷改 L1**，稳定优先
 - 文章命名`{YYYY-MM-DD}-每日冷知识-{2-6字}.md`，仅存本地articles/，不进git/IMA
@@ -33,7 +35,7 @@
   任务失败归因/讨论换模型→§10｜改版本号→§12⭐｜选题引用→§13｜判AI指控→§14｜同文件多处改→§15⭐
 
 ## 2. 写作规范（指针，权威在 SKILL.md）
-- 唯一权威 `daily-why-writer` SKILL.md（阶段0强制加载）；FORBIDDEN 81条（FP-01~82，含 FP-58 空缺，实际 81 条）全文在 references/FORBIDDEN.md
+- 唯一权威 `daily-why-writer` SKILL.md（阶段0强制加载）；FORBIDDEN 87条（FP-01~88，含 FP-58 空缺，实际 87 条）全文在 references/FORBIDDEN.md
 - 字数上限690全文口径，600仅软目标不得作判定阈值
 - 信源甄别纪律 → topics/writing_spec.md
 

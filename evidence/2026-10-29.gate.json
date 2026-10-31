@@ -1,0 +1,41 @@
+{
+  "generated_at": "2026-10-29T10:21:11",
+  "mode": "warn",
+  "card": "F:/WorkBuddy/daily-why/evidence/2026-10-29.json",
+  "article": "F:/WorkBuddy/daily-why/articles/2026-10/2026-10-29-每日冷知识-水果不是果肉.md",
+  "p0_count": 0,
+  "p1_count": 5,
+  "blocked": false,
+  "findings": [
+    {
+      "severity": "P1",
+      "code": "snippet_only",
+      "where": "claim C1",
+      "message": "仅 snippet 级核实，高风险 claim 建议 fetch 原文"
+    },
+    {
+      "severity": "P1",
+      "code": "snippet_only",
+      "where": "claim C2",
+      "message": "仅 snippet 级核实，高风险 claim 建议 fetch 原文"
+    },
+    {
+      "severity": "P1",
+      "code": "snippet_only",
+      "where": "claim C3",
+      "message": "仅 snippet 级核实，高风险 claim 建议 fetch 原文"
+    },
+    {
+      "severity": "P1",
+      "code": "snippet_only",
+      "where": "claim C4",
+      "message": "仅 snippet 级核实，高风险 claim 建议 fetch 原文"
+    },
+    {
+      "severity": "P1",
+      "code": "snippet_only",
+      "where": "claim C5",
+      "message": "仅 snippet 级核实，高风险 claim 建议 fetch 原文"
+    }
+  ]
+}

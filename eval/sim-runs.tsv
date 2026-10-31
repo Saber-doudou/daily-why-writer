@@ -8,3 +8,5 @@ F3	2026-10-27	stress_tertiary_and_banned	n/a	2	0	0	门禁级压力夹具：terti
 S3	2026-10-28	为什么微波炉不能放金属？	111.0	2	1	482	C1 故意不写 url（source 只留 title/publisher/source_level），正文「微波的波长大约十二厘米」句挂 C1 映射；门禁报 missing_url + schema_invalid（schema 层 url 必填同触发，两道防线同时生效），P1 为 snippet_only
 S4	2026-10-28	为什么冰面那么滑？	146.0	2	0	420	C1 给占位 url 但 verified_by=none 且 confidence=unverified，正文 Q1 末尾照写并挂 C1 映射；门禁报 unverified×2（两字段各触发一次）。正文该句无数字特征故未额外触发 unverified_mapping，诊断版 S4b 加「零下二十度」后 P0=3（+unverified_mapping）
 S5	2026-10-28	为什么鸽子走路时头一点一点？	205.0	0	0	485	卡完全合规（PubMed 10667977 摘要逐字引文，primary/fetch/high）；三类数字埋点齐备：Q 标签序号、表格行「推进与保持 2 拍」、正文「整套动作只有 2 拍」句挂 C1 映射；门禁 P0=0 P1=0，未误杀
+S6	2026-10-29	你吃的水果大多不是'果肉'（桃子吃中果皮、苹果吃花托、草莓吃花托、西瓜吃胎座）	n/a	0	5	617	真实全链跑：初版617字→优化版555字，validate 100分；门禁 P0=0（P1=5，全 snippet_only）；**D-09 首次真产出 learning_summary.json**（契约校验 v1 退出码0），L3 改进点来源标记为 learning_summary.json、transport 由 regex 切到 json
+S7	2026-10-30	为什么毫米尺度的螺旋桨反而会把自己往后推？	n/a	0	6	587	真实全链跑：初版587字→优化版687字，validate 100分；门禁 P0=0（P1=6）；learning_summary.json 连续第2天产出；v1 独立审校对含4处P0硬伤初稿判 score=100/issues=0，漏判率6/6=100%（审查报告 P0-2）

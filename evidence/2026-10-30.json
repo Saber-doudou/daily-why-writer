@@ -1,0 +1,119 @@
+{
+  "schema_version": "v1",
+  "topic": "为什么毫米尺度的螺旋桨反而会把自己往后推？",
+  "angle": "毫米-亚毫米尺度微型机器人推进：螺旋桨在中等雷诺数下出现'推进力反转'，离心吸力盖过前向推力",
+  "claims": [
+    {
+      "id": "C1",
+      "text": "北京邮电大学丁阳教授团队在《美国国家科学院院刊》(PNAS) 发表关于螺旋桨'推进力反转'的研究成果。",
+      "type": "attribution",
+      "source": {
+        "title": "《美国国家科学院院刊》(PNAS)刊发北京邮电大学丁阳教授团队重要研究成果",
+        "publisher": "北京邮电大学",
+        "year": "2025",
+        "url": "https://www.bupt.edu.cn/info/1079/89687.htm",
+        "source_level": "secondary"
+      },
+      "quote": "《美国国家科学院院刊》(PNAS)刊发北京邮电大学丁阳教授团队重要研究成果",
+      "verified_by": "snippet",
+      "confidence": "high"
+    },
+    {
+      "id": "C2",
+      "text": "中等雷诺数下，螺旋桨产生的向后吸力大于向前推力，因此无论正转反转潜艇都后退。",
+      "type": "mechanism",
+      "source": {
+        "title": "螺旋桨为何失灵？我国科学家首次发现“推进力反转”现象",
+        "publisher": "科技日报",
+        "year": "2025",
+        "url": "https://www.stdaily.com/web/gdxw/2025-10/03/content_411475.html",
+        "source_level": "secondary"
+      },
+      "quote": "在中等雷诺数情境下,潜艇和螺旋桨承受向后的吸力会大于向前的升力,所以无论螺旋桨怎么转,潜艇都会后退。",
+      "verified_by": "snippet",
+      "confidence": "high"
+    },
+    {
+      "id": "C3",
+      "text": "推力反转的雷诺数区间：Re 约 1.3 至 150 明显反转，150 至 175 不稳定，Re 小于 1.3 出现第二次反转，高雷诺数正常推进。",
+      "type": "number",
+      "source": {
+        "title": "《PNAS》刊发北京邮电大学物理科学与技术学院丁阳教授团队的颠覆性发现",
+        "publisher": "北京邮电大学物理科学与技术学院",
+        "year": "2025",
+        "url": "https://spst.bupt.edu.cn/info/1023/1784.htm",
+        "source_level": "secondary"
+      },
+      "quote": "当雷诺数降低至150至175范围内时,运动的方向变得不稳定,而当雷诺数约为1.3至150时,潜艇出现了明显的推力反转",
+      "verified_by": "snippet",
+      "confidence": "high"
+    },
+    {
+      "id": "C4",
+      "text": "雷诺数是惯性力与粘性力的比值，受流体性质与物体尺寸共同影响；加硅油增大粘性使雷诺数变小，相当于把潜艇缩小约一万倍，对应毫米至亚毫米尺度微型机器人。",
+      "type": "mechanism",
+      "source": {
+        "title": "微型螺旋桨竟会“反向推进”？中国科学家揭示毫米尺度下的运动奥秘",
+        "publisher": "人民日报",
+        "year": "2025",
+        "url": "https://www.peopleapp.com/column/30050431269-500007125189",
+        "source_level": "secondary"
+      },
+      "quote": "加入硅油增大环境粘性,雷诺数变小,相当于把潜艇缩小1万倍,正对应的是毫米—亚毫米尺度的微型机器人在水中或血液中运动的情况",
+      "verified_by": "snippet",
+      "confidence": "high"
+    },
+    {
+      "id": "C5",
+      "text": "实验用玩具潜艇长 75 毫米、宽 20 毫米、高 30 毫米，尾部装一个直径 5 毫米的右旋螺旋桨。",
+      "type": "number",
+      "source": {
+        "title": "《PNAS》刊发北京邮电大学物理科学与技术学院丁阳教授团队的颠覆性发现",
+        "publisher": "北京邮电大学物理科学与技术学院",
+        "year": "2025",
+        "url": "https://spst.bupt.edu.cn/info/1023/1784.htm",
+        "source_level": "secondary"
+      },
+      "quote": "微型玩具潜艇(长75mm,宽20mm,高30mm),尾部有一个5mm直径的右旋螺旋桨",
+      "verified_by": "snippet",
+      "confidence": "high"
+    },
+    {
+      "id": "C6",
+      "text": "论文题为 From Propulsion to Suction: Unraveling Thrust Reversal in Propellers at Intermediate Reynolds Numbers，DOI 10.1073/pnas.2504153122，北京时间 2025 年 10 月 3 日上线；第一作者付蓉（北京计算科学研究中心博士生），参与者含李思雨（北京师范大学博士生）。",
+      "type": "attribution",
+      "source": {
+        "title": "螺旋桨为何失灵？我国科学家首次发现“推进力反转”现象",
+        "publisher": "科技日报",
+        "year": "2025",
+        "url": "https://www.stdaily.com/web/gdxw/2025-10/03/content_411475.html",
+        "source_level": "secondary"
+      },
+      "quote": "相关论文刊发在最新一期《美国国家科学院院刊》(PNAS)上,已于北京时间10月3日上线。",
+      "verified_by": "snippet",
+      "confidence": "high"
+    },
+    {
+      "id": "C7",
+      "text": "普通尺度下螺旋桨'推'水前进，毫米尺度下反而变成'吸'着自己往后走——这是本篇的冷知识反转点。",
+      "type": "wording",
+      "source": {
+        "title": "科学家揭示特定尺度下“推进力反转”现象",
+        "publisher": "人民日报",
+        "year": "2025",
+        "url": "https://cpc.people.com.cn/n1/2025/1019/c64387-40584814.html",
+        "source_level": "secondary"
+      },
+      "quote": "像是螺旋桨在吸着自己往后走,而不是推着向前。",
+      "verified_by": "snippet",
+      "confidence": "high"
+    }
+  ],
+  "open_questions": [
+    "中等雷诺数区间(Re 1.3 至 150)内，螺旋桨叶片形状与载体间距如何优化以抑制或利用离心吸力",
+    "微型医疗机器人在血液等低雷诺数环境中是否会触及反转边界"
+  ],
+  "banned_claims": [
+    "传统认识认为螺旋桨正转必前进、反转必后退，这一规律在毫米尺度下不成立，已被丁阳团队中等雷诺数实验证伪"
+  ]
+}

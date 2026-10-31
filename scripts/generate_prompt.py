@@ -268,7 +268,7 @@ def generate_multi_agent_prompt(rules: dict, recent_topics: list = None) -> str:
    - 退出码 2 → 参数错误，修正话题文本后重试
    - **shell 传参纪律（10-13 审查补充）**：候选话题一律用单引号包裹，防止 $、反引号、反斜杠被 shell 解释；候选自身含单引号时改用双引号，并确认其中不含 $、反引号、反斜杠
 4. **选中后查证**：用 WebSearch 查证 1 到 2 个关键词：关键数字、研究者引用完整性（机构+年份+期刊）、引用准确性
-4.5 **证据卡 + 门禁（2026-10-27 R3 新增，观察期 warn）**：把步骤4的查证结果写成 `F:/WorkBuddy/daily-why/evidence/{{今天日期}}.json`，字段按 `F:/WorkBuddy/daily-why/contracts/evidence_card.schema.json`。硬要求：机制、数字、归因三类 claim 必须带 url 与不少于 15 字的原文引文；tertiary 来源不得单独支撑；已证伪说法写进 `banned_claims`。写完运行 `{PYTHON} F:/WorkBuddy/daily-why/scripts/evidence_gate.py --card F:/WorkBuddy/daily-why/evidence/{{今天日期}}.json --mode warn`，P0/P1 明细会落到同目录的 `.gate.json`，发布报告引用该文件，不要手抄。**判据口径**：只有含数字的句子才算事实句——阿拉伯数字、倍数、百分比、分数，以及「五十年代」「三倍」这类带计量单位的中文数字；`Q1：` 这类格式标签不算，机构名与人名也不在自动判据内（由审校 fact_checks 覆盖）。观察期不阻断，但 P0 必须出现在报告里。
+4.5 **证据卡 + 门禁（2026-10-27 R3 新增；2026-11-01 起 block 生效）**：把步骤4的查证结果写成 `F:/WorkBuddy/daily-why/evidence/{{今天日期}}.json`，字段按 `F:/WorkBuddy/daily-why/contracts/evidence_card.schema.json`。硬要求：机制、数字、归因三类 claim 必须带 url 与不少于 15 字的原文引文；tertiary 来源不得单独支撑；已证伪说法写进 `banned_claims`。写完运行 `{PYTHON} F:/WorkBuddy/daily-why/scripts/evidence_gate.py --card F:/WorkBuddy/daily-why/evidence/{{今天日期}}.json --mode block`，P0/P1 明细会落到同目录的 `.gate.json`，发布报告引用该文件，不要手抄。**分级阻断（10-31 落地）**：只有**卡片层高置信** P0 返回 exit 1 阻断（missing_url / short_quote / tertiary_only / unverified / banned_claim_hit / unknown_claim / schema_invalid / duplicate_id）；**正文层**两类（`unmapped_fact` / `unverified_mapping`，依赖数字判据与句末映射、误杀面宽）自动降级为 warn 不阻断，只记录进 .gate.json。**exit 1 时的 4 级兜底（必须按序执行，禁止硬着头皮发）**：① **改 claim**——P0 属卡片自身问题（引文太短/缺 url/tertiary 单独支撑）先修卡片重跑；实在修不平就删掉该 claim，正文对应句同步删除或改为不含数字的叙述；② **定向补证**——用 WebSearch/WebFetch 补 primary 源与不少于 15 字原文引文，重跑门禁；③ **换角度**——该机制/数字确实查不到可靠来源时，换一个可核实的事实角度重写本节（不是换整篇话题）；④ **安全池兜底**——前三级都失败 → 运行 `{PYTHON} F:/WorkBuddy/daily-why/scripts/safe_pool.py --status` 取一道可用题，按 `--consume S0X --date {{今天日期}} --reason l4` 登记后改用该题重写全文。**四级皆失败**才允许输出「⚠️ 今日证据门禁未通过」并上报失败候选清单，不得静默终止、不得绕过门禁发布。**判据口径**：只有含数字的句子才算事实句——阿拉伯数字、倍数、百分比、分数，以及「五十年代」「三倍」这类带计量单位的中文数字；`Q1：` 这类格式标签不算，机构名与人名也不在自动判据内（由审校 fact_checks 覆盖）。P0 明细必须出现在报告里。
 5. **落选话题回写素材池**：本轮拉取/筛选过程中未采用的候选（含查证后放弃的），用 Bash 追加/更新到 `F:/WorkBuddy/daily-why/config/topic_candidates.json` 的 candidates 数组（source 字段标记 `external` 或 `rejected`；已有则跳过），保持 JSON 合法
 6. **降级链**（外部源拉取失败或无可用候选时按序降级）：
    - 降级① 脑洞选题：读 `F:/WorkBuddy/daily-why/config/topics_context_compact.json` 的 topic_summaries，自己想一个新话题，运行 `{PYTHON} F:/WorkBuddy/daily-why/scripts/check_topic.py --angle '话题'` 校验（退出码 0 → 继续；1 → 重选，最多 3 轮；2 → 参数错误）
@@ -282,9 +282,9 @@ def generate_multi_agent_prompt(rules: dict, recent_topics: list = None) -> str:
    - 退出码 0 且无提示 → 进入阶段2
    背景：10-13 牛排稿成稿标题与 09-07 文章字符包含率 66.7%，原流程只在选题时查候选话题串、写文后无人复查成稿标题，该缺口由本步闭环（L3 严格模式本可拦，但不应把希望寄托在最后一环）。
 
-9.5 **成稿证据核对（2026-10-27 R3 新增，观察期 warn）**：运行 `{PYTHON} F:/WorkBuddy/daily-why/scripts/evidence_gate.py --card F:/WorkBuddy/daily-why/evidence/{{今天日期}}.json --article F:/WorkBuddy/daily-why/articles/{{年月}}/{{今天日期}}-每日冷知识-{{关键词}}.md --mode warn`。正文中每个含数字的事实句（包括「上世纪五十年代」这类中文数字带单位的表达，不含 `Q1：` 这类格式标签）句末加 `<!-- claim:C1 -->` 映射注释，多条证据支撑时写 `<!-- claim:C1,C2 -->`；Q 标题本身不挂映射。P0/P1 明细原样写进发布报告的「证据核对」小节。
+9.5 **成稿证据核对（2026-10-27 R3 新增；2026-11-01 起 block 生效）**：运行 `{PYTHON} F:/WorkBuddy/daily-why/scripts/evidence_gate.py --card F:/WorkBuddy/daily-why/evidence/{{今天日期}}.json --article F:/WorkBuddy/daily-why/articles/{{年月}}/{{今天日期}}-每日冷知识-{{关键词}}.md --mode block`。正文中每个含数字的事实句（包括「上世纪五十年代」这类中文数字带单位的表达，不含 `Q1：` 这类格式标签）句末加 `<!-- claim:C1 -->` 映射注释，多条证据支撑时写 `<!-- claim:C1,C2 -->`；Q 标题本身不挂映射。P0/P1 明细原样写进发布报告的「证据核对」小节。**退出码非 0 时按步骤 4.5 的 4 级兜底处理，不得跳过门禁直接进入阶段 2。**
 
-> **观察期与切换**：2026-10-27 至 10-31 用 `--mode warn` 只记录不阻断，先看真实文章上的误杀率；11-01 起若无误杀，把上面两处的 `--mode warn` 改成 `--mode block`，并接 4 级日更兜底（删 claim / 定向补证 / 换角度 / 安全池 `config/safe_topics.json`）。切换前必须先看 `eval/sim-runs.tsv` 与当周发布报告里的 P0 明细。
+> **切换记录与回退开关（2026-11-01）**：观察期 10-27 至 10-30 共 4 个工作日真跑 P0 全 0，已按计划切 block（注：10-31 周六、11-01 周日 L1 均不触发，实际首次 block 真跑为 11-02 周一）。切 block 时同步启用**分级阻断**（见步骤 4.5）：卡片层高置信 P0 才阻断，正文层两类降级 warn。**紧急回退**：任一误杀导致无法出稿，设置环境变量 `DAILY_WHY_GATE_RELAX=1` 即可**当次**降级为 warn（无需改 prompt / 写库 / 等次日生效），修复后立即取消该变量。回退阈值（建议）：连续 2 个工作日出现卡片层 P0 阻断，或单日 ≥2 次阻断 → 降级回 warn 并告警。
 
 【硬约束】选题失败上报：若外部源拉取、脑洞选题、素材池兜底全部失败（候选均被 check_topic.py 判重复），必须输出"⚠️ 今日选题失败：失败候选列表 + 3 个建议新方向"，不得静默终止。
 
@@ -297,20 +297,21 @@ def generate_multi_agent_prompt(rules: dict, recent_topics: list = None) -> str:
 - model: "reasoning"
 - 任务内容（原样传入子 agent）：
   1. Read 读取 `{{初稿文件完整路径}}`
-  2. 运行脚本审核：`{PYTHON} F:/WorkBuddy/daily-why/scripts/validate_article.py --json "{{初稿文件完整路径}}"`，记录 P0/P1/P2 与得分
+  2. 运行脚本审核：`{PYTHON} F:/WorkBuddy/daily-why/scripts/validate_article.py --json "{{初稿文件完整路径}}"`，记录 P0/P1/P2 与 `structure_score`（机械口径，不是内容质量分）
   3. Read 加载 `{SKILL_DIR}/references/CHECKLIST.md` 逐项人工对照扫描
   4. Read 加载 `{SKILL_DIR}/references/FORBIDDEN.md`，逐条扫描文件中【全部】FP 规则（数量以文件实际内容为准，不要写死编号）
-  5. Read 加载 `{SKILL_DIR}/reviewer_prompt.md`，**严格执行其中的 P0/P1/P2 分级标准**：P0=事实错误/逻辑矛盾/结构缺失；P1=AI味/连接词≥3、字数>690、类比失准、**绝对化**；P2=措辞微调。凡命中「绝对化/类比失准/字数>690」至少标 P1，**禁止降为 P2**
-  6. **事实断言独立核验**：对文中人物/机构/亲缘关系/年份/数据类断言，用 WebSearch 独立核实至少 2 处关键断言，发现事实错误标记 P0
+  5. Read 加载 `{SKILL_DIR}/reviewer_prompt.md`，**严格执行其中的 P0/P1/P2 分级标准（v3.2 形式门禁口径）**：P0 **仅限 6 类可机械复核项**（结构缺失、Q 标题误用 h3、分隔线 > 2、FORBIDDEN 硬命中、必填数组缺失、定位断言失实）；P1=AI味/连接词≥3、字数>690、类比失准、**绝对化**、分类不在 6 选 1 枚举内；P2=措辞微调。凡命中「绝对化/类比失准/字数>690」至少标 P1，**禁止降为 P2**
+  6. **事实断言核验（v3.2 起降为 advisory，不计 P0/P1）**：对文中人物/机构/亲缘关系/年份/数据类断言，用 WebSearch 独立核实至少 2 处关键断言；发现的问题写入 `fact_checks` 与 `advisory_findings`，**不得标 P0**（事实责任已划归 L2 与 `evidence_gate.py`）
   7. 最小结构验证（不依赖 SKILL.md 写作规则）：A段引用块（>开头）、C段Q格式（**Q1/Q2/Q3：**）、F段引用块含"冷知识反转"标签、结尾风格表格（四行）。任一缺失即 P0 结构缺失
-  8. **强制输出物（v2.8 无条件强制，缺一即判审校无效）**：写入的 review.json 必须包含以下 7 个键（10-27 R2 契约起新增 `schema_version`）：
+  8. **强制输出物（v2.8 无条件强制，缺一即判审校无效）**：写入的 review.json 必须包含以下 8 个键（10-27 R2 契约起新增 `schema_version`，11-01 v3.2 起新增 `structure_score`）：
      - `schema_version` **必须逐字为 `"v1"` 且是 JSON 的第一个键**（R2 契约：`validate_contract.py` 靠它分流 v1 与 legacy，缺了会被判 legacy，新契约永远不生效；`validate_review.py` v1.3 起对 10-29 之后的文件缺此字段判 FAIL，10-27 至 10-28 仅警告）
      - `fact_checks` ≥2 条，每条含 `detail_verified` 字段
      - `quote_checks` / `mechanism_checks` / `attribution_checks` 三个键**必须存在**（可为空数组，键名不得省略）
      - `term_checks`：文中含医学或解剖学术语时 ≥1 条（含 `term`/`used`/`correct`/`exact`）
      - `gap_checks`：**必须 7 条**（G-01 至 G-07；条数以 `{SKILL_DIR}/references/GAP_PATTERNS.md` 实际类型总数为准，不要写死），每条含 `pattern_id`/`triggered`/`checked`/`finding`，**且全部 `checked=true`**
+     - `structure_score`（v3.2 起强制）：0 至 100 整数，与兼容别名 `score` **同值**；**只反映机械规则（字数/格式/FORBIDDEN/结构），不得把事实与机制发现计入**。`validate_review.py` v1.4 对 11-01 之后的文件缺此字段判 FAIL，两值不一致也判 FAIL
      判定方式：上述任一缺失 → 本次审校无效，要求 Reviewer 补写后重新判定，**不得据此放行**。G-01（安全性闭环）与 G-02（绝对化）为当前最高发漏判类型，重点核查
-  9. 输出审核报告**写入文件** `F:/WorkBuddy/daily-why/review/{{今天日期}}_review.json`（含 schema_version="v1"、pass/p0_count/p1_count/p2_count/score/review_timestamp/issues 数组，每项含 level/category/description/suggestion）。**`review_timestamp` 必须先用 Bash 执行 `date +%Y-%m-%dT%H:%M:%S%z` 取系统真实时间写入，禁止自行推断或编造时间**。并在最终回复文本中回报审校结论（SendMessage 在本地 automation 环境不可用，以文本回报兜底）
+  9. 输出审核报告**写入文件** `F:/WorkBuddy/daily-why/review/{{今天日期}}_review.json`（含 schema_version="v1"、pass/p0_count/p1_count/p2_count/structure_score/review_timestamp/issues 数组，每项含 level/category/description/suggestion）。**`review_timestamp` 必须先用 Bash 执行 `date +%Y-%m-%dT%H:%M:%S%z` 取系统真实时间写入，禁止自行推断或编造时间**。并在最终回复文本中回报审校结论（SendMessage 在本地 automation 环境不可用，以文本回报兜底）
   10. 通过条件：P0=0 且 P1≤2（且第 8 条的强制输出物齐备）
 
 **等待策略（文件检测优先）**：
@@ -335,8 +336,8 @@ def generate_multi_agent_prompt(rules: dict, recent_topics: list = None) -> str:
 - 不通过 → 根据报告中的 issues 修复文章 → 写入文件 → 重新 spawn Reviewer 审校（最多2轮）
 - 2轮后仍不通过 → 标记"⚠️ 需人工审核"，输出当前最佳版本
 - **防死循环**：连续 2 轮审校指向同一 P 级问题且修复无实质改进 → 停止迭代，标记"⚠️ 需人工审核"并输出当前最佳版本
-- **P2 采纳闭环（09-01 强制）**：无论通过与否，凡按 Reviewer 意见修改过文章（含采纳 P2），修改后必须重跑 `validate_article.py --json` 确认得分不回退，并同步更新 `review/{{今天日期}}_review.json` 的 `script_result.char_count/score` 或标注 `"revised_after_review": true`；禁止"改完即落盘不重验"
-- 输出：文件路径、审核得分、P0/P1/P2 数、审校方式（独立 reviewer / ⚠️未独立审校）
+- **P2 采纳闭环（09-01 强制）**：无论通过与否，凡按 Reviewer 意见修改过文章（含采纳 P2），修改后必须重跑 `validate_article.py --json` 确认结构分不回退，并同步更新 `review/{{今天日期}}_review.json` 的 `script_result.char_count/structure_score` 或标注 `"revised_after_review": true`；禁止"改完即落盘不重验"
+- 输出：文件路径、结构分（机械口径，不含事实/机制判断）、P0/P1/P2 数、审校方式（独立 reviewer / ⚠️未独立审校）
 - 运行 `{PYTHON} F:/WorkBuddy/daily-why/scripts/update_history.py` 更新记忆
 
 ## 阶段4：创建投喂素材文件夹

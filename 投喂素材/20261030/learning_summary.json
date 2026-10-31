@@ -1,0 +1,22 @@
+{
+  "schema_version": "v1",
+  "date": "2026-10-30",
+  "article_id": "2026-10-30-螺旋桨反转",
+  "title": "为什么毫米尺度的螺旋桨反而会把自己往后推？",
+  "improvements": [
+    {"text": "修正'缩小约一万倍'为'Re降约一万倍，按平方关系约同转速尺寸缩到百分之一（0.75毫米）'", "dimension": "事实", "source_ai": "千问"},
+    {"text": "补全四段相图，明确1.3到150为反转窗口、低于1.3二次反转", "dimension": "事实", "source_ai": "IMA"},
+    {"text": "补入'离心吸力方向只取决于转不转、不取决于往哪转'的核心机制钥匙", "dimension": "机制", "source_ai": "IMA"},
+    {"text": "删除'纹丝不动'自相矛盾表述", "dimension": "表述", "source_ai": "千问"},
+    {"text": "补出处锚点（PNAS 2025.10/北邮丁阳/付蓉）增强可信度", "dimension": "事实", "source_ai": "IMA"},
+    {"text": "将F段从复述Q3改为升维结尾（流体力学中间空白地图）", "dimension": "结构", "source_ai": "IMA"}
+  ],
+  "new_rules": [],
+  "rejected_suggestions": [
+    {"text": "删掉🌀emoji", "reason": "🌀是每日冷知识格式标记，非内容缺陷"},
+    {"text": "标题把'推'改'吸'", "reason": "标题描述现象作为钩子成立"},
+    {"text": "Re∝L/μ线性表述", "reason": "与权威平方关系矛盾"},
+    {"text": "一万倍类比巧妙（豆包误判）", "reason": "与权威Re∝L²矛盾，属事实误判"}
+  ],
+  "source_files": ["投喂素材/20261030/ds.txt", "投喂素材/20261030/ima.txt", "投喂素材/20261030/千问.txt", "投喂素材/20261030/豆包.txt"]
+}

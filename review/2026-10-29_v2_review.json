@@ -1,0 +1,209 @@
+{
+  "schema_version": "v1",
+  "article_id": "2026-10-29",
+  "review_timestamp": "2026-10-29T12:28:22+0800",
+  "pass": true,
+  "p0_count": 0,
+  "p1_count": 0,
+  "p2_count": 0,
+  "score": 100,
+  "script_result": {
+    "exit_code": 0,
+    "score": 100,
+    "char_count": 555,
+    "p0_count": 0,
+    "p1_count": 0,
+    "p2_count": 0
+  },
+  "issues": [],
+  "fact_checks": [
+    {
+      "claim": "桃的可食部为肉质中果皮（mesocarp），内果皮石化为核，桃杏李樱桃属核果（drupe）",
+      "source_verified": true,
+      "detail_verified": true,
+      "verdict": "verified",
+      "note": "UCANR《Stone Fruit Physiology》、1911 Britannica《Peach》、维基 Drupe 三源一致：drupe 外果皮薄皮、中果皮为多汁可食部、内果皮木质化/石化为核。与文 Q1 描述完全吻合。"
+    },
+    {
+      "claim": "苹果为假果（pome），肥厚可食部主要由花托/花筒（hypanthium）发育，子房缩为中心果心；梨山楂枇杷同理",
+      "source_verified": true,
+      "detail_verified": true,
+      "verdict": "verified",
+      "note": "维基 Pome、EPA 农药分组、Biology Insights 一致：pome 属 accessory fruit，可食部源自 hypanthium/receptacle，子房为果心。梨(Pyrus)、山楂(Crataegus)、枇杷(Eriobotrya)均在 pome 例证内，与文 Q2 吻合。"
+    },
+    {
+      "claim": "西瓜可食瓜瓤为胎座（placental tissue）组织，外层西瓜皮为果皮（pericarp）",
+      "source_verified": true,
+      "detail_verified": true,
+      "verdict": "verified",
+      "note": "人民网《吃水果其实多是在吃“皮”》明确“西瓜是胎座发育的一个极致——瓜瓤不是果皮长成，而是包裹种子的胎座组织”；New World Encyclopedia 称水瓜 flesh “consists of highly developed placental tissue”。与文 Q3 吻合。"
+    },
+    {
+      "claim": "荔枝晶莹肉质为假种皮（aril），由种子的珠柄发育，连果皮都算不上",
+      "source_verified": true,
+      "detail_verified": true,
+      "verdict": "verified",
+      "note": "科普中国明确“荔枝可食用部分并不是果皮，而是肉质化的假种皮，由胚珠的珠柄、珠托或胎座发育而来；剥开丢掉的才是果皮”。文用“珠柄”为多来源之一，属可接受简化，方向与归属正确。"
+    },
+    {
+      "claim": "草莓红色肉质为膨大花托（receptacle/hypanthium），表面瘦果（achene）为独立真果",
+      "source_verified": true,
+      "detail_verified": true,
+      "verdict": "verified",
+      "note": "沿 2026-10-29 一轮审校已核实的权威源（UC Davis/LibreTexts/Encyclopedia.com：草莓可食部为 receptacle，表面 achenes 为真果），本轮未另查。A 段“红色部分是花托、表面小颗粒才是真正的果实”与之一致。"
+    }
+  ],
+  "quote_checks": [],
+  "mechanism_checks": [
+    {
+      "claim": "Q1 核果三层果皮机制：子房壁分外/中/内三层，外为薄皮、中为多汁桃肉、内石化成核",
+      "direction_ok": true,
+      "elements_complete": true,
+      "note": "分类性机制说明完整，三层对应可食部位置清晰，无跳步无方向矛盾。"
+    },
+    {
+      "claim": "Q2 苹果假果机制：花托/花筒膨大肉质化为主可食部，子房缩为果心",
+      "direction_ok": true,
+      "elements_complete": true,
+      "note": "因果方向自洽，花托与子房分工明确；“主要由花托发育”用“主要”留余地，未绝对化。"
+    },
+    {
+      "claim": "Q3 西瓜/荔枝可食部机制：瓜瓤=胎座组织、荔枝肉=假种皮",
+      "direction_ok": true,
+      "elements_complete": true,
+      "note": "各归各器官，方向正确，与权威源一致，无混用图景。"
+    }
+  ],
+  "attribution_checks": [
+    {
+      "claim": "桃可食部归因中果皮（核果肉质层）",
+      "is_primary_cause": true,
+      "note": "桃/核果可食部确为中果皮，主因正确。"
+    },
+    {
+      "claim": "苹果可食部归因花托/花筒（假果 accessory tissue）",
+      "is_primary_cause": true,
+      "note": "苹果可食部主要来自 hypanthium，子房仅果心，主因正确。"
+    },
+    {
+      "claim": "西瓜可食部归因胎座组织",
+      "is_primary_cause": true,
+      "note": "瓜瓤为胎座，主因正确。"
+    },
+    {
+      "claim": "荔枝可食部归因假种皮（aril）",
+      "is_primary_cause": true,
+      "note": "荔枝可食部为假种皮，主因正确。"
+    },
+    {
+      "claim": "草莓可食部归因膨大花托，表面瘦果为真果",
+      "is_primary_cause": true,
+      "note": "草莓可食部为 receptacle，主因正确。"
+    }
+  ],
+  "term_checks": [
+    {
+      "term": "中果皮",
+      "used": "中果皮",
+      "correct": "中果皮",
+      "exact": true,
+      "note": "mesocarp，核果可食部，规范术语，使用准确。"
+    },
+    {
+      "term": "花托",
+      "used": "花托",
+      "correct": "花托/花筒(hypanthium)",
+      "exact": true,
+      "note": "假果可食部，中文科普通用“花托”，与权威源 hypanthium/receptacle 语义一致。"
+    },
+    {
+      "term": "胎座",
+      "used": "胎座",
+      "correct": "胎座",
+      "exact": true,
+      "note": "placenta/placental tissue，西瓜可食部，规范术语，准确。"
+    },
+    {
+      "term": "假种皮",
+      "used": "假种皮",
+      "correct": "假种皮(aril)",
+      "exact": true,
+      "note": "aril，荔枝可食部，规范术语，准确。"
+    },
+    {
+      "term": "果心",
+      "used": "果心",
+      "correct": "果心",
+      "exact": true,
+      "note": "一轮 P2 修复点：Q2 已用“果心”（苹果子房/革质核心）替代原“硬核”，与 pome 果心实为革质而非木质石核的解剖事实一致，修复正确。"
+    }
+  ],
+  "gap_checks": [
+    {
+      "pattern_id": "G-01",
+      "triggered": false,
+      "checked": true,
+      "finding": "饮食类话题，但全文只破“果肉”误区，A 段未立“能不能吃/有毒吗/会不会伤”类安全顾虑，无安全闭环缺口，不触发。"
+    },
+    {
+      "pattern_id": "G-02",
+      "triggered": false,
+      "checked": true,
+      "finding": "全文未命中绝对词（不可能/全看/全都/一定/绝对/必然/永远/无非）或说满承诺；“可食部主要来自花托”“多半是果皮、花托、胎座、假种皮”等均已用“主要/多半”限定，无虚假绝对化，不触发。"
+    },
+    {
+      "pattern_id": "G-03",
+      "triggered": true,
+      "checked": true,
+      "finding": "全文植物学定性断言经 WebSearch 回权威源（UCANR/1911Britannica/维基Pome/EPA/科普中国/人民网/New World Enc）逐条核对，桃/苹果/西瓜/荔枝/草莓可食部归属全部正确，无看似合理实为错的事实错误，未标 P0/P1。"
+    },
+    {
+      "pattern_id": "G-04",
+      "triggered": false,
+      "checked": true,
+      "finding": "各 Q 段为分类性机制说明（三层果皮/花托/胎座/假种皮），逐环节完整、无跳步，读者可自推，不触发。"
+    },
+    {
+      "pattern_id": "G-05",
+      "triggered": false,
+      "checked": true,
+      "finding": "全文无古籍/论文原文引述；植物学术语（中果皮/花托/胎座/假种皮/果心）用字均规范（见 term_checks），无音近形近误用，不触发。"
+    },
+    {
+      "pattern_id": "G-06",
+      "triggered": false,
+      "checked": true,
+      "finding": "全文无“研究表明/某大学/发表于某年”类引用标记，无需逐字核细节，不触发。"
+    },
+    {
+      "pattern_id": "G-07",
+      "triggered": false,
+      "checked": true,
+      "finding": "各水果可食部分别归对应器官（桃=中果皮/苹果=花托/西瓜=胎座/荔枝=假种皮/草莓=花托），各归各因，无多因归因偏漏，不触发。"
+    }
+  ],
+  "title_checks": [
+    {
+      "title": "🍑 同一口“果肉”，可能来自植物的不同部位",
+      "subject_scoped": true,
+      "unit_matches_source": true,
+      "scope_consistent_with_body": true,
+      "verdict": "pass",
+      "note": "标题主体为“果肉”这一概念（各器官来源各异），非对某具体类群下“灭绝/绝迹/消亡”断言，也不含无限定泛称外推；方向一/方向二均不触发。正文各水果可食部归属支撑标题“不同部位”的表述。"
+    }
+  ],
+  "issue_responses": [
+    {
+      "issue_index": 0,
+      "status": "resolved",
+      "evidence": "优化版 Q2（第11行）原文“子房只缩在中心，成了那个果心”，已将一轮指出的“硬核”改为“果心”；“果心”（pome 革质核心）与桃/核果木质石核区别明确，修复到位。"
+    },
+    {
+      "issue_index": 1,
+      "status": "resolved",
+      "evidence": "优化版 F 段（第21行）原文“这些结构各自把糖分和香味堆在一起，吸引动物吃掉，顺手把种子带到远处生根”，已删除“伪装/骗你”类目的论拟人，改为“吸引动物吃掉/顺手把种子带到远处生根”的中性演化表述（吸引动物取食以传播种子），修复到位。"
+    }
+  ],
+  "forbidden_violations": [],
+  "overall_comment": "优化版植物学事实经 WebSearch 独立核验全部准确，结构齐全（A段引用块/C段Q1至Q4/F段“冷知识反转”标签/两行四列结尾表格，分类“生活常识”在6选1枚举内），字数555远低于690，无绝对化、无~与——、无FP黑名单命中；一轮2个P2（Q2“硬核”→“果心”、F段拟人化→中性表述）均已修复，本轮无新问题，P0/P1/P2=0/0/0，综合判定通过。"
+}

@@ -383,7 +383,10 @@ def validate_file(filepath: Path, strict: bool = False) -> ValidationResult:
 
     result.score = max(0, result.score)
     result.info["max_score"] = 100
+    # C 方案（2026-11-01）：final_score 降级为废弃别名，规范名是 structure_score。
+    # 100 分只代表「无机械规则违规」，不代表「事实与机制没问题」——后者归 L2 与 evidence_gate。
     result.info["final_score"] = result.score
+    result.info["structure_score"] = result.score
 
     p0p1_ok = result.has_passed_p0p1()
     if strict and not p0p1_ok:
@@ -397,6 +400,11 @@ def validate_file(filepath: Path, strict: bool = False) -> ValidationResult:
     return result
 
 
+# C 方案（2026-11-01）：这些 info 键在文本报告里不逐条打印，
+# 改由「结构分」一行统一呈现并带作用域说明，避免裸 `final_score: 100` 被误读。
+_INFO_HIDDEN_IN_TEXT = ("max_score", "final_score", "structure_score")
+
+
 def print_report(result: ValidationResult, use_json: bool = False, verbose: bool = False):
     """打印验证报告（P0/P1/P2 新版）
     verbose=True 时输出详细修复建议 + 自动匹配判例
@@ -405,6 +413,10 @@ def print_report(result: ValidationResult, use_json: bool = False, verbose: bool
         output = asdict(result)
         # 精简 JSON 输出：移除 info 中的内部字段
         output["related_cases"] = result.related_cases
+        # C 方案（2026-11-01）：分值语义显式标注作用域，杜绝 100 分被读成「内容没问题」
+        output["structure_score"] = result.score
+        output["score_scope"] = "mechanical_only"
+        output["score_excludes"] = ["facts", "mechanism"]
         print(json.dumps(output, ensure_ascii=False, indent=2))
         return
 
@@ -419,12 +431,15 @@ def print_report(result: ValidationResult, use_json: bool = False, verbose: bool
     print(f"P0(致命)={len(result.p0)}  P1(重要)={len(result.p1)}  P2(一般)={len(result.p2)}")
     print(f"通过条件: P0=0 ? {'✅' if len(result.p0)==0 else '❌'}  |  "
           f"P1≤{P1_MAX_ALLOWED} ? {'✅' if len(result.p1)<=P1_MAX_ALLOWED else '❌'}")
+    # C 方案（2026-11-01）：分值只反映机械规则，显式标注作用域
+    print(f"结构分: {result.score}/100（仅机械规则：字数/格式/FORBIDDEN/结构；"
+          f"不含事实与机制判断，事实由 L2 与 evidence_gate 负责）")
     print()
 
     if result.info:
         print("--- 基本信息 ---")
         for k, v in result.info.items():
-            if k not in ("max_score",):
+            if k not in _INFO_HIDDEN_IN_TEXT:
                 print(f"  {k}: {v}")
         print()
 

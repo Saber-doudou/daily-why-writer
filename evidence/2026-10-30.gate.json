@@ -1,0 +1,47 @@
+{
+  "generated_at": "2026-10-30T09:54:34",
+  "mode": "warn",
+  "card": "F:/WorkBuddy/daily-why/evidence/2026-10-30.json",
+  "article": "F:/WorkBuddy/daily-why/articles/2026-10/2026-10-30-每日冷知识-螺旋桨反转.md",
+  "p0_count": 0,
+  "p1_count": 6,
+  "blocked": false,
+  "findings": [
+    {
+      "severity": "P1",
+      "code": "snippet_only",
+      "where": "claim C1",
+      "message": "仅 snippet 级核实，高风险 claim 建议 fetch 原文"
+    },
+    {
+      "severity": "P1",
+      "code": "snippet_only",
+      "where": "claim C2",
+      "message": "仅 snippet 级核实，高风险 claim 建议 fetch 原文"
+    },
+    {
+      "severity": "P1",
+      "code": "snippet_only",
+      "where": "claim C3",
+      "message": "仅 snippet 级核实，高风险 claim 建议 fetch 原文"
+    },
+    {
+      "severity": "P1",
+      "code": "snippet_only",
+      "where": "claim C4",
+      "message": "仅 snippet 级核实，高风险 claim 建议 fetch 原文"
+    },
+    {
+      "severity": "P1",
+      "code": "snippet_only",
+      "where": "claim C5",
+      "message": "仅 snippet 级核实，高风险 claim 建议 fetch 原文"
+    },
+    {
+      "severity": "P1",
+      "code": "snippet_only",
+      "where": "claim C6",
+      "message": "仅 snippet 级核实，高风险 claim 建议 fetch 原文"
+    }
+  ]
+}

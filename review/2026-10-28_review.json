@@ -1,0 +1,141 @@
+{
+  "schema_version": "v1",
+  "article_id": "2026-10-28",
+  "review_timestamp": "2026-10-28T10:06:59+0800",
+  "pass": true,
+  "p0_count": 0,
+  "p1_count": 0,
+  "p2_count": 0,
+  "score": 100,
+  "revised_after_review": true,
+  "script_result": {
+    "exit_code": 0,
+    "score": 100,
+    "char_count": 647,
+    "p0_count": 0,
+    "p1_count": 0,
+    "p2_count": 0
+  },
+  "issues": [
+    {
+      "level": "P1",
+      "category": "CHECKLIST-§G05/术语精度",
+      "description": "文中将环境/背景噪声称为「白噪声」（Q1「一层平时听不太见的白噪声」、Q2「环境白噪声」）。白噪声特指功率谱平坦的噪声，而环境噪声（空调嗡鸣、车流、风扇等混合）并非严格意义上的白噪声——术语归属不精确，属项目已沉淀的「背景噪声≠白噪音」问题（reviewer_prompt Step 5.7 列为 P1）。",
+      "location": "Q1、Q2",
+      "suggestion": "改为「环境噪声」或「背景噪声」；若保留「白噪声」作为通俗化表达，建议加「近似」或「像白噪声一样的宽频噪声」限定，避免将环境噪声与功率谱平坦的白噪声画等号。",
+      "resolved_after_review": true
+    },
+    {
+      "level": "P1",
+      "category": "GAP-G02/绝对化",
+      "description": "Q1「我们身边永远飘着各种噪声」中的「永远」为绝对化表述，命中 G-02 触发词清单（永远/必然/绝对等）。在完全隔音的消声室中并无环境噪声（牛津大学 Andrew King 明确「soundproofed room 什么都听不到」），「永远」在严格意义上不成立。",
+      "location": "Q1",
+      "suggestion": "将「永远」弱化为「平时」「在普通房间里几乎总」或加限定「只要身处有环境噪声的房间」，既保留机理铺垫又避免绝对化。",
+      "resolved_after_review": true
+    }
+  ],
+  "fact_checks": [
+    {
+      "claim": "杯子在其约648赫兹的共振频率处，比不拿杯子时响了约15分贝（claim:C2）",
+      "source_verified": true,
+      "detail_verified": true,
+      "verdict": "verified",
+      "note": "数据出自 ABC Science（Dr Karl Kruszelnicki, 2012-05-15）转述的一项研究：「in a typical noisy room, a cup was held to the ear and a tiny microphone held right next to the eardrum… 15 decibels louder at the cup's resonant frequency of 648 hertz」。文中「约648赫兹/约15分贝」与源逐字吻合且措辞更谨慎，细节无误。"
+    },
+    {
+      "claim": "同一种环境里，人在剧烈运动前后来听海螺，声响并没有变响变尖（据此否定血流说）",
+      "source_verified": true,
+      "detail_verified": true,
+      "verdict": "verified",
+      "note": "多源一致记载同一证伪实验：Dr Karl(ABC,2012)「run around…loudness still the same」；科普中国「正常状态和剧烈运动之后…没有明显差异，没有更尖锐或更响亮」；IFLScience「post-workout…nothing changes」。运动后血流加快但海螺声不变，证伪血流说，表述准确。"
+    },
+    {
+      "claim": "空腔（杯子/海螺）为亥姆霍兹共振器，选择性放大环境噪声的某些频率；杯子越大偏好频率越低、声音越闷，越小越尖",
+      "source_verified": true,
+      "detail_verified": true,
+      "verdict": "verified",
+      "note": "杯子/海螺作为亥姆霍兹共振器放大环境噪声为学界共识（Cambridge/Naked Scientists, Helmholtz resonator 概念；科普中国「杯子越大声音越低沉、越小越清亮」一致）。机制正确，无事实硬伤。"
+    }
+  ],
+  "quote_checks": [
+    {
+      "claim": "Q2「曾有研究在嘈杂房间里把麦克风贴在鼓膜旁测量」对实验设置的描述",
+      "verbatim_match": true,
+      "source": "ABC Science (Dr Karl), 2012-05-15, https://www.abc.net.au/science/articles/2012/05/15/3500938.htm — 原文「in a typical noisy room, a cup was held to the ear and a tiny microphone held right next to the eardrum」",
+      "note": "实验设置描述（嘈杂房间、杯子贴耳、麦克风置于鼓膜旁）与权威源逐字一致；研究未具名作者/期刊/年份，但数据细节已逐字核实无误。"
+    }
+  ],
+  "mechanism_checks": [
+    {
+      "claim": "杯子罩住耳朵围成空腔→亥姆霍兹共振器选择性放大环境白噪声某些频率→入耳成嗡嗡声",
+      "direction_ok": true,
+      "elements_complete": true,
+      "note": "机制方向自洽：环境噪声（因）→空腔共振器选择性放大特定频率（果）→入耳。环节完整，无需补中间环节；Q1（不发声、放大噪声）与 Q2（如何挑频率）分工清晰，无方向矛盾。"
+    }
+  ],
+  "attribution_checks": [
+    {
+      "claim": "嗡嗡声来自环境噪声被空腔放大，而非大海声、亦非耳朵附近血液流动",
+      "is_primary_cause": true,
+      "note": "环境噪声放大为主因（学界共识）；大海说、血流说均经「运动前后响度不变」实验证伪，归因无偏漏。"
+    }
+  ],
+  "term_checks": [],
+  "gap_checks": [
+    {
+      "pattern_id": "G-01",
+      "triggered": false,
+      "checked": true,
+      "finding": ""
+    },
+    {
+      "pattern_id": "G-02",
+      "triggered": true,
+      "checked": true,
+      "finding": "Q1「我们身边永远飘着各种噪声」含绝对词「永远」（G-02触发词清单命中），消声室中不成立 → P1；建议弱化为「平时」"
+    },
+    {
+      "pattern_id": "G-03",
+      "triggered": false,
+      "checked": true,
+      "finding": ""
+    },
+    {
+      "pattern_id": "G-04",
+      "triggered": false,
+      "checked": true,
+      "finding": ""
+    },
+    {
+      "pattern_id": "G-05",
+      "triggered": true,
+      "checked": true,
+      "finding": "Q1/Q2 将环境噪声称为「白噪声」，白噪声特指功率谱平坦噪声、环境噪声并非白噪声 → P1（术语精度，reviewer_prompt Step 5.7 同款）"
+    },
+    {
+      "pattern_id": "G-06",
+      "triggered": true,
+      "checked": true,
+      "finding": "Q2 引述 648Hz/15dB 研究但未具名来源/作者/年份；已 WebSearch 回源（Dr Karl/ABC 2012）逐字核实数值无误，细节准确，无需修数据，仅建议补充来源年份/机构以增强可追溯性"
+    },
+    {
+      "pattern_id": "G-07",
+      "triggered": false,
+      "checked": true,
+      "finding": ""
+    }
+  ],
+  "issue_responses": [],
+  "title_checks": [
+    {
+      "title": "为什么把空杯子贴到耳边，会听到嗡嗡声？",
+      "subject_scoped": true,
+      "unit_matches_source": true,
+      "scope_consistent_with_body": true,
+      "verdict": "pass",
+      "note": "标题为现象追问，无消亡/灭绝类断言，无主体缩小或无限定泛称放大问题；正文范围（杯子/海螺=亥姆霍兹共振器放大环境噪声）与标题一致。"
+    }
+  ],
+  "forbidden_violations": [],
+  "overall_comment": "初稿事实质量高：648Hz/15dB 研究数据、运动前后海螺实验、亥姆霍兹共振机制三处关键断言经 WebSearch 独立核实均逐字吻合权威源（Dr Karl/ABC、科普中国、Cambridge），无 P0 事实错误；最小结构（A段引用块、C段加粗 Q 格式、F段冷知识反转标签、2行×4列结尾表格含四行内容、分类落 6 选 1「生活常识」）齐全。两处 P1 均属项目已沉淀的审校盲区类型：① 环境噪声被称作「白噪声」（术语精度，G-05）；② Q1「永远」绝对词（G-02）。字数 648 < 690、连接词未超阈值、无硬结构缺失。P0=0、P1=2（≤2），按通过条件判定 pass=true。建议采纳两处 P1 微调后再发布。"
+}

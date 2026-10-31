@@ -1,0 +1,138 @@
+{
+  "schema_version": "v1",
+  "article_id": "2026-10-28",
+  "review_timestamp": "2026-10-28T11:49:06+0800",
+  "pass": true,
+  "p0_count": 0,
+  "p1_count": 0,
+  "p2_count": 2,
+  "score": 98,
+  "script_result": {
+    "exit_code": 0,
+    "score": 100,
+    "char_count": 686,
+    "p0_count": 0,
+    "p1_count": 0,
+    "p2_count": 0
+  },
+  "issues": [
+    {
+      "level": "P2",
+      "category": "GAP-G02/绝对化（轻度）",
+      "description": "F段「把那层底噪一直都在」中「一直都在」为轻度绝对化——消声室中确实听不到环境底噪（Dr Karl/ABC 2012 明确「进消声室听海螺什么都听不到」）。但此处语境指日常生活环境中的环境底噪，语义范围窄、不误导读者，仅命中 G-02 触发词「一直」，不达 P1。",
+      "location": "F段（冷知识反转）",
+      "suggestion": "可选微调：「但那层底噪一直都在」→「但那层底噪几乎一直都在」，或保持现状（P2 不改不阻断）。"
+    },
+    {
+      "level": "P2",
+      "category": "FORBIDDEN-FP49/FP28 边缘",
+      "description": "Q3 末句「纯粹是环境噪声被空腔现场直播放大」中「纯粹」为较强排除词（FP-49 一族：一刀切否定中间态）；且 **现场直播** 为非标准术语加粗（FP-28 边缘，无引号仅加粗，程度较轻）。权威源（Dr Karl/ABC）证实杯/壳确实依赖环境噪声，但在海边等真实有海浪场景下空腔也会放大真实海浪声，「纯粹」未留此中间态。",
+      "location": "Q3 末句",
+      "suggestion": "可选微调：「纯粹是环境噪声被空腔现场直播放大」→「就是环境噪声被空腔放大出来的」，并去掉「现场直播」加粗；P2 不改不阻断。"
+    }
+  ],
+  "fact_checks": [
+    {
+      "claim": "Q2：某只特定大小的杯子在其约648赫兹的共振处，比不拿杯子时响了约15分贝，更高那档频率反而被压低（claim:C2）",
+      "source_verified": true,
+      "detail_verified": true,
+      "omission_severity": "minor",
+      "verdict": "verified",
+      "note": "WebSearch 回源 ABC Science（Dr Karl Kruszelnicki, 2012-05-15, abc.net.au/science/articles/2012/05/15/3500938.htm）：「in a typical noisy room, a cup was held to the ear and a tiny microphone held right next to the eardrum… 15 decibels louder at the cup's resonant frequency of 648 hertz… at double the frequency (1296 hertz), the sound heard was 16 decibels quieter」。文中「约648赫兹」「约15分贝」「更高那档反而被压低」与源逐字吻合，且「更高那档被压低」对应 1296Hz 低 16dB 的事实，无张冠李戴。细节核实通过。"
+    },
+    {
+      "claim": "Q3：同一个人剧烈运动前后来听海螺，声响并没有变响变尖，据此否定血流放大说",
+      "source_verified": true,
+      "detail_verified": true,
+      "omission_severity": "minor",
+      "verdict": "verified",
+      "note": "双源独立核实：① Dr Karl/ABC 2012「run around on the beach for a few minutes to increase the blood flow… the loudness of the 'sound of the sea' is still the same」；② ScienceABC「when you perform intense physical activity, blood flow becomes faster… that does not happen, so this assumption also fails」。文中「运动前后来听海螺没变响变尖」与两源一致，血流证伪实验描述准确，无事实错误。"
+    },
+    {
+      "claim": "Q2：大腔小口空腔在声学上叫共振腔，红酒瓶是其原型，杯子是拆掉细颈的简化版；腔体越大偏好频率越低",
+      "source_verified": true,
+      "detail_verified": true,
+      "omission_severity": "minor",
+      "verdict": "verified",
+      "note": "归类核实：Naked Scientists（剑桥大学 Matthew Mason）明确将壳/瓶/杯类空腔解释为 Helmholtz resonator，原型即 empty wine bottle（contained volume of air + neck），且「the larger the shell, the lower the frequencies」与文中「腔体越大、开口越小，偏好频率越低」一致。Dr Karl 则用「resonant cavity / acoustic filter」口径。文中「红酒瓶是原型、杯子是拆掉细颈的简化版」是对 Helmholtz（大腔小口）向开放腔（大开口）的自然过渡描述，非张冠李戴，归类准确。"
+    }
+  ],
+  "quote_checks": [
+    {
+      "claim": "Q2「曾有研究在嘈杂房间把麦克风贴在鼓膜旁测量」对实验设置的描述",
+      "verbatim_match": true,
+      "source": "ABC Science (Dr Karl Kruszelnicki), 2012-05-15, https://www.abc.net.au/science/articles/2012/05/15/3500938.htm — 原文「in a typical noisy room, a cup was held to the ear and a tiny microphone held right next to the eardrum」",
+      "note": "「嘈杂房间」「麦克风贴在鼓膜旁」与源逐字一致。研究仍为「曾有研究」无具名来源（一轮 G-06 建议补来源），属可接受省略，未构成 P 级问题。"
+    }
+  ],
+  "mechanism_checks": [
+    {
+      "claim": "Q1/Q2：杯壁与耳道围成小空腔→像滤波器选择性放大某些频率→环境底噪中被忽略的部分浮现为嗡嗡声",
+      "direction_ok": true,
+      "elements_complete": true,
+      "note": "因果方向自洽：环境噪声（因，非杯子自身发声）→ 空腔共振（中间环节，Q2 给出「共振腔/滤波器」机制与 648Hz/15dB 量化证据）→ 嗡嗡声（果）。环节完整无跳步；Q1（为什么有声音）与 Q2（如何挑频率）边界不重叠（CHECKLIST §58）。"
+    },
+    {
+      "claim": "Q3：海螺螺旋腔体让声波反复反射、多次谐振叠出起伏，故更像海浪；直筒杯子更像风",
+      "direction_ok": true,
+      "elements_complete": true,
+      "note": "与 09-03 贝壳听海教训对照：本篇 Q3 明确包含「螺旋腔体多次谐振」增强环节（一轮 fact_checks 同判），机制要素完整；血流的证伪用「运动前后不变」实验支撑，方向自洽。"
+    }
+  ],
+  "attribution_checks": [
+    {
+      "claim": "嗡嗡声来自环境噪声被空腔放大，而非大海声、亦非血液流动",
+      "is_primary_cause": true,
+      "note": "主因归因正确：环境噪声放大为空腔嗡嗡声的主因（Dr Karl/ABC 明确「the shell definitely needs the ambient or background sound. No ambient sound, no ocean-in-the-shell sound」）；血流说被运动实验证伪（双源），大海说证伪（消声室测试）。归因无偏漏，次因/伪因均已交代。"
+    }
+  ],
+  "term_checks": [
+    {
+      "term": "耳道",
+      "used": "耳道",
+      "correct": "耳道",
+      "exact": true,
+      "note": "「杯壁和耳道之间围成一个小空腔」——解剖学用词正确（耳道=外耳道，腔体形成表述准确）。"
+    },
+    {
+      "term": "鼓膜",
+      "used": "鼓膜",
+      "correct": "鼓膜",
+      "exact": true,
+      "note": "「把麦克风贴在鼓膜旁」用字正确（eardrum=鼓膜，非「耳膜」口语混用亦规范）。"
+    }
+  ],
+  "gap_checks": [
+    { "pattern_id": "G-01", "triggered": false, "checked": true, "finding": "" },
+    { "pattern_id": "G-02", "triggered": true, "checked": true, "finding": "一轮 Q1「永远」已改为「平时」（已修复）；v2 残留 F段「底噪一直都在」轻度绝对化（日常语境、消声室为例外场景），判 P2 非 P1。" },
+    { "pattern_id": "G-03", "triggered": true, "checked": true, "finding": "三处可核事实（648Hz/15dB、运动证伪血流、红酒瓶原型归类）全部 WebSearch 回源核实逐字吻合，无「听起来对但细节错」的定性错误。" },
+    { "pattern_id": "G-04", "triggered": false, "checked": true, "finding": "" },
+    { "pattern_id": "G-05", "triggered": true, "checked": true, "finding": "一轮「白噪声」误称已修复：v2 全文改用「环境底噪/环境噪声」，grep 全文无「白噪声」字样；「共振腔」归类经 Naked Scientists（Helmholtz resonator 原型红酒瓶）核实准确，无术语归属错误。" },
+    { "pattern_id": "G-06", "triggered": true, "checked": true, "finding": "Q2「曾有研究」仍无具名来源（机构/年份/作者），但 648Hz/15dB 数据细节已回 Dr Karl/ABC 2012 原文逐字核实无误——来源存在且细节正确，仅可追溯性欠缺，判为 minor 省略不标 P（一轮同判）。" },
+    { "pattern_id": "G-07", "triggered": false, "checked": true, "finding": "" }
+  ],
+  "issue_responses": [
+    {
+      "issue_index": 0,
+      "status": "resolved",
+      "evidence": "v2 Q1 改为「我们身边平时就飘着各种噪声…一层不易察觉的环境底噪」、Q2「环境底噪里」，全文已无「白噪声」字样（Grep 全文 0 命中），一轮指出的术语归属不精确已修复。"
+    },
+    {
+      "issue_index": 1,
+      "status": "resolved",
+      "evidence": "v2 Q1 由「我们身边永远飘着各种噪声」改为「我们身边平时就飘着各种噪声」，绝对词「永远」已按一轮建议弱化为「平时」（Q1 原文 L7 实证）；F段残留的「一直都在」属更窄语境的轻度表述，另行记 P2，不影响本条闭环。"
+    }
+  ],
+  "title_checks": [
+    {
+      "title": "为什么把空杯子贴到耳边，会听到嗡嗡声？",
+      "subject_scoped": true,
+      "unit_matches_source": true,
+      "scope_consistent_with_body": true,
+      "verdict": "pass",
+      "note": "标题为现象追问句式（杯子贴耳→嗡嗡声），无消亡/灭绝类断言、无无限定泛称外推；正文机制范围（空腔放大环境噪声，杯子/海螺皆适用）与标题一致。结尾表格「话题」字段「空杯子贴耳边听到嗡嗡声」与标题口径一致。"
+    }
+  ],
+  "forbidden_violations": [],
+  "overall_comment": "优化版修复了两处一轮 P1（「白噪声」误称→环境底噪、「永远」→「平时」），三处关键事实断言（648Hz/15dB 研究数据、运动证伪血流、红酒瓶原型的共振腔归类）经 WebSearch 独立回源（ABC Dr Karl 2012 / Naked Scientists / ScienceABC）逐字核实无 P0。字数 686 < 690 全文口径，脚本 100 分。残留 2 处 P2（F段「一直都在」轻度绝对化、Q3「纯粹」+「现场直播」加粗的 FP-49/FP-28 边缘），不阻断发布。P0=0、P1=0（≤2），通过。"
+}
