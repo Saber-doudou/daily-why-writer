@@ -20,6 +20,23 @@ safe_topics.json / historical_claims.tsv）全都不在镜像里，而双向自�
 - ③ 用 **AST 从 l3_publish.py 原样提取**，不是 import，也不是复制一份清单。
   import 会触发发布路径的副作用；复制一份则立刻开始漂移，正是本脚本要治的病。
   读脚本真身，清单改了这里自动跟着变（与 #58 回归验证同一手法）。
+
+⚠️ 双仓库，别查错仓（11-01 补，审查报告 P2-9；审查方自己就在这里错过一次）：
+本项目有两个 git 仓库，**职责不同**：
+
+    ┌ 工作区仓  ROOT / F:/WorkBuddy/daily-why
+    │   纯本地，**没有 remote**。全部日常产物都在这里（articles / review / evidence /
+    │   投喂素材 / deliverables / 记忆日志）。本脚本的 ①②③ 全部读这个仓。
+    │   看 HEAD 用 `git -C F:/WorkBuddy/daily-why log`。
+    │
+    └ 镜像仓  config.json 的 git_repo_path / F:/WorkBuddy/daily-why-writer
+        有 remote（GitHub Saber-doudou/daily-why-writer），只放「要公开的工程件」
+        （脚本 / 契约 / 规则库 / SKILL / reviewer_prompt / CHANGELOG）。
+        **④ 查的是这个仓的 HEAD 树**，看 HEAD 必须 `git -C F:/WorkBuddy/daily-why-writer log`。
+
+两个仓的 hash 互不相干，串仓查询会得到「不存在的 commit」这种假结论。
+`ROOT` 在上方常量区定义，指**工作区仓**；镜像仓路径一律从 cfg["git_repo_path"] 取，
+不要硬编码，也不要用 ROOT 冒充镜像仓。
 - ④ 只查本地镜像，远端校验要显式 `--remote`。网络不通时不能让它把轮次判红——
   那会变成新的假失败，正是 10-28 D1 的教训（单次探活失败被当成「不可重试」）。
 - ① 的「交付范围」是白名单式过滤：内容产物（文章/评审/证据/报告/素材/日志）
@@ -224,7 +241,12 @@ def _git(*args, cwd=None):
 
 
 def changed_files(commits):
-    """① 本轮改动：未提交（含未跟踪）+ 最近 N 次提交。"""
+    """① 本轮改动：未提交（含未跟踪）+ 最近 N 次提交。
+
+    注意仓库归属：全部 `_git()` 调用都默认跑在 **工作区仓**（`ROOT`，无 remote，
+    装全部日常产物）。镜像仓（GitHub）的核对在 `mirror_missing()` 里单独做，
+    两者 hash 不可互换——串仓查 HEAD 会得到「不存在的 commit」的假结论。
+    """
     files = set()
 
     rc, out, _ = _git("diff", "--name-only", "HEAD")
