@@ -30,6 +30,12 @@ ROOT = Path(__file__).resolve().parent.parent
 HIGH_RISK = {"mechanism", "number", "attribution"}
 MIN_QUOTE = 15
 
+# banned_claims 条目的最短长度门槛（11-01，审查报告 P1-7 后半）。
+# banned_claims 用的是纯子串匹配，条目越短越容易在无关句里误命中；
+# 切 block 后一次误杀就挡掉当天稿子，所以短串不判 P0（降 P1 但仍报出，并提示改写）。
+# 取 6：实测既有的合格禁令「白蚁分泌蚁酸」正好 6 字，低于 6 的多为「灭绝」「三倍」这类词。
+BANNED_MIN_LEN = 6
+
 # 高风险事实句特征：数字类表达。
 # 阿拉伯数字 + 倍数/百分比/分数，外加带计量单位的中文数字（「五十年代」「三倍」这类
 # 同样是可核事实，不能被漏掉——模拟运行 S1 就漏了「上世纪五十年代」）。
@@ -83,6 +89,16 @@ def check_card(card):
             if verified == "snippet":
                 out.append(("P1", "snippet_only", where,
                             "仅 snippet 级核实，高风险 claim 建议 fetch 原文"))
+
+    # 11-01（审查报告 P1-7 后半）：banned_claims 条目过短 → 写卡时就提示。
+    # `b in text` 是纯子串匹配，三五个字的禁令（如「灭绝」「三倍」）会在无关句里误命中。
+    # 在卡片层先提醒把它写成完整陈述句，比等到正文误判 P0 再把稿子拦下来便宜得多。
+    for banned in (card.get("banned_claims") or []):
+        b = (banned or "").strip()
+        if b and len(b) < BANNED_MIN_LEN:
+            out.append(("P1", "banned_claim_too_short", "banned_claims",
+                        f"禁令「{b}」仅 {len(b)} 字（门槛 {BANNED_MIN_LEN} 字），"
+                        f"过短易在无关句里误命中；请改写成完整陈述句"))
     return out
 
 
@@ -103,10 +119,20 @@ def check_article(text, card):
     claims = {c.get("id"): c for c in (card.get("claims") or [])}
 
     # 4.0 banned_claims：已证伪断言出现在正文即为 P0
+    # 11-01（审查报告 P1-7 后半）加长度门槛。为什么不是「短串直接不看」：
+    # 那会把真禁令变成隐形规则，属于用静默换安静。改成两级——达标的照旧 P0 阻断，
+    # 过短的降 P1 但仍报出来，并点名让作者改写成完整陈述句（卡片层另有一条同类提示）。
+    # 判据：切 block 后一次误杀就挡掉当天稿子，短串误命中是最高频的误杀来源。
     for banned in (card.get("banned_claims") or []):
         b = (banned or "").strip()
-        if b and b in text:
+        if not b or b not in text:
+            continue
+        if len(b) >= BANNED_MIN_LEN:
             out.append(("P0", "banned_claim_hit", "正文", f"命中已证伪断言「{b}」"))
+        else:
+            out.append(("P1", "banned_claim_short_hit", "正文",
+                        f"命中已证伪断言「{b}」（仅 {len(b)} 字，门槛 {BANNED_MIN_LEN} 字，"
+                        f"按 P1 处理以免短串误杀；请把该禁令写成完整陈述句）"))
 
     frags = resolve_mapping(card)
     inline = re.compile(r"<!--\s*claim:\s*([A-Za-z0-9,\s]+?)\s*-->")
@@ -447,6 +473,34 @@ SELFTEST = {
         "card": {"schema_version": "v1", "topic": "测试", "claims": [], "banned_claims": []},
         "article": "产量提高了 3 倍。",
         "expect_p0": 1, "expect_codes": ["unmapped_fact"],
+    },
+
+    # ── 11-01 新增：banned_claims 长度门槛的正反夹具（审查报告 P1-7 后半）──
+    # 三条互为反向，锁死「达标禁令仍阻断 / 短禁令降级但不隐身 / 未命中不报」，
+    # 防「一修就松」把真禁令变成隐形规则。
+    "stress_banned_long_hit_still_p0": {
+        # 达标（≥6 字）禁令命中正文 → 仍必须 P0 阻断，行为不变。
+        "card": {"schema_version": "v1", "topic": "测试", "claims": [],
+                 "banned_claims": ["白蚁分泌蚁酸"]},
+        "article": "白蚁分泌蚁酸的链条早就被证伪了。",
+        "expect_p0": 1, "expect_codes": ["banned_claim_hit"],
+    },
+    "stress_banned_short_hit_is_p1": {
+        # 短禁令（2 字「灭绝」）命中正文 → 降 P1 但仍报出，不进 P0（防短串误杀挡稿）。
+        # 同时卡片层报 banned_claim_too_short，两条 P1 必须都在。
+        "card": {"schema_version": "v1", "topic": "测试", "claims": [],
+                 "banned_claims": ["灭绝"]},
+        "article": "这类群早就灭绝了。",
+        "expect_p0": 0, "expect_codes": [],
+        "expect_p1_codes": ["banned_claim_short_hit", "banned_claim_too_short"],
+    },
+    "stress_banned_short_no_hit_only_card_hint": {
+        # 短禁令未命中正文 → 只剩卡片层提示，正文不报（正向对照，防过度报警）。
+        "card": {"schema_version": "v1", "topic": "测试", "claims": [],
+                 "banned_claims": ["灭绝"]},
+        "article": "这篇文章讲的是螺旋桨为什么会反转。",
+        "expect_p0": 0, "expect_codes": [],
+        "expect_p1_codes": ["banned_claim_too_short"],
     },
 }
 
