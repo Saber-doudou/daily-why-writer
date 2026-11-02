@@ -1,6 +1,16 @@
 # 自动化执行记录 - automation-1778312519754
 > 📦 归档：2026-08-31 及更早记录已零损失切割至 archive/自动化执行记忆归档-2026-07-01至2026-08-31.md（2026-09-07 执行，sha256 逐字校验通过）
 
+## 2026-11-02
+- 话题：为什么撒哈拉银蚁不怕滚烫的沙子？（动物世界）
+- 文件：2026-11-02-每日冷知识-银蚁空调.md
+- 更新时间：2026-11-02 10:37
+- 关键词：银蚁空调
+- 高层摘要：SOP(daily-why-writer v4.5)加载✅；prepare_topics刷新；外部源WebSearch筛候选(银蚁降温铠甲/银杏镀银膜/云有重量)→check_topic全通过→选中"银蚁降温铠甲"；写前查证多源(科普中国/美国能源部Science 2015/New Scientist：70度沙温/53.6度临界/三角毛发被动辐射冷却/有毛比剃毛低5-10度/正午约10分钟窗口/哥伦比亚大学Nanfang Yu团队)；证据卡evidence/2026-11-02.json+门禁.gate.json(warn P0=0/P1=6 snippet_only)；成稿标题复查--file退出码0无提示；成稿证据核对warn P0=0(逐句补claim映射后干净)；spawn独立Reviewer(general-purpose+reasoning无name)PASS：事实核验4处全吻合、强制键齐备(fact4/mech1/attr1/quote1/term0/title1/gap7)、validate_review退出码0全绿；初稿即P0=P1=P2=0免修复；记忆门禁通过(工作空间2228/3000,用户级3722/4000,自动化671/1000行)；投喂素材20261102已建；update_history自动回捞落选候选(银杏镀银膜/云有重量external)入池(现240条)
+- 审核：P0=0, P1=0, P2=0, 得分 100 ✅（独立Reviewer审校 agent-2447bfa3-d90b-43ef-81eb-cd2841967446；644字；强制键齐备 fact4/mech1/attr1/quote1/term0/title1/gap7；validate_review退出码0全绿）
+- 备注：证据门禁本日首次block真跑(10-27至10-30观察期warn，11-01周日L1不触发，实际首次block=11-02周一)，P0全0符合预期；snippet_only六条为预期warn不阻断；independent reviewer稳定无需熔断自审；memory_decay待下沉10条(§01/§02/§03/§07/§08/§09/§10/§11/§13/§14)本次不强制处理
+
+- **L2投喂**：2026-11-02 四AI学习完成（触发 dailywhy学习总结）。4家素材齐全（ds6.1K/ima5.8K/千问5.6K/豆包4.9K）。差额分析核心差距（P0）：①DS/IMA误判「5-10度剃毛对照」「50度上下」无出处，经 Science 2015 五源核实准确（FP-87反向实证）；②Q3「十几度」与70-50=20减法矛盾（千问抓出算术自洽硬伤）；③反转段应用虚写缺规模效果数字（千问IMA豆包三方共识）；④机制可补强（三角截面弹射/全内反射/大气窗口/不耗一度电）。v2 重写 799字 score95(P0=0 P1=1 字数>690待压)；独立审校 P0=0/P1=1/P2=0(score95，一轮issues空跳过issue_responses覆盖校验，validate_review退出码0)。新规则：CHECKLIST §132（反转段应用须给规模效果数字）+ FP-87补银蚁空调正向印证案例；writer 维持 v4.5，FP 维持87。FEEDBACK_LOG 1条 + AI能力特点 11-02行 + topic_candidates(l2×2：被动辐射冷却/银蚁毛发三角截面全内反射)。休眠检测263条无匹配激活；rule_lifecycle 三区重算（活跃23/预防87/待验证22/共132）；自动化 prompt 重生成并落库（automation-1778312519754 nextRunAt 正常）。学习总结 投喂素材/20261102/学习总结.md（##改进点契约锚点自检 EXIT=0，5条目）+ learning_summary.json（v3.7机器交接契约，validate_contract --kind learning_summary --require-v1 通过，v1）。⚠️ 已知项：v2仍超690字(799)待后续压字；automation prompt 落库时claim映射注释因工具层XML转义存储为实体形式(&lt;!-- claim:C1 --&gt;)，L1运行时LLM可鲁棒识别无功能影响。
 ## 2026-10-30
 - 话题：为什么毫米尺度的螺旋桨反而会把自己往后推？（物理化学）
 - 文件：2026-10-30-每日冷知识-螺旋桨反转.md

@@ -1,0 +1,99 @@
+{
+  "schema_version": "v1",
+  "topic": "撒哈拉银蚁的零能耗空调降温铠甲",
+  "angle": "体表三角截面毛发如何通过反射阳光+中红外辐射实现被动辐射冷却，使银蚁在正午70度沙地存活",
+  "claims": [
+    {
+      "id": "C1",
+      "text": "撒哈拉正午沙地表面温度可达70摄氏度，银蚁的临界热最大值约为53.6摄氏度，必须在此之下维持体温。",
+      "type": "number",
+      "source": {
+        "title": "Silver Ants Stay Cool in the Saharan Heat (美国能源部科学办公室，转述哥伦比亚大学Science 2015研究)",
+        "publisher": "US Department of Energy",
+        "year": "2015",
+        "url": "https://www.energy.gov/science/bes/articles/silver-ants-stay-cool-saharan-heat",
+        "source_level": "secondary"
+      },
+      "quote": "Saharan silver ants (Cataglyphis bombycina) forage in the Saharan desert in the full midday sun when surface temperatures reach up to 70°C (158°F), and they must keep their body temperature below their critical thermal maximum of 53.6°C (128.48°F)",
+      "verified_by": "snippet",
+      "confidence": "high"
+    },
+    {
+      "id": "C2",
+      "text": "银蚁体表三角截面毛发在可见光与近红外波段高效反射阳光，在中红外波段高效发射体热，将热量以热辐射方式直接送往较冷的外太空，被称为被动辐射冷却。",
+      "type": "mechanism",
+      "source": {
+        "title": "一头大象和一只蚂蚁，各自藏着一套“不用电的空调”（科普中国）",
+        "publisher": "科普中国",
+        "year": "2024",
+        "url": "https://www.kepuchina.cn/article/articleinfo?ar_id=714250&business_type=100",
+        "source_level": "secondary"
+      },
+      "quote": "三角截面毛发构成了一个特殊的光学表面——在可见光和近红外波段，它们像镜子一样高效反射阳光。但到了中红外波段，也就是银蚁自身辐射体热的主要波段，这层毛发却表现得像一层阻抗匹配结构，能够将银蚁体内积蓄的热量高效地通过热辐射的方式，直接发射到外太空。在物理学上，这被称为被动辐射冷却。",
+      "verified_by": "snippet",
+      "confidence": "high"
+    },
+    {
+      "id": "C3",
+      "text": "保留毛发的银蚁个体比被剃去毛发的同类体温低5至10摄氏度，这是毛发被动降温的直接实验证据。",
+      "type": "number",
+      "source": {
+        "title": "Silver coat lets Saharan ants withstand scorching desert heat (New Scientist)",
+        "publisher": "New Scientist",
+        "year": "2015",
+        "url": "https://www.newscientist.com/article/2025104-silver-coat-lets-saharan-ants-withstand-scorching-desert-heat/",
+        "source_level": "secondary"
+      },
+      "quote": "They found that the ants with hair had body temperatures 5 to 10 degrees lower than those that had been shaved – a big difference in the scorching Sahara.",
+      "verified_by": "snippet",
+      "confidence": "high"
+    },
+    {
+      "id": "C4",
+      "text": "该机制由哥伦比亚大学Nanfang Yu团队发现，论文《Keeping Cool: Enhanced Optical Reflection and Heat Dissipation in Silver Ants》发表于Science 349, 298 (2015)。",
+      "type": "attribution",
+      "source": {
+        "title": "Silver Ants Stay Cool in the Saharan Heat (美国能源部科学办公室)",
+        "publisher": "US Department of Energy",
+        "year": "2015",
+        "url": "https://www.energy.gov/science/bes/articles/silver-ants-stay-cool-saharan-heat",
+        "source_level": "secondary"
+      },
+      "quote": "N. N. Shi, C. C. Tsai, F. Camino, G. D. Bernard, N. Yu, and R. Wehner, \"Keeping Cool: Enhanced Optical Reflection and Heat Dissipation in Silver Ants\", Science 349, 298 (2015)",
+      "verified_by": "snippet",
+      "confidence": "high"
+    },
+    {
+      "id": "C5",
+      "text": "银蚁只在天敌沙漠蜥蜴躲回巢穴的正午前后约十分钟窗口外出觅食，用极短活动时间避开高温致死风险。",
+      "type": "number",
+      "source": {
+        "title": "一头大象和一只蚂蚁，各自藏着一套“不用电的空调”（科普中国）",
+        "publisher": "科普中国",
+        "year": "2024",
+        "url": "https://www.kepuchina.cn/article/articleinfo?ar_id=714250&business_type=100",
+        "source_level": "secondary"
+      },
+      "quote": "但撒哈拉银蚁偏偏挑这个时候出来觅食。它的策略极其冒险：每天只有正午前后大约十分钟的活动窗口。为什么选这个时间？因为它的天敌——沙漠蜥蜴——这个时候已经被热得躲回巢穴里了。",
+      "verified_by": "snippet",
+      "confidence": "high"
+    },
+    {
+      "id": "C6",
+      "text": "在三角毛发被动辐射冷却的保护下，银蚁体温可比脚底沙地低十几度，从而卡在其53.6度的临界热最大值之下存活。",
+      "type": "number",
+      "source": {
+        "title": "一头大象和一只蚂蚁，各自藏着一套“不用电的空调”（科普中国）",
+        "publisher": "科普中国",
+        "year": "2024",
+        "url": "https://www.kepuchina.cn/article/articleinfo?ar_id=714250&business_type=100",
+        "source_level": "secondary"
+      },
+      "quote": "在这套降温铠甲的保护下，银蚁的体温可以比脚底的沙地低十几度。这十几度，就是生与死的距离。",
+      "verified_by": "snippet",
+      "confidence": "high"
+    }
+  ],
+  "open_questions": [],
+  "banned_claims": []
+}

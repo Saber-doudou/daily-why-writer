@@ -1,0 +1,146 @@
+{
+  "schema_version": "v1",
+  "article_id": "2026-11-02",
+  "pass": true,
+  "p0_count": 0,
+  "p1_count": 0,
+  "p2_count": 0,
+  "structure_score": 100,
+  "score": 100,
+  "review_timestamp": "2026-11-02T10:34:08+0800",
+  "script_result": {
+    "exit_code": 0,
+    "passed": true,
+    "structure_score": 100,
+    "score": 100,
+    "char_count": 644,
+    "p0_count": 0,
+    "p1_count": 0,
+    "p2_count": 0,
+    "score_scope": "mechanical_only"
+  },
+  "issues": [],
+  "fact_checks": [
+    {
+      "claim": "文中称该降温机制'在2015年被哥伦比亚大学的团队写进《Science》论文'（C4标注）",
+      "source_verified": true,
+      "detail_verified": true,
+      "verdict": "verified",
+      "note": "WebSearch核实：Norman Nan Shi, Cheng-Chia Tsai, Fernando Camino, Gary D. Bernard, Nanfang Yu, Rüdiger Wehner, 'Keeping cool: Enhanced optical reflection and radiative heat dissipation in Saharan silver ants', Science 349(6245):298-301, 2015-06-18, DOI 10.1126/science.aab3564。通讯作者Nanfang Yu属哥伦比亚大学应用物理与数学系，机构/年份/期刊三项均准确。"
+    },
+    {
+      "claim": "长着毛的银蚁比被剃光毛的同类体温低5到10度（C3标注）",
+      "source_verified": true,
+      "detail_verified": true,
+      "verdict": "verified",
+      "note": "Science原文Abstract及ScienceDaily/DOE报道均明确：毛发使银蚁体温较无毛发时降低5到10摄氏度（'reducing the body temperature of silver ants by 5 to 10 degrees compared to if the ants were without the hair cover'）。数字与原文一致。"
+    },
+    {
+      "claim": "沙面温度达70度，银蚁身体稳在50度上下（48-51°C），刚好卡在53.6度的死亡线（临界热上限）之下（C1/C6标注）",
+      "source_verified": true,
+      "detail_verified": true,
+      "verdict": "verified",
+      "note": "Science原文及报道：沙面温度可达70°C；银蚁'operative environmental temperatures'为48-51°C；critical thermal maximum为53.6°C。文中'50度上下''53.6度死亡线''比脚下的沙子低了十几度'均与原文吻合。"
+    },
+    {
+      "claim": "F段反转：工程师仿银蚁毛发做出被动辐射冷却涂层，十五运志愿者服务站已用上",
+      "source_verified": true,
+      "detail_verified": true,
+      "verdict": "verified",
+      "note": "WebSearch核实（南方plus/环球网/广州市政府网/腾讯新闻）：香港科技大学霍英东研究院研发微纳米级被动式制冷涂层，仿撒哈拉银蚁角质层结构，反射太阳光并以中红外辐射被动制冷、无需耗电；该技术应用于十五运会广州赛区约100个城市志愿服务站外墙喷涂，表面降温15°C以上、室内降2-3°C，为全国首次同类涂料在城市志愿者站应用。反转非编造（FP-71不触发）。"
+    }
+  ],
+  "quote_checks": [
+    {
+      "claim": "文中研究引用'2015年哥伦比亚大学的团队写进《Science》论文'",
+      "verbatim_match": true,
+      "source": "Science 349(6245):298-301, 2015, DOI 10.1126/science.aab3564；ScienceDaily 2015-06-18；U.S. DOE Office of Science"
+    }
+  ],
+  "mechanism_checks": [
+    {
+      "claim": "三角截面毛发→反射可见/近红外太阳光 + 发射中红外体热至冷天空→被动降温",
+      "direction_ok": true,
+      "elements_complete": true,
+      "note": "机制方向与Science原文一致：三角截面毛发同时增强可见-近红外波段反射（减少吸热）与中红外波段辐射发射（向冷天空排热），两机制并列互补、缺一不可；文章未遗漏关键中间环节。"
+    }
+  ],
+  "attribution_checks": [
+    {
+      "claim": "银蚁降温归因于'反射太阳光'与'向天空发射中红外体热'双机制",
+      "is_primary_cause": true,
+      "note": "双机制均为Science原文确认的主因（reflectivity + emissivity），文章同时呈现二者，未以次要效果掩盖主因，归因完整。"
+    }
+  ],
+  "term_checks": [],
+  "gap_checks": [
+    {
+      "pattern_id": "G-01",
+      "triggered": false,
+      "checked": true,
+      "finding": "话题为沙漠昆虫体温调节科普，非饮食/健康/用药/电器/儿童/宠物等后果不可逆领域；A段未抛出'能不能吃/有毒吗/安全吗'等读者顾虑类表述，无安全性闭环缺口。"
+    },
+    {
+      "pattern_id": "G-02",
+      "triggered": false,
+      "checked": true,
+      "finding": "重点核查：扫描绝对词（不可能/全看/全都/一定/绝对/必然/永远/无非）及效果说满词（彻底解决/完全不会/再也/保证）。文中'不耗一度电''零电费空调''不插电'均描述被动辐射冷却（passive radiative cooling）的客观事实——该机制运转确不消耗电能，属准确陈述而非误导绝对化；其余未发现绝对化表述。"
+    },
+    {
+      "pattern_id": "G-03",
+      "triggered": false,
+      "checked": true,
+      "finding": "重点核查：核心数据类断言（沙面70°C、体温48-51°C即文中'50度上下'、临界热上限53.6°C、毛发降温5-10°C）经Science原文逐条核对均准确，无'看似合理实为错误'。'正午前后大约十分钟'觅食窗口为通俗化表述，与已知行为一致，非事实硬伤。"
+    },
+    {
+      "pattern_id": "G-04",
+      "triggered": false,
+      "checked": true,
+      "finding": ""
+    },
+    {
+      "pattern_id": "G-05",
+      "triggered": true,
+      "checked": true,
+      "finding": "文中含Science论文引用，已逐字核对：2015/哥伦比亚大学/《Science》三项均准确，与Shi, Tsai, Camino, Bernard, Yu, Wehner, Science 349(6245):298-301一致，无引文用字漂移。"
+    },
+    {
+      "pattern_id": "G-06",
+      "triggered": true,
+      "checked": true,
+      "finding": "来源存在且细节逐字核对无误：降温5-10°C、沙温达70°C、临界热上限53.6°C、身体48-51°C均与Science Abstract及报道吻合；'哥伦比亚大学的团队'涵盖领衔的Columbia团队（通讯作者Nanfang Yu属Columbia），无张冠李戴。"
+    },
+    {
+      "pattern_id": "G-07",
+      "triggered": false,
+      "checked": true,
+      "finding": ""
+    }
+  ],
+  "title_checks": [
+    {
+      "title": "为什么撒哈拉银蚁不怕滚烫的沙子？",
+      "subject_scoped": true,
+      "unit_matches_source": true,
+      "scope_consistent_with_body": true,
+      "verdict": "pass",
+      "note": "标题主体圈定到具体物种（撒哈拉银蚁），非无限定泛称；无消亡类断言（灭绝/绝迹/消失/消亡/绝了后），不触发标题tripwire；标题疑问与正文Q段（为何正午出门/毛发如何降温/降温多管用）自洽，范围无矛盾。"
+    }
+  ],
+  "advisory_findings": [
+    {
+      "step": "5.9",
+      "claim": "正午前后大约十分钟觅食窗口",
+      "finding": "该具体时长未在Science原文中作为精确数值出现，属科普通俗化表述；与银蚁'在一天最热时刻活动以避开蜥蜴天敌'的已知行为一致，非事实硬伤，建议保留或加'约'字弱化。",
+      "suggested_level": "P2"
+    },
+    {
+      "step": "5",
+      "claim": "全文事实与机制",
+      "finding": "经WebSearch独立核实，四项核心断言（2015 Columbia/Science论文、毛发降温5-10°C、70°C沙温与53.6°C临界上限、十五运志愿者站被动冷却涂层应用）全部准确，无事实硬伤；F段反转为真实工程应用，非编造（FP-71不触发）。事实责任依规划归L2与evidence_gate.py，本岗仅留痕。",
+      "suggested_level": "none"
+    }
+  ],
+  "forbidden_violations": [],
+  "overall_comment": "机械审核（validate_article.py）score=100、char_count=644（≤690），P0/P1/P2均为0。结构完整：A段引用块（>开头）、C段Q1/Q2/Q3格式、F段'冷知识反转'标签、结尾2行×4列风格表格齐备；分隔线2处（未超2）；Q标题用加粗而非h3；FORBIDDEN全条目扫描无硬命中。事实断言经WebSearch独立核实全部准确。结论：放行（pass=true）。"
+}
