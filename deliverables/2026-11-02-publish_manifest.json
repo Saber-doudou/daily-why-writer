@@ -1,0 +1,31 @@
+{
+  "schema_version": "v1",
+  "date": "2026-11-02",
+  "topic": "银蚁空调",
+  "v1_path": "articles/2026-11/2026-11-02-每日冷知识-银蚁空调.md",
+  "v2_path": "articles/2026-11/2026-11-02-优化版-每日冷知识-银蚁空调.md",
+  "review_paths": [
+    "review/2026-11-02_review.json"
+  ],
+  "ima_note_id": "7523027386384068",
+  "git_commit": null,
+  "char_count": 605,
+  "fixture": false,
+  "checks": [
+    {
+      "name": "ima_backup",
+      "status": "warn",
+      "detail": "7523027386384068"
+    },
+    {
+      "name": "git_sync",
+      "status": "warn",
+      "detail": "unverified"
+    },
+    {
+      "name": "match_check",
+      "status": "pass",
+      "detail": "改进点 5 条"
+    }
+  ]
+}
