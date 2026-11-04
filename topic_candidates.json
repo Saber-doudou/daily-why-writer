@@ -1,5 +1,5 @@
 {
-  "updated": "2026-11-03",
+  "updated": "2026-11-04",
   "purpose": "素材池（可再生）：流入=外部拉取落选+L2 反哺，流出=选题兜底取用，理论上只增不减",
   "source_enum": {
     "initial": "初始素材",
@@ -1848,6 +1848,57 @@
       "category": "物理",
       "why_hot": "本次反证实验（上游加表面活性剂→逆流立刻停止）的生活化延伸，一滴洗洁精抹平表面张力差是读者可亲手验证的强记忆点",
       "evidence": "千问.txt 反证实验：上游加苯扎氯铵→逆流立刻停止",
+      "source": "l2"
+    },
+    {
+      "topic": "黑暗中撕胶带为什么会产生强电场和X射线",
+      "source": "rejected",
+      "provenance": {
+        "kind": "l1_probe",
+        "date": "2026-11-04",
+        "verdict": "pass",
+        "note": "L1 步骤3 探测通过但当日未采用，由决策日志自动回捞"
+      }
+    },
+    {
+      "topic": "牛奶为什么能解辣",
+      "source": "rejected",
+      "provenance": {
+        "kind": "l1_probe",
+        "date": "2026-11-04",
+        "verdict": "pass",
+        "note": "L1 步骤3 探测通过但当日未采用，由决策日志自动回捞"
+      }
+    },
+    {
+      "topic": "灯泡为什么做成梨形",
+      "source": "rejected",
+      "provenance": {
+        "kind": "l1_probe",
+        "date": "2026-11-04",
+        "verdict": "pass",
+        "note": "L1 步骤3 探测通过但当日未采用，由决策日志自动回捞"
+      }
+    },
+    {
+      "topic": "为什么医院X光机里要装一块金属靶？（韧致辐射：电子急刹才发光）",
+      "category": "物理化学",
+      "why_hot": "本次Q2写明胶带X射线与医院X光机同为电子轰击靶面减速辐射，IMA素材点出「韧致辐射」术语却未展开；可独立成篇讲电子打靶成像",
+      "evidence": "2008 Nature nature07378；ABC Science 2008 解释电子撞击减速辐射X射线",
+      "source": "l2"
+    },
+    {
+      "topic": "为什么强电场能推动本来不肯发生的化学反应？（电场催化）",
+      "category": "物理化学",
+      "why_hot": "本次F段只给结论未给机制；DS/千问/IMA三家均要求点透绿色化学意义，PNAS 2025 提到电场降低反应势垒、促进电子转移，可独立成篇",
+      "evidence": "PNAS 2025 doi 10.1073/pnas.2510504122；环球科学/南开化学审校稿：10^8至10^9 V/m 门槛、STM针尖一纳米",
+      "source": "l2"
+    },
+    {
+      "topic": "为什么咬碎冬青味硬糖也会在暗处闪光？（摩擦发光）",
+      "category": "物理化学",
+      "why_hot": "IMA把蓝光笼统归为「摩擦发光」，回PNAS原文实为电荷分离后电场击穿空气放电，术语边界值得单独讲；冬青糖是摩擦发光经典演示",
+      "evidence": "Compadre / New Scientist 2008 X-Rays Made with Scotch Tape 提到 wintergreen LifeSavers 摩擦发光",
       "source": "l2"
     }
   ]
