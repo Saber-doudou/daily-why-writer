@@ -156,9 +156,12 @@ for d in feed_dirs:
             missing_txt.append(f"{d.name}/{name}")
 check("投喂素材目录 4 空文件", not missing_txt, f"{len(feed_dirs)} 个目录, 缺失: {missing_txt[:5]}" if missing_txt else f"{len(feed_dirs)} 个目录完整")
 
-# ── 8. 备份目录 ──
-baks = sorted(WS.glob("备份/*20260813*"))
-check("今日备份文件存在", len(baks) >= 3, f"{len(baks)} 个: {[b.name for b in baks]}")
+# ── 8. 备份目录（2026-11-05 归档重构：备份/ 已整体迁入 archive/legacy-20261105/）──
+LEGACY = WS / "archive" / "legacy-20261105"
+expected = ["snapshot-20260622", "pre-optimize-20260901", "deprecated-20260915", "duplicate-articles", "script-baks"]
+got = sorted(d.name for d in LEGACY.iterdir() if d.is_dir()) if LEGACY.is_dir() else []
+missing = [n for n in expected if n not in got]
+check("归档批次 legacy-20261105 完整", not missing, f"缺失: {missing}" if missing else f"{len(got)} 个子目录在位")
 
 # ── 9. SKILL.md 关键内容抽查 ──
 skill_text = (SKILL/"SKILL.md").read_text(encoding="utf-8")

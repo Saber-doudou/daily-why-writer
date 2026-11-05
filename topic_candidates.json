@@ -1,5 +1,5 @@
 {
-  "updated": "2026-11-04",
+  "updated": "2026-11-05",
   "purpose": "素材池（可再生）：流入=外部拉取落选+L2 反哺，流出=选题兜底取用，理论上只增不减",
   "source_enum": {
     "initial": "初始素材",
@@ -1899,6 +1899,48 @@
       "category": "物理化学",
       "why_hot": "IMA把蓝光笼统归为「摩擦发光」，回PNAS原文实为电荷分离后电场击穿空气放电，术语边界值得单独讲；冬青糖是摩擦发光经典演示",
       "evidence": "Compadre / New Scientist 2008 X-Rays Made with Scotch Tape 提到 wintergreen LifeSavers 摩擦发光",
+      "source": "l2"
+    },
+    {
+      "topic": "艾姆斯房间为什么让一样高的人看起来一大一小",
+      "source": "external",
+      "category": "自然科学",
+      "why_hot": "视错觉大小恒常性，眼见不为实反转点强，check_topic 仅命中早期泛标题模板"
+    },
+    {
+      "topic": "猫从高处摔下来为什么总能四脚着地",
+      "source": "rejected",
+      "provenance": "check_topic 判重复（92% 字符包含率命中已发布同名文），非落选素材，仅登记防误用"
+    },
+    {
+      "topic": "死海为什么其实有微生物活着",
+      "source": "rejected",
+      "provenance": {
+        "kind": "l1_probe",
+        "date": "2026-11-05",
+        "verdict": "pass",
+        "note": "L1 步骤3 探测通过但当日未采用，由决策日志自动回捞"
+      }
+    },
+    {
+      "topic": "死海为什么正在逐年萎缩、水位不断下降？",
+      "category": "环境地理",
+      "why_hot": "死海水位每年下降逾1米，成因涉及约旦河取水、蒸发大于补给、盐度随之上升，是与微生物话题紧邻的环境线索",
+      "evidence": "弱，需WebSearch查证降幅与成因",
+      "source": "l2"
+    },
+    {
+      "topic": "极端嗜盐古菌能扛住多高的盐度？生命耐盐上限在哪？",
+      "category": "自然科学",
+      "why_hot": "从死海微生物延伸到极端生命边界，salt-in 机制在饱和盐卤中仍运转，是科普好奇点",
+      "evidence": "弱到中等，需查证已知最高盐度分离株",
+      "source": "l2"
+    },
+    {
+      "topic": "地球上还有哪些名字带「死」却生机盎然的极端水体（盐湖、碱湖）？",
+      "category": "自然科学",
+      "why_hot": "与死海形成对照，拓展「名字误导」类冷知识，可横向盘点全球极端水体",
+      "evidence": "弱，需查证具体湖泊与群落",
       "source": "l2"
     }
   ]
