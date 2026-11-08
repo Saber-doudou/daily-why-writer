@@ -4,6 +4,41 @@
 
 ---
 
+## 2026-11-09 优化批次 A 至 E（无版本号变更，技能版本链保持 v4.6 / v3.2 / v3.3.0 / v3.8 / v1.6）
+
+按 `deliverables/2026-11-02-待办与优化清单.md` 的 D-1 至 D-6 决策执行。工作区仓 6 个提交，镜像仓同步一次。
+
+### 批次 A（零风险）
+- P2-1：`iron_rules.md` §01/02/07/09/11 改 `pin: true`；`memory_decay.py` 新增 `pointer_only()` 判据，主文件只剩触发索引行即视为已归位；头部注明 09-18 旧判定废止。验收 exit 0、无待下沉。
+- P1-5：`git_gray_exemptions` 支持目录前缀，抽出可测的 `compute_gray_files()`；`git ls-files` 改 `-c core.quotepath=false -z`（中文路径八进制转义会让前缀豁免失效）；渲染前 20 条且工程件优先、完整清单外置；`render_report` 加 2000 字符单行上限。实测报告 1514 B / 最长行 306 字符（原 203143 B / 198316 字符）。
+- P1-1 跳过：实测 `delivery_check.py --remote` exit 0，代码早已走 `git ls-remote`，VPN 假失败现象已消失；未动 14 条 mock 夹具。
+- P0-3：L2 SKILL Phase 5 新增「升版必须同步 config/version.json 并跑一致性校验」硬步骤（项目外文件，改前已备份）；本次只加步骤不升版本号。
+- P1-2：报告两层 P1 分名「证据P1 / 结构P1」，摘要行同时出现且注明禁止相加。
+
+### 批次 B（prompt 一次写库）
+- `generate_prompt.py` 三处：步骤 4.5 新增 WebFetch 硬要求（mechanism / number 的 verified_by 只能填 fetch）、删步骤 5（harvest 成为唯一路径）、阶段 3 收紧 `revised_after_review` 措辞，消灭「或」字造出的合法出口。
+- `l3_publish.py` 新增可测的 `review_schema_gate()`：审校报告 `ok=False` 直接 `sys.exit(1)` 硬阻断；正反夹具 3/3 通过。
+- prompt 11588 至 12102 字符 / 128 行，diff 只有 3 处；写库后从 DB 只读回读，字符数 + 行数 + sha256 `77102d915ff91bf24` 三项全等，status ACTIVE、rrule 未动。
+- 留痕：首次写库误把 JSON 转义串写进 DB（12281 字符 / 1 行），被回读抓到；用短探针确认工具参数口径后重写才通过。再次印证「只看 success 等于没验」。
+
+### 批次 C（门禁分级）
+- `evidence_gate.py` 常量 `SNIPPET_HIGH_RISK_ENFORCE_SINCE = "2026-11-11"`：mechanism / number 的 snippet 生效前 P1 `snippet_only_highrisk`、生效起 P0；attribution 恒 P1。
+- gate.json 新增 `snippet_highrisk_count` 可见化字段；3 条三态夹具；`--selftest` 31/31、`--replay` 10 例命中 10、误杀 0。真实 11-06 卡片实测 P0=0 / P1=3 / 高风险未 fetch 2 条，不阻断。
+
+### 批次 D（清理）
+- 22 个根目录重复副本下沉 `archive/root-duplicates-20261109/`（EXP-012 永不删除，只降级，可逆）；`test-prompts.json` 用途存疑原样保留；`.gitignore` 加 22 条防复发规则。
+- 引用确认：流水线只读 `scripts/`、`config/` 与技能目录，根目录 `SKILL.md` 不是自检读取对象；未改动任何判据。
+
+### 批次 E（常量）
+- `validate_review.py` 常量 `SCORE_ALIAS_SUNSET = "2026-12-01"`，到期仍含 `score` 即报错；三态夹具（生效前放行 / 到期阻断 / 删别名后放行）通过。
+
+### 偏差与留痕
+- 文档写「工作区仓无 remote」，实测有 remote 且与镜像仓指向同一 GitHub 仓库；结论不变（不推工作区仓），全程精确 `git add`，未用 `add -A`。
+- 文档 P1-1 依据经实测不成立，按 0.8「依据不成立则重新判断」跳过并留痕；文档未写 `core.quotepath` 陷阱，实现时补齐。
+- 全程 `full_selfcheck` 30/30、`delivery_check` exit 0（含 `--remote`）、记忆门禁 exit 0、版本一致性 errors=0。
+
+---
+
 ## v5.9 — 2026-11-01 切 block 上线 + 分级阻断 + FACT_PAT 收窄 + C 方案（Reviewer 形式门禁）（Reviewer v3.2 / L2 v3.8 / L3 v3.3.0）
 
 v5.8 当时列的「未执行（需 Master 授权）」两项，本轮拿到授权后全部执行完毕；
