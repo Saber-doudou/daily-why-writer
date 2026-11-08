@@ -42,6 +42,8 @@ from datetime import datetime, date
 
 BASE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 RULES_PATH = os.path.join(BASE, ".workbuddy", "memory", "topics", "iron_rules.md")
+# 11-09 D-2：衰减判定要看主文件形态，不能只看分片里的闲置天数
+MEMORY_PATH = os.path.join(BASE, ".workbuddy", "memory", "MEMORY.md")
 
 DEMOTE_DAYS = 10   # 未触发 → 从常驻降为索引行
 SINK_DAYS = 20     # 未触发 → 下沉（主文件删行，仅留指针）
@@ -103,10 +105,32 @@ def score_of(r, today):
     return round(0.3 * recency + 0.3 * access_freq + 0.2 * freshness + 0.2 * type_w, 3)
 
 
+_POINTER_CACHE = {}
+
+
+def pointer_only(rid, memory_path=MEMORY_PATH):
+    """§NN 在 MEMORY.md 里是否只剩触发索引行（没有常驻全文）。
+
+    读一次缓存一次；主文件读不到时返回 False（保持旧行为，不静默改判）。
+    """
+    if memory_path not in _POINTER_CACHE:
+        try:
+            text = io.open(memory_path, encoding="utf-8").read()
+        except OSError:
+            text = ""
+        _POINTER_CACHE[memory_path] = set(re.findall(r"→(§[0-9]+)", text))
+    return rid in _POINTER_CACHE[memory_path]
+
+
 def evaluate(r, today):
     """返回 (状态, 建议动作, 闲置天数)。"""
     if r["pin"]:
         return "常驻(pin)", "保持（低频高代价，豁免衰减）", None
+    # 11-09 D-2：主文件只剩触发索引行 = 已在目标状态，没有正文可再下沉。
+    # 此前 §03/§08/§10/§13/§14 五条天天在用的索引行也被报「待下沉」，
+    # 根因是只按闲置天数判、不看主文件实际形态。
+    if pointer_only(r["id"]):
+        return "索引行(已归位)", "保持（MEMORY.md 仅剩触发索引，已无正文可下沉）", None
     if not r["last_accessed"]:
         return "未知", "补充 last_accessed 后再判定", None
     days = (today - r["last_accessed"]).days
@@ -148,6 +172,9 @@ def report(rules, today, as_json=False):
             print(f"  {x['id']} {x['title'][:20]} → {x['action']}")
     else:
         print("✅ 无需处置：全部活跃或 pin 豁免")
+        n_pointer = sum(1 for x in rows if x["status"] == "索引行(已归位)")
+        if n_pointer:
+            print("   （其中 %d 条主文件仅剩触发索引行，已在目标状态，不再报待下沉）" % n_pointer)
     print("=" * 68)
     return todo
 

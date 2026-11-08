@@ -63,6 +63,12 @@ TITLE_CHECK_ENFORCE_SINCE = "2026-10-23"
 # 实际的危险点。C 方案把 Reviewer 降为形式门禁，分值改名为 structure_score 并注明作用域。
 STRUCTURE_SCORE_ENFORCE_SINCE = "2026-11-01"
 
+# 11-09 D-4：兼容别名 score 的强制移除日（C 方案过渡态截止）。
+# 契约引擎不支持 anyOf，落地成「两个都写、值必须相等」的过渡态；过渡态不会自己结束，
+# 半年后没人记得 score 是废弃别名，新写的消费方可能读错字段。把「12-01 记得来删」
+# 变成一次写死的常量，避免又一条挂账。
+SCORE_ALIAS_SUNSET = "2026-12-01"
+
 # 消亡类断言关键词（命中即要求 title_checks 非空）——与 validate_article.py tripwire 同口径
 TITLE_EXT_KWS = ("灭绝", "绝迹", "消失", "绝了后", "消亡", "灭亡", "绝种")
 
@@ -208,6 +214,12 @@ def validate(path: Path, article_path: Path | None = None) -> dict:
         errors.append(
             f"缺少 `structure_score`（{STRUCTURE_SCORE_ENFORCE_SINCE} 起强制）。"
             f"`score` 已被 C 方案降级为兼容别名，只写 score 不再算合规")
+
+    # 11-09 D-4：别名日落，到期自动强制，不再靠人记得 12-01 来删。
+    if legacy_score is not None and file_date and file_date >= SCORE_ALIAS_SUNSET:
+        errors.append(
+            f"仍含兼容别名 `score`（{SCORE_ALIAS_SUNSET} 起已日落）；"
+            "请删除 score 字段，只保留 structure_score")
 
     # 3. 强制留痕数组：键必须存在（各数组有强制起始日，之前缺失仅警告，历史不回改）
     m_arr = re.search(r"(\d{4}-\d{2}-\d{2})", path.name)

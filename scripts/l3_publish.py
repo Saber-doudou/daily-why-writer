@@ -117,8 +117,11 @@ class Result:
         """追加一行到运行日志（08-31 重建，此前 l3_run.log 停更于 08-14 且无任何写入逻辑）"""
         try:
             ts = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+            # 11-09 P1-5：报告里灰区清单分行渲染以压短单行；日志侧压回一行，
+            # 保持「一条 Phase 记录 = 日志一行」的格式，不破坏按行读日志的工具。
+            one_line = " ".join(str(msg).splitlines())
             with open(self._log_path, "a", encoding="utf-8") as f:
-                f.write(f"[{ts}] [Phase {phase}] {status} {msg}\n")
+                f.write(f"[{ts}] [Phase {phase}] {status} {one_line}\n")
         except OSError:
             pass  # 日志失败不阻塞主流程
 
@@ -845,7 +848,7 @@ def phase1_match_check(v1_path, v2_path, summary_path, dry_run, res):
                   f"改进点={c['total']}条")
     if a["status"] == "ok":
         print(f"  审核一致性: {'✅' if a['ok'] else '❌'}  "
-              f"P0={a['p0']} P1={a['p1']} 结构分={a['score']}（机械口径，不含事实/机制）")
+              f"P0={a['p0']} 结构层P1={a['p1']} 结构分={a['score']}（机械口径，不含事实/机制）")
     else:
         print(f"  审核一致性: ❌ {a['error']}")
     print(f"  规则同步:   {'✅' if report['rules']['ok'] else '❌'} "
@@ -899,13 +902,8 @@ def phase1_match_check(v1_path, v2_path, summary_path, dry_run, res):
                     "warnings": _v["warnings"],
                     "stats": _v["stats"],
                 }
-                # 09-09 引用门禁：命中「正文有引用但 quote_checks 空」→ 硬阻断 L3 发布
-                # （与 dedup_gate_check 同构：检测到即 sys.exit(1)，逼回 Reviewer 补 quote_checks）
-                if _v.get("blocking"):
-                    for _b in _v["blocking"][:3]:
-                        res.fail(1, f"[review schema {_tag}] 引用门禁未过: {_b}")
-                    res.fail(1, f"[review schema {_tag}] 引用门禁未过，L3 终止发布（回到 Reviewer 补 quote_checks 后重试）")
-                    sys.exit(1)
+                # 09-09 引用门禁 + 11-09 P0-1 空壳报告硬阻断，统一走可测的闸门函数
+                review_schema_gate(_v, _tag, res)
                 _ne, _nw = len(_v["errors"]), len(_v["warnings"])
                 if _ne:
                     for _e in _v["errors"][:3]:
@@ -1096,6 +1094,30 @@ def phase2_ima(date_str, dry_run, force, res):
         return "not_found"
 
 
+# 11-09 P1-5：告警渲染上限。全量拼接 1601 个文件名曾把发布报告撑到 203 KB、
+# 单行 198316 字符（11-03 至 11-06 连续四日复现）——一条告警带上千条目等于没有告警。
+GRAY_LIST_LIMIT = 20
+REPORT_MAX_LINE_CHARS = 2000
+
+
+def compute_gray_files(tracked, whitelist, exemptions):
+    """灰区 = 已被 git 跟踪、却不在同步白名单里的文件。
+
+    11-09 P1-5：豁免项支持目录前缀（以 / 结尾），单文件项仍精确匹配。
+    此前 `tracked - whitelist - exemptions` 是纯集合减法，549 个 `投喂素材/`
+    文件必须逐条列进豁免清单才能剔除，等于没有豁免。
+    """
+    dirs = tuple(p for p in exemptions if p.endswith("/"))
+    exact = set(p for p in exemptions if not p.endswith("/"))
+
+    def exempt(f):
+        if f in exact:
+            return True
+        return any(f.startswith(d) for d in dirs)
+
+    return sorted(f for f in tracked - set(whitelist) - {".gitignore"} if not exempt(f))
+
+
 # ── Phase 3: GitHub 推送 ─────────────────────────────
 
 def phase3_git(date_str, topic, dry_run, force, res, verify=True):
@@ -1242,21 +1264,48 @@ def phase3_git(date_str, topic, dry_run, force, res, verify=True):
     # （灰区）——它们不在 files_to_copy 复制范围，源改动永远不会同步进 repo，
     # 版本随工作区演进而陈旧（历史实证：format_checker 等 4 文件 6 月整体提交后
     # 3 个月未同步，repo 版本漂移）。双向自检 = 白名单内缺失 + 白名单外灰区都暴露。
+    # 11-09 P1-5：git 默认 core.quotepath=true，中文路径会以八进制转义输出
+    # （如 `备份/x` 变成 `\345\244\207...`），目录前缀豁免因此永远匹配不上。
+    # 改走 -c core.quotepath=false + -z，取原始 UTF-8 路径，顺带避免文件名含换行的歧义。
     r_ls = subprocess.run(
-        ["git", "ls-files"], cwd=str(repo), capture_output=True, text=True
+        ["git", "-c", "core.quotepath=false", "ls-files", "-z"],
+        cwd=str(repo), capture_output=True,
     )
-    tracked = {f for f in (r_ls.stdout or "").splitlines() if f.strip()}
+    tracked = {f.decode("utf-8", errors="replace")
+               for f in (r_ls.stdout or b"").split(b"\0") if f.strip()}
     whitelist = set(CFG.get("git_add_files", []))
     # .gitignore 为仓库私有文件（git 约定），无需从工作区同步，豁免
     # 09-11 v3.18：新增灰区豁免清单（config.git_gray_exemptions）——达尔文 09-04
     # 实验一次性产物已归档+双备份、无后续改动，「源改动同步」语义不适用，进白名单
     # 属死条目（死文件判据）；每周重复同一条灰区告警属噪音，会诱发告警疲劳（EXP-014）。
     # 豁免必须走配置文件并留理由，禁止口头豁免（EXP-004 约束优于指令）。
-    exemptions = set(CFG.get("git_gray_exemptions", []))
-    gray = sorted(tracked - whitelist - {".gitignore"} - exemptions)
+    exemptions = CFG.get("git_gray_exemptions", [])
+    gray = compute_gray_files(tracked, whitelist, exemptions)
     if gray:
-        res.warn(3, f"repo 有 {len(gray)} 个文件不在 git_add_files（灰区，改动不会同步）: "
-                    f"{', '.join(gray)}")
+        # 11-09 P1-5：工程件优先展示。纯按路径排序会把 .gstack/ 与 .workbuddy/
+        # 这类运行痕迹排在最前，真正该看的 docs/ 与 eval/ 反而被挤到 20 条之外。
+        eng = [f for f in gray if f.startswith(
+            ("scripts/", "config/", "contracts/", "docs/", "eval/"))]
+        eng_set = set(eng)
+        shown_list = (eng + [f for f in gray if f not in eng_set])[:GRAY_LIST_LIMIT]
+        # 报告里每行最多 7 条，避免 20 条路径拼成近千字符的单行；
+        # 日志侧由 Result._log 压成一行，不破坏逐行格式。
+        per_line = 7
+        chunks = [", ".join(shown_list[i:i + per_line])
+                  for i in range(0, len(shown_list), per_line)]
+        shown = "\n    ".join(chunks)
+        extra = len(gray) - len(shown_list)
+        tail = ""
+        if extra > 0:
+            # 完整清单外置：报告里只留前 20 条 + 一行指引，排查时再翻文件。
+            # deliverables/ 属交付范围排除区（见 delivery_check.DELIVERABLE_EXCLUDE），
+            # 不是工程件，不会污染四方一致性自检。
+            detail = Path(CFG["base_dir"]) / "deliverables" / f"{date_str}-gray-files.txt"
+            detail.parent.mkdir(parents=True, exist_ok=True)
+            detail.write_text("\n".join(gray) + "\n", encoding="utf-8")
+            tail = f"；另有 {extra} 条，完整清单见 {detail}"
+        res.warn(3, f"repo 有 {len(gray)} 个文件不在 git_add_files（灰区，改动不会同步，工程件优先）: "
+                    f"{shown}{tail}")
     else:
         res.ok(3, "同步清单双向自检通过（白名单全覆盖，无灰区文件）")
 
@@ -1598,6 +1647,30 @@ def write_publish_manifest(date_str, v1_path, v2_path, v1_meta, v2_meta,
     return out
 
 
+def review_schema_gate(v, tag, res):
+    """11-09 P0-1：审校报告不合规 = 审核链断掉，宁可当天不发也不发。
+
+    11-02 实证：v2 审校产出 215 字节 / 10 字段的空壳，validate_review 退出码 1，
+    但旧逻辑里 ok=False 只把报告打成 FAIL，L3 照常发布。与 blocking 引用门禁
+    同构：检测到即 sys.exit(1)。抽成独立函数是为了能喂正反夹具（反向验证铁律）。
+    """
+    if v.get("blocking"):
+        for b in v["blocking"][:3]:
+            res.fail(1, f"[review schema {tag}] 引用门禁未过: {b}")
+        res.fail(1, f"[review schema {tag}] 引用门禁未过，L3 终止发布"
+                    "（回到 Reviewer 补 quote_checks 后重试）")
+        sys.exit(1)
+    if not v["ok"]:
+        for e in v["errors"][:5]:
+            res.fail(1, f"[review schema {tag}] {e}")
+        if len(v["errors"]) > 5:
+            res.fail(1, f"[review schema {tag}] 另有 {len(v['errors']) - 5} 项错误")
+        res.fail(1, f"[review schema {tag}] 审校报告校验未过（ok=False），L3 终止发布；"
+                    "回到 Reviewer 补齐强制输出物后重试（P0-1，11-09）")
+        sys.exit(1)
+    return True
+
+
 def render_report(date_str, v1_meta, v2_meta, ima_result, git_result, res, match_report=None):
     """渲染发布报告到 deliverables/{date}-发布报告.md（08-31 起替代 AI 手写，
     杜绝字数/得分/commit 失真。骨架全部由脚本数据生成，语义验证表留 AI 补充区；
@@ -1610,6 +1683,17 @@ def render_report(date_str, v1_meta, v2_meta, ima_result, git_result, res, match
         check_report_tampered(report_path, res)
 
         lines = [f"# 发布报告 — {date_str} {v1_meta['topic']}", ""]
+        # 11-09 P1-2：两层 P1 不同源。gate 的 P1 是证据质量（snippet_only），
+        # review 的 P1 是结构与表达；都叫 P1 时，报告读者会把「证据层 6 条」
+        # 与「结构层 0 条」误读成同一个数。此处取 gate 的 p1_count 供摘要行显式并列。
+        gate_p1 = None
+        try:
+            gate_path = Path(CFG["base_dir"]) / "evidence" / f"{date_str}.gate.json"
+            if gate_path.exists():
+                gate_p1 = json.loads(gate_path.read_text(encoding="utf-8")).get("p1_count")
+        except (OSError, ValueError) as e:
+            res.warn(4, f"[证据层 P1] gate.json 读取失败，摘要行标注缺失: {e}")
+        gate_p1_txt = str(gate_p1) if gate_p1 is not None else "缺（gate 未落盘）"
         # 基本信息
         lines.append("## 基本信息")
         lines.append(f"- 话题：{v1_meta['topic']}")
@@ -1631,6 +1715,8 @@ def render_report(date_str, v1_meta, v2_meta, ima_result, git_result, res, match
             a = match_report.get("audit", {})
             ru = match_report.get("rules", {})
             lines.append("## 匹配度检查（脚本生成，checksum 保护区）")
+            lines.append(f"- 两层 P1（不同源，禁止相加）：证据P1={gate_p1_txt}（gate，证据质量） / "
+                         f"结构P1={a.get('p1', '?')}（review，结构与表达）")
             lines.append(f"- 结构一致性: {'✅' if s.get('ok') else '❌'}  "
                          f"话题={'✅' if s.get('topic_match') else '❌'} "
                          f"分类={'✅' if s.get('category_match') else '❌'} "
@@ -1646,7 +1732,7 @@ def render_report(date_str, v1_meta, v2_meta, ima_result, git_result, res, match
                              "`l3_publish.py --verify-report` 校验补验是否落盘")
             if a.get("status") == "ok":
                 lines.append(f"- 审核一致性: {'✅' if a.get('ok') else '❌'} "
-                             f"P0={a.get('p0', '?')} P1={a.get('p1', '?')} "
+                             f"P0={a.get('p0', '?')} 结构层P1={a.get('p1', '?')} "
                              f"结构分={a.get('score', '?')}（机械口径，不含事实/机制）")
             else:
                 lines.append(f"- 审核一致性: ❌ {a.get('error', '')}")
@@ -1664,6 +1750,17 @@ def render_report(date_str, v1_meta, v2_meta, ima_result, git_result, res, match
         if res.warnings:
             lines.append(f"- 警告：{res.warnings} 个")
         lines.append("")
+        # 11-09 P1-5：报告单行长度上限。灰区告警曾把 1601 个文件名拼成
+        # 198316 字符的一行（11-03 至 11-06 连续四日 200 KB 报告），
+        # 真正该看的 5 条工程件被噪音淹没。防线放在渲染出口，覆盖所有 Phase 消息。
+        overlong = [(i + 1, len(ln)) for i, ln in enumerate(lines)
+                    if len(ln) > REPORT_MAX_LINE_CHARS]
+        if overlong:
+            res.warn(3, f"发布报告有 {len(overlong)} 行超过 {REPORT_MAX_LINE_CHARS} 字符"
+                        f"（最长 {max(n for _, n in overlong)}），已就地截断，请查告警来源")
+            lines = [ln if len(ln) <= REPORT_MAX_LINE_CHARS
+                     else ln[:REPORT_MAX_LINE_CHARS] + f"…（本行原长 {len(ln)} 字符，已截断）"
+                     for ln in lines]
         # ── 脚本生成区结束（09-16 v3.22 修复 #57）────────────────────
         # 所有权边界：CHECKSUM_MARK 之前归脚本（每次渲染无条件重写），之后归 AI
         # （无条件原样保留）。指纹函数与校验侧共用，口径归一（#57a）。

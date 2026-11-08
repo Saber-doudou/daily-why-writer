@@ -23,12 +23,26 @@ import json
 import os
 import re
 import sys
-from datetime import datetime
+from datetime import datetime, date
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 HIGH_RISK = {"mechanism", "number", "attribution"}
 MIN_QUOTE = 15
+
+# 11-09 D-1：高风险 claim 的 snippet 分级生效日。
+# 5 个工作日实测「高风险且 snippet」为 5/2/3/3/2 条，立刻升 P0 = 100% 阻断率，
+# 等于把门禁变成常闭门。故先由 prompt 步骤 4.5 强制 WebFetch 治本，检查侧只给
+# 一个明确生效日；11-09 与 11-10 是两个观察日。attribution 从摘要可判断大概，
+# 恒 P1，不受生效日影响。逃生开关仍可用 DAILY_WHY_GATE_RELAX=1。
+SNIPPET_HIGH_RISK_ENFORCE_SINCE = "2026-11-11"
+SNIPPET_HIGH_RISK_TYPES = {"mechanism", "number"}
+
+
+def snippet_high_risk_enforced(today=None):
+    """生效日判定。today 可注入，供夹具锁死生效前与生效后两态。"""
+    d = today or date.today().isoformat()
+    return d >= SNIPPET_HIGH_RISK_ENFORCE_SINCE
 
 # banned_claims 条目的最短长度门槛（11-01，审查报告 P1-7 后半）。
 # banned_claims 用的是纯子串匹配，条目越短越容易在无关句里误命中；
@@ -53,9 +67,10 @@ FACT_PAT = re.compile(
 
 # ───────────────────────── 卡片检查 ─────────────────────────
 
-def check_card(card):
+def check_card(card, today=None):
     """返回 findings 列表：[(severity, code, where, message)]"""
     out = []
+    enforce = snippet_high_risk_enforced(today)
     claims = card.get("claims") or []
     seen = set()
     for i, c in enumerate(claims):
@@ -87,8 +102,15 @@ def check_card(card):
             if conf == "unverified":
                 out.append(("P0", "unverified", where, "confidence=unverified，未核实不许写"))
             if verified == "snippet":
-                out.append(("P1", "snippet_only", where,
-                            "仅 snippet 级核实，高风险 claim 建议 fetch 原文"))
+                if ctype in SNIPPET_HIGH_RISK_TYPES:
+                    # 生效前只可见化不阻断；生效起升 P0（有明确达标路径，不是无限期拖延）
+                    sev = "P0" if enforce else "P1"
+                    out.append((sev, "snippet_only_highrisk", where,
+                                "机制/数字类 claim 仅 snippet 级核实，须 WebFetch 取原文"
+                                + ("（已过生效日，阻断）" if enforce else "（生效前仅告警）")))
+                else:
+                    out.append(("P1", "snippet_only", where,
+                                "仅 snippet 级核实，attribution 类允许摘要级判断"))
 
     # 11-01（审查报告 P1-7 后半）：banned_claims 条目过短 → 写卡时就提示。
     # `b in text` 是纯子串匹配，三五个字的禁令（如「灭绝」「三倍」）会在无关句里误命中。
@@ -253,6 +275,50 @@ def check_mechanism_coverage(text, card):
 # ───────────────────────── 夹具自检 ─────────────────────────
 
 SELFTEST = {
+    # ── 11-09 D-1：snippet 分级三态夹具，锁死生效前 / 生效后 / attribution ──
+    "snippet_highrisk_before_sunset": {
+        "card": {
+            "schema_version": "v1", "topic": "测试",
+            "claims": [{"id": "C1", "text": "某机制", "type": "mechanism",
+                        "source": {"title": "t", "url": "https://a.b", "source_level": "primary"},
+                        "quote": "这是一段不少于十五个字的原文引文示例文字",
+                        "verified_by": "snippet", "confidence": "high"}],
+            "banned_claims": [],
+        },
+        "article": "某机制句。<!-- claim:C1 -->",
+        "today": "2026-11-09",
+        "expect_p0": 0,
+        "expect_p1_codes": ["snippet_only_highrisk"],
+    },
+    "snippet_highrisk_after_sunset": {
+        "card": {
+            "schema_version": "v1", "topic": "测试",
+            "claims": [{"id": "C1", "text": "某数字", "type": "number",
+                        "source": {"title": "t", "url": "https://a.b", "source_level": "primary"},
+                        "quote": "这是一段不少于十五个字的原文引文示例文字",
+                        "verified_by": "snippet", "confidence": "high"}],
+            "banned_claims": [],
+        },
+        "article": "无事实句。",
+        "today": "2026-11-11",
+        "expect_p0": 1,
+        "expect_codes": ["snippet_only_highrisk"],
+    },
+    "snippet_attribution_always_p1": {
+        "card": {
+            "schema_version": "v1", "topic": "测试",
+            "claims": [{"id": "C1", "text": "某归因", "type": "attribution",
+                        "source": {"title": "t", "url": "https://a.b", "source_level": "primary"},
+                        "quote": "这是一段不少于十五个字的原文引文示例文字",
+                        "verified_by": "snippet", "confidence": "high"}],
+            "banned_claims": [],
+        },
+        "article": "无事实句。",
+        "today": "2026-11-12",
+        "expect_p0": 0,
+        "expect_p1_codes": ["snippet_only"],
+    },
+
     "good": {
         "card": {
             "schema_version": "v1",
@@ -544,7 +610,8 @@ def run_selftest():
     ok = 0
     total = len(SELFTEST)
     for name, case in SELFTEST.items():
-        findings = check_card(case["card"]) + check_article(case["article"], case["card"])
+        findings = (check_card(case["card"], today=case.get("today"))
+                     + check_article(case["article"], case["card"]))
         p0 = [f for f in findings if f[0] == "P0"]
         codes = {f[1] for f in p0}
         good = len(p0) == case["expect_p0"]
@@ -693,6 +760,8 @@ def write_report(card_path, article, findings, mode, relaxed=False):
         "article": str(article).replace("\\", "/") if article else None,
         "p0_count": len(p0),
         "p1_count": len(p1),
+        "snippet_highrisk_count": sum(1 for f in findings
+                                      if f[1] == "snippet_only_highrisk"),
         "blocked": bool(p0) and mode == "block" and not relaxed,
         "findings": [{"severity": s, "code": c, "where": w, "message": m}
                      for s, c, w, m in findings],
