@@ -659,6 +659,28 @@ def run_selftest():
         total += 1
         print(f"[{'PASS' if _good else 'FAIL'}] 退出码 {_label}: 实际={_rc} 期望={_want}")
 
+    # ── 11-10 F2：blocked 与退出码同源（端到端反向夹具）──
+    # 修复前：unmapped_fact 属正文层 WARN_ONLY_P0_CODES，CLI exit 0 但
+    # gate.json 写 blocked=true。用真实 CLI 落盘报告，锁死两者一致。
+    import subprocess
+    import tempfile
+    with tempfile.TemporaryDirectory() as _td:
+        _cp = Path(_td) / "card.json"
+        _ap = Path(_td) / "article.md"
+        _cp.write_text(json.dumps(SELFTEST["unmapped"]["card"], ensure_ascii=False), encoding="utf-8")
+        _ap.write_text(SELFTEST["unmapped"]["article"], encoding="utf-8")
+        _env = {k: v for k, v in os.environ.items() if k != "DAILY_WHY_GATE_RELAX"}
+        _r = subprocess.run(
+            [sys.executable, str(Path(__file__).resolve()),
+             "--card", str(_cp), "--article", str(_ap), "--mode", "block"],
+            capture_output=True, text=True, encoding="utf-8", env=_env)
+        _g = json.loads((Path(_td) / "card.gate.json").read_text(encoding="utf-8"))
+    _good = (_r.returncode == 0 and _g["blocked"] is False and _g["p0_count"] == 1)
+    ok += _good
+    total += 1
+    print(f"[{'PASS' if _good else 'FAIL'}] F2 blocked 与退出码同源: "
+          f"exit={_r.returncode} blocked={_g['blocked']} p0={_g['p0_count']}")
+
     print(f"\n自检 {ok}/{total} 通过")
     return 0 if ok == total else 1
 
@@ -742,7 +764,7 @@ def gate_relaxed():
     return v in ("1", "true", "yes", "on")
 
 
-def write_report(card_path, article, findings, mode, relaxed=False):
+def write_report(card_path, article, findings, mode, relaxed=False, blocking=None):
     """warn 模式下退出码恒为 0，P0 必须落盘，否则会静默丢失（模拟 S2 指出的硬伤）。
 
     relaxed=True 时把 block 降级记录进报告（EXP-014 可观测性：降级不能静默，
@@ -752,6 +774,10 @@ def write_report(card_path, article, findings, mode, relaxed=False):
     p1 = [f for f in findings if f[0] == "P1"]
     out = Path(card_path).with_suffix(".gate.json")
     out.parent.mkdir(parents=True, exist_ok=True)
+    # 11-10 F2：blocked 必须与进程退出码同源。main 只让 blocking（排除
+    # WARN_ONLY_P0_CODES）参与阻断判定；旧口径用全部 p0 会让「仅正文层 P0」
+    # 写成 blocked=true 但 exit 0 照常发布，报告说假话（EXP-014）。
+    effective = blocking if blocking is not None else p0
     payload = {
         "generated_at": datetime.now().isoformat(timespec="seconds"),
         "mode": mode,
@@ -762,7 +788,7 @@ def write_report(card_path, article, findings, mode, relaxed=False):
         "p1_count": len(p1),
         "snippet_highrisk_count": sum(1 for f in findings
                                       if f[1] == "snippet_only_highrisk"),
-        "blocked": bool(p0) and mode == "block" and not relaxed,
+        "blocked": bool(effective) and mode == "block" and not relaxed,
         "findings": [{"severity": s, "code": c, "where": w, "message": m}
                      for s, c, w, m in findings],
     }
@@ -831,7 +857,8 @@ def main():
               f"{sorted({f[1] for f in soft})}", file=sys.stderr)
 
     if not args.no_report:
-        rp = write_report(card_path, args.article, findings, args.mode, relaxed)
+        rp = write_report(card_path, args.article, findings, args.mode, relaxed,
+                          blocking=blocking)
         print(f"[evidence_gate] 报告已落盘: {rp.name}（warn 模式下 P0 不会静默丢失）")
 
     if blocking and args.mode == "block" and relaxed:

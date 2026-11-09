@@ -132,6 +132,37 @@ try:
 except Exception as e:
     check("delivery_check 反向夹具", False, str(e))
 
+# ── 5f. review_schema_gate 正反夹具（11-10 F6，兑现 P0-1 docstring 承诺）──
+# 用 AST 从 l3_publish.py 原样提取函数体（不 import，避免触发发布副作用），
+# 与 delivery_check 提取同步清单同一手法。反向必须 SystemExit(1)，正向放行。
+try:
+    _src = (WS/"scripts/l3_publish.py").read_text(encoding="utf-8")
+    _tree = ast.parse(_src)
+    _fn = next(n for n in _tree.body
+               if isinstance(n, ast.FunctionDef) and n.name == "review_schema_gate")
+    _ns = {"sys": sys}
+    exec(compile(ast.Module(body=[_fn], type_ignores=[]), "l3_publish.py", "exec"), _ns)
+    _gate = _ns["review_schema_gate"]
+
+    class _Res:
+        def __init__(self): self.fails = []
+        def fail(self, *_a): self.fails.append(_a)
+
+    _ok_res = _Res()
+    _pos = _gate({"ok": True, "errors": [], "blocking": []}, "fixture", _ok_res) is True
+    _bad_res = _Res()
+    _neg = False
+    try:
+        _gate({"ok": False, "errors": ["缺少 structure_score"], "blocking": []},
+              "fixture", _bad_res)
+    except SystemExit as e:
+        _neg = (e.code == 1)
+    check("review_schema_gate 正反夹具",
+          _pos and _neg and not _ok_res.fails and len(_bad_res.fails) > 0,
+          f"正向放行={_pos} 反向阻断={_neg} 反向记录={len(_bad_res.fails)} 条")
+except Exception as e:
+    check("review_schema_gate 正反夹具", False, str(e))
+
 # ── 6. 文章数据完整性 ──
 arts = sorted(WS.glob("articles/**/*-每日冷知识*.md"))
 arts_md = sorted(WS.glob("articles/**/*.md"))

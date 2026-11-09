@@ -236,7 +236,23 @@ def check_file(kind, path: Path, require_v1=False, md_as_v1=False):
         schema = load_schema(kind)
         errors = []
         validate_node(doc, schema, "$", errors)
-        return ("ok" if not errors else "violation"), version, errors, []
+        # 11-10 F3：C 方案 11-01 起才把 structure_score 列为必填。11-01 前的
+        # 历史 v1 审校只有兼容别名 score，按「历史不回改」把这一条降为 gap。
+        # 只豁免这一条：其余必填字段缺失照旧 violation（实测 11-02 缺
+        # issue_responses、11-05_v2 缺 issues、11-06_v2 缺 overall_comment
+        # 属历史欠账，不借本次豁免蒙混过关）。
+        gaps = []
+        if kind == "review":
+            m = re.search(r"(\d{4}-\d{2}-\d{2})", path.name)
+            if m and m.group(1) < "2026-11-01":
+                kept = []
+                for p, msg in errors:
+                    if p == "$" and msg == "缺少必填字段 structure_score":
+                        gaps.append("缺少 structure_score（11-01 前历史，按 C 方案生效日豁免）")
+                    else:
+                        kept.append((p, msg))
+                errors = kept
+        return ("ok" if not errors else "violation"), version, errors, gaps
 
     gaps = legacy_gaps(kind, doc)
     return ("legacy_gap" if gaps else "ok"), version, [], gaps

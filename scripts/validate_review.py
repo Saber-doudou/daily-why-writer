@@ -52,7 +52,7 @@ import re
 import sys
 from pathlib import Path
 
-VERSION = "v1.4"
+VERSION = "v1.5"
 
 # v1.2（10-23）新增：标题主体口径核对（title_checks）强制起始日
 TITLE_CHECK_ENFORCE_SINCE = "2026-10-23"

@@ -4,6 +4,30 @@
 
 ---
 
+## 2026-11-10 第三轮审查修复 F1 至 F6（技能版本链 publish v3.3.1 / validate_review v1.5）
+
+来源：Master 转来的独立核验报告。本轮不采信结论，逐条复现后按 Master 拍板的四项推荐方案执行。
+
+### 复现时对报告的 3 处修正
+- F1 实测 21 条路径域误报成立，但镜像仓里被点名的 `config/version.json`（sha 1eed6c92）是**陈旧重复副本**，活目标是根 `version.json`（sha 605e389b，与工作区 `config/version.json` 逐字节一致）。故不采用报告建议的 basename 归一（会把 21 份真实漂移副本一起隐身），改为拆分告警措辞。
+- F3 实测 **11 个**历史 review 判违规而非 8 个：8 个 10-27 至 10-30 缺 `structure_score`（本次 required 换字段引入），另 3 个为 11-02 缺 `issue_responses`、11-05_v2 缺 `issues`、11-06_v2 缺 `overall_comment` / `script_result.exit_code`，属历史欠账，与本次改动无关，不纳入豁免。
+- F8 两项下调：`delivery_check` 的 quotepath 潜伏项当前影响面为 0（18 个未跟踪路径全 ASCII）；DB prompt 的「v3.2 形式门禁口径」是「自 v3.2 起」的语义、不是版本声明。
+
+### 落地改动
+- F1 `l3_publish.py` 新增 `split_duplicate_copies()`，灰区拆成真灰区与镜像仓陈旧副本两类分别告警；完整清单外置文件只写真灰区。当前镜像仓 tracked 1915、灰区 242，其中 21 条为副本。
+- F2 `evidence_gate.py` 的 `write_report` 新增 `blocking` 参数，`blocked` 改用 main 过滤后的 blocking；`run_selftest` 加端到端夹具（修复前会 FAIL：blocked=true 但 exit 0）。
+- F3 `validate_contract.py` 在 v1 分支按文件名日期对 11-01 前的 review 仅豁免 `structure_score` 一条，降为 gap；其余违规照旧。
+- F4 工作区仓解除 `branch.main.remote` / `branch.main.merge` 跟踪，保留 origin 供只读比对，杜绝误推 19 个本地提交。
+- F5 版本进位 `l3_publish v3.3.0 到 v3.3.1`、`validate_review v1.4 到 v1.5`；version.json、publish SKILL 三口径（frontmatter / 标题 / 末条 Version）、本日志四处对齐。
+- F6 `full_selfcheck.py` 新增 5f：AST 原样提取 `review_schema_gate` 跑正反夹具（空壳报告 SystemExit(1)、合法报告放行）。
+
+### 未纳入本轮（记录，不擅自做）
+- 报告 F7：`phase1_match_check` 裸调用 `v2_path=None` 会 AttributeError，但 main 2155 行有 `articles["v2"] is None` guard，属函数级潜伏项。
+- 报告 F8 小项：单行截断后缀仍超 2000 字符、`deliverables/*-gray-files.txt` 未跟踪、DB prompt 口径措辞。
+- L3 允许当日无 v2 审校文件直发：Master 已明确为有意设计，保持现状。
+
+---
+
 ## 2026-11-09 优化批次 A 至 E（无版本号变更，技能版本链保持 v4.6 / v3.2 / v3.3.0 / v3.8 / v1.6）
 
 按 `deliverables/2026-11-02-待办与优化清单.md` 的 D-1 至 D-6 决策执行。工作区仓 6 个提交，镜像仓同步一次。

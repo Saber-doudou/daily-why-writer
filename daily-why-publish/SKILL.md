@@ -7,11 +7,11 @@ description: >
   路由规则：凡输入含「发布/推送/审计/备份」动作词（如 dailywhy发布），本技能优先于
   其他 dailywhy 系列技能触发（动作词优先），触发即执行 L3 发布流程。
 agent_created: true
-version: v3.3.0
-last_updated: 2026-10-29
+version: v3.3.1
+last_updated: 2026-11-10
 ---
 
-# daily-why-publish v3.3.0
+# daily-why-publish v3.3.1
 
 AI 语义验证 + 脚本执行，各司其职。
 
@@ -314,6 +314,7 @@ L3 daily-why-publish（手动触发）← 本 Skill
 
 | 版本 | 日期 | 变更 |
 |------|------|------|
+| v3.3.1 | 2026-11-10 | **第三轮审查 F1 至 F6 全量修复**：① F1 灰区告警拆分为真灰区与镜像仓陈旧重复副本（21 条），不再对后者说「改动不会同步」，也不掩盖副本漂移；② F2 gate.json 的 blocked 改用过滤后 blocking，修「报告写已阻断但 exit 0 照常发布」；③ F3 契约仅对 11-01 前历史 v1 review 豁免 structure_score；④ F4 解除工作区仓 main 跟踪；⑤ F6 review_schema_gate 正反夹具接入 full_selfcheck 5f。版本链：l3_publish v3.3.1 / validate_review v1.5。 |
 | v3.3.0 | 2026-10-30 | **R3.8 推送门修正（D1 + D2）+ 版本号进位归正**（补录，当时只写了末条 `*Version:` 与 version.json，漏登本表）：① **D1 探活不当裁判**——`github_reachable` 改为超时 8 秒、重试 3 次（间隔 2/5 秒），且探活失败**不再提前 return**，仍尝试真实 pull/push（原先单次 curl 抖动就让整条重试链作废，判「网络不通」直接放弃推送）；探活只用来省时间，不用来下结论。② **D2 新增 dirty 类**——`classify_git_error` 加 `DIRTY_ERROR_HINTS`（unstaged changes / uncommitted changes / cannot rebase 等 7 条），命中判 `dirty` 而非冲突，且该分支**排在冲突判断之前**；工作区脏不再被误报成 rebase 冲突、不再白跑一次 `--abort`。③ 配套新建 `scripts/git_push_selftest.py`（14 条 mock 夹具，覆盖探活抖动、脏工作区、真冲突、鉴权失败等），接入 `full_selfcheck` 第 5c 项。④ `delivery_check.py` 缺口 4（`not_in_mirror`）区分**在途**与**历史遗漏**：本轮刚改、下一轮 L3 才会送进镜像的文件不判红、单列展示（原先会持续报警造成告警疲劳），并补 `--selftest` 反向夹具接入 5d/5e。⑤ **版本号进位归正**——本链是「省略第二个点的三段式」（v3.9 = v3.0.9、v3.10 = v3.1.0 … v3.28 = v3.2.8），本次进位到 **v3.3.0**（写完整三段式），消除与 08-17 老 `v3.3`（实为 v3.0.3）的字符串撞号 —— `"v3.3" < "v3.28"` 会让字符串比较把新版本判成更旧；停止在 v3.2x 上继续累加，今后禁止 v3.30 / v3.31 这类小数点后双位数形式。版本号四处对齐（version.json + l3_publish.py VERSION/docstring + 本 SKILL 标题/页脚）+ CHANGELOG v5.7 |
 | v3.28 | 2026-10-29 | **R3.9 交付链路四方一致自检落地**（补录，当时漏登本表）：新建 `scripts/delivery_check.py`，机械查四方 —— ① 本轮改动的交付物（未提交 + 未跟踪 + 最近 N 次提交，过滤到交付范围）② `config.json` 的 `git_add_files` ③ `l3_publish.phase3_git` 的同步清单（`extra_sync` / `files_to_copy`）④ 镜像仓库 HEAD 树里该文件是否真的存在；缺一即 exit 1 并指名。**补的正是 #67 缺的两问**：该进清单的有没有进、清单里的有没有真送到镜像 —— 此前三道检查全在「清单内部」打转，于是 R2/R3 一整批产物（`evidence_gate.py` / `safe_pool.py` / `validate_contract.py` / contracts 四份 schema / `safe_topics.json` / `historical_claims.tsv`）全都不在镜像里，而双向自检与发布报告一路报绿。设计取舍：③ **用 AST 从 l3_publish.py 原样提取**，不 import（会触发发布副作用）、不复制第二份（立刻开始漂移）；远端校验**默认关闭**（`--remote` 才查），网络不通不得判红（10-28 D1 教训）；每日派生数据（topics_context 等）排除出交付范围。脚本自身补入 `extra_sync` 与 `git_add_files`。接入 `full_selfcheck` 第 5d（正向）与 5e（`--selftest` 反向夹具，防「一修就松」）。+ CHANGELOG v5.6 |
 | v3.27 | 2026-10-27 | **修复 #61：R2/R3 交付物从未进 GitHub repo**（补录，当时漏登本表）：`evidence_gate.py` / `safe_pool.py` / `validate_contract.py` / `contracts` 四份 schema / `safe_topics.json` / `eval/historical_claims.tsv` 全都不在镜像仓里，而双向自检与发布报告一路报绿。**根因**：现有检查全在「清单内部」打转（白名单每项有没有复制源 / 已跟踪文件在不在白名单 / full_selfcheck 只扫本地不读镜像），**没有一道问「当期交付物有没有进清单」**——与 #59 同源（工具正确但没人检查它是否被调用）。修复：`extra_sync` 与 `git_add_files` 同步补入 10 项。此缺陷直接催生了 v3.28 的 `delivery_check.py`（把这一问变成高频自检能抓的事实）。+ CHANGELOG v5.4 |
@@ -355,3 +356,4 @@ L3 daily-why-publish（手动触发）← 本 Skill
 *Version: v3.27 | 2026-10-27 | 修复 #67：R2/R3 交付物从未进 GitHub repo。审计实证 evidence_gate.py / safe_pool.py / validate_contract.py / contracts 四份 schema / config/safe_topics.json / eval/historical_claims.tsv 全部不在镜像，而发布报告与脚本自检一路报绿。根因：Phase 3 双向自检的两个方向（清单项有无复制源、已跟踪文件在不在清单）都不覆盖「当期交付物有没有进清单」，与 #59 同源。现 extra_sync 与 git_add_files 同步补 10 项，每项均答得出「谁读、哪步读」；教训：新增交付物必须同改两份清单，验收要看 repo 实际内容而非脚本自检结论。对照 v3.26 末条记录，本条为末条，版本门禁按末条取值。
 *Version: v3.28 | 2026-10-29 | R3.9 交付链路四方一致自检落地：新建 scripts/delivery_check.py，查「四方一致」——① 本轮交付物（工作区改动 + 最近 N 次提交，按范围过滤）② config.json 的 git_add_files ③ l3_publish 的同步清单 ④ 镜像仓库 HEAD 树实际存在；缺一 exit 1 并指名。补的正是 #67 缺的那两问：「该进清单的有没有进」「清单里的有没有真送到镜像」——此前三道检查全在清单内部打转，full_selfcheck 只扫本地不读镜像。设计要点：清单用 AST 从 l3_publish.py 原样提取（不 import 触发发布副作用、不复制第二份清单以免再次漂移，与 #58 回归验证同手法）；远端校验默认关闭需显式 --remote，网络不通不得判红（10-28 D1 教训：单次探活失败被当成「不可重试」）；每日刷新的派生数据（topics_context*.json）排除出交付范围，否则每天必红会诱发告警疲劳。该脚本自身同步补入 extra_sync 与 git_add_files——检查别人的东西，自己先被检查。本条为末条。
 *Version: v3.3.0 | 2026-10-30 | R3.8 推送门修正：① D1——github_reachable 原为单次 curl，一次抖动就让整条重试链作废还嘴硬「不可重试」，现改为探活自身重试 3 次（间隔 2s/5s）、且探活失败**不当裁判**仍尝试真实 pull/push（curl 不通≠git 不通）；② D2——classify_git_error 新增 dirty 类（unstaged changes / your local changes / cannot pull with rebase 等），工作区脏不再被误报成「rebase 冲突」、不再白跑一次 rebase --abort；③ 配套 scripts/git_push_selftest.py（14 条纯 mock 夹具）接入 full_selfcheck 第 5c 项，脚本自身同步补入 extra_sync 与 git_add_files；④ delivery_check 缺口 4 区分「在途」（本轮新增、有复制源、待下次 L3 送达，不判红但显式列出）与「历史遗漏」（清单写了却送不到，判红），并加 --selftest 反向夹具锁死该区分，接入 full_selfcheck 第 5d/5e 项。**版本号进位归正（Master 10-30 拍板）**：本链为「省略第二个点的三段式」，v3.28=v3.2.8 → **本次进位到 v3.3.0**（写作完整三段式，非 v3.3）；原因：`v3.3` 与 08-17 老条目（实为 v3.0.3）字符串撞号，且 "v3.3" < "v3.28" 会让大小比较误判新版本更旧。停止在 v3.2x 上继续累加；禁止今后写 v3.30 / v3.31 这类小数点后双位数的形式。本条为末条。
+*Version: v3.3.1 | 2026-11-10 | 第三轮审查 F1 至 F6 全量修复（Master 11-10 拍板）：F1 灰区告警拆分（split_duplicate_copies，真灰区与镜像仓陈旧副本分别措辞，21 条不再误报也不隐身）；F2 evidence_gate.write_report 的 blocked 改用 main 传入的 blocking，与退出码同源，配端到端夹具；F3 validate_contract 对 11-01 前历史 v1 review 仅豁免 structure_score 一个字段；F4 解除工作区仓 branch.main.remote/merge 跟踪（origin 保留供只读比对）；F6 full_selfcheck 5f 用 AST 提取 review_schema_gate 跑正反夹具，兑现 P0-1 docstring 承诺。三段式进位 v3.3.0 到 v3.3.1，validate_review v1.4 到 v1.5。本条为末条。*
