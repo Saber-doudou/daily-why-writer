@@ -2,7 +2,7 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "$id": "dailywhy/review.schema.json",
   "title": "dailywhy review contract v1",
-  "description": "L1 Reviewer 的输出契约。19 个顶层字段全必填；数组内部结构不在此约束（只要求对象），避免把内部粒度写死。C 方案（2026-11-01）：分值规范名为 structure_score，只反映机械规则（字数/格式/FORBIDDEN/结构），不含事实与机制判断；score 降级为兼容别名。",
+  "description": "L1 Reviewer 的输出契约。19 个顶层字段全必填；数组内部结构不在此约束（只要求对象），避免把内部粒度写死。C 方案（2026-11-01）：分值规范名为 structure_score，只反映机械规则（字数/格式/FORBIDDEN/结构），不含事实与机制判断。11-09 起产出侧只写 structure_score，score 已从 required 移除；2026-12-01 起 validate_review.py 见 score 即判 FAIL。历史 review.json 不回改。",
   "type": "object",
   "required": [
     "schema_version",
@@ -12,7 +12,7 @@
     "p0_count",
     "p1_count",
     "p2_count",
-    "score",
+    "structure_score",
     "script_result",
     "fact_checks",
     "quote_checks",
@@ -37,13 +37,13 @@
       "type": "integer",
       "minimum": 0,
       "maximum": 100,
-      "description": "【兼容别名，已降级】请读 structure_score。两者若同时存在必须同值；2026-11-01 起只写 score 不再算合规（由 validate_review.py 强制）。"
+      "description": "【已移除，勿再产出】11-09 起产出侧只写 structure_score；2026-12-01 起 validate_review.py 见此字段即判 FAIL（L3 Phase 1 硬阻断）。保留本定义仅为兼容读取历史 review.json，历史文件不回改。"
     },
     "structure_score": {
       "type": "integer",
       "minimum": 0,
       "maximum": 100,
-      "description": "机械结构分（规范名）。只反映字数/格式/FORBIDDEN/结构等确定性规则，不含事实与机制判断 —— 事实归 L2 与 evidence_gate.py，不要把这个分数读成「内容没问题」。2026-11-01 起由 validate_review.py 按文件名日期强制必填。"
+      "description": "机械结构分（规范名）。只反映字数/格式/FORBIDDEN/结构等确定性规则，不含事实与机制判断 —— 事实归 L2 与 evidence_gate.py，不要把这个分数读成「内容没问题」。2026-11-01 起由 validate_review.py 按文件名日期强制必填；11-09 起为唯一分值字段，产出侧不再写 score。"
     },
     "script_result": {
       "type": "object",

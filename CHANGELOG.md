@@ -32,6 +32,39 @@
 ### 批次 E（常量）
 - `validate_review.py` 常量 `SCORE_ALIAS_SUNSET = "2026-12-01"`，到期仍含 `score` 即报错；三态夹具（生效前放行 / 到期阻断 / 删别名后放行）通过。
 
+### 批次 E 补记（同日晚间，独立审查发现并修复 / 阻断级）
+
+**问题**：批次 E 只改了检查侧 `SCORE_ALIAS_SUNSET=2026-12-01`，没改产出侧，形成互斥约束：
+DB prompt 第 8 条、`reviewer_prompt.md` 输出模板与落盘自检第 11 项、
+`contracts/review.schema.json` required 都仍要求写 `score`。用今日真实
+`review/2026-11-09_review.json` 端到端复现：12-02 的审校报告只要含 `score` 就
+`ok=False`，`review_schema_gate` 随即 `sys.exit(1)`，L3 Phase 1 硬停，100% 必现。
+这是「只改检查侧是自伤」在两天内的第二次复发（批次 C 的 D-1 注释里自己写过这句话）。
+
+**产出侧四处已同步改为只写 `structure_score`**：
+1. `scripts/generate_prompt.py` 第 8 条 —— **最上游**。只改 DB 不改它，下次
+   `--update-automation` 会把旧措辞写回，重演 10-27 父/子 prompt 漂移。
+2. DB prompt 与 `config/automation-prompt-latest.txt` —— 重新生成 + 写库回读，
+   12175 字符 / 128 行 / sha256 `f70e3dd8e0105738` 三项全等。
+3. `reviewer_prompt.md` —— 模板顶层与 `script_result` 内层删 `score`，自检第 11 项改为
+   「只写 structure_score」；技能升 **v3.3**。
+4. `contracts/review.schema.json` —— required 由 `score` 换成 `structure_score`；
+   `score` 定义保留仅用于兼容读取历史 review.json，历史文件不回改。
+
+`validate_review.py` 检查侧常量保留（到期见 `score` 仍 FAIL，作为护栏），并补两端依赖说明。
+**下游全链 grep 确认不会静默解析出 -1**：`l3_publish.py:770` 正则已含 `structure_score`；
+`auto_fix.py:366`、`update_history.py:87/240` 首选 `structure_score`；
+`validate_contract.py:43` 为 one-of；`validate_review.py:204` 兼容读取返回 `None` 不触发。
+
+**修后四态实测**：11-09 旧格式放行 / 12-02 旧格式仍阻断 / 11-09 新格式放行 /
+**12-02 新格式放行**。下游分值解析实测 95（非 -1）。
+
+**顺带补齐（Master 11-09 决策）**：L2 技能补升 **v3.9**（frontmatter + 变更日志末条 +
+`version.json` 三处对齐，按 P0-3 新硬步骤先改权威源）；项目外技能备份由 `%TEMP%`
+复制到 `archive/`；L3 允许「当日无 v2 审校文件直发」经判定为有意设计，**保持现状**，
+不加存在性检查。
+
+
 ### 偏差与留痕
 - 文档写「工作区仓无 remote」，实测有 remote 且与镜像仓指向同一 GitHub 仓库；结论不变（不推工作区仓），全程精确 `git add`，未用 `add -A`。
 - 文档 P1-1 依据经实测不成立，按 0.8「依据不成立则重新判断」跳过并留痕；文档未写 `core.quotepath` 陷阱，实现时补齐。

@@ -67,6 +67,8 @@ STRUCTURE_SCORE_ENFORCE_SINCE = "2026-11-01"
 # 契约引擎不支持 anyOf，落地成「两个都写、值必须相等」的过渡态；过渡态不会自己结束，
 # 半年后没人记得 score 是废弃别名，新写的消费方可能读错字段。把「12-01 记得来删」
 # 变成一次写死的常量，避免又一条挂账。
+# 11-09 补记：产出侧已同步迁移（generate_prompt.py 第 8 条 / reviewer_prompt.md 模板与自检第 11 项 / review.schema.json required / DB prompt），故到期不会误杀。
+# 两端必须一起改：只改检查侧 = 12-01 全线停摆（11-09 独立审查端到端实证）。
 SCORE_ALIAS_SUNSET = "2026-12-01"
 
 # 消亡类断言关键词（命中即要求 title_checks 非空）——与 validate_article.py tripwire 同口径

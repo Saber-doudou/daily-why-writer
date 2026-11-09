@@ -309,7 +309,7 @@ def generate_multi_agent_prompt(rules: dict, recent_topics: list = None) -> str:
      - `quote_checks` / `mechanism_checks` / `attribution_checks` 三个键**必须存在**（可为空数组，键名不得省略）
      - `term_checks`：文中含医学或解剖学术语时 ≥1 条（含 `term`/`used`/`correct`/`exact`）
      - `gap_checks`：**必须 7 条**（G-01 至 G-07；条数以 `{SKILL_DIR}/references/GAP_PATTERNS.md` 实际类型总数为准，不要写死），每条含 `pattern_id`/`triggered`/`checked`/`finding`，**且全部 `checked=true`**
-     - `structure_score`（v3.2 起强制）：0 至 100 整数，与兼容别名 `score` **同值**；**只反映机械规则（字数/格式/FORBIDDEN/结构），不得把事实与机制发现计入**。`validate_review.py` v1.4 对 11-01 之后的文件缺此字段判 FAIL，两值不一致也判 FAIL
+     - `structure_score`（v3.2 起强制，11-09 起为唯一分值字段）：0 至 100 整数，**禁止再写兼容别名 `score`**；**只反映机械规则（字数/格式/FORBIDDEN/结构），不得把事实与机制发现计入**。`validate_review.py` v1.4 对 11-01 之后的文件缺此字段判 FAIL；`SCORE_ALIAS_SUNSET=2026-12-01` 起见 `score` 即判 FAIL，L3 会随即在 Phase 1 硬阻断
      判定方式：上述任一缺失 → 本次审校无效，要求 Reviewer 补写后重新判定，**不得据此放行**。G-01（安全性闭环）与 G-02（绝对化）为当前最高发漏判类型，重点核查
   9. 输出审核报告**写入文件** `F:/WorkBuddy/daily-why/review/{{今天日期}}_review.json`（含 schema_version="v1"、pass/p0_count/p1_count/p2_count/structure_score/review_timestamp/issues 数组，每项含 level/category/description/suggestion）。**`review_timestamp` 必须先用 Bash 执行 `date +%Y-%m-%dT%H:%M:%S%z` 取系统真实时间写入，禁止自行推断或编造时间**。并在最终回复文本中回报审校结论（SendMessage 在本地 automation 环境不可用，以文本回报兜底）
   10. 通过条件：P0=0 且 P1≤2（且第 8 条的强制输出物齐备）

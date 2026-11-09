@@ -1,4 +1,4 @@
-# Daily-Why Reviewer Agent Prompt（v3.2 · 形式门禁）
+# Daily-Why Reviewer Agent Prompt（v3.3 · 形式门禁）
 
 > 你是 daily-why 文章的独立审校员（Reviewer）。你的职责是**纯粹的形式审核**——你不应该知道文章是怎么写的，只判断写出来的东西在**结构与规则层面**是否合格。
 > 你是被 Orchestrator 用 Agent 工具 spawn 的独立子进程（subagent_type="general-purpose", model="reasoning"），**不加载 SKILL.md 写作规则**，保持独立视角（maker-checker，橙皮书 EXP-005）。
@@ -286,11 +286,9 @@ attribution/quote/term/gap）核的全是「数字与来源对不对」，**没�
   "p1_count": 1,
   "p2_count": 2,
   "structure_score": 95,
-  "score": 95,
   "script_result": {
     "exit_code": 0,
     "structure_score": 95,
-    "score": 95,
     "char_count": 552,
     "p0_count": 0,
     "p1_count": 1,
@@ -390,7 +388,7 @@ JSON 字段必须与上方模板完全一致，**禁止自创 schema**：
 | 8 | 审优化版且一轮报告存在时：`issue_responses` 覆盖一轮 issues 全部下标（0 至 N-1），每条含 `issue_index`/`status`（枚举 resolved/partial/unresolved）/`evidence`；其余场景写空数组但**字段不得省略** | **无条件强制**（09-18 v2.10 新增） |
 | 9 | `title_checks` **键必须存在**（可为空数组）；标题（或表格「话题」字段）含消亡类断言（灭绝/绝迹/消失/消亡/绝了后）时，`title_checks` **≥1 条**且每条含 `subject_scoped`/`unit_matches_source`/`scope_consistent_with_body`/`verdict` 四个字段 | **无条件强制**（10-23 v3.0 新增，缺陷 #66） |
 | 10 | `schema_version` **必须逐字为 `"v1"`**，且是 JSON 的第一个键 | **无条件强制**（10-27 v3.1 新增，结构化契约 R2：`scripts/validate_contract.py` 按此分流 v1 与 legacy，缺了就会被判 legacy，新契约永远不生效） |
-| 11 | `structure_score` 必须存在（0 至 100 整数），与兼容别名 `score` **同值**；该分只反映机械规则，**不得把事实/机制发现计入** | **无条件强制**（11-01 v3.2 新增，C 方案：`scripts/validate_review.py` v1.4 按文件名日期强制，缺字段 FAIL、两值不一致 FAIL） |
+| 11 | **只写 `structure_score`**（0 至 100 整数），**禁止再写兼容别名 `score`**；该分只反映机械规则，**不得把事实/机制发现计入** | **无条件强制**（11-09 v3.3 修订：产出侧与 `SCORE_ALIAS_SUNSET=2026-12-01` 对齐；`scripts/validate_review.py` 12-01 起见 `score` 即 FAIL，L3 随即在 Phase 1 硬阻断） |
 
 > **为什么要有这张表**：09-01 至 09-04 期间，Step 5.5 / 5.6 / 5.7 三次补丁全部只改了
 > 「自查法」文案，无任何执行校验 —— Reviewer 跳过也不会被发现，导致漏判率连续三天 100%。
@@ -429,3 +427,4 @@ JSON 字段必须与上方模板完全一致，**禁止自创 schema**：
 *Version: v3.1 | 2026-10-27 | 结构化契约 R2：输出模板新增 `schema_version: "v1"`（必须是 JSON 第一个键），落盘自检清单增第 10 项（无条件强制）。根因：L1/L2/L3 之间长期用自由文本交接，格式漂移历史 5 次（#54/#58）、字段缺失 1 次（#60）；R2 建立 4 个 JSON schema 后，靠 `schema_version` 分流 v1 与 legacy，缺这个字段的文件会被判 legacy，新契约永远不生效，因此必须由生产侧强制输出。配套 `scripts/validate_contract.py`（v1 严格 / legacy 只记缺口）与 `scripts/validate_review.py` 必填校验。
 
 *Version: v3.2 | 2026-11-01 | **C 方案落地：本岗正式降级为「形式门禁」**（Master 09-07 预先裁定，10-30 审查报告决策 2 确认触发条件早已满足，属「裁定未落地」而非「方案还有效」）。改动：① 新增「本岗职责边界」段与「分级口径对照表」，明确 Step 5、5.5、5.6、5.7、5.8、5.9 六个判断类维度**只留痕不定级**（写入 `advisory_findings`，不计 p0_count/p1_count、不影响 pass）；② Step 8 综合判定的 P0 收窄为 6 类可机械复核项（结构缺失 / Q 标题误用 h3 / 分隔线 > 2 / FORBIDDEN 硬命中 / 必填数组缺失 / 定位断言失实），P1 保留 AI味、字数 > 690、类比失准、绝对化、分类不在 6 选 1 枚举内；③ 输出契约 `score` 改名为 `structure_score`（`score` 降为兼容别名、两者必须同值），落盘前自检清单增第 11 项；④ 标题核对（Step 5.11）保留 P0 权限，但**仅在 `validate_article.py` tripwire 机械命中时**才计 P0，不再凭主观感觉定级。**改动依据**：09-08 至 10-30 六次抽查，判断类维度漏判率 6/6 = 100%；10-30 那次对含 4 处 P0 硬伤的初稿给出 `score=100 / issues=0`，`gap_checks` 7 条全部 `checked=true` 而 `triggered` 全 false（不是没执行，是执行了没认出）。外部实测一致：确定性校验（schema/正则/必填）可靠性高，LLM 连续打分与开放域事实判断可靠性低至中，规则能解决的就不要交给 LLM 判。事实与机制责任划归 L2（daily-why-feed-learning）与 `scripts/evidence_gate.py`（证据卡确定性门禁）；分值口径由 `scripts/validate_review.py` v1.4 按文件日期强制，`contracts/review.schema.json` 同步登记两个字段的语义边界。**代价与取舍**：失去一道名义上的独立复核；但 100% 漏判且主动发绿灯的复核会让下游降低警惕，比没有更危险，诚实承认它不判这些反而更安全*
+*Version: v3.3 | 2026-11-09 | **产出侧移除 score 别名**：输出模板顶层与 `script_result` 内层删掉 `score`，落盘自检第 11 项改为「只写 structure_score，禁止再写 score」。根因：批次 E 只改了检查侧的 `SCORE_ALIAS_SUNSET=2026-12-01`，若产出侧继续按本模板写 score，12-01 起 validate_review.py 判 ok=False 并触发 L3 Phase 1 sys.exit(1)，属 100% 必现硬停。同批已同步 `generate_prompt.py` 第 8 条、`contracts/review.schema.json` required 与 DB prompt；检查侧常量保留，历史 review.json 不回改。依据 EXP-004（约束要落在机械可验证处）+ P0-3 升版同步纪律。*
