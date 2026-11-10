@@ -26,6 +26,13 @@
 - 报告 F8 小项：单行截断后缀仍超 2000 字符、`deliverables/*-gray-files.txt` 未跟踪、DB prompt 口径措辞。
 - L3 允许当日无 v2 审校文件直发：Master 已明确为有意设计，保持现状。
 
+### 推送与远端核验
+- 工作区提交 `0b7ee69`（7 文件）、镜像仓提交 `66b9167`（8 文件，逐字节回读一致）。
+- **首次推送全部失败**：6 次 `RC=128`（`Empty reply from server` / `Connection was reset` / `connect to github.com:443 after 21s failed`）。端点探测 `api.github.com` 200、`github.com` 000、本地代理 `127.0.0.1:2704` 502。GitHub API `list_commits(main)` 与短超时 `git ls-remote` 双路径确认远端仍是 `75100df`，本地领先 1 个提交。按 SOP 保留本地 commit 待补推，未用 API 绕路（那会造出 sha 不同的远端 commit、制造双仓分歧）。
+- Master 接通 VPN 后补推一次成功：`75100df..66b9167  main -> main`（`RC=0`）。
+- **三重核验**：`git ls-remote` RC=0 返回 `66b9167621a3`；GitHub API `list_commits(main)` 首条同为 `66b9167621a3`；`delivery_check --remote` 报「远端与本地一致: 66b9167621a3」四方一致、无缺口。远端 `version.json` 抽读确认 `daily-why-publish` 为 `v3.3.1`，推送内容与本地一致。
+- 顺手修正 `config/version.json` 的 `_updated` 由 11-09 补为 11-10（11-10 改了内容却漏更日期）。该字段无脚本消费者，纯人读元数据，但历史上一直随提交日更新（10-27 / 11-01 / 11-06 / 11-09 均对），属失修而非惯例。
+
 ---
 
 ## 2026-11-09 优化批次 A 至 E（无版本号变更，技能版本链保持 v4.6 / v3.2 / v3.3.0 / v3.8 / v1.6）
