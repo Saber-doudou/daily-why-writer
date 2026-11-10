@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-"""review.json schema 机械校验器 —— 补上「强制输出物」缺失的执行校验（v1.2, 2026-10-23）
+"""review.json schema 机械校验器 —— 补上「强制输出物」缺失的执行校验（v1.5, 2026-11-10；初版 v1.2 2026-10-23）
 
 背景（常驻缺陷 40 / SOP Step 8.5「09-04 头号结论」）：
     reviewer_prompt v2.6 把 Step 5/5.5/5.6/5.7 的「自查法」软指令改成了强制输出物
@@ -32,6 +32,19 @@ v1.4 2026-11-01  新增第 10 项校验「分值口径」（C 方案落地，10-
      根因：09-08 至 10-30 共 6 次抽检漏判率 6/6，v1 对含 4 处 P0 硬伤的初稿给出
      score=100 / issues=0。100 分被下游读成「内容没问题」比不给分更危险（主动发绿灯）。
      性质定性：属「裁定未落地」——Master 09-07 已预先裁定 C 方案触发条件，条件早已满足。
+
+v1.5 2026-11-10  新增第 11 项校验「分值别名日落」：
+     ① 新增常量 `SCORE_ALIAS_SUNSET = "2026-12-01"`：文件日期 >= 该日的 review 仍含
+        兼容别名 `score` 即 FAIL，`structure_score` 为唯一规范名；
+     ② 日落前（含过渡期）两者并存仍合法但必须同值；只写 `score` 按 v1.4 规则照旧 FAIL；
+     ③ 配套改动：产出侧四处（DB prompt / reviewer_prompt.md / review.schema.json /
+        generate_prompt.py）同日迁移为只写 `structure_score`，否则 12-01 起 L3 在
+        Phase 1 直接 sys.exit(1)、稿子发不出也备份不了；
+     ④ 配套：`validate_contract.py` 对 11-01 前的历史 v1 只豁免 structure_score 一项
+        （降为 WAIV 可见），其余必填照旧判 FAIL。
+     根因：批次 E 只落了检查侧日落常量，产出侧仍强制写 `score`，两端互斥、22 天后必停。
+     教训：给检查侧加「到期禁止 X」之前，必须先全链列出「现在谁在产出 X」并同步迁移——
+        只改检查侧是自伤（同一坑两天内踩了两次，见 defects 台账）。
 
 用法：
     python validate_review.py review/2026-09-07_review.json

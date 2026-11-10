@@ -4,6 +4,38 @@
 
 ---
 
+## 2026-11-10 第四轮审查修复 N1 / N3 / N4（无技能版本变更）
+
+来源：Master 转来的第四轮独立核验报告。四项全部复现成立，本轮按 Master 拍板只做 N1 + N3 + N4，镜像仓不动（N2 挂起）。
+
+### 复现时对报告的 2 处补正
+- N1 报告的「`--json` 实测返回 `rows: []`」只在**单文件模式**成立；批量模式 `rows` 是 13 条（被滤掉的是 7 个 status=ok 但有 gaps 的豁免项）。
+- N2 报告只说「3 条内容相同、叫陈旧不准确」，未点出这 21 条的**结构**：其中 20 个是镜像仓 `scripts/` 下的旧版脚本、1 个是 `config/` 副本；而 `scripts/` 下另有 **9 个活文件**（`l3_publish.py` 122816 B、`validate_review.py` 28107 B 等，均为 11-10 刚同步的同步目标）。将来清理必须精确到 21 条，一条不能多。
+
+### 落地改动
+- **N1 `validate_contract.py`**（纯输出层，判据与退出码未动）：
+  ① 统一算 `waived`（status=ok 且 gaps 非空）；
+  ② 文本输出新增 `[WAIV]` 标记行，不再和纯 ok 一起被跳过；
+  ③ 摘要改为 `ok N（历史豁免 M）` 并追加一行豁免说明；
+  ④ `--json` 新增 `waived` 字段，`rows` 过滤条件补 `or r["gaps"]`（原 `status != "ok"` 会把豁免项全部滤掉，机器侧读不到「被豁免了什么」）；
+  ⑤ `--gaps-out` 的 `schema_version` 列由硬编码 `legacy` 改为 `r["version"]`（原先把 8 个 11-01 前的 v1 误标成 legacy，台账上分不清「历史格式」与「新契约缺字段」）；
+  ⑥ detail 拼接修掉「缺 缺少 …」双字重复。
+- **N3 `CHANGELOG.md`** 补正：豁免落地后仍余 **4 个**违规（不是 3 个）。`2026-10-30_v2` 除被豁免的 `structure_score` 外还缺 `article_id` / `script_result.exit_code`；这两项在 F3 改动前的 `9bcf02a` 即已列入 required，属历史既有缺口、非本轮引入（该文件 mtime 11-02，本批从未触碰）。
+- **N4 `validate_review.py`** docstring 补 v1.5 段（日落常量、产出侧四处同步迁移、根因与教训），顶部版本标签由 `（v1.2, 2026-10-23）` 更新为 `（v1.5, 2026-11-10；初版 v1.2 2026-10-23）`。行为未变，不升版本号。
+
+### 验收（实测）
+- N1 文本：7 条 `[WAIV]` 可见，摘要 `ok 86（历史豁免 7）｜violation 4`，末行追加豁免说明。
+- N1 JSON：批量 `waived=7`、`rows=20`（原 13）；单文件 `2026-10-30_review.json` 由 `rows=[]` 变 `rows=1`。
+- N1 TSV：`schema_version` 分布由修复前「12 行全 legacy」变为 `legacy 9 / v1 8`。
+- 退出码未变：`--all` = 1（4 个历史违规）、豁免单文件 = 0、真违规单文件 = 1。
+- 全套：`full_selfcheck` 31/31、`evidence_gate --selftest` 32/32、回放 10/10、`delivery_check` 四方一致、`generate_prompt --check` 通过。
+
+### 未纳入本轮（Master 拍板挂起）
+- **N2 镜像仓 21 条重复副本清理**：本轮不动镜像仓。将来若做，必须精确 `git rm` 这 21 条（20 个 `scripts/` 下旧版 + 1 个 `config/` 副本），**保留 `scripts/` 下 9 个活文件与 10 个真灰区**；脚本内先断言每条既不在白名单、且根有同名活目标，任一不满足即中止。附带理由：镜像仓 `reviewer_prompt.md` 多处引用 `scripts/evidence_gate.py` 等路径，读者按文档找过去看到的是 11-01 旧版，留着比删了更容易误导。
+- **契约 `--all` 恒 exit 1**（4 个历史欠账）：按 Master 决策保持现状，只在输出里注明「全部为 11 月前历史欠账」，不改判据、不按日期分级 exit code。
+
+---
+
 ## 2026-11-10 第三轮审查修复 F1 至 F6（技能版本链 publish v3.3.1 / validate_review v1.5）
 
 来源：Master 转来的独立核验报告。本轮不采信结论，逐条复现后按 Master 拍板的四项推荐方案执行。
@@ -11,6 +43,9 @@
 ### 复现时对报告的 3 处修正
 - F1 实测 21 条路径域误报成立，但镜像仓里被点名的 `config/version.json`（sha 1eed6c92）是**陈旧重复副本**，活目标是根 `version.json`（sha 605e389b，与工作区 `config/version.json` 逐字节一致）。故不采用报告建议的 basename 归一（会把 21 份真实漂移副本一起隐身），改为拆分告警措辞。
 - F3 实测 **11 个**历史 review 判违规而非 8 个：8 个 10-27 至 10-30 缺 `structure_score`（本次 required 换字段引入），另 3 个为 11-02 缺 `issue_responses`、11-05_v2 缺 `issues`、11-06_v2 缺 `overall_comment` / `script_result.exit_code`，属历史欠账，与本次改动无关，不纳入豁免。
+  **豁免落地后仍余 4 个违规（不是 3 个）**：`2026-10-30_v2` 除被豁免的 `structure_score` 外，
+  还缺 `article_id` 与 `script_result.exit_code`。这两项在 F3 改动前的 `9bcf02a` 就已列入 required，
+  属历史既有缺口、非本轮引入（该文件 mtime 11-02，本批从未触碰）。
 - F8 两项下调：`delivery_check` 的 quotepath 潜伏项当前影响面为 0（18 个未跟踪路径全 ASCII）；DB prompt 的「v3.2 形式门禁口径」是「自 v3.2 起」的语义、不是版本声明。
 
 ### 落地改动

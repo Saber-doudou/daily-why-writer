@@ -18,6 +18,9 @@ pydantic；装依赖会引入「装完才能跑」的部署风险。这里实现
   python scripts/validate_contract.py --kind evidence_card --file evidence/xxx.json
 
 退出码：0 通过｜1 契约违规｜2 用法或 IO 错误｜3 仅 legacy 缺口（非失败，供台账）
+
+输出标记：[FAIL] 契约违规｜[GAP ] legacy 缺口｜[WAIV] 历史豁免（status=ok 但 gaps 非空，
+        如 11-01 前 v1 缺 structure_score 一类；只豁免该字段，其余必填照旧判 FAIL；不计入退出码）
 """
 
 import argparse
@@ -327,6 +330,10 @@ def main():
             "gaps": gaps,
         })
 
+    # 11-10 N1：历史豁免只降为 gap、status 仍是 ok。旧实现在文本与 --json 里都被
+    # 「status != ok」过滤掉 → 一个必填字段被静默豁免而无人可见（EXP-014）。
+    waived = sum(1 for r in rows if r["status"] == "ok" and r["gaps"])
+
     if args.gaps_out:
         out = Path(args.gaps_out)
         out.parent.mkdir(parents=True, exist_ok=True)
@@ -335,7 +342,9 @@ def main():
         ts = datetime.now().isoformat(timespec="seconds")
         for r in rows:
             if r["gaps"]:
-                lines.append(f"{ts}\t{r['kind']}\tlegacy\t{r['file']}\t{','.join(r['gaps'])}")
+                # 11-10 N1：原硬编码 legacy，把 11-01 前的 v1（缺 structure_score 被豁免）
+                # 误标成 legacy，台账上分不清「历史格式」与「新契约缺字段」。
+                lines.append(f"{ts}\t{r['kind']}\t{r['version']}\t{r['file']}\t{','.join(r['gaps'])}")
         out.write_text("\n".join(lines) + "\n", encoding="utf-8")
 
     if args.json:
@@ -347,16 +356,30 @@ def main():
             "legacy_gap": counts["legacy_gap"],
             "v1": v1,
             "legacy": legacy,
-            "rows": [r for r in rows if r["status"] != "ok"],
+            "waived": waived,
+            # 豁免项 status=ok 但有 gaps，必须一并输出，否则机器侧读不到「被豁免了什么」
+            "rows": [r for r in rows if r["status"] != "ok" or r["gaps"]],
         }, ensure_ascii=False, indent=2))
     else:
         for r in rows:
-            if r["status"] == "ok":
+            # 豁免项（ok + gaps）必须可见，不能和纯 ok 一起跳过
+            if r["status"] == "ok" and not r["gaps"]:
                 continue
-            tag = "FAIL" if r["status"] == "violation" else "GAP "
-            detail = "; ".join(f"{p}: {m}" for p, m in r["errors"]) if r["errors"] else "缺 " + ",".join(r["gaps"])
+            if r["status"] == "ok":
+                tag = "WAIV"
+            else:
+                tag = "FAIL" if r["status"] == "violation" else "GAP "
+            if r["errors"]:
+                detail = "; ".join(f"{p}: {m}" for p, m in r["errors"])
+            else:
+                gaps_txt = ",".join(r["gaps"])
+                # 豁免项的 gaps 文案自带「缺少…」，别再加「缺 」凑成「缺 缺少」
+                detail = gaps_txt if gaps_txt.startswith("缺") else "缺 " + gaps_txt
             print(f"[{tag}] {r['file']}  ({r['version']})  {detail}")
-        print(f"\n合计 {len(rows)} 份｜ok {counts['ok']}｜violation {counts['violation']}｜legacy_gap {counts['legacy_gap']}｜v1 {v1}｜legacy {legacy}")
+        print(f"\n合计 {len(rows)} 份｜ok {counts['ok']}（历史豁免 {waived}）｜violation {counts['violation']}｜legacy_gap {counts['legacy_gap']}｜v1 {v1}｜legacy {legacy}")
+        if waived:
+            print(f"⚠️  {waived} 项为历史豁免（非失败）：按 C 方案仅对 11-01 前的 v1 "
+                  f"豁免 structure_score，其余必填字段照旧判 violation")
 
     if counts["violation"]:
         return 1
