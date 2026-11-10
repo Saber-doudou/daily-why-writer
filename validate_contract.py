@@ -371,12 +371,16 @@ def main():
                 tag = "FAIL" if r["status"] == "violation" else "GAP "
             if r["errors"]:
                 detail = "; ".join(f"{p}: {m}" for p, m in r["errors"])
+                # 判 FAIL 的行若同时带豁免说明，不能在文本里隐身
+                # （如 10-30_v2：structure_score 被豁免，但 article_id / exit_code 仍违规）
+                if r["gaps"]:
+                    detail += "；另豁免: " + "; ".join(r["gaps"])
             else:
                 gaps_txt = ",".join(r["gaps"])
                 # 豁免项的 gaps 文案自带「缺少…」，别再加「缺 」凑成「缺 缺少」
                 detail = gaps_txt if gaps_txt.startswith("缺") else "缺 " + gaps_txt
             print(f"[{tag}] {r['file']}  ({r['version']})  {detail}")
-        print(f"\n合计 {len(rows)} 份｜ok {counts['ok']}（历史豁免 {waived}）｜violation {counts['violation']}｜legacy_gap {counts['legacy_gap']}｜v1 {v1}｜legacy {legacy}")
+        print(f"\n合计 {len(rows)} 份｜ok {counts['ok']}（其中豁免 {waived}）｜violation {counts['violation']}｜legacy_gap {counts['legacy_gap']}｜v1 {v1}｜legacy {legacy}")
         if waived:
             print(f"⚠️  {waived} 项为历史豁免（非失败）：按 C 方案仅对 11-01 前的 v1 "
                   f"豁免 structure_score，其余必填字段照旧判 violation")
