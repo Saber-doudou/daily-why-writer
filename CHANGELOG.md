@@ -4,6 +4,54 @@
 
 ---
 
+## 2026-11-10 修复 #73 L3 引用门禁 false positive（publish v3.3.1 → v3.3.2）
+
+L3（`dailywhy推送备份`）dry-run 在 Phase 1 引用门禁 `sys.exit(1)`，报「v1 引用门禁未过：文中含具体研究引用（期刊/年份/机构），但 quote_checks 与 fact_checks 均未发现逐字核验留痕」。当日 v1 review（`2026-11-10_review.json`）审的是**初版**（无引用、quote_checks 空是**正确的**），v2 review（`_v2_review.json`）审的是**优化版**（L2 优化时新增「谭垦 2023《科学》」引用，quote_checks 已有 2 条 verbatim_match）。
+
+**根因**：`l3_publish.py` Phase 1 引用门禁（旧 881-889 行）只取**一篇**正文（`sorted(_arts_dir.rglob(_pat))[-1]` 优先优化版），再把同一篇优化版同时套给 v1、v2 两个 review 做 `validate_review`；优化版含引用 → v1 被误判缺 quote_checks → 触发 blocking（09-09 设计门禁时假设「一篇正文对一个 review」，L2 双 review 落地后暴露的回归）。
+
+**实证**（validate_review 分版本正文实跑 4 组对照）：
+1. v1 review + **初版**正文 → `blocking=[]`（正确，初版本无引用）
+2. v2 review + **优化版**正文 → `blocking=[]`（正确，v2 quote_checks 2 条 verbatim）
+3. 门禁现状：v1 review + 优化版正文 → `blocking≠[]`（**误判**，即本次故障）
+4. 门禁现状：v2 review + 优化版正文 → `blocking=[]`
+
+**修复**（Master 授权 A 方案，只改 `l3_publish.py` 一处 +22/-9）：Phase 1 改为按 review 版本各配各的正文——`v1` 配初版 `f"{_d}-每日冷知识-*.md"`、`v2` 配「优化版优先、回退初版」。`validate_review.py` 的引用门禁拦截逻辑**原样未动**（门禁能力保留）。
+
+**回归验证**：
+- 修复后 `l3_publish.py --dry-run` 整体 PASS（引用门禁不再误判，exit 0）。
+- 正向对照（构造「含《科学》/谭垦 2023 正文 + 空 quote_checks 的 review」跑 validate_review）→ 仍 `blocking≠[]`，坐实拦截未被改废（EXP-004：修 false positive 不等于把门拆了）。
+
+**版本**：`l3_publish.py` VERSION 常量 + `config/version.json`（publish v3.3.1→**v3.3.2**）+ 安装版 `SKILL.md`（frontmatter version / 标题 / 变更日志末条）三处对齐，`check_version_consistency` 实测 4 口径一致 v3.3.2。缺陷台账记 #73（`.workbuddy/memory/topics/defects.md`）。
+
+**通用教训**：机械门禁的「检测源」必须与被检测对象一一对应——凡「按 X 校验 Y」的门禁，先确认 X 与 Y 版本/口径匹配；一个检测源套多个被检对象，新增的差异项会变成系统性误判（呼应 EXP-004 约束要对准真问题，而非字段僵化）。
+
+---
+
+## 2026-11-10 L2 Phase 6 记忆更新层根治（feed-learning v3.9 → v4.0）
+
+来源：Master 转来的外部核查报告（11-10 当日 L2 会话）。核查确认：L2 在 Phase 6 step 2 把「我没看到」写成「文件不存在」——`F:/WorkBuddy/daily-why/.workbuddy/memory/MEMORY.md` 实际存在（3967 字节，`check_memory_size.py` 现场打印合规 2228/3000 字符），「memory/ 根目录只有日期文件」为假（36 个条目含 MEMORY.md 等 8 个非日期条目），trends.md 头部那句「MEMORY.md 只保留一行索引」是 `restructure_memory.py` 的搬家水印被读反。成因推断：MEMORY.md 在默认 `ls` 排序排第 30 位，输出截断后屏幕只剩日期文件。
+
+### 真问题（核查报告第二节，本轮修复对象）
+1. **SOP 文案与 MEMORY.md 结构脱节 20 天**：SKILL Phase 6 step 2（L527）仍写「如有重大教训，追加到'关键教训'章节」，而 10-27 重构后该章节已变为「§6 教训索引（冻结区·教训禁入本区，写入地=topics/lessons.md）」——L2 每天走到这步都撞墙，只能自由发挥。
+2. **step 2 零机械校验**：Phase 6 只有 step 3 有门禁（trends_sync_check），step 2 一条校验都没有，「文件不存在」类幻觉无法被机制拦住。风险在将来：真出现重大教训时同样可能被静默跳过。
+
+### 落地改动（按「先改权威源再改技能文件」顺序）
+1. **`config/version.json`**：feed-learning 版本 v3.9 → **v4.0**（patch 满十进位，沿用 reviewer_prompt 链 v2.10→v3.0 先例），`_note` 头部补本轮变更记录。
+2. **`daily-why-feed-learning/SKILL.md`** 三处：
+   - **Phase 6 step 2 重写**：删「关键教训」旧指引；改为——有新教训 → 追加 `topics/lessons.md`（唯一写入地）并在 MEMORY.md §6 索引区补/确认主题词；无新教训 → 在 automation memory.md 当日条目写一句 no-op 理由，不得静默跳过；加硬约束「判文件存亡必须用 Glob/Read，禁止凭 ls 截断片段下结论」。
+   - **新增 Phase 6 step 4 硬门槛**：Phase 6 结束前必须跑 `scripts/check_memory_size.py`，rc≠0 禁止结束（与 step 3 同款门禁）；该脚本逐文件打印真实路径与字符数，机制上杜绝「文件不存在」类幻觉。
+   - **frontmatter** `last_updated: 2026-11-01` → `2026-11-10`（mtime 2026-11-09 23:58 对不上的腐化修正）；footer 变更日志追加 v4.0 条目。
+3. 今日无实际损失（核查报告第三节）：step 1 automation memory 11:44 已更新、step 3 trends.md 已回填且 `trends_sync_check.py` 实测 rc=0（45/46 对齐）、step 2 本轮 `new_rules=[]` no-op 合理；lessons.md 今日 4 条已在。
+
+### 验收（实测）
+- `check_version_consistency`：errors=0（见本轮回执）。
+- `check_memory_size.py`：rc=0，打印 MEMORY.md 真实路径与合规字符数。
+
+依据：EXP-004 约束优于指令 + EXP-014 可观测性即诚实性（「我没看到」不等于「不存在」）。
+
+---
+
 ## 2026-11-10 第四轮审查修复 N1 / N3 / N4（无技能版本变更）
 
 > **11-10 事后纠正（第五轮报告指出，同日修）**：本节初次落笔时把 N2 的结构数字写成

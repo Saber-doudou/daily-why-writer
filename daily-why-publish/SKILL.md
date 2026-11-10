@@ -7,11 +7,11 @@ description: >
   路由规则：凡输入含「发布/推送/审计/备份」动作词（如 dailywhy发布），本技能优先于
   其他 dailywhy 系列技能触发（动作词优先），触发即执行 L3 发布流程。
 agent_created: true
-version: v3.3.1
+version: v3.3.2
 last_updated: 2026-11-10
 ---
 
-# daily-why-publish v3.3.1
+# daily-why-publish v3.3.2
 
 AI 语义验证 + 脚本执行，各司其职。
 
@@ -357,3 +357,4 @@ L3 daily-why-publish（手动触发）← 本 Skill
 *Version: v3.28 | 2026-10-29 | R3.9 交付链路四方一致自检落地：新建 scripts/delivery_check.py，查「四方一致」——① 本轮交付物（工作区改动 + 最近 N 次提交，按范围过滤）② config.json 的 git_add_files ③ l3_publish 的同步清单 ④ 镜像仓库 HEAD 树实际存在；缺一 exit 1 并指名。补的正是 #67 缺的那两问：「该进清单的有没有进」「清单里的有没有真送到镜像」——此前三道检查全在清单内部打转，full_selfcheck 只扫本地不读镜像。设计要点：清单用 AST 从 l3_publish.py 原样提取（不 import 触发发布副作用、不复制第二份清单以免再次漂移，与 #58 回归验证同手法）；远端校验默认关闭需显式 --remote，网络不通不得判红（10-28 D1 教训：单次探活失败被当成「不可重试」）；每日刷新的派生数据（topics_context*.json）排除出交付范围，否则每天必红会诱发告警疲劳。该脚本自身同步补入 extra_sync 与 git_add_files——检查别人的东西，自己先被检查。本条为末条。
 *Version: v3.3.0 | 2026-10-30 | R3.8 推送门修正：① D1——github_reachable 原为单次 curl，一次抖动就让整条重试链作废还嘴硬「不可重试」，现改为探活自身重试 3 次（间隔 2s/5s）、且探活失败**不当裁判**仍尝试真实 pull/push（curl 不通≠git 不通）；② D2——classify_git_error 新增 dirty 类（unstaged changes / your local changes / cannot pull with rebase 等），工作区脏不再被误报成「rebase 冲突」、不再白跑一次 rebase --abort；③ 配套 scripts/git_push_selftest.py（14 条纯 mock 夹具）接入 full_selfcheck 第 5c 项，脚本自身同步补入 extra_sync 与 git_add_files；④ delivery_check 缺口 4 区分「在途」（本轮新增、有复制源、待下次 L3 送达，不判红但显式列出）与「历史遗漏」（清单写了却送不到，判红），并加 --selftest 反向夹具锁死该区分，接入 full_selfcheck 第 5d/5e 项。**版本号进位归正（Master 10-30 拍板）**：本链为「省略第二个点的三段式」，v3.28=v3.2.8 → **本次进位到 v3.3.0**（写作完整三段式，非 v3.3）；原因：`v3.3` 与 08-17 老条目（实为 v3.0.3）字符串撞号，且 "v3.3" < "v3.28" 会让大小比较误判新版本更旧。停止在 v3.2x 上继续累加；禁止今后写 v3.30 / v3.31 这类小数点后双位数的形式。本条为末条。
 *Version: v3.3.1 | 2026-11-10 | 第三轮审查 F1 至 F6 全量修复（Master 11-10 拍板）：F1 灰区告警拆分（split_duplicate_copies，真灰区与镜像仓陈旧副本分别措辞，21 条不再误报也不隐身）；F2 evidence_gate.write_report 的 blocked 改用 main 传入的 blocking，与退出码同源，配端到端夹具；F3 validate_contract 对 11-01 前历史 v1 review 仅豁免 structure_score 一个字段；F4 解除工作区仓 branch.main.remote/merge 跟踪（origin 保留供只读比对）；F6 full_selfcheck 5f 用 AST 提取 review_schema_gate 跑正反夹具，兑现 P0-1 docstring 承诺。三段式进位 v3.3.0 到 v3.3.1，validate_review v1.4 到 v1.5。本条为末条。*
+*Version: v3.3.2 | 2026-11-10 | 修复 #73 L3 引用门禁 false positive：旧逻辑只取优化版正文（sorted[-1] 优先优化版）套给 v1/v2 两个 review，L2 优化新增「谭垦 2023《科学》」引用后，v1（审的是无引用初版）被误判缺 quote_checks 硬拦 exit 1；现 l3_publish 改为按 review 版本各配各的正文（v1 配初版 f"{_d}-每日冷知识-*.md、v2 配优化版优先回退初版），仅改 880 至 895 行一处（+22/-9），validate_review 拦截逻辑原样未动，正向对照 confirm 含引用正文 + 空 quote_checks 仍 blocking。本条为末条。*
