@@ -82,7 +82,7 @@ def check_title_emoji(content: str, result):
     if title_match:
         title = title_match.group(1)
         has_emoji = bool(
-            re.search(r"[\U0001F300-\U0001F9FF\u2600-\u26FF\u2700-\u27BF]",
+            re.search(r"[\U0001F300-\U0001F9FF\U0001FA00-\U0001FAFF\u2600-\u26FF\u2700-\u27BF]",
                       title))
         if not has_emoji:
             result.p1_error("标题缺少 emoji 装饰")

@@ -11,7 +11,8 @@
     "improvements",
     "new_rules",
     "rejected_suggestions",
-    "source_files"
+    "source_files",
+    "memory_update"
   ],
   "properties": {
     "schema_version": { "type": "string", "enum": ["v1"] },
@@ -53,6 +54,15 @@
         }
       }
     },
-    "source_files": { "type": "array", "items": { "type": "string" } }
+    "source_files": { "type": "array", "items": { "type": "string" } },
+    "memory_update": {
+      "type": "object",
+      "description": "Phase 6 记忆更新的执行声明（11-10 建，2026-11-11 起生效；此前历史文件由 validate_contract.py 按效日豁免为 WAIV）。mode=append 表示本日有新教训并将追加 topics/lessons.md；mode=noop 表示无新教训，reason 必须说清判据。",
+      "required": ["mode", "reason"],
+      "properties": {
+        "mode": { "type": "string", "enum": ["append", "noop"] },
+        "reason": { "type": "string", "minLength": 1 }
+      }
+    }
   }
 }

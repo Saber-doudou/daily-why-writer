@@ -21,6 +21,8 @@ pydantic；装依赖会引入「装完才能跑」的部署风险。这里实现
 
 输出标记：[FAIL] 契约违规｜[GAP ] legacy 缺口｜[WAIV] 历史豁免（status=ok 但 gaps 非空，
         如 11-01 前 v1 缺 structure_score 一类；只豁免该字段，其余必填照旧判 FAIL；不计入退出码）
+        另有 learning_summary 的 memory_update（Phase 6 记忆更新执行声明）自 2026-11-11 起生效，
+        此前历史按效日豁免为 WAIV（11-10 P1 新增）。
 """
 
 import argparse
@@ -255,6 +257,20 @@ def check_file(kind, path: Path, require_v1=False, md_as_v1=False):
                     else:
                         kept.append((p, msg))
                 errors = kept
+        # 11-10 P1：memory_update（Phase 6 记忆更新执行声明）自 2026-11-11 起生效。
+        # 11-10 及以前的 v1 学习总结不带该字段，按「历史不回改」降为 gap 豁免；
+        # 只豁免这一条，其余必填缺失照旧 violation。判文件日以 doc["date"] 为准
+        # （v1 必填且有 pattern 校验），无 date 时视为可疑、不豁免（宁可误伤不放过）。
+        if kind == "learning_summary":
+            d = str(doc.get("date", ""))
+            if d and d < "2026-11-11":
+                kept = []
+                for p, msg in errors:
+                    if p == "$" and msg == "缺少必填字段 memory_update":
+                        gaps.append("缺少 memory_update（2026-11-11 起生效，此前历史按生效日豁免）")
+                    else:
+                        kept.append((p, msg))
+                errors = kept
         return ("ok" if not errors else "violation"), version, errors, gaps
 
     gaps = legacy_gaps(kind, doc)
@@ -382,8 +398,9 @@ def main():
             print(f"[{tag}] {r['file']}  ({r['version']})  {detail}")
         print(f"\n合计 {len(rows)} 份｜ok {counts['ok']}（其中豁免 {waived}）｜violation {counts['violation']}｜legacy_gap {counts['legacy_gap']}｜v1 {v1}｜legacy {legacy}")
         if waived:
-            print(f"⚠️  {waived} 项为历史豁免（非失败）：按 C 方案仅对 11-01 前的 v1 "
-                  f"豁免 structure_score，其余必填字段照旧判 violation")
+            print(f"⚠️  {waived} 项为历史豁免（非失败）：review 的 structure_score（11-01 前历史）"
+                  f"与 learning_summary 的 memory_update（2026-11-11 起生效）两条效日豁免，"
+                  f"其余必填字段照旧判 violation")
 
     if counts["violation"]:
         return 1

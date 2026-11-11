@@ -45,10 +45,27 @@ L3（`dailywhy推送备份`）dry-run 在 Phase 1 引用门禁 `sys.exit(1)`，�
 3. 今日无实际损失（核查报告第三节）：step 1 automation memory 11:44 已更新、step 3 trends.md 已回填且 `trends_sync_check.py` 实测 rc=0（45/46 对齐）、step 2 本轮 `new_rules=[]` no-op 合理；lessons.md 今日 4 条已在。
 
 ### 验收（实测）
-- `check_version_consistency`：errors=0（见本轮回执）。
-- `check_memory_size.py`：rc=0，打印 MEMORY.md 真实路径与合规字符数。
+- `check_version_consistency`：errors=0。实测输出：`[Phase 0] ✅ [版本] daily-why-feed-learning: frontmatter:v4.0 / 日志末条:v4.0 与权威源 v4.0 全部一致`（五技能全绿，rc=0）。
+- `check_memory_size.py`：rc=0，打印 `MEMORY.md ✅ 合规 2228/3000 字符` 与真实路径。
 
 依据：EXP-004 约束优于指令 + EXP-014 可观测性即诚实性（「我没看到」不等于「不存在」）。
+
+---
+
+## 2026-11-10 复核修复：P1 契约字段 memory_update + P2 索引补行（feed-learning v4.0 → v4.1）
+
+第二轮独立复核确认 v4.0 自述全部属实（8 项全绿），另指出 2 处该补、3 处该记，本轮全接。其中 P2 的「索引末条停在 10-28/FP-87、已腐化 13 天、grep 0 命中」**经实测判错**（复核者 15:0x 已自纠，根因是用固定窗口代替边界枚举，与 L2 那次 ls 截断同型）：lessons.md 索引区 11-01/11-06/11-09 行俱在，且 12:05 已追加的 11-10 行在 L19（索引区块内）；有效部分是当天另 4 条教训全文（复核口径/补丁器三条/补丁传输/数字枚举）确实没进索引。
+
+**落地改动：**
+1. **P1 契约字段 `memory_update`**（`contracts/learning_summary.schema.json` + `scripts/validate_contract.py` + SKILL 接线）：
+   - schema `required` 增 `memory_update`：`mode ∈ append|noop` + `reason ≥1 字`，2026-11-11 起生效（description 注明）。
+   - 校验器加效日豁免（照抄 review structure_score 先例）：`date < 2026-11-11` 的 v1 学习总结缺该字段降为 WAIV gap，其余必填照旧 FAIL；历史 9 份 v1 实测全部 WAIV、零新增 violation，`--all` rc 仍 3（基线保持）。
+   - 四态夹具实测：带字段 ok(rc0) / 效日后缺字段 FAIL(rc1) / 效日前缺字段 WAIV(rc0) / mode 非法枚举 FAIL(rc1)。
+   - SKILL Phase 5 step 5 加字段纪律（声明在 Phase 5、执行在 Phase 6，声明与执行不一致视为流程违规）；Phase 6 step 2 加交叉引用。**堵住的缺口**：step 4 的 check_memory_size.py 只管体积与存在性，整段静默跳过 step 2 照样 rc=0——门禁与被防失效模式不对齐（EXP-004 形态），契约字段兜住执行与否。
+2. **P2 索引补行**：lessons.md 主题词索引补 11-10 当天 4 条教训（复核口径三条 / 补丁器与可观测性三条 / 补丁传输换工具链 / 数字必须脚本枚举），加上 12:05 已有的「我没看到≠不存在」共 5 条全部进索引。
+3. **该记三项**：① 悬空引用修正——v4.0 验收的「（见本轮回执）」替换为实测输出行原文；② Phase 5 step 6 尾句「本次只加 SOP 步骤，不升本技能版本号」为 11-09 当轮说明，与本轮 v4.0/v4.1 连续升版打架，已改为历史存照口径（注明不构成通行规则）；③ 交付状态如实记录：**本轮改动 4 个仓库文件未做 git 提交**（`config/version.json`、`CHANGELOG.md`、`scripts/validate_contract.py`、`contracts/learning_summary.schema.json`；SKILL.md 在技能目录、不入仓），镜像 HEAD 仍 4fa2507，**按既定节奏由今晚 L3 带上去**——本条即为「未推送」的明示，不得读成已推送。不报工作区 M 总数：那是滑动靶（另有会话在动 `l3_publish.py`、`defects.md` 等），「本轮改了哪几个文件」才是稳定判据（复核者 15:0x 建议，采纳）。
+
+**版本链**：feed-learning v4.0 → **v4.1**（version.json 先改 → SKILL frontmatter → footer → 本节，四处对齐）。
 
 ---
 
